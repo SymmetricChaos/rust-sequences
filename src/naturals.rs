@@ -1,25 +1,21 @@
-pub struct Integers32 {
-    ctr: u32,
+use num::{CheckedAdd, One, Zero};
+
+pub struct Natural<T> {
+    ctr: T,
 }
 
-impl Default for Integers32 {
-    fn default() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Integers32 {
+impl<T: CheckedAdd + Clone + One + Zero> Natural<T> {
     pub fn new() -> Self {
-        Self { ctr: 0 }
+        Self { ctr: T::zero() }
     }
 }
 
-impl Iterator for Integers32 {
-    type Item = u32;
+impl<T: CheckedAdd + Clone + One + Zero> Iterator for Natural<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr;
-        self.ctr += 1;
+        let out = self.ctr.clone();
+        self.ctr = self.ctr.checked_add(&T::one())?;
         Some(out)
     }
 }
