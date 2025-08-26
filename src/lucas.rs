@@ -1,5 +1,7 @@
 use num::{BigInt, One};
 
+/// The Lucas numbers.
+/// 2, 1, 3, 4, 7, 11, 18, 29, 47, 76...
 pub struct Lucas {
     a: BigInt,
     b: BigInt,
@@ -10,13 +12,6 @@ impl Lucas {
         Self {
             a: BigInt::from(2),
             b: BigInt::one(),
-        }
-    }
-
-    pub fn new_ab(a: u32, b: u32) -> Self {
-        Self {
-            a: BigInt::from(a),
-            b: BigInt::from(b),
         }
     }
 }
@@ -33,14 +28,6 @@ impl Iterator for Lucas {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Lucas;
-//         let x = Lucas::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Lucas::new(), 0, 10;
+);

@@ -1,5 +1,7 @@
 use num::{BigInt, One};
 
+/// The factorial numbers
+/// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
 pub struct Factorial {
     val: BigInt,
     ctr: BigInt,
@@ -25,14 +27,6 @@ impl Iterator for Factorial {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Factorial;
-//         let x = Factorial::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Factorial::new(), 0, 10;
+);

@@ -1,5 +1,7 @@
 use num::{BigInt, Zero};
 
+/// The oblong numbers
+/// 0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
 pub struct Oblong {
     val: BigInt,
     ctr: BigInt,
@@ -25,14 +27,6 @@ impl Iterator for Oblong {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Oblong;
-//         let x = Oblong::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Oblong::new(), 0, 10;
+);

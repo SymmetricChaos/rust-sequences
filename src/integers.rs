@@ -1,5 +1,7 @@
 use num::{BigInt, One, Signed, Zero};
 
+/// The integers
+/// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
 pub struct Integer {
     val: BigInt,
     ctr: BigInt,
@@ -29,14 +31,6 @@ impl Iterator for Integer {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Integer;
-//         let x = Integer::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Integer::new(), 0, 10;
+);

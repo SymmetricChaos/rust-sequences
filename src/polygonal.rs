@@ -1,5 +1,6 @@
 use num::{BigInt, One, Zero};
 
+/// The polygonal numbers with selectable number order
 pub struct Polygonal {
     val: BigInt,
     ctr: BigInt,
@@ -7,7 +8,6 @@ pub struct Polygonal {
 }
 
 impl Polygonal {
-    /// Create a sequence of polygonal numbers starting from zero.
     /// n = 0 -> natural numbers
     /// n = 1 -> triangular numbers
     /// n = 2 -> square numbers
@@ -32,14 +32,9 @@ impl Iterator for Polygonal {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Polygonal;
-//         let x = Polygonal::new(2);
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Polygonal::new(0), 0, 10;
+    super::Polygonal::new(1), 0, 10;
+    super::Polygonal::new(2), 0, 10;
+    super::Polygonal::new(3), 0, 10;
+);

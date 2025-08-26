@@ -1,5 +1,7 @@
 use num::{BigInt, One, Zero};
 
+/// The Pell numbers
+/// 0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
 pub struct Pell {
     a: BigInt,
     b: BigInt,
@@ -27,14 +29,6 @@ impl Iterator for Pell {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Pell;
-//         let x = Pell::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Pell::new(), 0, 10;
+);

@@ -1,5 +1,7 @@
 use num::{BigInt, One, Zero};
 
+/// The triangular numbers.
+/// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
 pub struct Triangular {
     val: BigInt,
     ctr: BigInt,
@@ -25,14 +27,6 @@ impl Iterator for Triangular {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Triangular;
-//         let x = Triangular::new();
-//         for n in x.skip(10).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Triangular::new(), 0, 10;
+);

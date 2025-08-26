@@ -1,21 +1,23 @@
-use num::{CheckedAdd, One, Zero};
+use num::{BigInt, One, Zero};
 
-pub struct Fibonacci<T> {
-    a: T,
-    b: T,
+/// The Fibonacci numbers
+/// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34...
+pub struct Fibonacci {
+    a: BigInt,
+    b: BigInt,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Fibonacci<T> {
+impl Fibonacci {
     pub fn new() -> Self {
         Self {
-            a: T::zero(),
-            b: T::one(),
+            a: BigInt::zero(),
+            b: BigInt::one(),
         }
     }
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Iterator for Fibonacci<T> {
-    type Item = T;
+impl Iterator for Fibonacci {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
@@ -26,15 +28,6 @@ impl<T: CheckedAdd + Clone + One + Zero> Iterator for Fibonacci<T> {
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Fibonacci;
-//         use num::BigUint;
-//         let x = Fibonacci::<BigUint>::new();
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Fibonacci::new(), 0, 10;
+);

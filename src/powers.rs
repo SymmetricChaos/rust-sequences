@@ -1,37 +1,35 @@
 use num::{BigInt, One};
 
-pub struct Powers {
+/// The powers of n
+pub struct Power {
     val: BigInt,
-    pow: BigInt,
+    n: BigInt,
 }
 
-impl Powers {
-    pub fn new(pow: u32) -> Self {
+impl Power {
+    /// Panics if n = 0
+    pub fn new(n: u32) -> Self {
+        assert!(n != 0);
         Self {
             val: BigInt::one(),
-            pow: BigInt::from(pow),
+            n: BigInt::from(n),
         }
     }
 }
 
-impl Iterator for Powers {
+impl Iterator for Power {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = self.val.checked_mul(&self.pow)?;
+        self.val = self.val.checked_mul(&self.n)?;
         Some(out)
     }
 }
 
-// mod tests {
-
-//     #[test]
-//     fn seq() {
-//         use super::Powers;
-//         let x = Powers::new(3.try_into().unwrap());
-//         for n in x.skip(0).take(10) {
-//             println!("{n}")
-//         }
-//     }
-// }
+crate::print_a_few!(
+    super::Power::new(1), 0, 10;
+    super::Power::new(2), 0, 10;
+    super::Power::new(3), 0, 10;
+    super::Power::new(4), 0, 10;
+);
