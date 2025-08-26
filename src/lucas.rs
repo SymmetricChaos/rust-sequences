@@ -12,6 +12,13 @@ impl Lucas {
             b: BigInt::one(),
         }
     }
+
+    pub fn new_ab(a: u32, b: u32) -> Self {
+        Self {
+            a: BigInt::from(a),
+            b: BigInt::from(b),
+        }
+    }
 }
 
 impl Iterator for Lucas {
