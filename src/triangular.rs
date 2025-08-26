@@ -9,7 +9,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Triangular<T> {
     pub fn new() -> Self {
         Self {
             val: T::zero(),
-            ctr: T::zero(),
+            ctr: T::one(),
         }
     }
 }
@@ -19,8 +19,8 @@ impl<T: CheckedAdd + Clone + One + Zero> Iterator for Triangular<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.ctr = self.ctr.checked_add(&T::one())?;
         self.val = self.val.checked_add(&self.ctr)?;
+        self.ctr = self.ctr.checked_add(&T::one())?;
         Some(out)
     }
 }
