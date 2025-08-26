@@ -1,26 +1,26 @@
-use num::{BigInt, One, Zero};
+use num::{BigInt, Zero};
 
-pub struct Triangular {
+pub struct Oblong {
     val: BigInt,
     ctr: BigInt,
 }
 
-impl Triangular {
+impl Oblong {
     pub fn new() -> Self {
         Self {
             val: BigInt::zero(),
-            ctr: BigInt::one(),
+            ctr: BigInt::from(2),
         }
     }
 }
 
-impl Iterator for Triangular {
+impl Iterator for Oblong {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         self.val = self.val.checked_add(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&BigInt::one())?;
+        self.ctr = self.ctr.checked_add(&BigInt::from(2))?;
         Some(out)
     }
 }
@@ -29,9 +29,9 @@ mod tests {
 
     #[test]
     fn seq() {
-        use super::Triangular;
-        let x = Triangular::new();
-        for n in x.skip(10).take(10) {
+        use super::Oblong;
+        let x = Oblong::new();
+        for n in x.skip(0).take(10) {
             println!("{n}")
         }
     }

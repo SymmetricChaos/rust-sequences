@@ -1,26 +1,26 @@
-use num::{CheckedAdd, CheckedMul, One, Zero};
+use num::{BigInt, One};
 
-pub struct Factorial<T> {
-    val: T,
-    ctr: T,
+pub struct Factorial {
+    val: BigInt,
+    ctr: BigInt,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Factorial<T> {
+impl Factorial {
     pub fn new() -> Self {
         Self {
-            val: T::one(),
-            ctr: T::one() + T::one(),
+            val: BigInt::one(),
+            ctr: BigInt::from(2),
         }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> Iterator for Factorial<T> {
-    type Item = T;
+impl Iterator for Factorial {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         self.val = self.val.checked_mul(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr = self.ctr.checked_add(&BigInt::one())?;
         Some(out)
     }
 }
@@ -30,8 +30,7 @@ mod tests {
     #[test]
     fn seq() {
         use super::Factorial;
-        use num::BigUint;
-        let x = Factorial::<BigUint>::new();
+        let x = Factorial::new();
         for n in x.skip(0).take(10) {
             println!("{n}")
         }

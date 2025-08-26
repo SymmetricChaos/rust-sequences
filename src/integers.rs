@@ -1,25 +1,25 @@
-use num::{CheckedAdd, CheckedSub, One, Signed, Zero};
+use num::{BigInt, One, Signed, Zero};
 
-pub struct Integer<T> {
-    val: T,
-    ctr: T,
+pub struct Integer {
+    val: BigInt,
+    ctr: BigInt,
 }
 
-impl<T: CheckedAdd + Clone + One + Signed + Zero> Integer<T> {
+impl Integer {
     pub fn new() -> Self {
         Self {
-            val: T::zero(),
-            ctr: T::zero(),
+            val: BigInt::zero(),
+            ctr: BigInt::zero(),
         }
     }
 }
 
-impl<T: CheckedAdd + CheckedSub + Clone + One + Signed + Zero> Iterator for Integer<T> {
-    type Item = T;
+impl Iterator for Integer {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr = self.ctr.checked_add(&BigInt::one())?;
         if self.val.is_positive() {
             self.val = self.val.checked_sub(&self.ctr)?;
         } else {
@@ -34,8 +34,7 @@ mod tests {
     #[test]
     fn seq() {
         use super::Integer;
-        use num::BigInt;
-        let x = Integer::<BigInt>::new();
+        let x = Integer::new();
         for n in x.skip(0).take(10) {
             println!("{n}")
         }

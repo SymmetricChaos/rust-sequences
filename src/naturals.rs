@@ -1,21 +1,23 @@
-use num::{CheckedAdd, One, Zero};
+use num::{BigInt, One, Zero};
 
-pub struct Natural<T> {
-    ctr: T,
+pub struct Natural {
+    ctr: BigInt,
 }
 
-impl<T: CheckedAdd + Clone + Zero> Natural<T> {
+impl Natural {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone + One> Iterator for Natural<T> {
-    type Item = T;
+impl Iterator for Natural {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.ctr.clone();
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr = self.ctr.checked_add(&BigInt::one())?;
         Some(out)
     }
 }

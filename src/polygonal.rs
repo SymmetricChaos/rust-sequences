@@ -1,28 +1,28 @@
-use num::{CheckedAdd, One, Zero};
+use num::{BigInt, One, Zero};
 
-pub struct Polygonal<T> {
-    val: T,
-    ctr: T,
-    inc: T,
+pub struct Polygonal {
+    val: BigInt,
+    ctr: BigInt,
+    inc: BigInt,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Polygonal<T> {
+impl Polygonal {
     /// Create a sequence of polygonal numbers starting from zero.
     /// n = 0 -> natural numbers
     /// n = 1 -> triangular numbers
     /// n = 2 -> square numbers
     /// and then higher order polygonal numbers
-    pub fn new(n: T) -> Self {
+    pub fn new(n: u32) -> Self {
         Self {
-            val: T::zero(),
-            ctr: T::one(),
-            inc: n,
+            val: BigInt::zero(),
+            ctr: BigInt::one(),
+            inc: BigInt::from(n),
         }
     }
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Iterator for Polygonal<T> {
-    type Item = T;
+impl Iterator for Polygonal {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
@@ -37,8 +37,7 @@ mod tests {
     #[test]
     fn seq() {
         use super::Polygonal;
-        use num::BigUint;
-        let x = Polygonal::<BigUint>::new(2.try_into().unwrap());
+        let x = Polygonal::new(2);
         for n in x.skip(0).take(10) {
             println!("{n}")
         }
