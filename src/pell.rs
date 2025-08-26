@@ -21,8 +21,7 @@ impl Iterator for Pell {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let double_b = self.b.checked_mul(&BigInt::from(2))?;
-        let t = self.a.checked_add(&double_b)?;
+        let t = &self.a + (&self.b * 2);
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -30,5 +29,5 @@ impl Iterator for Pell {
 }
 
 crate::print_a_few!(
-    super::Pell::new(), 0, 10;
+    Pell::new(), 0, 10;
 );

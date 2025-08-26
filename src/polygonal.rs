@@ -26,15 +26,15 @@ impl Iterator for Polygonal {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = self.val.checked_add(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&self.inc)?;
+        self.val += &self.ctr;
+        self.ctr += &self.inc;
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    super::Polygonal::new(0), 0, 10;
-    super::Polygonal::new(1), 0, 10;
-    super::Polygonal::new(2), 0, 10;
-    super::Polygonal::new(3), 0, 10;
+    Polygonal::new(0), 0, 10;
+    Polygonal::new(1), 0, 10;
+    Polygonal::new(2), 0, 10;
+    Polygonal::new(3), 0, 10;
 );

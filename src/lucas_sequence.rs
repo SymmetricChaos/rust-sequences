@@ -1,7 +1,7 @@
 use num::BigInt;
 
-/// Any simple additive recurrence
-/// a_x = a_(x-1) + a_(x-2)
+/// Any recurrence of the form
+/// a_x = p * a_{x-1} + q * a_{x-2}
 pub struct LucasSequence {
     a: BigInt,
     b: BigInt,
@@ -25,9 +25,9 @@ impl Iterator for LucasSequence {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let pa = self.p.checked_mul(&self.a)?;
-        let qb = self.q.checked_mul(&self.b)?;
-        let t = pa.checked_add(&qb)?;
+        let pa = &self.p * &self.a;
+        let qb = &self.q * &self.b;
+        let t = pa + qb;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -35,7 +35,7 @@ impl Iterator for LucasSequence {
 }
 
 crate::print_a_few!(
-    super::LucasSequence::new(0,  1,  1, 1), 0, 10; // Fibonacci sequence
-    super::LucasSequence::new(0,  1,  1, 2), 0, 10; // Pell sequence
-    super::LucasSequence::new(3,  2, -2, 3), 0, 10;
+    LucasSequence::new(0,  1,  1, 1), 0, 10; // Fibonacci sequence
+    LucasSequence::new(0,  1,  1, 2), 0, 10; // Pell sequence
+    LucasSequence::new(3,  2, -2, 3), 0, 10;
 );

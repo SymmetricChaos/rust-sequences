@@ -8,7 +8,7 @@ pub struct Power {
 
 impl Power {
     /// Panics if n = 0
-    pub fn new(n: u32) -> Self {
+    pub fn new(n: u64) -> Self {
         assert!(n != 0);
         Self {
             val: BigInt::one(),
@@ -22,14 +22,15 @@ impl Iterator for Power {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = self.val.checked_mul(&self.n)?;
+        self.val *= &self.n;
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    super::Power::new(1), 0, 10;
-    super::Power::new(2), 0, 10;
-    super::Power::new(3), 0, 10;
-    super::Power::new(4), 0, 10;
+    Power::new(1), 0, 10;
+    Power::new(2), 0, 10;
+    Power::new(3), 0, 10;
+    Power::new(4), 0, 10;
+    Power::new(u64::MAX), 0, 4;
 );

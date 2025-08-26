@@ -21,12 +21,12 @@ impl Iterator for Factorial {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = self.val.checked_mul(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&BigInt::one())?;
+        self.val *= &self.ctr;
+        self.ctr += 1;
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    super::Factorial::new(), 0, 10;
+    Factorial::new(), 0, 10;
 );

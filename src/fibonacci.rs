@@ -21,7 +21,7 @@ impl Iterator for Fibonacci {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = self.a.checked_add(&self.b)?;
+        let t = &self.a + &self.b;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -29,5 +29,5 @@ impl Iterator for Fibonacci {
 }
 
 crate::print_a_few!(
-    super::Fibonacci::new(), 0, 10;
+    Fibonacci::new(), 0, 10;
 );

@@ -1,4 +1,4 @@
-use num::{BigInt, One, Zero};
+use num::{BigInt, Zero};
 
 /// The natural numbers
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
@@ -19,11 +19,11 @@ impl Iterator for Natural {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.ctr.clone();
-        self.ctr = self.ctr.checked_add(&BigInt::one())?;
+        self.ctr += 1;
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    super::Natural::new(), 0, 10;
+    Natural::new(), 0, 10;
 );

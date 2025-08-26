@@ -1,4 +1,4 @@
-use num::{BigInt, One, Signed, Zero};
+use num::{BigInt, Signed, Zero};
 
 /// The integers
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
@@ -21,16 +21,16 @@ impl Iterator for Integer {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.ctr = self.ctr.checked_add(&BigInt::one())?;
+        self.ctr += 1;
         if self.val.is_positive() {
-            self.val = self.val.checked_sub(&self.ctr)?;
+            self.val -= &self.ctr;
         } else {
-            self.val = self.val.checked_add(&self.ctr)?;
+            self.val += &self.ctr;
         };
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    super::Integer::new(), 0, 10;
+    Integer::new(), 0, 10;
 );
