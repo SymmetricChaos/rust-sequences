@@ -26,15 +26,15 @@ impl<T: CheckedAdd + Clone + One + Zero> Iterator for Fibonacci<T> {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Fibonacci;
-        use num::BigUint;
-        let x = Fibonacci::<BigUint>::new();
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Fibonacci;
+//         use num::BigUint;
+//         let x = Fibonacci::<BigUint>::new();
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

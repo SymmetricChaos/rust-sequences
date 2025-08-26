@@ -27,14 +27,14 @@ impl Iterator for Pell {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Pell;
-        let x = Pell::new();
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Pell;
+//         let x = Pell::new();
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

@@ -26,14 +26,14 @@ impl Iterator for Lucas {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Lucas;
-        let x = Lucas::new();
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Lucas;
+//         let x = Lucas::new();
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

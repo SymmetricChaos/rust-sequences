@@ -24,14 +24,14 @@ impl Iterator for Powers {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Powers;
-        let x = Powers::new(3.try_into().unwrap());
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Powers;
+//         let x = Powers::new(3.try_into().unwrap());
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

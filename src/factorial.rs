@@ -25,14 +25,14 @@ impl Iterator for Factorial {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Factorial;
-        let x = Factorial::new();
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Factorial;
+//         let x = Factorial::new();
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

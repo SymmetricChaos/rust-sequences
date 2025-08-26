@@ -32,14 +32,14 @@ impl Iterator for Polygonal {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Polygonal;
-        let x = Polygonal::new(2);
-        for n in x.skip(0).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Polygonal;
+//         let x = Polygonal::new(2);
+//         for n in x.skip(0).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }

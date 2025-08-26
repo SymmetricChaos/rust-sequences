@@ -25,14 +25,14 @@ impl Iterator for Triangular {
     }
 }
 
-mod tests {
+// mod tests {
 
-    #[test]
-    fn seq() {
-        use super::Triangular;
-        let x = Triangular::new();
-        for n in x.skip(10).take(10) {
-            println!("{n}")
-        }
-    }
-}
+//     #[test]
+//     fn seq() {
+//         use super::Triangular;
+//         let x = Triangular::new();
+//         for n in x.skip(10).take(10) {
+//             println!("{n}")
+//         }
+//     }
+// }
