@@ -1,22 +1,22 @@
-use num::{BigInt, Zero};
+use num::{BigInt, One, Zero};
 
-/// The oblong numbers.
-/// 0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
-pub struct Oblong {
+/// The triangular numbers.
+/// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
+pub struct Square {
     val: BigInt,
     ctr: BigInt,
 }
 
-impl Oblong {
+impl Square {
     pub fn new() -> Self {
         Self {
             val: BigInt::zero(),
-            ctr: BigInt::from(2),
+            ctr: BigInt::one(),
         }
     }
 }
 
-impl Iterator for Oblong {
+impl Iterator for Square {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -28,5 +28,5 @@ impl Iterator for Oblong {
 }
 
 crate::print_a_few!(
-    Oblong::new(), 0, 10;
+    Square::new(), 0, 10;
 );

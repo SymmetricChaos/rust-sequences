@@ -1,6 +1,6 @@
 use num::{BigInt, Signed, Zero};
 
-/// The integers
+/// The integers.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
 pub struct Integer {
     val: BigInt,

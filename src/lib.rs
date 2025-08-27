@@ -12,25 +12,40 @@ pub mod pell;
 pub mod polygonal;
 pub mod power;
 pub mod recurrence;
+pub mod square;
+pub mod transforms;
 pub mod triangular;
+pub mod parity;
 
 #[macro_export]
 macro_rules! print_a_few {
     ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
-
-    #[cfg(test)]
-    mod print_a_few {
-        #[ignore = "visual check"]
-        #[test]
-        fn print_a_few_multi() {
+        #[cfg(test)]
+        mod print_a_few {
             use super::*;
-            use itertools::Itertools;
-            $(
-                let ns = $seq.skip($skip).take($take).collect_vec();
-                println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
-            )+
-
+            // #[ignore = "visual check"]
+            #[test]
+            fn print_a_few_multi() {
+                $(
+                    let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+                    println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
+                )+
+            }
         }
-    }
+    };
+
+    ($mod_name: ident; $($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
+        #[cfg(test)]
+        mod $mod_name {
+            use super::*;
+            // #[ignore = "visual check"]
+            #[test]
+            fn print_a_few_multi() {
+                $(
+                    let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+                    println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
+                )+
+            }
+        }
     };
 }

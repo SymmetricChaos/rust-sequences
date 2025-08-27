@@ -1,6 +1,6 @@
 use num::{BigInt, One};
 
-/// The factorial numbers
+/// The factorial numbers.
 /// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
 pub struct Factorial {
     val: BigInt,

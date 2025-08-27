@@ -1,6 +1,6 @@
 use num::{BigInt, One, Zero};
 
-/// The Pell numbers
+/// The Pell numbers.
 /// 0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
 pub struct Pell {
     a: BigInt,
