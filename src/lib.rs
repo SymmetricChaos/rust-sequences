@@ -3,6 +3,7 @@ pub mod factorial;
 pub mod fibonacci;
 pub mod geometric;
 pub mod integers;
+pub mod iterated_function;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod naturals;
@@ -23,8 +24,9 @@ macro_rules! print_a_few {
         #[test]
         fn print_a_few_multi() {
             use super::*;
+            use itertools::Itertools;
             $(
-                let ns: Vec<num::BigInt> = $seq.skip($skip).take($take).collect();
+                let ns = $seq.skip($skip).take($take).collect_vec();
                 println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
             )+
 
