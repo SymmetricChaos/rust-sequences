@@ -1,4 +1,4 @@
-use num::{BigInt, Signed, Zero};
+use num::{BigInt, Signed};
 
 /// The integers.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
@@ -10,8 +10,8 @@ pub struct Integer {
 impl Integer {
     pub fn new() -> Self {
         Self {
-            val: BigInt::zero(),
-            ctr: BigInt::zero(),
+            val: BigInt::from(0),
+            ctr: BigInt::from(0),
         }
     }
 }

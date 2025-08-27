@@ -1,4 +1,4 @@
-use num::{BigInt, One, Signed, Zero};
+use num::{BigInt, Signed};
 
 /// The even natural numbers.
 /// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...
@@ -9,7 +9,7 @@ pub struct Even {
 impl Even {
     pub fn new() -> Self {
         Self {
-            val: BigInt::zero(),
+            val: BigInt::from(0),
         }
     }
 }
@@ -32,7 +32,9 @@ pub struct Odd {
 
 impl Odd {
     pub fn new() -> Self {
-        Self { val: BigInt::one() }
+        Self {
+            val: BigInt::from(1),
+        }
     }
 }
 
@@ -56,7 +58,7 @@ pub struct EvenInteger {
 impl EvenInteger {
     pub fn new() -> Self {
         Self {
-            val: BigInt::zero(),
+            val: BigInt::from(0),
             ctr: BigInt::from(2),
         }
     }
@@ -88,7 +90,7 @@ pub struct OddInteger {
 impl OddInteger {
     pub fn new() -> Self {
         Self {
-            val: BigInt::one(),
+            val: BigInt::from(1),
             ctr: BigInt::from(2),
         }
     }

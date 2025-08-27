@@ -1,33 +1,36 @@
 use num::BigInt;
 
-/// The Fibonacci numbers.
-/// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34...
-pub struct Fibonacci {
+/// The tetrahedral numbers.
+/// 0, 1, 4, 10, 20, 35, 56, 84, 120, 165...
+pub struct Tetrahedral {
     a: BigInt,
     b: BigInt,
+    ctr: BigInt,
 }
 
-impl Fibonacci {
+impl Tetrahedral {
     pub fn new() -> Self {
         Self {
             a: BigInt::from(0),
             b: BigInt::from(1),
+            ctr: BigInt::from(2),
         }
     }
 }
 
-impl Iterator for Fibonacci {
+impl Iterator for Tetrahedral {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = &self.a + &self.b;
+        let t = 2 * &self.b - &self.a + &self.ctr;
         self.a = self.b.clone();
         self.b = t;
+        self.ctr += 1;
         Some(out)
     }
 }
 
 crate::print_a_few!(
-    Fibonacci::new(), 0, 10;
+    Tetrahedral::new(), 0, 10;
 );

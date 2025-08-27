@@ -1,4 +1,4 @@
-use num::{BigInt, One, Zero};
+use num::BigInt;
 
 /// The polygonal numbers with selectable number order
 pub struct Polygonal {
@@ -14,8 +14,8 @@ impl Polygonal {
     /// and then higher order polygonal numbers
     pub fn new(n: u32) -> Self {
         Self {
-            val: BigInt::zero(),
-            ctr: BigInt::one(),
+            val: BigInt::from(0),
+            ctr: BigInt::from(1),
             inc: BigInt::from(n),
         }
     }

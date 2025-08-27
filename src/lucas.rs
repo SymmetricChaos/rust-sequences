@@ -1,4 +1,4 @@
-use num::{BigInt, One};
+use num::BigInt;
 
 /// The Lucas numbers.
 /// 2, 1, 3, 4, 7, 11, 18, 29, 47, 76...
@@ -11,7 +11,7 @@ impl Lucas {
     pub fn new() -> Self {
         Self {
             a: BigInt::from(2),
-            b: BigInt::one(),
+            b: BigInt::from(1),
         }
     }
 }

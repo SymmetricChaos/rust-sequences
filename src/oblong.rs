@@ -1,4 +1,4 @@
-use num::{BigInt, Zero};
+use num::BigInt;
 
 /// The oblong numbers.
 /// 0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
@@ -10,7 +10,7 @@ pub struct Oblong {
 impl Oblong {
     pub fn new() -> Self {
         Self {
-            val: BigInt::zero(),
+            val: BigInt::from(0),
             ctr: BigInt::from(2),
         }
     }

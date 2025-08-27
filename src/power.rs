@@ -1,4 +1,4 @@
-use num::{BigInt, One};
+use num::BigInt;
 
 /// The powers of n
 pub struct Power {
@@ -11,7 +11,7 @@ impl Power {
     pub fn new(n: u64) -> Self {
         assert!(n != 0);
         Self {
-            val: BigInt::one(),
+            val: BigInt::from(0),
             n: BigInt::from(n),
         }
     }

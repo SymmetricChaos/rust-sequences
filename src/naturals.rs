@@ -1,4 +1,4 @@
-use num::{BigInt, Zero};
+use num::BigInt;
 
 /// The natural numbers.
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
@@ -9,7 +9,7 @@ pub struct Natural {
 impl Natural {
     pub fn new() -> Self {
         Self {
-            ctr: BigInt::zero(),
+            ctr: BigInt::from(0),
         }
     }
 }

@@ -1,4 +1,4 @@
-use num::{BigInt, One, Zero};
+use num::BigInt;
 
 /// The Pell numbers.
 /// 0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
@@ -10,8 +10,8 @@ pub struct Pell {
 impl Pell {
     pub fn new() -> Self {
         Self {
-            a: BigInt::zero(),
-            b: BigInt::one(),
+            a: BigInt::from(0),
+            b: BigInt::from(1),
         }
     }
 }

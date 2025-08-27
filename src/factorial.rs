@@ -1,4 +1,4 @@
-use num::{BigInt, One};
+use num::BigInt;
 
 /// The factorial numbers.
 /// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
@@ -10,7 +10,7 @@ pub struct Factorial {
 impl Factorial {
     pub fn new() -> Self {
         Self {
-            val: BigInt::one(),
+            val: BigInt::from(1),
             ctr: BigInt::from(2),
         }
     }
