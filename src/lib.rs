@@ -1,7 +1,7 @@
+pub mod additive;
 pub mod arithmetic;
 pub mod factorial;
 pub mod fibonacci;
-pub mod generic;
 pub mod geometric;
 pub mod integers;
 pub mod iterated_function;
