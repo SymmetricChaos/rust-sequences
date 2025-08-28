@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use num::BigInt;
 
 /// Any recurrence of the form
@@ -28,6 +29,37 @@ impl Iterator for AdditiveLinear {
         let t = (&self.p * &self.a) + (&self.q * &self.b);
         self.a = self.b.clone();
         self.b = t;
+        Some(out)
+    }
+}
+
+/// Any recurrence of the form
+/// a_x = c_0 * a_{x-n} + c_1 * a_{x-n-1} + c_2 * a{x-n-2}...
+pub struct AdditiveLinearN {
+    vals: Vec<BigInt>,
+    coefs: Vec<BigInt>,
+}
+
+impl AdditiveLinearN {
+    pub fn new(inits: &[i64], coefs: &[i64]) -> Self {
+        Self {
+            vals: inits.iter().map(|x| BigInt::from(*x)).collect_vec(),
+            coefs: coefs.iter().map(|x| BigInt::from(*x)).collect_vec(),
+        }
+    }
+}
+
+impl Iterator for AdditiveLinearN {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.vals[0].clone();
+        let mut t = BigInt::from(0);
+        for (v, c) in self.vals.iter().zip(self.coefs.iter()) {
+            t += v * c;
+        }
+        self.vals[0] = t;
+        self.vals.rotate_left(1);
         Some(out)
     }
 }
@@ -153,6 +185,7 @@ impl Iterator for Multiplicative {
 
 crate::print_a_few!(
     AdditiveLinear::new(0, 1, 2, 3), 0, 10;
+    AdditiveLinearN::new(&[3, 0, 2], &[1, 1, 0]), 0, 10;
     MultiplicativeLinear::new(1, 2, 3, 4), 0, 10;
     Additive::new(0, 1, |x| x + 1, |x| x * -2), 0, 10;
     Multiplicative::new(0, 1, |x| x - 2, |x| x * -2), 0, 10;
