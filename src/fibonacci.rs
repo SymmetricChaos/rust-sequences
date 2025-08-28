@@ -28,6 +28,6 @@ impl Iterator for Fibonacci {
     }
 }
 
-crate::print_a_few!(
-    Fibonacci::new(), 0, 10;
+crate::check_sequences!(
+    Fibonacci::new(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
 );

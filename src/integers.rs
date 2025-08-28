@@ -31,6 +31,6 @@ impl Iterator for Integer {
     }
 }
 
-crate::print_a_few!(
-    Integer::new(), 0, 10;
+crate::check_sequences!(
+    Integer::new(), 0, 10, [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
 );

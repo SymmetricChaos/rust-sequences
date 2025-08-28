@@ -27,6 +27,6 @@ impl Iterator for Triangular {
     }
 }
 
-crate::print_a_few!(
-    Triangular::new(), 0, 10;
+crate::check_sequences!(
+    Triangular::new(), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
 );

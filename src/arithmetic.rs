@@ -25,9 +25,9 @@ impl Iterator for Arithmetic {
     }
 }
 
-crate::print_a_few!(
-    Arithmetic::new(0, 0), 0, 10;
-    Arithmetic::new(0, 1), 0, 10;
-    Arithmetic::new(0, 2), 0, 10;
-    Arithmetic::new(0, 3), 0, 10;
+crate::check_sequences!(
+    Arithmetic::new(0, 0), 0, 10, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Arithmetic::new(0, 1), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Arithmetic::new(0, 2), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    Arithmetic::new(0, 3), 0, 10, [0, 3, 6, 9, 12, 15, 18, 21, 24, 27];
 );

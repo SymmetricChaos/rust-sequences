@@ -2,6 +2,7 @@ use num::BigInt;
 
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
+/// beginning with a_0 = 0 and a_1 = 1
 pub struct LucasU {
     a: BigInt,
     b: BigInt,
@@ -25,15 +26,16 @@ impl Iterator for LucasU {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let pa = &self.p * &self.a;
-        let qb = &self.q * &self.b;
-        let t = pa - qb;
+        let t = (&self.p * &self.a) - (&self.q * &self.b);
         self.a = self.b.clone();
         self.b = t;
         Some(out)
     }
 }
 
+/// Any recurrence of the form
+/// a_x = p * a_{x-1} - q * a_{x-2}
+/// beginning with a_0 = 2 and a_1 = p
 pub struct LucasV {
     a: BigInt,
     b: BigInt,
@@ -57,20 +59,15 @@ impl Iterator for LucasV {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let pa = &self.p * &self.a;
-        let qb = &self.q * &self.b;
-        let t = pa - qb;
+        let t = (&self.p * &self.a) - (&self.q * &self.b);
         self.a = self.b.clone();
         self.b = t;
         Some(out)
     }
 }
 
-crate::print_a_few!(
-    LucasU::new(1, -1), 0, 10; // Fibonacci
-    LucasV::new(1, -1), 0, 10; // Lucas
-    LucasU::new(2, -1), 0, 10; // Pell
-    LucasV::new(2, -1), 0, 10; // Pell-Lucas
-    LucasU::new(1, -2), 0, 10; // Jacobsthal
-    LucasV::new(1, -2), 0, 10; // Jacobsthal-Lucas
+crate::check_sequences!(
+    LucasU::new(1, -1), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]; // Fibonacci
+    LucasV::new(1, -1), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]; // Lucas
+    LucasU::new(1, -2), 0, 10, [0, 1, 2, 5, 12, 29, 70, 169, 408, 985]; // Pell
 );

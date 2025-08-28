@@ -11,7 +11,7 @@ impl Power {
     pub fn new(n: u64) -> Self {
         assert!(n != 0);
         Self {
-            val: BigInt::from(0),
+            val: BigInt::from(1),
             n: BigInt::from(n),
         }
     }
@@ -27,10 +27,9 @@ impl Iterator for Power {
     }
 }
 
-crate::print_a_few!(
-    Power::new(1), 0, 10;
-    Power::new(2), 0, 10;
-    Power::new(3), 0, 10;
-    Power::new(4), 0, 10;
-    Power::new(u64::MAX), 0, 4;
+crate::check_sequences!(
+    Power::new(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    Power::new(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+    Power::new(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
+    Power::new(4), 0, 10, [1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144];
 );

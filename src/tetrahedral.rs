@@ -31,6 +31,6 @@ impl Iterator for Tetrahedral {
     }
 }
 
-crate::print_a_few!(
-    Tetrahedral::new(), 0, 10;
+crate::check_sequences!(
+    Tetrahedral::new(), 0, 10, [0, 1, 4, 10, 20, 35, 56, 84, 120, 165];
 );

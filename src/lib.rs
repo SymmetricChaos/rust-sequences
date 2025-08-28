@@ -1,6 +1,7 @@
 pub mod arithmetic;
 pub mod factorial;
 pub mod fibonacci;
+pub mod generic;
 pub mod geometric;
 pub mod integers;
 pub mod iterated_function;
@@ -12,7 +13,6 @@ pub mod parity;
 pub mod pell;
 pub mod polygonal;
 pub mod power;
-pub mod recurrence;
 pub mod square;
 pub mod tetrahedral;
 pub mod transforms;
@@ -22,31 +22,32 @@ pub mod triangular;
 macro_rules! print_a_few {
     ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
         #[cfg(test)]
-        mod print_a_few {
-            use super::*;
-            // #[ignore = "visual check"]
-            #[test]
-            fn print_a_few_multi() {
-                $(
-                    let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-                    println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
-                )+
-            }
+        #[ignore = "visualization"]
+        #[test]
+        fn print_a_few_multi() {
+            $(
+                let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+                println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
+            )+
         }
     };
 
-    ($mod_name: ident; $($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
+}
+
+#[macro_export]
+macro_rules! check_sequences {
+    ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
         #[cfg(test)]
-        mod $mod_name {
-            use super::*;
-            // #[ignore = "visual check"]
             #[test]
-            fn print_a_few_multi() {
+            fn check_equality() {
                 $(
-                    let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-                    println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
+                    let expected = $data.map(|x| num::BigInt::from(x)).to_vec();
+                    let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
+                    if expected != calculated {
+                        panic!("failure to agree\nexpected:   {:?}\ncalculated: {:?}", expected, calculated);
+                    }
                 )+
             }
-        }
+
     };
 }

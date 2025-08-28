@@ -28,6 +28,6 @@ impl Iterator for Lucas {
     }
 }
 
-crate::print_a_few!(
-    Lucas::new(), 0, 10;
+crate::check_sequences!(
+    Lucas::new(), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
 );

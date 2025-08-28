@@ -27,6 +27,6 @@ impl Iterator for Square {
     }
 }
 
-crate::print_a_few!(
-    Square::new(), 0, 10;
+crate::check_sequences!(
+    Square::new(), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
 );

@@ -27,6 +27,6 @@ impl Iterator for Oblong {
     }
 }
 
-crate::print_a_few!(
-    Oblong::new(), 0, 10;
+crate::check_sequences!(
+    Oblong::new(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
 );

@@ -24,7 +24,7 @@ impl Iterator for Even {
     }
 }
 
-/// The even natural numbers.
+/// The odd natural numbers.
 /// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19...
 pub struct Odd {
     val: BigInt,
@@ -112,9 +112,9 @@ impl Iterator for OddInteger {
     }
 }
 
-crate::print_a_few!(
-    Even::new(), 0, 10;
-    EvenInteger::new(), 0, 10;
-    Odd::new(), 0, 10;
-    OddInteger::new(), 0, 10;
+crate::check_sequences!(
+    Even::new(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    EvenInteger::new(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
+    Odd::new(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    OddInteger::new(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
 );

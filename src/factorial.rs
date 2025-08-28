@@ -27,6 +27,6 @@ impl Iterator for Factorial {
     }
 }
 
-crate::print_a_few!(
-    Factorial::new(), 0, 10;
+crate::check_sequences!(
+    Factorial::new(), 0, 10, [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800];
 );

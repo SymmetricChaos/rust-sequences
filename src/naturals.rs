@@ -24,6 +24,6 @@ impl Iterator for Natural {
     }
 }
 
-crate::print_a_few!(
-    Natural::new(), 0, 10;
+crate::check_sequences!(
+    Natural::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );
