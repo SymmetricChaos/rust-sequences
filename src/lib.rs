@@ -2,21 +2,17 @@ pub mod additive;
 pub mod arithmetic;
 pub mod factorial;
 pub mod fibonacci;
+pub mod figurate;
 pub mod geometric;
 pub mod integers;
 pub mod iterated_function;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod naturals;
-pub mod oblong;
 pub mod parity;
 pub mod pell;
-pub mod polygonal;
 pub mod power;
-pub mod square;
-pub mod tetrahedral;
 pub mod transforms;
-pub mod triangular;
 
 #[macro_export]
 macro_rules! print_a_few {
