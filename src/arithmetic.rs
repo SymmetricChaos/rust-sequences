@@ -7,10 +7,10 @@ pub struct Arithmetic {
 }
 
 impl Arithmetic {
-    pub fn new(init: u64, n: u64) -> Self {
+    pub fn new(init: i64, inc: i64) -> Self {
         Self {
             val: BigInt::from(init),
-            inc: BigInt::from(n),
+            inc: BigInt::from(inc),
         }
     }
 }

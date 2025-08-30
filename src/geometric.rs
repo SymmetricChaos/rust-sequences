@@ -7,7 +7,7 @@ pub struct Geometric {
 }
 
 impl Geometric {
-    pub fn new(init: u64, n: u64) -> Self {
+    pub fn new(init: i64, n: i64) -> Self {
         Self {
             val: BigInt::from(init),
             inc: BigInt::from(n),
@@ -25,7 +25,7 @@ impl Iterator for Geometric {
     }
 }
 
-crate::print_a_few!(
-    Geometric::new(3, 2), 0, 10;
-    Geometric::new(4, 3), 0, 10;
+crate::check_sequences!(
+    Geometric::new(3, 2), 0, 10, [3, 6, 12, 24, 48, 96, 192, 384, 768, 1536];
+    Geometric::new(4, 3), 0, 10, [4, 12, 36, 108, 324, 972, 2916, 8748, 26244, 78732];
 );

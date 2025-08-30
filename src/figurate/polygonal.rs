@@ -10,7 +10,7 @@ pub struct Polygonal {
 impl Polygonal {
     /// n = 1 -> Triangular numbers.
     /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
-    pub fn new(n: u32) -> Self {
+    pub fn new(n: i64) -> Self {
         Self {
             val: BigInt::from(0),
             ctr: BigInt::from(1),
@@ -39,7 +39,7 @@ pub struct CenteredPolygonal {
 impl CenteredPolygonal {
     /// n = 3 -> Centered Triangular
     /// 1, 4, 10, 19, 31, 46, 64, 85, 109, 136...
-    pub fn new(n: u64) -> Self {
+    pub fn new(n: i64) -> Self {
         Self {
             n: BigInt::from(n),
             triangular: Polygonal::new(1),
