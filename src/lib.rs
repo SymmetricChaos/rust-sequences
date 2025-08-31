@@ -11,6 +11,7 @@ pub mod lucas_sequence;
 pub mod naturals;
 pub mod parity;
 pub mod pell;
+pub mod playground;
 pub mod power;
 pub mod transforms;
 
