@@ -16,6 +16,7 @@ impl PartialSums {
         }
     }
 }
+
 impl Iterator for PartialSums {
     type Item = BigInt;
 
@@ -42,6 +43,7 @@ impl PartialDiffs {
         }
     }
 }
+
 impl Iterator for PartialDiffs {
     type Item = BigInt;
 
@@ -68,6 +70,7 @@ impl PartialProds {
         }
     }
 }
+
 impl Iterator for PartialProds {
     type Item = BigInt;
 

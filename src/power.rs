@@ -7,9 +7,9 @@ pub struct Power {
 }
 
 impl Power {
-    /// Panics if n = 0
-    pub fn new(n: u64) -> Self {
-        assert!(n != 0);
+    /// Panics if n <= 0
+    pub fn new(n: i64) -> Self {
+        assert!(n > 0);
         Self {
             val: BigInt::from(1),
             n: BigInt::from(n),
