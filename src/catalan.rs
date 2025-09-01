@@ -21,7 +21,7 @@ impl Iterator for Catalan {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = (((2 * &self.ctr - 1) * 2)* &self.val) / (&self.ctr + 1) ;
+        self.val = (((2 * &self.ctr - 1) * 2) * &self.val) / (&self.ctr + 1);
         self.ctr += 1;
         Some(out)
     }

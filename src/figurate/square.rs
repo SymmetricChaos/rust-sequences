@@ -15,8 +15,7 @@ impl Square {
         }
     }
 
-    /// The nth square number calculated as
-    /// n * n
+    /// The nth square number
     pub fn nth(n: u64) -> BigInt {
         BigInt::from(n) * BigInt::from(n)
     }

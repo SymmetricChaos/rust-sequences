@@ -15,8 +15,7 @@ impl Triangular {
         }
     }
 
-    // The nth triangular number calculated as
-    // (n * (n+1))/2
+    /// The nth triangular number
     pub fn nth(n: u64) -> BigInt {
         (BigInt::from(n) * (BigInt::from(n) + 1)) / 2
     }

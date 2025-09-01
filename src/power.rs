@@ -1,6 +1,6 @@
 use num::BigInt;
 
-/// The powers of n
+/// The powers of n.
 pub struct Power {
     val: BigInt,
     n: BigInt,

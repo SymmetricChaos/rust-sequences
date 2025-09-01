@@ -6,7 +6,6 @@ pub mod fibonacci;
 pub mod figurate;
 pub mod geometric;
 pub mod integers;
-pub mod iterated_function;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod naturals;
