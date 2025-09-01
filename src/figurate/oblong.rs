@@ -14,6 +14,10 @@ impl Oblong {
             ctr: BigInt::from(2),
         }
     }
+
+    pub fn nth(n: u64) -> BigInt {
+        BigInt::from(n) * (BigInt::from(n) + 1)
+    }
 }
 
 impl Iterator for Oblong {

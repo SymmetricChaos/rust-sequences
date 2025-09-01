@@ -14,6 +14,12 @@ impl Triangular {
             ctr: BigInt::from(1),
         }
     }
+
+    // The nth triangular number calculated as
+    // (n * (n+1))/2
+    pub fn nth(n: u64) -> BigInt {
+        (BigInt::from(n) * (BigInt::from(n) + 1)) / 2
+    }
 }
 
 impl Iterator for Triangular {

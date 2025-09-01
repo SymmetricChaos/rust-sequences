@@ -1,6 +1,6 @@
 use num::BigInt;
 
-/// The triangular numbers.
+/// The square numbers.
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
 pub struct Square {
     val: BigInt,
@@ -13,6 +13,12 @@ impl Square {
             val: BigInt::from(0),
             ctr: BigInt::from(1),
         }
+    }
+
+    /// The nth square number calculated as
+    /// n * n
+    pub fn nth(n: u64) -> BigInt {
+        BigInt::from(n) * BigInt::from(n)
     }
 }
 
