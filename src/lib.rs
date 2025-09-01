@@ -1,5 +1,6 @@
 pub mod additive;
 pub mod arithmetic;
+pub mod catalan;
 pub mod factorial;
 pub mod fibonacci;
 pub mod figurate;
