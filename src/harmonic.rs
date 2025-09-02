@@ -1,4 +1,4 @@
-use num::{BigInt, BigRational};
+use num::{BigRational, FromPrimitive};
 
 /// The terms of the harmonic series.
 /// 1, 1/2, 1/3, 1/4, 1/5...
@@ -9,7 +9,7 @@ pub struct Harmonic {
 impl Harmonic {
     pub fn new() -> Self {
         Self {
-            ctr: BigRational::from_integer(BigInt::from(0)),
+            ctr: BigRational::from_i32(0).unwrap(),
         }
     }
 }
@@ -18,7 +18,7 @@ impl Iterator for Harmonic {
     type Item = BigRational;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr += BigRational::from_integer(BigInt::from(1));
+        self.ctr += BigRational::from_i32(1).unwrap();
         Some(self.ctr.recip())
     }
 }
@@ -33,8 +33,8 @@ pub struct HarmonicSums {
 impl HarmonicSums {
     pub fn new() -> Self {
         Self {
-            val: BigRational::from_integer(BigInt::from(0)),
-            ctr: BigRational::from_integer(BigInt::from(1)),
+            val: BigRational::from_i32(0).unwrap(),
+            ctr: BigRational::from_i32(1).unwrap(),
         }
     }
 }
@@ -45,7 +45,7 @@ impl Iterator for HarmonicSums {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         self.val += self.ctr.recip();
-        self.ctr += BigRational::from_integer(BigInt::from(1));
+        self.ctr += BigRational::from_i32(1).unwrap();
         Some(out)
     }
 }
