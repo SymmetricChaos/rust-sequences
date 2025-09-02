@@ -13,6 +13,7 @@ pub mod parity;
 pub mod pell;
 pub mod playground;
 pub mod power;
+pub mod primes;
 pub mod transforms;
 
 #[macro_export]
@@ -24,8 +25,27 @@ macro_rules! print_a_few {
         fn print_a_few_multi() {
             $(
                 let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-                println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $take, ns);
+                println!("{} {}..{}\n{:?}\n", stringify!($seq), $skip, $skip+$take, ns);
             )+
+        }
+    };
+
+}
+
+#[macro_export]
+macro_rules! check_time {
+    ($($seq: expr, $skip: expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[ignore = "visualization"]
+        #[test]
+        fn print_a_few_multi() {
+            let t = std::time::Instant::now();
+            $(
+                let ns = $seq.skip($skip).next().unwrap(); // better to use fully qualified forms in macros
+                println!("{} {} -> {:?}", stringify!($seq), $skip, ns);
+            )+
+            let elapsed = t.elapsed();
+            println!("duration: {:?}", elapsed)
         }
     };
 
