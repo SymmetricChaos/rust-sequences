@@ -1,24 +1,25 @@
-use num::BigInt;
+use num::{One, Zero};
+use std::ops::{Add, AddAssign, Mul, MulAssign};
 
-pub struct PartialSums {
-    sum: BigInt,
-    iter: Box<dyn Iterator<Item = BigInt>>,
+pub struct PartialSums<T> {
+    sum: T,
+    iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl PartialSums {
+impl<T: Zero> PartialSums<T> {
     pub fn new<I>(iter: I) -> Self
     where
-        I: Iterator<Item = BigInt> + 'static,
+        I: Iterator<Item = T> + 'static,
     {
         Self {
-            sum: BigInt::from(0),
+            sum: T::zero(),
             iter: Box::new(iter),
         }
     }
 }
 
-impl Iterator for PartialSums {
-    type Item = BigInt;
+impl<T: Add + AddAssign + Clone> Iterator for PartialSums<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.sum.clone();
@@ -27,25 +28,25 @@ impl Iterator for PartialSums {
     }
 }
 
-pub struct PartialProds {
-    prod: BigInt,
-    iter: Box<dyn Iterator<Item = BigInt>>,
+pub struct PartialProds<T> {
+    prod: T,
+    iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl PartialProds {
+impl<T: One> PartialProds<T> {
     pub fn new<I>(iter: I) -> Self
     where
-        I: Iterator<Item = BigInt> + 'static,
+        I: Iterator<Item = T> + 'static,
     {
         Self {
-            prod: BigInt::from(1),
+            prod: T::one(),
             iter: Box::new(iter),
         }
     }
 }
 
-impl Iterator for PartialProds {
-    type Item = BigInt;
+impl<T: Mul + MulAssign + Clone> Iterator for PartialProds<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.prod.clone();
