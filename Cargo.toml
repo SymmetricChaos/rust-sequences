@@ -1,5 +1,5 @@
 [package]
-name = "rust-recurrence"
+name = "rust-sequences"
 version = "0.1.0"
 edition = "2024"
 

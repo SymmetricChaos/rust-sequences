@@ -1,4 +1,29 @@
-use num::{BigInt, Signed};
+use num::{BigInt, One, Signed, Zero};
+
+/// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
+/// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
+pub struct Parity {
+    val: bool,
+}
+
+impl Parity {
+    pub fn new() -> Self {
+        Self { val: false }
+    }
+}
+
+impl Iterator for Parity {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.val = !self.val;
+        if self.val {
+            Some(BigInt::from(0))
+        } else {
+            Some(BigInt::from(1))
+        }
+    }
+}
 
 /// The even natural numbers.
 /// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...

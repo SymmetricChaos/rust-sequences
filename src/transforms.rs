@@ -89,34 +89,34 @@ impl<T: CheckedSub + Clone + Ord> Iterator for AbsDiffs<T> {
     }
 }
 
-/// The differences of every adjecent pair from a sequence. The earlier subtracted from the later.
-pub struct Diffs<T> {
-    prev: T,
-    iter: Box<dyn Iterator<Item = T>>,
-}
+// /// The differences of every adjecent pair from a sequence. The earlier subtracted from the later.
+// pub struct Diffs<T> {
+//     prev: T,
+//     iter: Box<dyn Iterator<Item = T>>,
+// }
 
-impl<T> Diffs<T> {
-    pub fn new<I>(mut iter: I) -> Self
-    where
-        I: Iterator<Item = T> + 'static,
-    {
-        Self {
-            prev: iter.next().unwrap(),
-            iter: Box::new(iter),
-        }
-    }
-}
+// impl<T> Diffs<T> {
+//     pub fn new<I>(mut iter: I) -> Self
+//     where
+//         I: Iterator<Item = T> + 'static,
+//     {
+//         Self {
+//             prev: iter.next().unwrap(),
+//             iter: Box::new(iter),
+//         }
+//     }
+// }
 
-impl<T: CheckedSub + Clone + Ord> Iterator for Diffs<T> {
-    type Item = T;
+// impl<T: CheckedSub + Clone + Ord> Iterator for Diffs<T> {
+//     type Item = T;
 
-    fn next(&mut self) -> Option<Self::Item> {
-        let cur = self.iter.next()?;
-        let out = self.prev.checked_sub(&cur)?;
-        self.prev = cur;
-        Some(out)
-    }
-}
+//     fn next(&mut self) -> Option<Self::Item> {
+//         let cur = self.iter.next()?;
+//         let out = self.prev.checked_sub(&cur)?;
+//         self.prev = cur;
+//         Some(out)
+//     }
+// }
 
 /// Sequence of numerators of a sequence of ratios.
 pub struct Numerators<T> {
