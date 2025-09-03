@@ -27,7 +27,7 @@ impl Iterator for Arithmetic {
 
 crate::check_sequences!(
     Arithmetic::new(0, 0), 0, 10, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Arithmetic::new(0, 1), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Arithmetic::new(0, 2), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
-    Arithmetic::new(0, 3), 0, 10, [0, 3, 6, 9, 12, 15, 18, 21, 24, 27];
+    Arithmetic::new(1, 1), 0, 10, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    Arithmetic::new(3, 2), 0, 10, [3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+    Arithmetic::new(4, 3), 0, 10, [4, 7, 10, 13, 16, 19, 22, 25, 28, 31];
 );

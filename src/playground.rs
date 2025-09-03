@@ -1,9 +1,11 @@
 #[cfg(test)]
 use crate::{
+    core::{
+        naturals::{Counting, Natural},
+        primes::Prime,
+    },
     fibonacci::Fibonacci,
     harmonic::Harmonic,
-    naturals::{Counting, Natural},
-    primes::Prime,
     transforms::{AbsDiffs, PartialSums, Ratios},
 };
 

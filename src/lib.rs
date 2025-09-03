@@ -1,20 +1,15 @@
 pub mod additive;
-pub mod arithmetic;
+
 pub mod catalan;
+pub mod core;
 pub mod factorial;
 pub mod fibonacci;
 pub mod figurate;
-pub mod geometric;
 pub mod harmonic;
-pub mod integers;
 pub mod lucas;
 pub mod lucas_sequence;
-pub mod naturals;
-pub mod parity;
 pub mod pell;
 pub mod playground;
-pub mod power;
-pub mod primes;
 pub mod smooth;
 pub mod transforms;
 
