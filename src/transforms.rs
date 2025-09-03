@@ -1,4 +1,4 @@
-use num::{CheckedAdd, CheckedMul, One, Zero, rational::Ratio};
+use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, One, Zero, rational::Ratio};
 
 /// Sequence of partial sums. Returns None if overflow occurs or sequence ends.
 pub struct PartialSums<T> {
@@ -56,12 +56,74 @@ impl<T: CheckedMul + Clone> Iterator for PartialProds<T> {
     }
 }
 
+/// The absolute differences of every adjecent pair from a sequence.
+pub struct AbsDiffs<T> {
+    prev: T,
+    iter: Box<dyn Iterator<Item = T>>,
+}
+
+impl<T> AbsDiffs<T> {
+    pub fn new<I>(mut iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            prev: iter.next().unwrap(),
+            iter: Box::new(iter),
+        }
+    }
+}
+
+impl<T: CheckedSub + Clone + Ord> Iterator for AbsDiffs<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let cur = self.iter.next()?;
+        let out = if self.prev > cur {
+            self.prev.checked_sub(&cur)?
+        } else {
+            cur.checked_sub(&self.prev)?
+        };
+        self.prev = cur;
+        Some(out)
+    }
+}
+
+/// The differences of every adjecent pair from a sequence. The earlier subtracted from the later.
+pub struct Diffs<T> {
+    prev: T,
+    iter: Box<dyn Iterator<Item = T>>,
+}
+
+impl<T> Diffs<T> {
+    pub fn new<I>(mut iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            prev: iter.next().unwrap(),
+            iter: Box::new(iter),
+        }
+    }
+}
+
+impl<T: CheckedSub + Clone + Ord> Iterator for Diffs<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let cur = self.iter.next()?;
+        let out = self.prev.checked_sub(&cur)?;
+        self.prev = cur;
+        Some(out)
+    }
+}
+
 /// Sequence of numerators of a sequence of ratios.
 pub struct Numerators<T> {
     iter: Box<dyn Iterator<Item = Ratio<T>>>,
 }
 
-impl<T: One> Numerators<T> {
+impl<T> Numerators<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = Ratio<T>> + 'static,
@@ -85,7 +147,7 @@ pub struct Denominator<T> {
     iter: Box<dyn Iterator<Item = Ratio<T>>>,
 }
 
-impl<T: One> Denominator<T> {
+impl<T> Denominator<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = Ratio<T>> + 'static,
@@ -101,5 +163,97 @@ impl<T: Clone> Iterator for Denominator<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.iter.next()?.denom().clone())
+    }
+}
+
+/// Sequence of reciprocals of a sequence of integers. Returns None if the integer is zero.
+pub struct Reciprocals<T> {
+    iter: Box<dyn Iterator<Item = T>>,
+}
+
+impl<T> Reciprocals<T> {
+    pub fn new<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            iter: Box::new(iter),
+        }
+    }
+}
+
+impl<T: Clone + Integer> Iterator for Reciprocals<T> {
+    type Item = Ratio<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let n = self.iter.next()?;
+        if n.is_zero() {
+            None
+        } else {
+            Some(Ratio::<T>::new_raw(T::one(), n))
+        }
+    }
+}
+
+/// Sequence of reciprocals of a sequence of ratios. Returns None whenever the numerator of the original sequence is zero.
+pub struct Inverses<T> {
+    iter: Box<dyn Iterator<Item = Ratio<T>>>,
+}
+
+impl<T> Inverses<T> {
+    pub fn new<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = Ratio<T>> + 'static,
+    {
+        Self {
+            iter: Box::new(iter),
+        }
+    }
+}
+
+impl<T: Clone + Integer> Iterator for Inverses<T> {
+    type Item = Ratio<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let n = self.iter.next()?;
+        if n.numer().is_zero() {
+            None
+        } else {
+            Some(n.recip())
+        }
+    }
+}
+
+/// Given integer sequences N and D return the sequence n_i/d_i for each element of N and D.
+/// Returns None if d_i is zero.
+pub struct Ratios<T> {
+    n: Box<dyn Iterator<Item = T>>,
+    d: Box<dyn Iterator<Item = T>>,
+}
+
+impl<T> Ratios<T> {
+    pub fn new<N, D>(n: N, d: D) -> Self
+    where
+        N: Iterator<Item = T> + 'static,
+        D: Iterator<Item = T> + 'static,
+    {
+        Self {
+            n: Box::new(n),
+            d: Box::new(d),
+        }
+    }
+}
+
+impl<T: Clone + Integer> Iterator for Ratios<T> {
+    type Item = Ratio<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let num = self.n.next()?;
+        let den = self.d.next()?;
+        if den.is_zero() {
+            None
+        } else {
+            Some(Ratio::<T>::new_raw(num, den))
+        }
     }
 }
