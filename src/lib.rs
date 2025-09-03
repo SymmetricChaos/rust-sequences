@@ -15,6 +15,7 @@ pub mod pell;
 pub mod playground;
 pub mod power;
 pub mod primes;
+pub mod smooth;
 pub mod transforms;
 
 #[macro_export]

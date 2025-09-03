@@ -1,4 +1,4 @@
-use num::{BigInt, One, Signed, Zero};
+use num::{BigInt, Signed};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
