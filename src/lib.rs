@@ -36,19 +36,20 @@ macro_rules! print_a_few {
 }
 
 #[macro_export]
-macro_rules! check_time {
+macro_rules! check_times {
     ($($seq: expr, $skip: expr);+ $(;)?) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
         fn print_a_few_multi() {
-            let t = std::time::Instant::now();
+
             $(
+                let t = std::time::Instant::now();
                 let ns = $seq.skip($skip).next().unwrap(); // better to use fully qualified forms in macros
-                println!("{} {} -> {:?}", stringify!($seq), $skip, ns);
+                let elapsed = t.elapsed();
+                println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, ns, elapsed);
             )+
-            let elapsed = t.elapsed();
-            println!("duration: {:?}", elapsed)
+
         }
     };
 

@@ -44,7 +44,7 @@ impl Iterator for Prime {
     }
 }
 
-crate::check_time!(
+crate::check_times!(
     Prime::new(), 100_000;
 );
 
