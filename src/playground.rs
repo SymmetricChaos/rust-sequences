@@ -1,8 +1,8 @@
 #[cfg(test)]
 use crate::{
     core::{
-        naturals::{Counting, Natural},
-        primes::Prime,
+        natural::{Counting, Natural},
+        prime::Prime,
     },
     fibonacci::Fibonacci,
     harmonic::Harmonic,

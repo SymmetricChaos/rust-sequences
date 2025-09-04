@@ -1,5 +1,4 @@
 pub mod additive;
-
 pub mod catalan;
 pub mod core;
 pub mod factorial;
@@ -57,10 +56,11 @@ macro_rules! check_sequences {
             #[test]
             fn check_equality() {
                 $(
+                    let name = stringify!($seq);
                     let expected = $data.map(|x| num::BigInt::from(x)).to_vec();
                     let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
                     if expected != calculated {
-                        panic!("failure to agree\nexpected:   {:?}\ncalculated: {:?}", expected, calculated);
+                        panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", name, expected, calculated);
                     }
                 )+
             }

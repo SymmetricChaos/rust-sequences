@@ -89,6 +89,7 @@ impl<T: CheckedSub + Clone + Ord> Iterator for AbsDiffs<T> {
     }
 }
 
+// TODO: what is the standard way to do this as there are two valid choices? If both how are they named?
 // /// The differences of every adjecent pair from a sequence. The earlier subtracted from the later.
 // pub struct Diffs<T> {
 //     prev: T,

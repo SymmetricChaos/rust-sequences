@@ -1,7 +1,7 @@
-use num::BigInt;
+use num::{BigInt, One, Zero};
 use std::collections::HashMap; // Found to be much faster than BTreeMap
 
-/// The prime numbers.
+/// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
 pub struct Prime {
     sieve: HashMap<BigInt, Vec<BigInt>>,
@@ -9,10 +9,19 @@ pub struct Prime {
 }
 
 impl Prime {
-    pub fn new() -> Prime {
-        Prime {
+    pub fn new() -> Self {
+        Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
             n: BigInt::from(1),
+        }
+    }
+
+    /// An older definition of primes also known as the non-composite numbers.
+    /// 1, 2, 3, 5, 7, 11, 13, 17, 19, 23...
+    pub fn with_one() -> Self {
+        Self {
+            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
+            n: BigInt::from(0),
         }
     }
 }
@@ -21,6 +30,10 @@ impl Iterator for Prime {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<BigInt> {
+        if self.n.is_zero() {
+            self.n += 1;
+            return Some(BigInt::one());
+        }
         loop {
             self.n += 1;
             if !self.sieve.contains_key(&self.n) {
