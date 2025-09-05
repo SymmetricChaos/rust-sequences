@@ -1,10 +1,11 @@
 use num::{BigInt, One};
 
-pub struct PascalTriangle {
+/// The rows of Pascal's triangle, aka the binomial coefficients.
+pub struct PascalsTriangle {
     row: Vec<BigInt>,
 }
 
-impl PascalTriangle {
+impl PascalsTriangle {
     pub fn new() -> Self {
         Self {
             row: vec![BigInt::one()],
@@ -12,7 +13,7 @@ impl PascalTriangle {
     }
 }
 
-impl Iterator for PascalTriangle {
+impl Iterator for PascalsTriangle {
     type Item = Vec<BigInt>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -29,5 +30,5 @@ impl Iterator for PascalTriangle {
 }
 
 crate::print_rows!(
-    PascalTriangle::new(), 0, 10;
+    PascalsTriangle::new(), 0, 10;
 );

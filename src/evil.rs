@@ -1,25 +1,25 @@
 use num::BigInt;
 
-/// The odious numbers.
-/// 1, 2, 4, 7, 8, 11, 13, 14, 16, 19...
-pub struct Odious {
+/// The evil numbers.
+/// 0, 3, 5, 6, 9, 10, 12, 15, 17, 18...
+pub struct Evil {
     ctr: BigInt,
 }
 
-impl Odious {
+impl Evil {
     pub fn new() -> Self {
         Self {
-            ctr: BigInt::from(1),
+            ctr: BigInt::from(0),
         }
     }
 }
 
-impl Iterator for Odious {
+impl Iterator for Evil {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            let mut odious = true;
+            let mut odious = false;
             for i in 0..self.ctr.bits() {
                 odious ^= self.ctr.bit(i);
             }
@@ -36,5 +36,5 @@ impl Iterator for Odious {
 }
 
 crate::check_sequences!(
-    Odious::new(), 0, 10, [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
+    Evil::new(), 0, 10, [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
 );

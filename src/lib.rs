@@ -2,6 +2,7 @@ pub mod ackermann_sets;
 pub mod additive;
 pub mod catalan;
 pub mod core;
+pub mod evil;
 pub mod factorial;
 pub mod fibonacci;
 pub mod figurate;
