@@ -9,6 +9,7 @@ pub mod harmonic;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod odious;
+pub mod pascal;
 pub mod pell;
 pub mod playground;
 pub mod smooth;
@@ -23,6 +24,22 @@ macro_rules! print_a_few {
             $(
                 let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
                 let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| x.to_string()),", ");
+                println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+            )+
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! print_rows {
+    ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[ignore = "visualization"]
+        #[test]
+        fn print_a_few_multi() {
+            $(
+                let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+                let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{:?}", x)),"\n");
                 println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
             )+
         }
