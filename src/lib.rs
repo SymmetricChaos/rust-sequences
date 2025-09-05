@@ -14,6 +14,7 @@ pub mod pascal;
 pub mod pell;
 pub mod playground;
 pub mod smooth;
+pub mod thue_morse;
 
 #[macro_export]
 macro_rules! print_a_few {
