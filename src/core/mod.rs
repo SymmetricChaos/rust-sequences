@@ -8,6 +8,7 @@ pub mod natural;
 pub mod parity;
 pub mod power;
 pub mod prime;
+pub mod transforms;
 
 pub use arithmetic::Arithmetic;
 pub use composite::Composite;

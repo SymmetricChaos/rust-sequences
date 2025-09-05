@@ -1,3 +1,4 @@
+pub mod ackermann_sets;
 pub mod additive;
 pub mod catalan;
 pub mod core;
@@ -7,10 +8,10 @@ pub mod figurate;
 pub mod harmonic;
 pub mod lucas;
 pub mod lucas_sequence;
+pub mod odious;
 pub mod pell;
 pub mod playground;
 pub mod smooth;
-pub mod transforms;
 
 #[macro_export]
 macro_rules! print_a_few {

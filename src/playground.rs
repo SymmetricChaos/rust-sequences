@@ -3,10 +3,10 @@ use crate::{
     core::{
         natural::{Counting, Natural},
         prime::Prime,
+        transforms::{AbsDiffs, PartialSums, Ratios},
     },
     fibonacci::Fibonacci,
     harmonic::Harmonic,
-    transforms::{AbsDiffs, PartialSums, Ratios},
 };
 
 crate::print_a_few!(

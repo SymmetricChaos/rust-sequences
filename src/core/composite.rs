@@ -1,7 +1,7 @@
 use num::{BigInt, One, Signed, Zero};
 use std::collections::HashMap; // Found to be much faster than BTreeMap
 
-/// The composite numbers.
+/// The composite numbers. A002808
 /// 4, 6, 8, 9, 10, 12, 14, 15, 16...
 pub struct Composite {
     sieve: HashMap<BigInt, Vec<BigInt>>,
@@ -16,7 +16,7 @@ impl Composite {
         }
     }
 
-    /// Includes 0 and 1, which are not composite, forming the non-prime numbers and zero.
+    /// Includes 0 and 1, which are not composite, forming the non-prime numbers and zero. A141468
     /// 0, 1, 4, 6, 8, 9, 10, 12, 14, 15...
     pub fn with_zero() -> Self {
         Self {
@@ -25,7 +25,7 @@ impl Composite {
         }
     }
 
-    /// Includes 1, which is not composite, forming the non-prime numbers.
+    /// Includes 1, which is not composite, forming the non-prime numbers. A018252
     /// 1, 4, 6, 8, 9, 10, 12, 14, 15, 16...
     pub fn with_one() -> Self {
         Self {
