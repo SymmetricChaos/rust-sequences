@@ -17,13 +17,31 @@ impl AdditiveLinear {
         }
     }
 
-    /// Any number of terms and coefficients.
+    /// The simplest linear recurrence with two terms and two coefficients.
+    pub fn new_big(a: BigInt, b: BigInt, p: BigInt, q: BigInt) -> Self {
+        Self {
+            vals: vec![a, b],
+            coefs: vec![p, q],
+        }
+    }
+
+    /// Linear recurrence with any number of terms and coefficients.
     /// Panics if inits.len() != coefs.len()
     pub fn new_from_slices(inits: &[i64], coefs: &[i64]) -> Self {
         assert_eq!(inits.len(), coefs.len());
         Self {
             vals: inits.iter().map(|x| BigInt::from(*x)).collect_vec(),
             coefs: coefs.iter().map(|x| BigInt::from(*x)).collect_vec(),
+        }
+    }
+
+    /// Linear recurrence with any number of terms and coefficients.
+    /// Panics if inits.len() != coefs.len()
+    pub fn new_from_slices_big(inits: &[BigInt], coefs: &[BigInt]) -> Self {
+        assert_eq!(inits.len(), coefs.len());
+        Self {
+            vals: inits.to_owned(),
+            coefs: coefs.to_owned(),
         }
     }
 }
@@ -63,9 +81,31 @@ impl Additive {
         }
     }
 
+    pub fn new_big(
+        a: BigInt,
+        b: BigInt,
+        p: Box<dyn Fn(&BigInt) -> BigInt>,
+        q: Box<dyn Fn(&BigInt) -> BigInt>,
+    ) -> Self {
+        Self {
+            vals: vec![a, b],
+            funcs: vec![p, q],
+        }
+    }
+
     pub fn new_from_slices(inits: &[i64], funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>) -> Self {
         Self {
             vals: inits.iter().map(|x| BigInt::from(*x)).collect_vec(),
+            funcs,
+        }
+    }
+
+    pub fn new_from_slices_big(
+        inits: &[BigInt],
+        funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>,
+    ) -> Self {
+        Self {
+            vals: inits.to_owned(),
             funcs,
         }
     }

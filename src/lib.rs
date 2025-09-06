@@ -78,7 +78,7 @@ macro_rules! check_sequences {
                 $(
                     let name = stringify!($seq);
                     let expected = $data.map(|x| num::BigInt::from(x)).to_vec();
-                    let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
+                    let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| num::BigInt::from(x)));
                     if expected != calculated {
                         panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", name, expected, calculated);
                     }

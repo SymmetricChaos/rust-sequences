@@ -1,8 +1,4 @@
-// f({}) = 0
-// f(A) = sum 2^f(elem_i) for all elem_i in A
-// implies
-
-use num::{BigInt, Zero};
+use num::{BigInt, Signed};
 
 // For 64-bit numbers only these 64 sets are used, each effectively represents a particular bit
 pub const BASE_SETS: [&str; 64] = [
@@ -73,6 +69,8 @@ pub const BASE_SETS: [&str; 64] = [
 ];
 
 /// The Ackerman sets, a bijection between the naturals and the pure sets.
+/// f({}) = 0
+/// f(A) = sum 2^f(a_i) for all a_i in A
 pub struct AckermannSet {
     ctr: u64,
 }
@@ -82,12 +80,17 @@ impl AckermannSet {
         Self { ctr: 0 }
     }
 
-    pub fn nth(n: u64) -> String {
-        number_to_set_64(n)
+    // TODO: should this be i64 or u64? Currently i64 for consistency through library of always using signed for API.
+    /// The nth Ackerman set. Panics if n is negative.
+    pub fn nth(n: i64) -> String {
+        assert!(!n.is_negative());
+        number_to_set_64(n as u64)
     }
 
-    pub fn nth_big(n: BigInt) -> String {
-        assert!(n >= BigInt::zero());
+    // This remiains fast up to thousands of bits!
+    /// The nth Ackerman set. Panics if n is negative.
+    pub fn nth_big(n: &BigInt) -> String {
+        assert!(!n.is_negative());
         number_to_set_big(n)
     }
 }
@@ -115,11 +118,11 @@ pub fn number_to_set_64(mut n: u64) -> String {
     out
 }
 
-pub fn number_to_set_big(n: BigInt) -> String {
-    assert!(n >= BigInt::zero());
+pub fn number_to_set_big(n: &BigInt) -> String {
+    assert!(!n.is_negative());
     let mut out = String::from("{");
     for i in 0..=n.bits() {
-        if i <= 64 {
+        if i < 64 {
             if n.bit(i) {
                 out.push_str(BASE_SETS[i as usize]); // much faster than recursion
             }
@@ -138,20 +141,20 @@ mod tests {
 
     use super::*;
 
-    #[ignore = "constant generation"]
-    #[test]
-    fn generate_base_sets() {
-        println!("pub const BASE_SETS: [&str; 64] = [");
-        for i in 0..64 {
-            println!("    \"{}\",", number_to_set_64(i))
-        }
-        println!("];");
-    }
+    // #[ignore = "constant generation"]
+    // #[test]
+    // fn generate_base_sets() {
+    //     println!("pub const BASE_SETS: [&str; 64] = [");
+    //     for i in 0..64 {
+    //         println!("    \"{}\",", number_to_set_64(i))
+    //     }
+    //     println!("];");
+    // }
 
     #[test]
     fn compare() {
-        for i in 100..164 {
-            assert_eq!(number_to_set_64(i), number_to_set_big(BigInt::from(i)))
+        for i in 1000..1064 {
+            assert_eq!(number_to_set_64(i), number_to_set_big(&BigInt::from(i)))
         }
     }
 }
