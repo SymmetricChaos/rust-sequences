@@ -23,7 +23,7 @@ impl<T: One + Zero> ThueMorse<T> {
 impl<T: One + Zero + Clone> Iterator for ThueMorse<T> {
     type Item = T;
 
-    fn next(&mut self) -> Option<T> {
+    fn next(&mut self) -> Option<Self::Item> {
         let out = match self.value.bit(self.ctr) {
             true => Some(self.one.clone()),
             false => Some(self.zero.clone()),

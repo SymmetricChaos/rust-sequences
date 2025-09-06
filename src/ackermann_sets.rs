@@ -72,6 +72,7 @@ pub const BASE_SETS: [&str; 64] = [
     "{{}{{}}{{{}}}{{}{{}}}{{{{}}}}{{}{{{}}}}}",
 ];
 
+/// The Ackerman sets, a bijection between the naturals and the pure sets.
 pub struct AckermannSet {
     ctr: u64,
 }
