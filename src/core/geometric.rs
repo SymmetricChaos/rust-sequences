@@ -7,7 +7,10 @@ pub struct Geometric {
 }
 
 impl Geometric {
-    pub fn new(init: i64, n: i64) -> Self {
+    pub fn new<T>(init: T, n: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             val: BigInt::from(init),
             inc: BigInt::from(n),

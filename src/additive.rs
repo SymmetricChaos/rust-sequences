@@ -10,38 +10,32 @@ pub struct AdditiveLinear {
 
 impl AdditiveLinear {
     /// The simplest linear recurrence with two terms and two coefficients.
-    pub fn new(a: i64, b: i64, p: i64, q: i64) -> Self {
+    pub fn new<T>(a: T, b: T, p: T, q: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             vals: vec![BigInt::from(a), BigInt::from(b)],
             coefs: vec![BigInt::from(p), BigInt::from(q)],
         }
     }
 
-    /// The simplest linear recurrence with two terms and two coefficients.
-    pub fn new_big(a: BigInt, b: BigInt, p: BigInt, q: BigInt) -> Self {
-        Self {
-            vals: vec![a, b],
-            coefs: vec![p, q],
-        }
-    }
-
     /// Linear recurrence with any number of terms and coefficients.
     /// Panics if inits.len() != coefs.len()
-    pub fn new_from_slices(inits: &[i64], coefs: &[i64]) -> Self {
+    pub fn new_from_slices<T: Clone>(inits: &[T], coefs: &[T]) -> Self
+    where
+        BigInt: From<T>,
+    {
         assert_eq!(inits.len(), coefs.len());
         Self {
-            vals: inits.iter().map(|x| BigInt::from(*x)).collect_vec(),
-            coefs: coefs.iter().map(|x| BigInt::from(*x)).collect_vec(),
-        }
-    }
-
-    /// Linear recurrence with any number of terms and coefficients.
-    /// Panics if inits.len() != coefs.len()
-    pub fn new_from_slices_big(inits: &[BigInt], coefs: &[BigInt]) -> Self {
-        assert_eq!(inits.len(), coefs.len());
-        Self {
-            vals: inits.to_owned(),
-            coefs: coefs.to_owned(),
+            vals: inits
+                .into_iter()
+                .map(|x| BigInt::from(x.clone()))
+                .collect_vec(),
+            coefs: coefs
+                .into_iter()
+                .map(|x| BigInt::from(x.clone()))
+                .collect_vec(),
         }
     }
 }

@@ -7,15 +7,13 @@ pub struct Collatz {
 
 impl Collatz {
     /// Start a Collatz sequence from n.
-    pub fn new(n: i64) -> Self {
+    pub fn new<T>(n: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             value: BigInt::from(n),
         }
-    }
-
-    /// Start a Collatz sequence from n.
-    pub fn new_big(n: BigInt) -> Self {
-        Self { value: n }
     }
 }
 
@@ -34,22 +32,20 @@ impl Iterator for Collatz {
     }
 }
 
-/// The odd values of the Collatz (aka hailstone) sequences.
+/// The odd values of the Collatz (aka hailstone) sequences. In the usual Collatz sequences powers of two are divided out of values one at a time.
 pub struct CollatzOdd {
     value: BigInt,
 }
 
 impl CollatzOdd {
     /// Start an odd Collatz sequence from n.
-    pub fn new(n: i64) -> Self {
+    pub fn new<T>(n: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             value: BigInt::from(n),
         }
-    }
-
-    /// Start an odd Collatz sequence from n.
-    pub fn new_big(n: BigInt) -> Self {
-        Self { value: n }
     }
 }
 

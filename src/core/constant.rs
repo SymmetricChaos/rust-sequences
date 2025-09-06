@@ -6,14 +6,13 @@ pub struct Constant {
 }
 
 impl Constant {
-    pub fn new(val: i64) -> Self {
+    pub fn new<T>(val: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             val: BigInt::from(val),
         }
-    }
-
-    pub fn new_big(val: BigInt) -> Self {
-        Self { val }
     }
 }
 

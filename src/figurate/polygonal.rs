@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, One, Zero};
 
 use crate::figurate::triangular::Triangular;
 
@@ -14,10 +14,13 @@ impl Polygonal {
     /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
     /// k = 1 -> The triangular numbers
     /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
-    pub fn new(k: i64) -> Self {
+    pub fn new<T>(k: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
-            val: BigInt::from(0),
-            ctr: BigInt::from(1),
+            val: BigInt::zero(),
+            ctr: BigInt::one(),
             inc: BigInt::from(k),
         }
     }
@@ -53,10 +56,13 @@ impl CenteredPolygonal {
     /// k = 4 -> Centered square numbers
     /// 1, 5, 13, 25, 41, 61, 85, 113, 145, 181...
     /// Lower values of k are consistent but do not have standard names
-    pub fn new(k: i64) -> Self {
+    pub fn new<T: One>(k: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
             k: BigInt::from(k),
-            triangular: Polygonal::new(1),
+            triangular: Polygonal::new(T::one()),
         }
     }
 

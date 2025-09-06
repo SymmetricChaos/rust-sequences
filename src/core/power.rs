@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, One, Signed};
 
 /// The powers of n.
 pub struct Power {
@@ -8,10 +8,13 @@ pub struct Power {
 
 impl Power {
     /// Panics if n <= 0
-    pub fn new(n: i64) -> Self {
-        assert!(n > 0);
+    pub fn new<T: Clone>(n: T) -> Self
+    where
+        BigInt: From<T>,
+    {
+        assert!(BigInt::from(n.clone()).is_positive());
         Self {
-            val: BigInt::from(1),
+            val: BigInt::one(),
             n: BigInt::from(n),
         }
     }

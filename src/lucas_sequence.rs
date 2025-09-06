@@ -1,4 +1,6 @@
-use num::BigInt;
+use num::{BigInt, One, Zero};
+
+use crate::core::TWO;
 
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
@@ -11,10 +13,13 @@ pub struct LucasU {
 }
 
 impl LucasU {
-    pub fn new(p: i64, q: i64) -> Self {
+    pub fn new<T>(p: T, q: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
-            a: BigInt::from(0),
-            b: BigInt::from(1),
+            a: BigInt::zero(),
+            b: BigInt::one(),
             p: BigInt::from(p),
             q: BigInt::from(q),
         }
@@ -44,10 +49,13 @@ pub struct LucasV {
 }
 
 impl LucasV {
-    pub fn new(p: i64, q: i64) -> Self {
+    pub fn new<T: Clone>(p: T, q: T) -> Self
+    where
+        BigInt: From<T>,
+    {
         Self {
-            a: BigInt::from(2),
-            b: BigInt::from(p),
+            a: TWO.to_owned(),
+            b: BigInt::from(p.clone()),
             p: BigInt::from(p),
             q: BigInt::from(q),
         }

@@ -16,8 +16,11 @@ impl Oblong {
     }
 
     /// The nth oblong number
-    pub fn nth(n: u64) -> BigInt {
-        BigInt::from(n) * (BigInt::from(n) + 1)
+    pub fn nth<T: Clone>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        BigInt::from(n.clone()) * (BigInt::from(n) + 1)
     }
 }
 

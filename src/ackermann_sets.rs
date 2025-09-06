@@ -80,18 +80,15 @@ impl AckermannSet {
         Self { ctr: 0 }
     }
 
-    // TODO: should this be i64 or u64? Currently i64 for consistency through library of always using signed for API.
-    /// The nth Ackerman set. Panics if n is negative.
-    pub fn nth(n: i64) -> String {
-        assert!(!n.is_negative());
-        number_to_set_64(n as u64)
-    }
-
     // This remiains fast up to thousands of bits!
     /// The nth Ackerman set. Panics if n is negative.
-    pub fn nth_big(n: &BigInt) -> String {
-        assert!(!n.is_negative());
-        number_to_set_big(n)
+    pub fn nth<T>(n: T) -> String
+    where
+        BigInt: From<T>,
+    {
+        let b = BigInt::from(n);
+        assert!(!b.is_negative());
+        number_to_set_big(&b)
     }
 }
 

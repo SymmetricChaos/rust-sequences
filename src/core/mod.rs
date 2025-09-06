@@ -16,6 +16,13 @@ pub use constant::Constant;
 pub use geometric::Geometric;
 pub use integer::Integer;
 pub use natural::{Counting, Natural};
+use num::{BigInt, FromPrimitive};
 pub use parity::{Even, EvenInteger, Odd, OddInteger};
 pub use power::Power;
 pub use prime::Prime;
+
+use std::cell::LazyCell;
+
+pub const TWO: LazyCell<BigInt> = LazyCell::new(|| BigInt::from_i32(2).unwrap());
+pub const NEG_TWO: LazyCell<BigInt> = LazyCell::new(|| BigInt::from_i32(-2).unwrap());
+pub const NEG_ONE: LazyCell<BigInt> = LazyCell::new(|| BigInt::from_i32(-1).unwrap());
