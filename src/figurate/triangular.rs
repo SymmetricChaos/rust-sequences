@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, Signed};
 
 /// The triangular numbers.
 /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
@@ -16,8 +16,14 @@ impl Triangular {
     }
 
     /// The nth triangular number
-    pub fn nth(n: u64) -> BigInt {
-        (BigInt::from(n) * (BigInt::from(n) + 1)) / 2
+    /// Panics if n is negative.
+    pub fn nth<T>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = BigInt::from(n);
+        assert!(!n.is_negative());
+        (n.clone() * (n + 1)) / 2
     }
 }
 

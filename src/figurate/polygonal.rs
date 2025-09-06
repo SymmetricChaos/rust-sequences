@@ -1,5 +1,6 @@
+use num::{BigInt, One, Signed, Zero};
+
 use crate::figurate::triangular::Triangular;
-use num::{BigInt, One, Zero};
 
 /// The polygonal numbers with selectable order.
 pub struct Polygonal {
@@ -25,9 +26,15 @@ impl Polygonal {
     }
 
     /// The nth polygonal number of order k
-    pub fn nth(k: i64, n: u64) -> BigInt {
+    /// Panics if n or k is negative.
+    pub fn nth<T>(k: T, n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
         let k = &BigInt::from(k);
         let n = &BigInt::from(n);
+        assert!(!n.is_negative());
+        assert!(!k.is_negative());
         ((k - 2) * n * n - (k - 4) * n) / 2
     }
 }
@@ -66,7 +73,13 @@ impl CenteredPolygonal {
     }
 
     /// The nth centered polygonal number of order k
-    pub fn nth(k: i64, n: u64) -> BigInt {
+    /// Panics if n or k is negative.
+    pub fn nth<T>(k: T, n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let k = BigInt::from(k);
+        assert!(!k.is_negative());
         (Triangular::nth(n) * k) + 1
     }
 }
@@ -96,3 +109,8 @@ crate::check_sequences!(
     CenteredPolygonal::new(5), 0, 10, [1, 6, 16, 31, 51, 76, 106, 141, 181, 226];
     CenteredPolygonal::new(6), 0, 10, [1, 7, 19, 37, 61, 91, 127, 169, 217, 271];
 );
+
+#[test]
+fn big() {
+    println!("{}", Polygonal::nth(-3, i128::MAX))
+}

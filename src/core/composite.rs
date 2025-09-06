@@ -16,21 +16,21 @@ impl Composite {
         }
     }
 
-    /// Includes 0 and 1, which are not composite, forming the non-prime numbers and zero. A141468
-    /// 0, 1, 4, 6, 8, 9, 10, 12, 14, 15...
-    pub fn with_zero() -> Self {
-        Self {
-            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
-            n: BigInt::from(-1),
-        }
-    }
-
     /// Includes 1, which is not composite, forming the non-prime numbers. A018252
     /// 1, 4, 6, 8, 9, 10, 12, 14, 15, 16...
     pub fn with_one() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
             n: BigInt::from(0),
+        }
+    }
+
+    /// Includes 0 and 1, which are not composite, forming the non-prime numbers and zero. A141468
+    /// 0, 1, 4, 6, 8, 9, 10, 12, 14, 15...
+    pub fn with_zero() -> Self {
+        Self {
+            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
+            n: BigInt::from(-1),
         }
     }
 }

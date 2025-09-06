@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, Signed};
 
 /// The square numbers.
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
@@ -16,8 +16,13 @@ impl Square {
     }
 
     /// The nth square number
-    pub fn nth(n: u64) -> BigInt {
-        BigInt::from(n) * BigInt::from(n)
+    pub fn nth<T>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = BigInt::from(n);
+        assert!(!n.is_negative());
+        &n * &n
     }
 }
 

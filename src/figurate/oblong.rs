@@ -15,12 +15,12 @@ impl Oblong {
         }
     }
 
-    /// The nth oblong number
-    pub fn nth<T: Clone>(n: T) -> BigInt
+    pub fn nth<T>(n: T) -> BigInt
     where
         BigInt: From<T>,
     {
-        BigInt::from(n.clone()) * (BigInt::from(n) + 1)
+        let n = BigInt::from(n);
+        &n * (&n + 1)
     }
 }
 
