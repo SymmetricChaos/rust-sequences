@@ -1,6 +1,5 @@
-use num::{BigInt, One, Zero};
-
 use crate::figurate::triangular::Triangular;
+use num::{BigInt, One, Zero};
 
 /// The polygonal numbers with selectable order.
 pub struct Polygonal {

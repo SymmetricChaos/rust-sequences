@@ -32,7 +32,7 @@ impl Iterator for Collatz {
     }
 }
 
-/// The odd values of the Collatz (aka hailstone) sequences. In the usual Collatz sequences powers of two are divided out of values one at a time.
+/// The odd values of the Collatz (aka hailstone) sequences. In the usual Collatz sequences powers of two are divided out one step at a time. In these they are all divided out in one step.
 pub struct CollatzOdd {
     value: BigInt,
 }

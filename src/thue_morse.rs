@@ -1,6 +1,5 @@
-use num::{BigInt, One, Zero};
-
 use crate::core::TWO;
+use num::{BigInt, One, Zero};
 
 /// The bits of the Thue-Morse sequence.
 /// 0, 1, 1, 0, 1, 0, 0, 1, 1, 0...

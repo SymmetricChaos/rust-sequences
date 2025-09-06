@@ -1,6 +1,5 @@
-use num::{BigInt, One, Zero};
-
 use crate::core::TWO;
+use num::{BigInt, One, Zero};
 
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
