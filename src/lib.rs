@@ -1,6 +1,7 @@
 pub mod ackermann_sets;
 pub mod additive;
 pub mod catalan;
+pub mod collatz;
 pub mod core;
 pub mod evil;
 pub mod factorial;
