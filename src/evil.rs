@@ -35,6 +35,11 @@ impl Iterator for Evil {
     }
 }
 
+crate::check_iteration_times!(
+    Evil::new(), 1_100_000;
+);
+
+
 crate::check_sequences!(
     Evil::new(), 0, 10, [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
 );

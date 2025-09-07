@@ -33,6 +33,11 @@ impl Iterator for Odious {
     }
 }
 
+crate::check_iteration_times!(
+    Odious::new(), 1_100_000;
+);
+
+
 crate::check_sequences!(
     Odious::new(), 0, 10, [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
 );

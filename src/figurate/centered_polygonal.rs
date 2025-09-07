@@ -9,8 +9,8 @@ pub struct CenteredPolygonal {
 }
 
 impl CenteredPolygonal {
-    /// k = 3 -> Centered triangular numbers
-    /// k = 4 -> Centered square numbers
+    /// k = 3 produces the centered triangular numbers
+    /// k = 4 produces the centered square numbers
     /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
     pub fn new<T: One>(k: T) -> Self
     where
@@ -18,11 +18,13 @@ impl CenteredPolygonal {
     {
         Self {
             k: BigInt::from(k),
-            polygonal: Polygonal::new(T::one()),
+            polygonal: Polygonal::new::<i32>(3),
         }
     }
 
-    /// The nth centered polygonal number of order k
+    /// k = 3 produces the centered triangular numbers
+    /// k = 4 produces the centered square numbers
+    /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
     pub fn nth<T>(n: T, k: T) -> BigInt
     where
         BigInt: From<T>,
