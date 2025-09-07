@@ -50,6 +50,50 @@ impl Iterator for Polygonal {
     }
 }
 
+// /// The generalized polygonal numbers with selectable order.
+// pub struct PolygonalGeneralized {
+//     val: BigInt,
+//     ctr: BigInt,
+//     inc: BigInt,
+// }
+
+// impl PolygonalGeneralized {
+//     pub fn new<T>(k: T) -> Self
+//     where
+//         BigInt: From<T>,
+//     {
+//         Self {
+//             val: BigInt::zero(),
+//             ctr: BigInt::one(),
+//             inc: BigInt::from(k),
+//         }
+//     }
+
+//     /// The nth polygonal number of order k
+//     /// Panics if n or k is negative.
+//     pub fn nth<T>(k: T, n: T) -> BigInt
+//     where
+//         BigInt: From<T>,
+//     {
+//         let k = &BigInt::from(k);
+//         let n = &BigInt::from(n);
+//         assert!(!n.is_negative());
+//         assert!(!k.is_negative());
+//         ((k - 2) * n * n - (k - 4) * n) / 2
+//     }
+// }
+
+// impl Iterator for PolygonalGeneralized {
+//     type Item = BigInt;
+
+//     fn next(&mut self) -> Option<Self::Item> {
+//         let out = self.val.clone();
+//         self.val += &self.ctr;
+//         self.ctr += &self.inc;
+//         Some(out)
+//     }
+// }
+
 /// The centered polygonal numbers with selectable order
 pub struct CenteredPolygonal {
     k: BigInt,

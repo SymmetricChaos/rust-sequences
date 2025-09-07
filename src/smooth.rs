@@ -9,6 +9,7 @@ pub struct Smooth {
 }
 
 impl Smooth {
+    // TODO: Should this allow BigInt: From<T>?
     /// Panics if n is less than two.
     pub fn new(n: i64) -> Self {
         assert!(n > 1);

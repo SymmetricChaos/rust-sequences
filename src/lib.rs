@@ -11,6 +11,7 @@ pub mod harmonic;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod odious;
+pub mod partition;
 pub mod pascal;
 pub mod pell;
 pub mod playground;
