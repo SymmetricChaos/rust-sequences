@@ -14,7 +14,7 @@ pub use arithmetic::Arithmetic;
 pub use composite::Composite;
 pub use constant::Constant;
 pub use geometric::Geometric;
-pub use integer::Integers;
+pub use integer::Integer;
 pub use natural::Natural;
 use num::{BigInt, FromPrimitive};
 pub use parity::{Even, EvenInteger, Odd, OddInteger};

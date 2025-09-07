@@ -1,4 +1,4 @@
-use num::{BigInt, One, Signed};
+use num::{BigInt, One};
 
 /// The powers of n.
 pub struct Power {
@@ -7,12 +7,10 @@ pub struct Power {
 }
 
 impl Power {
-    /// Panics if n <= 0
     pub fn new<T: Clone>(n: T) -> Self
     where
         BigInt: From<T>,
     {
-        assert!(BigInt::from(n.clone()).is_positive());
         Self {
             val: BigInt::one(),
             n: BigInt::from(n),
@@ -28,9 +26,22 @@ impl Iterator for Power {
         self.val *= &self.n;
         Some(out)
     }
+
+    // Should be slightly faster than iteration with .next()
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.val *= self.n.pow(n.try_into().unwrap());
+        let out = self.val.clone();
+        self.val *= &self.n;
+        Some(out)
+    }
 }
 
+crate::print_values!(
+    Power::new(3), 5, 10;
+);
+
 crate::check_sequences!(
+    Power::new(-2), 0, 10, [1, -2, 4, -8, 16, -32, 64, -128, 256, -512];
     Power::new(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     Power::new(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
     Power::new(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
