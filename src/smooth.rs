@@ -1,23 +1,25 @@
 use crate::core::Prime;
 use itertools::Itertools;
-use num::{BigInt, Integer, One};
+use num::{BigInt, Integer, One, Signed, Zero};
 
-/// The smooth numbers, those natural numbers for which the only prime divisors are less than n.
+/// The smooth numbers, those natural numbers for which the only prime divisors are less than or equal to n.
 pub struct Smooth {
     ctr: BigInt,
     primes: Vec<BigInt>,
 }
 
 impl Smooth {
-    // TODO: Should this allow BigInt: From<T>?
     /// Panics if n is less than two.
-    pub fn new(n: i64) -> Self {
-        assert!(n > 1);
+    /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
+    pub fn new<T>(n: T) -> Self
+    where
+        BigInt: From<T>,
+    {
+        let n = BigInt::from(n);
+        assert!(n.is_positive());
         Self {
-            ctr: BigInt::from(0),
-            primes: Prime::new()
-                .take_while(|x| *x <= BigInt::from(n))
-                .collect_vec(),
+            ctr: BigInt::zero(),
+            primes: Prime::new().take_while(|x| *x <= n).collect_vec(),
         }
     }
 }

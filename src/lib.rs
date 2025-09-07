@@ -12,11 +12,11 @@ pub mod lucas;
 pub mod lucas_sequence;
 pub mod odious;
 pub mod partition;
-pub mod pascal;
 pub mod pell;
 pub mod playground;
 pub mod smooth;
 pub mod thue_morse;
+pub mod triangles;
 
 #[macro_export]
 macro_rules! print_a_few {
@@ -57,13 +57,16 @@ macro_rules! check_times {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
-        fn print_a_few_multi() {
+        fn check_timings() {
 
             $(
                 let t = std::time::Instant::now();
-                let ns = $seq.skip($skip).next().unwrap(); // better to use fully qualified forms in macros
+                for _ in 0..($skip-1) {
+                    $seq.next().unwrap();
+                }
+                let n = $seq.next().unwrap();
                 let elapsed = t.elapsed();
-                println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, ns, elapsed);
+                println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, n, elapsed);
             )+
 
         }

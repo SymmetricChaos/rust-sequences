@@ -11,8 +11,8 @@ pub struct Fibonacci {
 impl Fibonacci {
     pub fn new() -> Self {
         Self {
-            a: BigInt::from(0),
-            b: BigInt::from(1),
+            a: BigInt::zero(),
+            b: BigInt::one(),
         }
     }
 }
@@ -36,6 +36,16 @@ pub struct FibonacciWord<T> {
     word: VecDeque<bool>,
     zero: T,
     one: T,
+}
+
+impl Default for FibonacciWord<BigInt> {
+    fn default() -> Self {
+        Self {
+            word: VecDeque::from(vec![false]),
+            zero: BigInt::zero(),
+            one: BigInt::one(),
+        }
+    }
 }
 
 impl<T: One + Zero + PartialEq> FibonacciWord<T> {
@@ -75,7 +85,6 @@ impl<T: Clone> Iterator for FibonacciWord<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let cur = self.word.pop_front()?;
-        println!("{}", self.word.len());
         if cur {
             self.word.push_back(false);
             Some(self.one.clone())
@@ -118,7 +127,7 @@ impl Iterator for FibonacciStrings {
 
 crate::check_sequences!(
     Fibonacci::new(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
-    FibonacciWord::<u8>::new(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
+    FibonacciWord::default(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
 );
 
 crate::print_a_few!(

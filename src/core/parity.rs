@@ -1,4 +1,4 @@
-use num::{BigInt, Signed};
+use num::{BigInt, One, Signed, Zero};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
@@ -18,9 +18,9 @@ impl Iterator for Parity {
     fn next(&mut self) -> Option<Self::Item> {
         self.val = !self.val;
         if self.val {
-            Some(BigInt::from(0))
+            Some(BigInt::zero())
         } else {
-            Some(BigInt::from(1))
+            Some(BigInt::one())
         }
     }
 }
@@ -47,6 +47,12 @@ impl Iterator for Even {
         self.val += 2;
         Some(out)
     }
+
+    // Nearly constant time optimization for .skip()
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.val += BigInt::from(n) * 2;
+        Some(self.val.clone())
+    }
 }
 
 /// The odd natural numbers.
@@ -57,9 +63,7 @@ pub struct Odd {
 
 impl Odd {
     pub fn new() -> Self {
-        Self {
-            val: BigInt::from(1),
-        }
+        Self { val: BigInt::one() }
     }
 }
 
@@ -71,20 +75,24 @@ impl Iterator for Odd {
         self.val += 2;
         Some(out)
     }
+
+    // Nearly constant time optimization for .skip()
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.val += 2 * BigInt::from(n);
+        Some(self.val.clone())
+    }
 }
 
 /// The even integers.
 /// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10...
 pub struct EvenInteger {
     val: BigInt,
-    ctr: BigInt,
 }
 
 impl EvenInteger {
     pub fn new() -> Self {
         Self {
             val: BigInt::from(0),
-            ctr: BigInt::from(2),
         }
     }
 }
@@ -96,11 +104,12 @@ impl Iterator for EvenInteger {
         let out = self.val.clone();
 
         if self.val.is_positive() {
-            self.val -= &self.ctr;
+            self.val *= BigInt::from(-1);
         } else {
-            self.val += &self.ctr;
+            self.val *= BigInt::from(-1);
+            self.val += 2;
         };
-        self.ctr += 2;
+
         Some(out)
     }
 }
@@ -109,14 +118,12 @@ impl Iterator for EvenInteger {
 /// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9...
 pub struct OddInteger {
     val: BigInt,
-    ctr: BigInt,
 }
 
 impl OddInteger {
     pub fn new() -> Self {
         Self {
             val: BigInt::from(1),
-            ctr: BigInt::from(2),
         }
     }
 }
@@ -128,14 +135,20 @@ impl Iterator for OddInteger {
         let out = self.val.clone();
 
         if self.val.is_positive() {
-            self.val -= &self.ctr;
+            self.val *= BigInt::from(-1);
         } else {
-            self.val += &self.ctr;
+            self.val *= BigInt::from(-1);
+            self.val += 2;
         };
-        self.ctr += 2;
+
         Some(out)
     }
 }
+
+crate::check_times!(
+    Even::new(), 1_000_000;
+    Even::new().skip(1_000_000), 1;
+);
 
 crate::check_sequences!(
     Even::new(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];

@@ -1,21 +1,20 @@
-use num::{BigInt, Signed};
+use num::{BigInt, One, Signed, Zero};
 
 /// The square numbers.
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
 pub struct Square {
     val: BigInt,
-    ctr: BigInt,
 }
 
 impl Square {
     pub fn new() -> Self {
         Self {
-            val: BigInt::from(0),
-            ctr: BigInt::from(1),
+            val: BigInt::zero(),
         }
     }
 
     /// The nth square number
+    /// Panics if n is negative.
     pub fn nth<T>(n: T) -> BigInt
     where
         BigInt: From<T>,
@@ -30,12 +29,16 @@ impl Iterator for Square {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val += &self.ctr;
-        self.ctr += 2;
+        let out = &self.val * &self.val;
+        self.val += BigInt::one();
+
         Some(out)
     }
 }
+
+crate::check_times!(
+    Square::new(), 3_500_000;
+);
 
 crate::check_sequences!(
     Square::new(), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];

@@ -15,7 +15,7 @@ pub use composite::Composite;
 pub use constant::Constant;
 pub use geometric::Geometric;
 pub use integer::Integer;
-pub use natural::{Counting, Natural};
+pub use natural::Natural;
 use num::{BigInt, FromPrimitive};
 pub use parity::{Even, EvenInteger, Odd, OddInteger};
 pub use power::Power;
