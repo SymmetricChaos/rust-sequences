@@ -10,10 +10,8 @@ pub struct CenteredPolygonal {
 
 impl CenteredPolygonal {
     /// k = 3 -> Centered triangular numbers
-    /// 1, 4, 10, 19, 31, 46, 64, 85, 109, 136...
     /// k = 4 -> Centered square numbers
-    /// 1, 5, 13, 25, 41, 61, 85, 113, 145, 181...
-    /// Lower values of k are consistent but do not have standard names but resemble Hogben's central polygonal numbers
+    /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
     pub fn new<T: One>(k: T) -> Self
     where
         BigInt: From<T>,
@@ -24,16 +22,15 @@ impl CenteredPolygonal {
         }
     }
 
-    // /// The nth centered polygonal number of order k
-    // /// Panics if n or k is negative.
-    // pub fn nth<T>(k: T, n: T) -> BigInt
-    // where
-    //     BigInt: From<T>,
-    // {
-    //     let n = BigInt::from(n);
-    //     let k = BigInt::from(k);
-    //     (Polygonal::nth(n.clone(), k.clone()) * k) + 1
-    // }
+    /// The nth centered polygonal number of order k
+    pub fn nth<T>(n: T, k: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let k = &BigInt::from(k);
+        let n = &BigInt::from(n);
+        (k * n * (n - 1)) / 2 + 1
+    }
 }
 
 impl Iterator for CenteredPolygonal {

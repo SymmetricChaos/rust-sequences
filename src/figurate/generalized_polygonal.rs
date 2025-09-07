@@ -2,7 +2,7 @@ use num::{BigInt, One};
 
 /// The generalized polygonal numbers with selectable order.
 pub struct GeneralizedPolygonal {
-    integers: crate::core::Integer,
+    integers: crate::core::Integers,
     k: BigInt,
 }
 
@@ -12,7 +12,7 @@ impl GeneralizedPolygonal {
         BigInt: From<T>,
     {
         Self {
-            integers: crate::core::Integer::new(),
+            integers: crate::core::Integers::new(),
             k: BigInt::from(k),
         }
     }

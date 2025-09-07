@@ -52,6 +52,7 @@ impl Iterator for Polygonal {
         Some(out)
     }
 
+    // Optimized .nth() makes .skip() quicker
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         self.gnomon += &self.order * n;
 
@@ -68,8 +69,8 @@ impl Iterator for Polygonal {
     }
 }
 
+// For testing the .nth() words
 crate::print_values!(
-
     Polygonal::new(1), 0, 10;
     Polygonal::new(1), 1, 10;
     Polygonal::new(1), 2, 10;
