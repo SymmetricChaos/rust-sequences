@@ -130,6 +130,6 @@ crate::check_sequences!(
     FibonacciWord::default(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
 );
 
-crate::print_a_few!(
+crate::print_values!(
     FibonacciStrings::new(), 0, 7;
 );

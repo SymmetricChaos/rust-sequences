@@ -50,7 +50,7 @@ impl Iterator for HarmonicSums {
     }
 }
 
-crate::print_a_few!(
+crate::print_values!(
     Harmonic::new(), 0, 10;
     HarmonicSums::new(), 0, 8;
 );

@@ -37,7 +37,7 @@ impl Iterator for GeneralizedPolygonal {
     }
 }
 
-crate::print_a_few!(
+crate::print_values!(
     GeneralizedPolygonal::new(1), 0, 10;
     GeneralizedPolygonal::new(2), 0, 10;
     GeneralizedPolygonal::new(3), 0, 10;

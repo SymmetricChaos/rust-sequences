@@ -120,7 +120,7 @@ impl Iterator for Additive {
     }
 }
 
-crate::print_a_few!(
+crate::print_values!(
     AdditiveLinear::new(0, 1, 2, 3), 0, 10;
     AdditiveLinear::new_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
     Additive::new(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;

@@ -19,12 +19,12 @@ pub mod thue_morse;
 pub mod triangles;
 
 #[macro_export]
-macro_rules! print_a_few {
+macro_rules! print_values {
     ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
-        fn print_a_few_multi() {
+        fn print_values() {
             $(
                 let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
                 let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| x.to_string()),", ");
@@ -40,7 +40,7 @@ macro_rules! print_rows {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
-        fn print_a_few_multi() {
+        fn print_rows() {
             $(
                 let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
                 let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{:?}", x)),"\n");
@@ -57,14 +57,15 @@ macro_rules! check_times {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
-        fn check_timings() {
+        fn check_times() {
 
             $(
                 let t = std::time::Instant::now();
-                for _ in 0..($skip-1) {
-                    $seq.next().unwrap();
-                }
-                let n = $seq.next().unwrap();
+                let mut s = $seq;
+                for _ in 0..($skip) {
+                    s.next();
+                };
+                let n = s.next().unwrap();
                 let elapsed = t.elapsed();
                 println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, n, elapsed);
             )+
@@ -79,7 +80,7 @@ macro_rules! check_sequences {
     ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
         #[cfg(test)]
             #[test]
-            fn check_equality() {
+            fn check_sequences() {
                 $(
                     let name = stringify!($seq);
                     let expected = $data.map(|x| num::BigInt::from(x)).to_vec();

@@ -9,7 +9,7 @@ use crate::{
     harmonic::Harmonic,
 };
 
-crate::print_a_few!(
+crate::print_values!(
     Natural::from(1), 0, 10;
     PartialSums::new(Natural::from(1)), 0, 10;
     PartialSums::new(Harmonic::new()), 0, 10;
