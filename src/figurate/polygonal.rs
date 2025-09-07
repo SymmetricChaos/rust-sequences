@@ -1,39 +1,44 @@
-use num::{BigInt, One, Signed, Zero};
+use num::{BigInt, One, Zero};
 
 /// The polygonal numbers with selectable order.
 pub struct Polygonal {
     val: BigInt,
-    ctr: BigInt,
-    inc: BigInt,
+    gnomon: BigInt,
+    order: BigInt,
 }
 
 impl Polygonal {
-    /// k = 0 -> The natural numbers
-    /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
-    /// k = 1 -> The triangular numbers
-    /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
+    /// The order, k, is the change in the size of the gnomon at each step.
+    /// k = 0 prodces the natural numbers
+    /// k = 1 produces the triangular numbers
+    /// k = 2 produces the square numbers
+    /// and so on for higher orders
+    /// Negative values of k are allowed but do not have standard names.
     pub fn new<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
         Self {
             val: BigInt::zero(),
-            ctr: BigInt::one(),
-            inc: BigInt::from(k),
+            gnomon: BigInt::one(),
+            order: BigInt::from(k),
         }
     }
 
-    /// The nth polygonal number of order k
-    /// Panics if n or k is negative.
-    pub fn nth<T>(k: T, n: T) -> BigInt
+    /// The order, k, is the change in the size of the gnomon at each step.
+    /// k = 0 prodces the natural numbers
+    /// k = 1 produces the triangular numbers
+    /// k = 2 produces the square numbers
+    /// and so on for higher orders
+    /// Negative values of k are allowed but do not have standard names.
+    /// Negative values of n are generalized polygonal numbers.
+    pub fn nth<T>(n: T, k: T) -> BigInt
     where
         BigInt: From<T>,
     {
         let k = &BigInt::from(k);
         let n = &BigInt::from(n);
-        assert!(!n.is_negative());
-        assert!(!k.is_negative());
-        ((k - 2) * n * n - (k - 4) * n) / 2
+        (k * n * n - (k - 2) * n) / 2
     }
 }
 
@@ -42,65 +47,56 @@ impl Iterator for Polygonal {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val += &self.ctr;
-        self.ctr += &self.inc;
+        self.val += &self.gnomon;
+        self.gnomon += &self.order;
+        Some(out)
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.gnomon += &self.order * n;
+
+        let n = &((&self.gnomon - 1) / &self.order);
+        let k = &self.order;
+        self.val = (k * n * n - (k - 2) * n) / 2;
+
+        let out = self.val.clone();
+
+        self.val += &self.gnomon;
+        self.gnomon += &self.order;
+
         Some(out)
     }
 }
 
-// /// The generalized polygonal numbers with selectable order.
-// pub struct PolygonalGeneralized {
-//     val: BigInt,
-//     ctr: BigInt,
-//     inc: BigInt,
-// }
+crate::print_values!(
 
-// impl PolygonalGeneralized {
-//     pub fn new<T>(k: T) -> Self
-//     where
-//         BigInt: From<T>,
-//     {
-//         Self {
-//             val: BigInt::zero(),
-//             ctr: BigInt::one(),
-//             inc: BigInt::from(k),
-//         }
-//     }
+    Polygonal::new(1), 0, 10;
+    Polygonal::new(1), 1, 10;
+    Polygonal::new(1), 2, 10;
+    Polygonal::new(1), 3, 10;
+    Polygonal::new(1), 4, 10;
 
-//     /// The nth polygonal number of order k
-//     /// Panics if n or k is negative.
-//     pub fn nth<T>(k: T, n: T) -> BigInt
-//     where
-//         BigInt: From<T>,
-//     {
-//         let k = &BigInt::from(k);
-//         let n = &BigInt::from(n);
-//         assert!(!n.is_negative());
-//         assert!(!k.is_negative());
-//         ((k - 2) * n * n - (k - 4) * n) / 2
-//     }
-// }
-
-// impl Iterator for PolygonalGeneralized {
-//     type Item = BigInt;
-
-//     fn next(&mut self) -> Option<Self::Item> {
-//         let out = self.val.clone();
-//         self.val += &self.ctr;
-//         self.ctr += &self.inc;
-//         Some(out)
-//     }
-// }
+    Polygonal::new(2), 0, 10;
+    Polygonal::new(2), 1, 10;
+    Polygonal::new(2), 2, 10;
+    Polygonal::new(2), 3, 10;
+    Polygonal::new(2), 4, 10;
+);
 
 crate::check_sequences!(
     Polygonal::new(0), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     Polygonal::new(1), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
     Polygonal::new(2), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
     Polygonal::new(3), 0, 10, [0, 1, 5, 12, 22, 35, 51, 70, 92, 117];
-
 );
 
 #[test]
-fn big() {
-    println!("{}", Polygonal::nth(-3, i128::MAX))
+fn test_nth() {
+    for i in 0..10 {
+        print!("{}, ", Polygonal::nth(i, 1))
+    }
+    println!("");
+    for i in 0..10 {
+        print!("{}, ", Polygonal::nth(i, 2))
+    }
 }

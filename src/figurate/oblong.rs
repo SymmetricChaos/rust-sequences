@@ -35,6 +35,10 @@ impl Iterator for Oblong {
     }
 }
 
+crate::check_times!(
+    Oblong::new(), 3_200_000;
+);
+
 crate::check_sequences!(
     Oblong::new(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
 );

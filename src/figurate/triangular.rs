@@ -1,4 +1,4 @@
-use num::{BigInt, Signed};
+use num::BigInt;
 
 /// The triangular numbers.
 /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
@@ -15,15 +15,14 @@ impl Triangular {
         }
     }
 
-    /// The nth triangular number
-    /// Panics if n is negative.
+    /// The nth triangular number where T(0) = 0.
+    /// Negative values are the generalized triangular numbers.
     pub fn nth<T>(n: T) -> BigInt
     where
         BigInt: From<T>,
     {
         let n = BigInt::from(n);
-        assert!(!n.is_negative());
-        (n.clone() * (n + 1)) / 2
+        (&n * (&n + 1)) / 2
     }
 }
 
@@ -36,7 +35,27 @@ impl Iterator for Triangular {
         self.ctr += 1;
         Some(out)
     }
+
+    // Optimized .nth() makes .skip() quicker
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.ctr += n;
+        self.val = ((&self.ctr - 1) * &self.ctr) / 2;
+        let out = self.val.clone();
+
+        self.val += &self.ctr;
+        self.ctr += 1;
+        Some(out)
+    }
 }
+
+crate::print_values!(
+
+    Triangular::new(), 0, 10;
+    Triangular::new(), 1, 10;
+    Triangular::new(), 2, 10;
+    Triangular::new(), 3, 10;
+    Triangular::new(), 4, 10;
+);
 
 crate::check_sequences!(
     Triangular::new(), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];

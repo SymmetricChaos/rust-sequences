@@ -16,6 +16,14 @@ impl GeneralizedPolygonal {
             k: BigInt::from(k),
         }
     }
+    pub fn nth<T>(n: T, k: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = &BigInt::from(n);
+        let k = &BigInt::from(k);
+        ((k - 2) * n * n - (k - 4) * n) / 2
+    }
 }
 
 impl Iterator for GeneralizedPolygonal {
