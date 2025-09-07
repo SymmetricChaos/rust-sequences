@@ -35,7 +35,7 @@ impl Iterator for Oblong {
     }
 }
 
-crate::check_times!(
+crate::check_iteration_times!(
     Oblong::new(), 3_200_000;
 );
 

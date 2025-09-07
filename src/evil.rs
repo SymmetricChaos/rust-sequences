@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, Zero};
 
 /// The evil numbers, those having an even number of bits set in their binary representation.
 /// 0, 3, 5, 6, 9, 10, 12, 15, 17, 18...
@@ -9,7 +9,7 @@ pub struct Evil {
 impl Evil {
     pub fn new() -> Self {
         Self {
-            ctr: BigInt::from(0),
+            ctr: BigInt::zero(),
         }
     }
 }

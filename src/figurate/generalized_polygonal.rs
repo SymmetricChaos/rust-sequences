@@ -7,6 +7,12 @@ pub struct GeneralizedPolygonal {
 }
 
 impl GeneralizedPolygonal {
+    /// The order, k, is the number of sides of the polygon.
+    /// k = 2 produces the natural numbers
+    /// k = 3 produces the triangular numbers
+    /// k = 4 produces the square numbers
+    /// and so on for higher orders
+    /// Lower values of k are allowed but do not have standard names.
     pub fn new<T: One>(k: T) -> Self
     where
         BigInt: From<T>,
@@ -16,6 +22,12 @@ impl GeneralizedPolygonal {
             k: BigInt::from(k),
         }
     }
+    /// The order, k, is the number of sides of the polygon.
+    /// k = 2 produces the natural numbers
+    /// k = 3 produces the triangular numbers
+    /// k = 4 produces the square numbers
+    /// and so on for higher orders
+    /// Lower values of k are allowed but do not have standard names.
     pub fn nth<T>(n: T, k: T) -> BigInt
     where
         BigInt: From<T>,
@@ -35,14 +47,14 @@ impl Iterator for GeneralizedPolygonal {
         Some(out)
     }
 
-    // Slight optimization to .nth() also make .skip() faster.
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        for _ in 0..n {
-            self.integers.next();
-        }
-        let out = ((&self.k - 2) * n * n - (&self.k - 4) * n) / 2;
-        Some(out)
-    }
+    // // Slight optimization to .nth() also make .skip() faster.
+    // fn nth(&mut self, n: usize) -> Option<Self::Item> {
+    //     for _ in 0..n {
+    //         self.integers.next();
+    //     }
+    //     let out = ((&self.k - 2) * n * n - (&self.k - 4) * n) / 2;
+    //     Some(out)
+    // }
 }
 
 crate::print_values!(

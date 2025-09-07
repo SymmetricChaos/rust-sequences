@@ -145,7 +145,7 @@ impl Iterator for OddInteger {
     }
 }
 
-crate::check_times!(
+crate::check_iteration_times!(
     Even::new(), 1_000_000;
     Even::new().skip(1_000_000), 1;
 );

@@ -72,16 +72,17 @@ pub const BASE_SETS: [&str; 64] = [
 /// f({}) = 0
 /// f(A) = sum 2^f(a_i) for all a_i in A
 pub struct AckermannSet {
-    ctr: u64,
+    ctr: BigInt,
 }
 
 impl AckermannSet {
     pub fn new() -> Self {
-        Self { ctr: 0 }
+        Self { ctr: BigInt::ZERO }
     }
 
     // This remiains fast up to thousands of bits!
-    /// The nth Ackerman set. Panics if n is negative.
+    /// The nth Ackerman set.
+    /// Panics if n is negative.
     pub fn nth<T>(n: T) -> String
     where
         BigInt: From<T>,
@@ -96,7 +97,14 @@ impl Iterator for AckermannSet {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = number_to_set_64(self.ctr);
+        let out = number_to_set_big(&self.ctr);
+        self.ctr += 1;
+        Some(out)
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.ctr += n;
+        let out = number_to_set_big(&self.ctr);
         self.ctr += 1;
         Some(out)
     }
@@ -138,18 +146,18 @@ mod tests {
 
     use super::*;
 
-    // #[ignore = "constant generation"]
-    // #[test]
-    // fn generate_base_sets() {
-    //     println!("pub const BASE_SETS: [&str; 64] = [");
-    //     for i in 0..64 {
-    //         println!("    \"{}\",", number_to_set_64(i))
-    //     }
-    //     println!("];");
-    // }
+    #[ignore = "constant generation"]
+    #[test]
+    fn generate_base_sets() {
+        println!("pub const BASE_SETS: [&str; 64] = [");
+        for i in 0..64 {
+            println!("    \"{}\",", number_to_set_64(i))
+        }
+        println!("];");
+    }
 
     #[test]
-    fn compare() {
+    fn compare_u64_to_bigint() {
         for i in 1000..1064 {
             assert_eq!(number_to_set_64(i), number_to_set_big(&BigInt::from(i)))
         }

@@ -49,7 +49,6 @@ impl Iterator for Triangular {
 }
 
 crate::print_values!(
-
     Triangular::new(), 0, 10;
     Triangular::new(), 1, 10;
     Triangular::new(), 2, 10;

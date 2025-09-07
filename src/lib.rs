@@ -52,7 +52,7 @@ macro_rules! print_rows {
 }
 
 #[macro_export]
-macro_rules! check_times {
+macro_rules! check_iteration_times {
     ($($seq: expr, $skip: expr);+ $(;)?) => {
         #[cfg(test)]
         #[ignore = "visualization"]

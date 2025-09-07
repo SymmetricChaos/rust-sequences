@@ -45,7 +45,7 @@ impl Iterator for Smooth {
 
 // TODO: Optimized methods exist for generating the regular aka 5-Smooth numbers
 
-crate::check_times!(
+crate::check_iteration_times!(
     Smooth::new(5), 600;
 );
 

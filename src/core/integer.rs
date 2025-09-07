@@ -46,7 +46,7 @@ impl Iterator for Integer {
     }
 }
 
-crate::check_times!(Integer::new(), 3_700_000);
+crate::check_iteration_times!(Integer::new(), 3_700_000);
 
 crate::print_values!(
     Integer::new(), 5, 10;
