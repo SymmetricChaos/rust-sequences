@@ -1,4 +1,4 @@
-use num::{BigInt, Signed, Zero};
+use num::{BigInt, PrimInt, Signed, Zero};
 
 /// The natural numbers. The non-negative integers.
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
@@ -40,6 +40,35 @@ impl Iterator for Natural {
     }
 }
 
+/// The natural numbers. The non-negative integers.
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
+pub struct NaturalGeneric<T> {
+    ctr: T,
+}
+
+impl<T: PrimInt> NaturalGeneric<T> {
+    pub fn new() -> Self {
+        Self { ctr: T::zero() }
+    }
+
+    /// Natural numbers starting at a given value.
+    pub fn from(n: T) -> Self {
+        assert!(n >= T::zero());
+        Self { ctr: n }
+    }
+}
+
+impl<T: PrimInt> Iterator for NaturalGeneric<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.ctr.clone();
+        self.ctr = self.ctr.checked_add(&T::one())?;
+        Some(out)
+    }
+}
+
 crate::check_sequences!(
     Natural::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    NaturalGeneric::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );

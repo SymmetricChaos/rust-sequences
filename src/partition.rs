@@ -25,7 +25,7 @@ impl Iterator for Partition {
         let mut parts = BigInt::zero();
         let mut sign = 0;
 
-        for p in crate::figurate::GeneralizedPolygonal::new(5).skip(1) {
+        for p in crate::figurate::GeneralizedPentagonalGeneric::<i64>::new().skip(1) {
             let p = TryInto::<usize>::try_into(p).ok()?;
             if let Some(idx) = self.ctr.checked_sub(p) {
                 if sign < 2 {
@@ -46,7 +46,7 @@ impl Iterator for Partition {
 }
 
 crate::check_iteration_times!(
-    Partition::new(), 6_600;
+    Partition::new(), 27_000;
 );
 
 crate::check_sequences!(

@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, One, Zero};
 
 /// The tetrahedral numbers.
 /// 0, 1, 4, 10, 20, 35, 56, 84, 120, 165...
@@ -11,8 +11,8 @@ pub struct Tetrahedral {
 impl Tetrahedral {
     pub fn new() -> Self {
         Self {
-            a: BigInt::from(0),
-            b: BigInt::from(1),
+            a: BigInt::zero(),
+            b: BigInt::one(),
             ctr: BigInt::from(2),
         }
     }

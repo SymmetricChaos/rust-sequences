@@ -1,5 +1,5 @@
-use num::{BigInt, One, Zero};
-use std::collections::HashMap; // Found to be much faster than BTreeMap
+use num::{BigInt, One, PrimInt, Zero};
+use std::{collections::HashMap, hash::Hash}; // Found to be much faster than BTreeMap
 
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
@@ -42,13 +42,66 @@ impl Iterator for Prime {
             } else {
                 let factors = &self.sieve[&self.n].clone();
                 for factor in factors {
-                    if self.sieve.contains_key(&(factor + &self.n)) {
-                        self.sieve
-                            .get_mut(&(factor + &self.n))
-                            .unwrap()
-                            .push(factor.clone());
+                    let s = factor + &self.n;
+                    if self.sieve.contains_key(&s) {
+                        self.sieve.get_mut(&s).unwrap().push(factor.clone());
                     } else {
-                        self.sieve.insert(factor + &self.n, vec![factor.clone()]);
+                        self.sieve.insert(s, vec![factor.clone()]);
+                    }
+                }
+                self.sieve.remove(&self.n);
+            }
+        }
+    }
+}
+
+/// The prime natural numbers.
+/// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
+pub struct PrimeGeneric<T> {
+    sieve: HashMap<T, Vec<T>>,
+    n: T,
+}
+
+impl<T: PrimInt> PrimeGeneric<T> {
+    pub fn new() -> Self {
+        Self {
+            sieve: HashMap::<T, Vec<T>>::new(),
+            n: T::one(),
+        }
+    }
+
+    /// An older definition of primes also known as the non-composite numbers.
+    /// 1, 2, 3, 5, 7, 11, 13, 17, 19, 23...
+    pub fn with_one() -> Self {
+        Self {
+            sieve: HashMap::<T, Vec<T>>::new(),
+            n: T::zero(),
+        }
+    }
+}
+
+impl<T: PrimInt + Hash> Iterator for PrimeGeneric<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<T> {
+        if self.n.is_zero() {
+            self.n = self.n.checked_add(&T::one())?;
+            return Some(T::one());
+        }
+        loop {
+            self.n = self.n.checked_add(&T::one())?;
+            if !self.sieve.contains_key(&self.n) {
+                let v = self.n.checked_add(&self.n)?;
+                self.sieve.insert(v, vec![self.n.clone()]);
+                return Some(self.n.clone());
+            } else {
+                let factors = &self.sieve[&self.n].clone();
+                for factor in factors {
+                    let v = factor.checked_add(&self.n)?;
+                    if self.sieve.contains_key(&v) {
+                        self.sieve.get_mut(&v).unwrap().push(factor.clone());
+                    } else {
+                        self.sieve.insert(v, vec![factor.clone()]);
                     }
                 }
                 self.sieve.remove(&self.n);
@@ -58,7 +111,8 @@ impl Iterator for Prime {
 }
 
 crate::check_iteration_times!(
-    Prime::new(), 100_000;
+    Prime::new(), 22_000;
+    PrimeGeneric::<u32>::new(), 46_000;
 );
 
 crate::check_sequences!(

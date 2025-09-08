@@ -37,7 +37,7 @@ impl Iterator for Square {
 }
 
 crate::check_iteration_times!(
-    Square::new(), 4_000_000;
+    Square::new(), 4_500_000;
 );
 
 crate::check_sequences!(

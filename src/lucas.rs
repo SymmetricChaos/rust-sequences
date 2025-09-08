@@ -28,6 +28,10 @@ impl Iterator for Lucas {
     }
 }
 
+crate::check_iteration_times!(
+    Lucas::new(), 157_500;
+);
+
 crate::check_sequences!(
     Lucas::new(), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
 );

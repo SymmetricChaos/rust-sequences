@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, One, Zero};
 
 /// The square triangular numbers.
 /// 0, 1, 36, 1225, 41616, 1413721, 48024900...
@@ -10,8 +10,8 @@ pub struct SquareTriangular {
 impl SquareTriangular {
     pub fn new() -> Self {
         Self {
-            a: BigInt::from(0),
-            b: BigInt::from(1),
+            a: BigInt::zero(),
+            b: BigInt::one(),
         }
     }
 }

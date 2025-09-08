@@ -24,6 +24,25 @@ impl Iterator for Constant {
     }
 }
 
+/// A constant sequence that always returns the same value.
+pub struct ConstantGeneric<T> {
+    val: T,
+}
+
+impl<T> ConstantGeneric<T> {
+    pub fn news(val: T) -> Self {
+        Self { val }
+    }
+}
+
+impl<T: Clone> Iterator for ConstantGeneric<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(self.val.clone())
+    }
+}
+
 crate::check_sequences!(
     Constant::new(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
 );

@@ -40,6 +40,11 @@ impl<T: One + Zero + Clone> Iterator for ThueMorse<T> {
     }
 }
 
+crate::check_iteration_times!(
+    ThueMorse::<BigInt>::new(), 6_000_000;
+    ThueMorse::<i32>::new(), 9_000_000;
+);
+
 crate::check_sequences!(
     ThueMorse::<BigInt>::new(), 0, 10, [0, 1, 1, 0, 1, 0, 0, 1, 1, 0];
 );

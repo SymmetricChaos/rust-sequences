@@ -1,4 +1,4 @@
-use num::BigInt;
+use num::{BigInt, PrimInt};
 
 /// Arithmetic sequence with chosen initial value and increment
 pub struct Arithmetic {
@@ -24,6 +24,27 @@ impl Iterator for Arithmetic {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         self.val += &self.inc;
+        Some(out)
+    }
+}
+
+pub struct ArithmeticGeneric<T> {
+    val: T,
+    inc: T,
+}
+
+impl<T: PrimInt> ArithmeticGeneric<T> {
+    pub fn new(init: T, inc: T) -> Self {
+        Self { val: init, inc }
+    }
+}
+
+impl<T: PrimInt> Iterator for ArithmeticGeneric<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.val.clone();
+        self.val = self.val.checked_add(&self.inc)?;
         Some(out)
     }
 }
