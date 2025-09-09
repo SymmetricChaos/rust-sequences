@@ -1,4 +1,4 @@
-use num::{BigInt, PrimInt, Signed, Zero};
+use num::{BigInt, PrimInt, Signed};
 
 /// The integers in the canonical ordering.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
@@ -13,17 +13,15 @@ impl Integer {
         }
     }
 
+    /// The nth integer.
     pub fn nth<T>(n: T) -> BigInt
     where
         BigInt: From<T>,
     {
         let n = BigInt::from(n);
 
-        if n.is_zero() {
-            return n;
-        }
         // fully qualified name to avoid name collision
-        else if num::Integer::is_odd(&n) {
+        if num::Integer::is_odd(&n) {
             (n + 1) / 2
         } else {
             -n / 2
@@ -52,7 +50,7 @@ pub struct IntegerGeneric<T> {
     val: T,
 }
 
-impl<T: PrimInt> IntegerGeneric<T> {
+impl<T: PrimInt + Signed> IntegerGeneric<T> {
     pub fn new() -> Self {
         Self { val: T::zero() }
     }
@@ -73,7 +71,10 @@ impl<T: PrimInt + Signed> Iterator for IntegerGeneric<T> {
     }
 }
 
-crate::check_iteration_times!(Integer::new(), 3_700_000);
+crate::check_iteration_times!(
+    Integer::new(), 4_000_000;
+    IntegerGeneric::<i32>::new(), 4_000_000;
+);
 
 crate::print_values!(
     Integer::new(), 5, 10;

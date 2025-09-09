@@ -1,4 +1,6 @@
-use num::{BigInt, One, Signed, Zero};
+use std::marker::PhantomData;
+
+use num::{BigInt, One, PrimInt, Signed, Zero};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
@@ -21,6 +23,35 @@ impl Iterator for Parity {
             Some(BigInt::zero())
         } else {
             Some(BigInt::one())
+        }
+    }
+}
+
+/// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
+/// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
+pub struct ParityGeneric<T> {
+    val: bool,
+    _type: PhantomData<T>,
+}
+
+impl<T: PrimInt> ParityGeneric<T> {
+    pub fn new() -> Self {
+        Self {
+            val: false,
+            _type: PhantomData,
+        }
+    }
+}
+
+impl<T: PrimInt> Iterator for ParityGeneric<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.val = !self.val;
+        if self.val {
+            Some(T::zero())
+        } else {
+            Some(T::one())
         }
     }
 }
