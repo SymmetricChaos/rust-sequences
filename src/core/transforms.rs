@@ -89,35 +89,73 @@ impl<T: CheckedSub + Clone + Ord> Iterator for AbsDiffs<T> {
     }
 }
 
-// TODO: what is the standard way to do this as there are two valid choices? If both how are they named?
-// /// The differences of every adjecent pair from a sequence. The earlier subtracted from the later.
-// pub struct Diffs<T> {
-//     prev: T,
-//     iter: Box<dyn Iterator<Item = T>>,
-// }
+/// The boustrophedon transform of a sequence
+pub struct Boustrophedon<T> {
+    iter: Box<dyn Iterator<Item = T>>,
+    row: Vec<T>,
+}
 
-// impl<T> Diffs<T> {
-//     pub fn new<I>(mut iter: I) -> Self
-//     where
-//         I: Iterator<Item = T> + 'static,
-//     {
-//         Self {
-//             prev: iter.next().unwrap(),
-//             iter: Box::new(iter),
-//         }
-//     }
-// }
+impl<T> Boustrophedon<T> {
+    pub fn new<I>(mut iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            row: vec![iter.next().unwrap()],
+            iter: Box::new(iter),
+        }
+    }
+}
 
-// impl<T: CheckedSub + Clone + Ord> Iterator for Diffs<T> {
-//     type Item = T;
+impl<T: Clone + CheckedAdd> Iterator for Boustrophedon<T> {
+    type Item = T;
 
-//     fn next(&mut self) -> Option<Self::Item> {
-//         let cur = self.iter.next()?;
-//         let out = self.prev.checked_sub(&cur)?;
-//         self.prev = cur;
-//         Some(out)
-//     }
-// }
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.row.last().unwrap().clone();
+        let k = self.row.len();
+        let mut next_row = Vec::with_capacity(self.row.len() + 1);
+        next_row.push(self.iter.next()?);
+        for n in 1..=k {
+            next_row.push(next_row[n - 1].checked_add(&self.row[k - n])?);
+        }
+        self.row = next_row;
+        Some(out)
+    }
+}
+
+/// The boustrophedon transform of a sequence
+pub struct BoustrophedonTriangle<T> {
+    iter: Box<dyn Iterator<Item = T>>,
+    row: Vec<T>,
+}
+
+impl<T> BoustrophedonTriangle<T> {
+    pub fn new<I>(mut iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            row: vec![iter.next().unwrap()],
+            iter: Box::new(iter),
+        }
+    }
+}
+
+impl<T: Clone + CheckedAdd> Iterator for BoustrophedonTriangle<T> {
+    type Item = Vec<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.row.clone();
+        let k = self.row.len();
+        let mut next_row = Vec::with_capacity(self.row.len() + 1);
+        next_row.push(self.iter.next()?);
+        for n in 1..=k {
+            next_row.push(next_row[n - 1].checked_add(&self.row[k - n])?);
+        }
+        self.row = next_row;
+        Some(out)
+    }
+}
 
 /// Sequence of numerators of a sequence of ratios.
 pub struct Numerators<T> {

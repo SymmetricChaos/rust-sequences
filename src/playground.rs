@@ -1,9 +1,8 @@
 #[cfg(test)]
 use crate::{
     core::{
-        natural::Natural,
-        prime::Prime,
-        transforms::{AbsDiffs, PartialSums, Ratios},
+        Constant, Natural, Prime,
+        transforms::{AbsDiffs, Boustrophedon, PartialSums, Ratios},
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
@@ -18,4 +17,5 @@ crate::print_values!(
     AbsDiffs::new(Prime::new()), 0, 10;
     Natural::new().skip(5), 0, 10;
     Triangular::new().skip(5000), 0, 5;
+    Boustrophedon::new(Constant::new(1)), 0, 10;
 );
