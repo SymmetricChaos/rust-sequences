@@ -36,7 +36,9 @@ impl Iterator for Natural {
 
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         self.ctr += n;
-        Some(self.ctr.clone())
+        let out = Some(self.ctr.clone());
+        self.ctr += 1;
+        out
     }
 }
 

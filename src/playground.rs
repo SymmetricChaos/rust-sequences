@@ -6,6 +6,7 @@ use crate::{
         transforms::{AbsDiffs, PartialSums, Ratios},
     },
     fibonacci::Fibonacci,
+    figurate::Triangular,
     harmonic::Harmonic,
 };
 
@@ -15,4 +16,6 @@ crate::print_values!(
     PartialSums::new(Harmonic::new()), 0, 10;
     Ratios::new(Prime::new(),Fibonacci::new().skip(1)), 0, 10;
     AbsDiffs::new(Prime::new()), 0, 10;
+    Natural::new().skip(5), 0, 10;
+    Triangular::new().skip(5000), 0, 5;
 );
