@@ -2,7 +2,7 @@
 use crate::{
     core::{
         Constant, Natural, Prime,
-        transforms::{AbsDiffs, Boustrophedon, PartialSums, Ratios},
+        transforms::{AbsDiffs, Boustrophedon, BoustrophedonTriangle, PartialSums, Ratios},
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
@@ -18,4 +18,8 @@ crate::print_values!(
     Natural::new().skip(5), 0, 10;
     Triangular::new().skip(5000), 0, 5;
     Boustrophedon::new(Constant::new(1)), 0, 10;
+);
+
+crate::print_rows!(
+    BoustrophedonTriangle::new(Prime::new()), 0, 5;
 );

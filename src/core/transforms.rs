@@ -145,8 +145,11 @@ impl<T: Clone + CheckedAdd> Iterator for BoustrophedonTriangle<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.row.clone();
+        let mut out = self.row.clone();
         let k = self.row.len();
+        if k.is_even() {
+            out.reverse();
+        }
         let mut next_row = Vec::with_capacity(self.row.len() + 1);
         next_row.push(self.iter.next()?);
         for n in 1..=k {
