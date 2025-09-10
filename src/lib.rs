@@ -15,6 +15,7 @@ pub mod partition;
 pub mod pell;
 pub mod playground;
 pub mod smooth;
+pub mod squarefree;
 pub mod thue_morse;
 pub mod triangles;
 
