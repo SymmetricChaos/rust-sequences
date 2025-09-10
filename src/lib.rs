@@ -5,6 +5,7 @@ pub mod collatz;
 pub mod core;
 pub mod evil;
 pub mod factorial;
+pub mod farey;
 pub mod fibonacci;
 pub mod figurate;
 pub mod harmonic;
