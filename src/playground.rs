@@ -7,6 +7,7 @@ use crate::{
     fibonacci::Fibonacci,
     figurate::Triangular,
     harmonic::{Harmonic, HarmonicSums},
+    zeta::Zeta,
 };
 
 crate::print_values!(
@@ -15,9 +16,10 @@ crate::print_values!(
     Ratios::new(Prime::new(),Fibonacci::new().skip(1)), 0, 10;
     AbsDiffs::new(Prime::new()), 0, 10;
     Natural::new().skip(5), 0, 10;
-    Triangular::new().skip(250_000), 0, 5; // show fast skip ahead
+    Triangular::new().skip(1_234_567), 0, 5; // show fast skip ahead
     Boustrophedon::new(Constant::new(1)), 0, 10;
     Exponential::new(1,1), 0, 8; // converges on e
+    Zeta::new(3), 0, 9; // converges on Apery's constant 1.202569...
 );
 
 crate::print_rows!(

@@ -17,7 +17,7 @@ impl Exponential {
         Self {
             sum: Ratio::one(),
             val: Ratio::one(),
-            x: Ratio::new_raw(BigInt::from(n), BigInt::from(d)),
+            x: Ratio::new(BigInt::from(n), BigInt::from(d)),
             factorials: Factorial::new(),
         }
     }
@@ -29,7 +29,7 @@ impl Iterator for Exponential {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.sum.clone();
         self.val *= &self.x;
-        let frac = Ratio::new_raw(BigInt::one(), self.factorials.next()?);
+        let frac = Ratio::new(BigInt::one(), self.factorials.next()?);
         self.sum += frac * &self.val;
         Some(out)
     }

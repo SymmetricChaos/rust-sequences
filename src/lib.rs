@@ -18,6 +18,7 @@ pub mod smooth;
 pub mod squarefree;
 pub mod thue_morse;
 pub mod triangles;
+pub mod trig;
 pub mod zeta;
 
 #[macro_export]

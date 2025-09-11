@@ -232,7 +232,7 @@ impl<T: Clone + Integer> Iterator for Reciprocals<T> {
         if n.is_zero() {
             None
         } else {
-            Some(Ratio::<T>::new_raw(T::one(), n))
+            Some(Ratio::<T>::new(T::one(), n))
         }
     }
 }
@@ -295,7 +295,7 @@ impl<T: Clone + Integer> Iterator for Ratios<T> {
         if den.is_zero() {
             None
         } else {
-            Some(Ratio::<T>::new_raw(num, den))
+            Some(Ratio::<T>::new(num, den))
         }
     }
 }
