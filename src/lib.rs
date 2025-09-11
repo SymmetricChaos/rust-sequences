@@ -4,7 +4,6 @@ pub mod catalan;
 pub mod collatz;
 pub mod core;
 pub mod evil;
-pub mod factorial;
 pub mod farey;
 pub mod fibonacci;
 pub mod figurate;
@@ -19,6 +18,7 @@ pub mod smooth;
 pub mod squarefree;
 pub mod thue_morse;
 pub mod triangles;
+pub mod zeta;
 
 #[macro_export]
 macro_rules! print_values {
