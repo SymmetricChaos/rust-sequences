@@ -11,6 +11,11 @@ impl BernoullisTriangle {
             row: vec![BigInt::one()],
         }
     }
+
+    /// Return an iterator over the elements in each row.
+    pub fn as_ints() -> impl Iterator<Item = BigInt> {
+        Self::new().flatten()
+    }
 }
 
 impl Iterator for BernoullisTriangle {
