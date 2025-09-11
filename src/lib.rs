@@ -1,5 +1,3 @@
-pub mod ackermann_sets;
-pub mod additive;
 pub mod catalan;
 pub mod collatz;
 pub mod core;
@@ -16,6 +14,7 @@ pub mod pell;
 pub mod playground;
 pub mod smooth;
 pub mod squarefree;
+pub mod strings;
 pub mod thue_morse;
 pub mod triangles;
 pub mod trig;

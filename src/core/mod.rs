@@ -11,6 +11,7 @@ pub mod natural;
 pub mod parity;
 pub mod powers;
 pub mod prime;
+pub mod recurrence;
 pub mod transforms;
 
 // Easy imports from other places
@@ -26,6 +27,7 @@ pub use natural::*;
 pub use parity::*;
 pub use powers::*;
 pub use prime::*;
+pub use recurrence::*;
 pub use transforms::*;
 
 use num::{BigInt, FromPrimitive};

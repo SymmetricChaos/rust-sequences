@@ -34,3 +34,7 @@ impl Iterator for Exponential {
         Some(out)
     }
 }
+
+crate::print_values!(
+    Exponential::new(1,1), 0, 10; // converges on e
+);

@@ -3,12 +3,12 @@ use num::BigInt;
 
 /// Any recurrence of the form
 /// a_x = c_0 * a_{x-n} + c_1 * a_{x-n-1} + c_2 * a{x-n-2}...
-pub struct AdditiveLinear {
+pub struct AdditiveLinearRecurrence {
     vals: Vec<BigInt>,
     coefs: Vec<BigInt>,
 }
 
-impl AdditiveLinear {
+impl AdditiveLinearRecurrence {
     /// The simplest linear recurrence with two terms and two coefficients.
     pub fn new<T>(a: T, b: T, p: T, q: T) -> Self
     where
@@ -40,7 +40,7 @@ impl AdditiveLinear {
     }
 }
 
-impl Iterator for AdditiveLinear {
+impl Iterator for AdditiveLinearRecurrence {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -57,12 +57,12 @@ impl Iterator for AdditiveLinear {
 
 /// Any recurrence of the form
 /// a_x = f_0(a_{x-1}) + f_1(a_{x-2}) + f_3(a_{x-3})...
-pub struct Additive {
+pub struct AdditiveRecurrence {
     vals: Vec<BigInt>,
     funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>,
 }
 
-impl Additive {
+impl AdditiveRecurrence {
     pub fn new(
         a: i64,
         b: i64,
@@ -105,7 +105,7 @@ impl Additive {
     }
 }
 
-impl Iterator for Additive {
+impl Iterator for AdditiveRecurrence {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -121,8 +121,8 @@ impl Iterator for Additive {
 }
 
 crate::print_values!(
-    AdditiveLinear::new(0, 1, 2, 3), 0, 10;
-    AdditiveLinear::new_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
-    Additive::new(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;
-    Additive::new_from_slices(&[0, 1, 2], vec![Box::new(|x| x + 1), Box::new(|x| x * -2), Box::new(|x| x + x/2 + 4)]), 0, 10;
+    AdditiveLinearRecurrence::new(0, 1, 2, 3), 0, 10;
+    AdditiveLinearRecurrence::new_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
+    AdditiveRecurrence::new(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;
+    AdditiveRecurrence::new_from_slices(&[0, 1, 2], vec![Box::new(|x| x + 1), Box::new(|x| x * -2), Box::new(|x| x + x/2 + 4)]), 0, 10;
 );
