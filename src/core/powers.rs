@@ -1,12 +1,12 @@
 use num::{BigInt, One};
 
 /// The powers of n.
-pub struct Power {
+pub struct Powers {
     val: BigInt,
     n: BigInt,
 }
 
-impl Power {
+impl Powers {
     pub fn new<T: Clone>(n: T) -> Self
     where
         BigInt: From<T>,
@@ -18,7 +18,7 @@ impl Power {
     }
 }
 
-impl Iterator for Power {
+impl Iterator for Powers {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -37,13 +37,13 @@ impl Iterator for Power {
 }
 
 crate::print_values!(
-    Power::new(3), 5, 10;
+    Powers::new(3), 5, 10;
 );
 
 crate::check_sequences!(
-    Power::new(-2), 0, 10, [1, -2, 4, -8, 16, -32, 64, -128, 256, -512];
-    Power::new(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    Power::new(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
-    Power::new(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
-    Power::new(4), 0, 10, [1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144];
+    Powers::new(-2), 0, 10, [1, -2, 4, -8, 16, -32, 64, -128, 256, -512];
+    Powers::new(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    Powers::new(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+    Powers::new(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
+    Powers::new(4), 0, 10, [1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144];
 );

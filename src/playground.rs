@@ -1,23 +1,23 @@
 #[cfg(test)]
 use crate::{
     core::{
-        Constant, Natural, Prime,
-        transforms::{AbsDiffs, Boustrophedon, BoustrophedonTriangle, PartialSums, Ratios},
+        AbsDiffs, Boustrophedon, BoustrophedonTriangle, Constant, Exponential, Natural,
+        PartialSums, Prime, Ratios,
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
-    harmonic::Harmonic,
+    harmonic::{Harmonic, HarmonicSums},
 };
 
 crate::print_values!(
-    Natural::from(1), 0, 10;
-    PartialSums::new(Natural::from(1)), 0, 10;
     PartialSums::new(Harmonic::new()), 0, 10;
+    HarmonicSums::new(), 0, 10;
     Ratios::new(Prime::new(),Fibonacci::new().skip(1)), 0, 10;
     AbsDiffs::new(Prime::new()), 0, 10;
     Natural::new().skip(5), 0, 10;
-    Triangular::new().skip(5000), 0, 5;
+    Triangular::new().skip(250_000), 0, 5; // show fast skip ahead
     Boustrophedon::new(Constant::new(1)), 0, 10;
+    Exponential::new(1,1), 0, 8; // converges on e
 );
 
 crate::print_rows!(

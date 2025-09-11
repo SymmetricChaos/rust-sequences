@@ -2,11 +2,14 @@
 pub mod arithmetic;
 pub mod composite;
 pub mod constant;
+pub mod exponent;
+pub mod exponential;
+pub mod factorial;
 pub mod geometric;
 pub mod integer;
 pub mod natural;
 pub mod parity;
-pub mod power;
+pub mod powers;
 pub mod prime;
 pub mod transforms;
 
@@ -14,11 +17,14 @@ pub mod transforms;
 pub use arithmetic::*;
 pub use composite::*;
 pub use constant::*;
+pub use exponent::*;
+pub use exponential::*;
+pub use factorial::*;
 pub use geometric::*;
 pub use integer::*;
 pub use natural::*;
 pub use parity::*;
-pub use power::*;
+pub use powers::*;
 pub use prime::*;
 pub use transforms::*;
 
