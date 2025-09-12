@@ -5,6 +5,7 @@ pub mod evil;
 pub mod farey;
 pub mod fibonacci;
 pub mod figurate;
+pub mod gray;
 pub mod harmonic;
 pub mod lucas;
 pub mod lucas_sequence;
