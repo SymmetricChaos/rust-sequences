@@ -21,6 +21,13 @@ pub mod trig;
 pub mod zeta;
 
 #[macro_export]
+macro_rules! big {
+    ($seq: expr) => {
+        $seq.into_iter().map(|x| BigInt::from(x)).collect()
+    };
+}
+
+#[macro_export]
 macro_rules! print_values {
     ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
         #[cfg(test)]

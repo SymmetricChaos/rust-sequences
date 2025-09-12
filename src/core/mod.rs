@@ -2,6 +2,7 @@
 pub mod arithmetic;
 pub mod composite;
 pub mod constant;
+pub mod continued_fraction;
 pub mod exponential;
 pub mod factorial;
 pub mod geometric;
@@ -18,6 +19,7 @@ pub mod transforms;
 pub use arithmetic::*;
 pub use composite::*;
 pub use constant::*;
+pub use continued_fraction::*;
 pub use exponential::*;
 pub use factorial::*;
 pub use geometric::*;
