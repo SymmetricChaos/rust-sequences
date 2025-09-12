@@ -1,7 +1,7 @@
 #[cfg(test)]
 use crate::{
     core::{
-        AbsDiffs, Boustrophedon, BoustrophedonTriangle, Constant, Exponential, Natural,
+        AbsDiffs, Boustrophedon, BoustrophedonTriangle, Constant, CubeRoot, Exponential, Natural,
         PartialSums, Prime, Ratios, SimpleContinuedFraction, SquareRoot,
     },
     fibonacci::Fibonacci,
@@ -25,7 +25,8 @@ crate::print_values!(
     SimpleContinuedFraction::new(Constant::new(1)), 0, 10; // converges on golden ratio 1.61803398875...
     SimpleContinuedFraction::new(Constant::new(2)), 0, 10; // converges on silver ratio 2.414213562...
     SimpleContinuedFraction::new_periodic(crate::big!(vec![1]), crate::big!(vec![2])), 0, 10; // converges on sqrt(2) 1.41421356237...
-    SquareRoot::new(2,1), 0, 5;
+    SquareRoot::new(1,2), 0, 6; // converges on the sqrt(1/2) 0.70710678118...
+    CubeRoot::new(2,1), 0, 5; // converges on the cbrt(2) 1.25992104989...
 );
 
 crate::print_rows!(
