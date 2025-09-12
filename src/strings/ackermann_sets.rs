@@ -102,6 +102,7 @@ impl Iterator for AckermannSet {
         Some(out)
     }
 
+    // Optimize by skipping set generation.
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         self.ctr += n;
         let out = number_to_set_big(&self.ctr);
@@ -158,7 +159,7 @@ mod tests {
 
     #[test]
     fn compare_u64_to_bigint() {
-        for i in 1000..1064 {
+        for i in 1000..2000 {
             assert_eq!(number_to_set_64(i), number_to_set_big(&BigInt::from(i)))
         }
     }

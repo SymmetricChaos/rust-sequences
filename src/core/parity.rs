@@ -133,11 +133,10 @@ impl Iterator for EvenInteger {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-
         if self.val.is_positive() {
-            self.val *= BigInt::from(-1);
+            self.val = -&self.val;
         } else {
-            self.val *= BigInt::from(-1);
+            self.val = -&self.val;
             self.val += 2;
         };
 
@@ -166,9 +165,9 @@ impl Iterator for OddInteger {
         let out = self.val.clone();
 
         if self.val.is_positive() {
-            self.val *= BigInt::from(-1);
+            self.val = -&self.val;
         } else {
-            self.val *= BigInt::from(-1);
+            self.val = -&self.val;
             self.val += 2;
         };
 

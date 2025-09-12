@@ -3,12 +3,12 @@ use num::BigInt;
 use crate::core::Natural;
 
 /// The natural numbers raised to a fixed power.
-pub struct Exponent {
+pub struct NthPowers {
     nats: Natural,
     p: u32,
 }
 
-impl Exponent {
+impl NthPowers {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new(p: u32) -> Self {
         Self {
@@ -18,7 +18,7 @@ impl Exponent {
     }
 }
 
-impl Iterator for Exponent {
+impl Iterator for NthPowers {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -27,6 +27,6 @@ impl Iterator for Exponent {
 }
 
 crate::check_sequences!(
-    Exponent::new(1), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Exponent::new(2), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
+    NthPowers::new(1), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    NthPowers::new(2), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
 );

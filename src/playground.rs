@@ -2,7 +2,7 @@
 use crate::{
     core::{
         AbsDiffs, Boustrophedon, BoustrophedonTriangle, Constant, Exponential, Natural,
-        PartialSums, Prime, Ratios,
+        PartialSums, Prime, Ratios, SimpleContinuedFraction,
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
@@ -20,6 +20,7 @@ crate::print_values!(
     Boustrophedon::new(Constant::new(1)), 0, 10;
     Exponential::new(1,1), 0, 8; // converges on e
     Zeta::new(3), 0, 9; // converges on Apery's constant 1.202569...
+    SimpleContinuedFraction::new(Constant::new(1)), 0, 10; // converges on golden ratio 1.61803398875...
 );
 
 crate::print_rows!(

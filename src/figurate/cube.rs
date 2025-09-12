@@ -1,33 +1,33 @@
 use num::{BigInt, Zero};
 
-/// The square numbers.
-/// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
-pub struct Square {
+/// The cube numbers.
+/// 0, 1, 8, 27, 64, 125, 216, 343, 512, 729...
+pub struct Cube {
     val: BigInt,
 }
 
-impl Square {
+impl Cube {
     pub fn new() -> Self {
         Self {
             val: BigInt::zero(),
         }
     }
 
-    /// The nth square number. Negative values are generalized squares.
+    /// The nth cube number.
     pub fn nth<T>(n: T) -> BigInt
     where
         BigInt: From<T>,
     {
         let n = BigInt::from(n);
-        &n * &n
+        &n * &n * &n
     }
 }
 
-impl Iterator for Square {
+impl Iterator for Cube {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = &self.val * &self.val;
+        let out = &self.val * &self.val * &self.val;
         self.val += 1;
 
         Some(out)
@@ -35,9 +35,9 @@ impl Iterator for Square {
 }
 
 crate::check_iteration_times!(
-    Square::new(), 4_500_000;
+    Cube::new(), 4_500_000;
 );
 
 crate::check_sequences!(
-    Square::new(), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
+    Cube::new(), 0, 10, [0, 1, 8, 27, 64, 125, 216, 343, 512, 729];
 );
