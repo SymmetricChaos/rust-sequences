@@ -21,7 +21,29 @@ impl<T: One + Zero> ThueMorse<T> {
     }
 }
 
-impl<T: One + Zero + Clone> Iterator for ThueMorse<T> {
+impl ThueMorse<BigInt> {
+    pub fn new_big_int() -> Self {
+        Self {
+            value: TWO.to_owned(),
+            ctr: 0,
+            zero: BigInt::zero(),
+            one: BigInt::one(),
+        }
+    }
+}
+
+impl ThueMorse<bool> {
+    pub fn new_bool() -> Self {
+        Self {
+            value: TWO.to_owned(),
+            ctr: 0,
+            zero: false,
+            one: true,
+        }
+    }
+}
+
+impl<T: Clone> Iterator for ThueMorse<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -43,6 +65,7 @@ impl<T: One + Zero + Clone> Iterator for ThueMorse<T> {
 crate::check_iteration_times!(
     ThueMorse::<BigInt>::new(), 6_000_000;
     ThueMorse::<i32>::new(), 9_000_000;
+    ThueMorse::new_bool(), 9_000_000;
 );
 
 crate::check_sequences!(

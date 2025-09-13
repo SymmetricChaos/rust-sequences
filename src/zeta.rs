@@ -1,4 +1,4 @@
-use crate::core::{NthPowers, PartialSums, Reciprocals};
+use crate::core::{IntegerReciprocals, NthPowers, PartialSums};
 use num::BigRational;
 
 /// The partial sums of the Riemann zeta function for natural numbers greater than zero
@@ -10,7 +10,7 @@ impl Zeta {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new(p: u32) -> Self {
         Self {
-            ctr: PartialSums::new(Reciprocals::new(NthPowers::new(p).skip(1))),
+            ctr: PartialSums::new(IntegerReciprocals::new(NthPowers::new(p).skip(1))),
         }
     }
 }

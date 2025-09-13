@@ -209,11 +209,11 @@ impl<T: Clone> Iterator for Denominator<T> {
 }
 
 /// Sequence of reciprocals of a sequence of integers. Returns None if the integer is zero.
-pub struct Reciprocals<T> {
+pub struct IntegerReciprocals<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T> Reciprocals<T> {
+impl<T> IntegerReciprocals<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -224,7 +224,7 @@ impl<T> Reciprocals<T> {
     }
 }
 
-impl<T: Clone + Integer> Iterator for Reciprocals<T> {
+impl<T: Clone + Integer> Iterator for IntegerReciprocals<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -238,11 +238,11 @@ impl<T: Clone + Integer> Iterator for Reciprocals<T> {
 }
 
 /// Sequence of reciprocals of a sequence of ratios. Returns None whenever the numerator of the original sequence is zero.
-pub struct Inverses<T> {
+pub struct Reciprocals<T> {
     iter: Box<dyn Iterator<Item = Ratio<T>>>,
 }
 
-impl<T> Inverses<T> {
+impl<T> Reciprocals<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = Ratio<T>> + 'static,
@@ -253,7 +253,7 @@ impl<T> Inverses<T> {
     }
 }
 
-impl<T: Clone + Integer> Iterator for Inverses<T> {
+impl<T: Clone + Integer> Iterator for Reciprocals<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
