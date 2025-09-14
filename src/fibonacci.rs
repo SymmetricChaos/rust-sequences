@@ -129,7 +129,6 @@ crate::check_iteration_times!(
     Fibonacci::new(), 160_000;
 );
 
-
 crate::check_sequences!(
     Fibonacci::new(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
     FibonacciWord::default(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];

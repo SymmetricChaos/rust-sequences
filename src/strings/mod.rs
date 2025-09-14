@@ -4,3 +4,5 @@ pub mod lindenmayer_system;
 pub mod tag_system;
 
 pub use ackermann_sets::*;
+pub use lindenmayer_system::*;
+pub use tag_system::*;

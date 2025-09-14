@@ -93,6 +93,6 @@ tag_system!(
 );
 
 crate::print_values!(
-    TagSystem::new( String::from("baa"), 2, illustration_system, 'H'), 0, 10;
-    TagSystem::new( String::from("aaa"), 2, collatz_system, 'H'), 0, 30;
+    TagSystem::new(String::from("baa"), 2, illustration_system, 'H'), 0, 10;
+    TagSystem::new(String::from("aaa"), 2, collatz_system, 'H'), 0, 30;
 );

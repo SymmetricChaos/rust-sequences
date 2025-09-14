@@ -72,8 +72,28 @@ l_system!(
     'b' => "a";
 );
 
+#[cfg(test)]
+l_system!(
+    peano_curve;
+    'X' => "XFYFX+F+YFXFY-F-XFYFX";
+    'Y' => "YFXFY-F-XFYFX+F+YFXFY";
+);
+
+#[cfg(test)]
+l_system!(
+    complex_bush;
+    'V' => "[+++W][---W]YV";
+    'W' => "+X[-W]Z";
+    'X' => "-W[+X]Z";
+    'Y' => "YZ";
+    'Z' => "[-FFF][+FFF]F";
+);
+
 crate::print_values!(
+    print_linenmayer, formatter "{}", sep "\n";
     Lindenmayer::new(String::from("0"), tree_system), 0, 4;
     Lindenmayer::new(String::from("a"), cantor_system), 0, 4;
     Lindenmayer::new(String::from("a"), algae_system), 0, 7;
+    Lindenmayer::new(String::from("X"), peano_curve), 0, 3;
+    Lindenmayer::new(String::from("VZFFF"), complex_bush), 0, 4;
 );
