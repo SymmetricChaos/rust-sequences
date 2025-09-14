@@ -29,36 +29,36 @@ macro_rules! big {
 }
 
 #[macro_export]
+macro_rules! one_row {
+    ($seq: expr, $skip: expr, $take: expr, $sep:literal, $formatter:literal) => {
+        let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
+        println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+    };
+}
+
+#[macro_export]
 macro_rules! print_values {
-    ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
+    ($($seq: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
-                let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-                let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| x.to_string()),", ");
-                println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+                crate::one_row!($seq, $skip, $take, ", ", "{}");
             )+
         }
     };
-}
-
-#[macro_export]
-macro_rules! print_rows {
-    ($($seq: expr, $skip: expr, $take: expr);+ $(;)?) => {
+    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($seq: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
-        fn print_rows() {
+        fn $name() {
             $(
-                let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-                let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{:?}", x)),"\n");
-                println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+                crate::one_row!($seq, $skip, $take, $sep, $formatter);
             )+
         }
     };
-
 }
 
 #[macro_export]
@@ -68,7 +68,6 @@ macro_rules! check_iteration_times {
         #[ignore = "visualization"]
         #[test]
         fn check_times() {
-
             $(
                 let t = std::time::Instant::now();
                 let mut s = $seq;
@@ -79,7 +78,6 @@ macro_rules! check_iteration_times {
                 let elapsed = t.elapsed();
                 println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, n, elapsed);
             )+
-
         }
     };
 
