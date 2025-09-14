@@ -32,7 +32,3 @@ impl Iterator for BellTriangle {
         Some(out)
     }
 }
-
-crate::print_rows!(
-    BellTriangle::new(), 0, 10;
-);

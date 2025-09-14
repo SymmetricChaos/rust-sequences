@@ -33,7 +33,3 @@ impl Iterator for BernoullisTriangle {
         Some(out)
     }
 }
-
-crate::print_rows!(
-    BernoullisTriangle::new(), 0, 10;
-);
