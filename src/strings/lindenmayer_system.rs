@@ -59,16 +59,15 @@ fn tree_system(x: char) -> Option<&'static str> {
 }
 
 #[cfg(test)]
-fn cantor_system(x: char) -> Option<&'static str> {
-    match x {
-        'a' => Some("aba"),
-        'b' => Some("bbb"),
-        _ => None,
-    }
-}
+l_system!(
+    cantor_system;
+    'a' => "aba";
+    'b' => "bbb";
+);
 
 #[cfg(test)]
-l_system!(algae_system;
+l_system!(
+    algae_system;
     'a' => "ab";
     'b' => "a";
 );
@@ -76,5 +75,5 @@ l_system!(algae_system;
 crate::print_values!(
     Lindenmayer::new(String::from("0"), tree_system), 0, 4;
     Lindenmayer::new(String::from("a"), cantor_system), 0, 4;
-    Lindenmayer::new(String::from("a"), algae_system), 0, 4;
+    Lindenmayer::new(String::from("a"), algae_system), 0, 7;
 );

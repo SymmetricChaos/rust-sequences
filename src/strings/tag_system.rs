@@ -1,5 +1,5 @@
 /// An tag system defined by:
-/// The deletion number
+/// The deletion number (the number of symbols deleted from the left of the word)
 /// A function from char to Option<&'static str>
 ///     Constant symbols should return None and variables Some
 /// A halting character
@@ -16,6 +16,7 @@ impl TagSystem {
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
+        assert!(deletion >= 1);
         Self {
             deletion,
             string: init,
@@ -61,27 +62,37 @@ impl Iterator for TagSystem {
     }
 }
 
-#[cfg(test)]
-fn illustration_system(x: char) -> Option<&'static str> {
-    match x {
-        'a' => Some("ccbaH"),
-        'b' => Some("cca"),
-        'c' => Some("cc"),
-        _ => None,
-    }
+#[macro_export]
+macro_rules! tag_system {
+    ($name:ident; $($a:literal => $b:literal);+ $(;)?) => {
+        fn $name(x: char) -> Option<&'static str> {
+            match x {
+                $(
+                    $a => Some($b),
+                )+
+                _ => None,
+            }
+        }
+    };
 }
 
 #[cfg(test)]
-fn collatz_system(x: char) -> Option<&'static str> {
-    match x {
-        'a' => Some("bc"),
-        'b' => Some("a"),
-        'c' => Some("aaa"),
-        _ => None,
-    }
-}
+tag_system!(
+    illustration_system;
+    'a' => "ccbaH";
+    'b' => "cca";
+    'c' => "cc";
+);
+
+#[cfg(test)]
+tag_system!(
+    collatz_system;
+    'a' => "bc";
+    'b' => "a";
+    'c' => "aaa";
+);
 
 crate::print_values!(
     TagSystem::new( String::from("baa"), 2, illustration_system, 'H'), 0, 10;
-    TagSystem::new( String::from("aaa"), 2, collatz_system, 'H'), 0, 31;
+    TagSystem::new( String::from("aaa"), 2, collatz_system, 'H'), 0, 30;
 );
