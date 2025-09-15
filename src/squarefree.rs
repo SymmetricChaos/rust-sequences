@@ -4,7 +4,7 @@ use num::{BigInt, Integer, Zero};
 pub struct Squarefree {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Prime,
+    primes: crate::core::Prime<BigInt>,
 }
 
 impl Squarefree {
@@ -44,7 +44,7 @@ impl Iterator for Squarefree {
 pub struct Squareful {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Prime,
+    primes: crate::core::Prime<BigInt>,
 }
 
 impl Squareful {
