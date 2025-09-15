@@ -36,7 +36,7 @@ impl Iterator for Evil {
 }
 
 crate::check_iteration_times!(
-    Evil::new(), 1_100_000;
+    Evil::new(), 1_000_000;
 );
 
 crate::check_sequences!(

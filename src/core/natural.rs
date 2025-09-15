@@ -1,66 +1,26 @@
-use num::{BigInt, PrimInt, Signed, Zero};
+use num::{BigInt, CheckedAdd, One, PrimInt, Zero};
 
 /// The natural numbers. The non-negative integers.
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
-pub struct Natural {
-    ctr: BigInt,
+pub struct Natural<T> {
+    ctr: T,
 }
 
-impl Natural {
+impl<T: PrimInt> Natural<T> {
+    pub fn new_prim() -> Self {
+        Self { ctr: T::zero() }
+    }
+}
+
+impl Natural<BigInt> {
     pub fn new() -> Self {
         Self {
             ctr: BigInt::zero(),
         }
     }
-
-    /// Natural numbers starting at a given value.
-    /// Panics if n is negative.
-    pub fn from<T>(n: T) -> Self
-    where
-        BigInt: From<T>,
-    {
-        let ctr = BigInt::from(n);
-        assert!(!ctr.is_negative());
-        Self { ctr }
-    }
 }
 
-impl Iterator for Natural {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.clone();
-        self.ctr += 1;
-        Some(out)
-    }
-
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        self.ctr += n;
-        let out = Some(self.ctr.clone());
-        self.ctr += 1;
-        out
-    }
-}
-
-/// The natural numbers. The non-negative integers.
-/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
-pub struct NaturalGeneric<T> {
-    ctr: T,
-}
-
-impl<T: PrimInt> NaturalGeneric<T> {
-    pub fn new() -> Self {
-        Self { ctr: T::zero() }
-    }
-
-    /// Natural numbers starting at a given value.
-    pub fn from(n: T) -> Self {
-        assert!(n >= T::zero());
-        Self { ctr: n }
-    }
-}
-
-impl<T: PrimInt> Iterator for NaturalGeneric<T> {
+impl<T: Clone + CheckedAdd + One> Iterator for Natural<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -72,5 +32,5 @@ impl<T: PrimInt> Iterator for NaturalGeneric<T> {
 
 crate::check_sequences!(
     Natural::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    NaturalGeneric::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Natural::<u8>::new_prim(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );

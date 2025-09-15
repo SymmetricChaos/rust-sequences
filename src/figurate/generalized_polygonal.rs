@@ -2,7 +2,7 @@ use num::{BigInt, One, PrimInt, Signed};
 
 /// The generalized polygonal numbers with selectable order.
 pub struct GeneralizedPolygonal {
-    integers: crate::core::Integer,
+    integers: crate::core::Integer<BigInt>,
     k: BigInt,
 }
 
@@ -59,7 +59,7 @@ impl Iterator for GeneralizedPolygonal {
 
 /// The generalized pentagonal numbers
 pub struct GeneralizedPentagonal {
-    integers: crate::core::Integer,
+    integers: crate::core::Integer<BigInt>,
 }
 
 impl GeneralizedPentagonal {
@@ -91,13 +91,13 @@ impl Iterator for GeneralizedPentagonal {
 /// The generalized pentagonal numbers
 /// T is restricted to Signed due to how values are generated from IntegerGeneric
 pub struct GeneralizedPentagonalGeneric<T> {
-    integers: crate::core::IntegerGeneric<T>,
+    integers: crate::core::Integer<T>,
 }
 
 impl<T: PrimInt + Signed> GeneralizedPentagonalGeneric<T> {
     pub fn new() -> Self {
         Self {
-            integers: crate::core::IntegerGeneric::<T>::new(),
+            integers: crate::core::Integer::<T>::new_prim(),
         }
     }
 

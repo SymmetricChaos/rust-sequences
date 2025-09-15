@@ -1,62 +1,26 @@
-use num::{BigInt, PrimInt, Signed};
+use num::{BigInt, CheckedAdd, PrimInt, Signed};
 
 /// The integers in the canonical ordering.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
-pub struct Integer {
-    val: BigInt,
+pub struct Integer<T> {
+    val: T,
 }
 
-impl Integer {
+impl<T: PrimInt + Signed> Integer<T> {
+    pub fn new_prim() -> Self {
+        Self { val: T::zero() }
+    }
+}
+
+impl Integer<BigInt> {
     pub fn new() -> Self {
         Self {
             val: BigInt::from(0),
         }
     }
-
-    /// The nth integer.
-    pub fn nth<T>(n: T) -> BigInt
-    where
-        BigInt: From<T>,
-    {
-        let n = BigInt::from(n);
-
-        // fully qualified name to avoid name collision
-        if num::Integer::is_odd(&n) {
-            (n + 1) / 2
-        } else {
-            -n / 2
-        }
-    }
 }
 
-impl Iterator for Integer {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        if self.val.is_positive() {
-            self.val = -&self.val;
-        } else {
-            self.val = -&self.val;
-            self.val += 1;
-        };
-        Some(out)
-    }
-}
-
-/// The integers in the canonical ordering.
-/// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
-pub struct IntegerGeneric<T> {
-    val: T,
-}
-
-impl<T: PrimInt + Signed> IntegerGeneric<T> {
-    pub fn new() -> Self {
-        Self { val: T::zero() }
-    }
-}
-
-impl<T: PrimInt + Signed> Iterator for IntegerGeneric<T> {
+impl<T: Clone + CheckedAdd + Signed> Iterator for Integer<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -73,7 +37,7 @@ impl<T: PrimInt + Signed> Iterator for IntegerGeneric<T> {
 
 crate::check_iteration_times!(
     Integer::new(), 4_000_000;
-    IntegerGeneric::<i32>::new(), 4_000_000;
+    Integer::<i32>::new_prim(), 4_000_000;
 );
 
 crate::print_values!(

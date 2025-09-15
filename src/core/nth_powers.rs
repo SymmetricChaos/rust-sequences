@@ -4,7 +4,7 @@ use crate::core::Natural;
 
 /// The natural numbers raised to a fixed power.
 pub struct NthPowers {
-    nats: Natural,
+    nats: Natural<BigInt>,
     p: u32,
 }
 

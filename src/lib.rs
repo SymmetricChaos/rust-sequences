@@ -87,35 +87,15 @@ macro_rules! check_iteration_times {
 macro_rules! check_sequences {
     ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
         #[cfg(test)]
-            #[test]
-            fn check_sequences() {
-                $(
-                    let name = stringify!($seq);
-                    let expected = $data.map(|x| num::BigInt::from(x)).to_vec();
-                    let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| num::BigInt::from(x)));
-                    if expected != calculated {
-                        panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", name, expected, calculated);
-                    }
-                )+
-            }
-
+        #[test]
+        fn check_sequences() {
+            $(
+                let expected = $data.map(|x| num::BigInt::from(x)).to_vec();
+                let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| num::BigInt::from(x)));
+                if expected != calculated {
+                    panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
+                }
+            )+
+        }
     };
 }
-
-// #[macro_export]
-// macro_rules! check_rational_sequences {
-//     ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
-//         #[cfg(test)]
-//             #[test]
-//             fn check_equality() {
-//                 $(
-//                     let expected = $data.map(|x| num::BigRational::from(x)).to_vec();
-//                     let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
-//                     if expected != calculated {
-//                         panic!("failure to agree\nexpected:   {:?}\ncalculated: {:?}", expected, calculated);
-//                     }
-//                 )+
-//             }
-
-//     };
-// }

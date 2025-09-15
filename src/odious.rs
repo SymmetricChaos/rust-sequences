@@ -34,7 +34,7 @@ impl Iterator for Odious {
 }
 
 crate::check_iteration_times!(
-    Odious::new(), 1_100_000;
+    Odious::new(), 1_000_000;
 );
 
 

@@ -1,12 +1,18 @@
-use num::{BigInt, PrimInt};
+use num::{BigInt, CheckedMul, PrimInt};
 
 /// Geometric sequence with chosen initial value and multiplier
-pub struct Geometric {
-    val: BigInt,
-    mul: BigInt,
+pub struct Geometric<T> {
+    val: T,
+    mul: T,
 }
 
-impl Geometric {
+impl<T: PrimInt> Geometric<T> {
+    pub fn new_prim(init: T, mul: T) -> Self {
+        Self { val: init, mul }
+    }
+}
+
+impl Geometric<BigInt> {
     pub fn new<T>(init: T, mul: T) -> Self
     where
         BigInt: From<T>,
@@ -18,29 +24,7 @@ impl Geometric {
     }
 }
 
-impl Iterator for Geometric {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val *= &self.mul;
-        Some(out)
-    }
-}
-
-/// Geometric sequence with chosen initial value and multiplier
-pub struct GeometricGeneric<T> {
-    val: T,
-    mul: T,
-}
-
-impl<T: PrimInt> GeometricGeneric<T> {
-    pub fn new(init: T, mul: T) -> Self {
-        Self { val: init, mul }
-    }
-}
-
-impl<T: PrimInt> Iterator for GeometricGeneric<T> {
+impl<T: Clone + CheckedMul> Iterator for Geometric<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -51,7 +35,7 @@ impl<T: PrimInt> Iterator for GeometricGeneric<T> {
 }
 
 crate::print_values!(
-    GeometricGeneric::<i32>::new(3, -4), 0, 10;
+    Geometric::<i32>::new_prim(3, -4), 0, 10;
 );
 
 crate::check_sequences!(

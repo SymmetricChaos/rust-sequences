@@ -4,37 +4,21 @@ use num::{BigInt, One, PrimInt, Signed, Zero};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
-pub struct Parity {
-    val: bool,
-}
-
-impl Parity {
-    pub fn new() -> Self {
-        Self { val: false }
-    }
-}
-
-impl Iterator for Parity {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.val = !self.val;
-        if self.val {
-            Some(BigInt::zero())
-        } else {
-            Some(BigInt::one())
-        }
-    }
-}
-
-/// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
-/// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
-pub struct ParityGeneric<T> {
+pub struct Parity<T> {
     val: bool,
     _type: PhantomData<T>,
 }
 
-impl<T: PrimInt> ParityGeneric<T> {
+impl<T: PrimInt> Parity<T> {
+    pub fn new_prim() -> Self {
+        Self {
+            val: false,
+            _type: PhantomData,
+        }
+    }
+}
+
+impl Parity<BigInt> {
     pub fn new() -> Self {
         Self {
             val: false,
@@ -43,7 +27,7 @@ impl<T: PrimInt> ParityGeneric<T> {
     }
 }
 
-impl<T: PrimInt> Iterator for ParityGeneric<T> {
+impl<T: One + Zero> Iterator for Parity<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

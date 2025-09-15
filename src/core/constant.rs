@@ -1,14 +1,20 @@
-use num::BigInt;
+use num::{BigInt, PrimInt};
 
 /// A constant sequence that always returns the same value.
-pub struct Constant {
-    val: BigInt,
+pub struct Constant<T> {
+    val: T,
 }
 
-impl Constant {
-    pub fn new<T>(val: T) -> Self
+impl<T: PrimInt> Constant<T> {
+    pub fn new_prime(val: T) -> Self {
+        Self { val }
+    }
+}
+
+impl Constant<BigInt> {
+    pub fn new<G>(val: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         Self {
             val: BigInt::from(val),
@@ -16,26 +22,7 @@ impl Constant {
     }
 }
 
-impl Iterator for Constant {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        Some(self.val.clone())
-    }
-}
-
-/// A constant sequence that always returns the same value.
-pub struct ConstantGeneric<T> {
-    val: T,
-}
-
-impl<T> ConstantGeneric<T> {
-    pub fn news(val: T) -> Self {
-        Self { val }
-    }
-}
-
-impl<T: Clone> Iterator for ConstantGeneric<T> {
+impl<T: Clone> Iterator for Constant<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

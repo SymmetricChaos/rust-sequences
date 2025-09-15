@@ -1,15 +1,23 @@
-use num::{BigInt, PrimInt};
+use num::{BigInt, CheckedAdd, PrimInt};
 
 /// Arithmetic sequence with chosen initial value and increment
-pub struct Arithmetic {
-    val: BigInt,
-    inc: BigInt,
+pub struct Arithmetic<T> {
+    val: T,
+    inc: T,
 }
 
-impl Arithmetic {
-    pub fn new<T>(init: T, inc: T) -> Self
+impl<T: PrimInt> Arithmetic<T> {
+    /// Sequence using a primitive integer type.
+    pub fn new_prim(init: T, inc: T) -> Self {
+        Self { val: init, inc }
+    }
+}
+
+impl Arithmetic<BigInt> {
+    /// Sequence using the BigInt type.
+    pub fn new<G>(init: G, inc: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         Self {
             val: BigInt::from(init),
@@ -18,28 +26,7 @@ impl Arithmetic {
     }
 }
 
-impl Iterator for Arithmetic {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val += &self.inc;
-        Some(out)
-    }
-}
-
-pub struct ArithmeticGeneric<T> {
-    val: T,
-    inc: T,
-}
-
-impl<T: PrimInt> ArithmeticGeneric<T> {
-    pub fn new(init: T, inc: T) -> Self {
-        Self { val: init, inc }
-    }
-}
-
-impl<T: PrimInt> Iterator for ArithmeticGeneric<T> {
+impl<T: Clone + CheckedAdd> Iterator for Arithmetic<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -48,6 +35,11 @@ impl<T: PrimInt> Iterator for ArithmeticGeneric<T> {
         Some(out)
     }
 }
+
+crate::check_iteration_times!(
+    Arithmetic::new(4, 3), 3_500_000;
+    Arithmetic::<u64>::new_prim(4, 3), 3_500_000;
+);
 
 crate::check_sequences!(
     Arithmetic::new(0, 0), 0, 10, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

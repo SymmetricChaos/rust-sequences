@@ -1,6 +1,6 @@
 use num::{BigInt, Integer, Zero};
 
-// Natural numbers that are not divisible twice by any other natural number except one.
+// Natural numbers that are not divisible twice by any natural number except one.
 pub struct Squarefree {
     ctr: BigInt,
     squares: Vec<BigInt>,
