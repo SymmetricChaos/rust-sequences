@@ -30,7 +30,7 @@ macro_rules! big {
 
 #[macro_export]
 macro_rules! one_row {
-    ($seq: expr, $skip: expr, $take: expr, $sep:literal, $formatter:literal) => {
+    ($seq: expr, $skip: expr, $take: expr, $formatter:literal, $sep:literal) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
@@ -39,23 +39,23 @@ macro_rules! one_row {
 
 #[macro_export]
 macro_rules! print_values {
-    ($($seq: expr, $skip: expr, $take: expr);+;) => {
+    ($($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
-                crate::one_row!($seq, $skip, $take, ", ", "{}");
+                crate::one_row!($sequence, $skip, $take, "{}", ", ");
             )+
         }
     };
-    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($seq: expr, $skip: expr, $take: expr);+;) => {
+    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
         #[ignore = "visualization"]
         #[test]
         fn $name() {
             $(
-                crate::one_row!($seq, $skip, $take, $sep, $formatter);
+                crate::one_row!($sequence, $skip, $take, $formatter, $sep);
             )+
         }
     };
