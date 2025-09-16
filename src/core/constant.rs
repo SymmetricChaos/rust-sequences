@@ -6,7 +6,7 @@ pub struct Constant<T> {
 }
 
 impl<T: PrimInt> Constant<T> {
-    pub fn new_prime(val: T) -> Self {
+    pub fn new_prim(val: T) -> Self {
         Self { val }
     }
 }
@@ -32,4 +32,5 @@ impl<T: Clone> Iterator for Constant<T> {
 
 crate::check_sequences!(
     Constant::new(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
+    Constant::new_prim(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
 );

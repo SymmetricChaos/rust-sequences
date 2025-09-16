@@ -6,7 +6,7 @@ pub struct Exponential {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorial,
+    factorials: Factorial<BigInt>,
 }
 
 impl Exponential {
