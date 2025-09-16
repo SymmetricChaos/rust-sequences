@@ -6,12 +6,12 @@ pub struct Lindenmayer {
 }
 
 impl Lindenmayer {
-    pub fn new<T>(init: String, transition: T) -> Self
+    pub fn new<T>(init: &str, transition: T) -> Self
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
         Self {
-            string: init,
+            string: init.to_string(),
             transition: Box::new(transition),
         }
     }
@@ -37,7 +37,7 @@ impl Iterator for Lindenmayer {
 
 #[macro_export]
 macro_rules! l_system {
-    ($name:ident; $($a:literal => $b:literal);+ $(;)?) => {
+    ($name:ident; $($a:literal => $b:literal),+ $(,)?) => {
         fn $name(x: char) -> Option<&'static str> {
             match x {
                 $(
@@ -61,39 +61,47 @@ fn tree_system(x: char) -> Option<&'static str> {
 #[cfg(test)]
 l_system!(
     cantor_system;
-    'a' => "aba";
-    'b' => "bbb";
+    'a' => "aba",
+    'b' => "bbb",
 );
 
 #[cfg(test)]
 l_system!(
     algae_system;
-    'a' => "ab";
-    'b' => "a";
+    'a' => "ab",
+    'b' => "a",
 );
 
 #[cfg(test)]
 l_system!(
     peano_curve;
-    'X' => "XFYFX+F+YFXFY-F-XFYFX";
-    'Y' => "YFXFY-F-XFYFX+F+YFXFY";
+    'X' => "XFYFX+F+YFXFY-F-XFYFX",
+    'Y' => "YFXFY-F-XFYFX+F+YFXFY",
 );
 
 #[cfg(test)]
 l_system!(
     complex_bush;
-    'V' => "[+++W][---W]YV";
-    'W' => "+X[-W]Z";
-    'X' => "-W[+X]Z";
-    'Y' => "YZ";
-    'Z' => "[-FFF][+FFF]F";
+    'V' => "[+++W][---W]YV",
+    'W' => "+X[-W]Z",
+    'X' => "-W[+X]Z",
+    'Y' => "YZ",
+    'Z' => "[-FFF][+FFF]F",
+);
+
+#[cfg(test)]
+l_system!(
+    thue_morse;
+    '0' => "01",
+    '1' => "10",
 );
 
 crate::print_values!(
     print_linenmayer, formatter "{}", sep "\n";
-    Lindenmayer::new(String::from("0"), tree_system), 0, 4;
-    Lindenmayer::new(String::from("a"), cantor_system), 0, 4;
-    Lindenmayer::new(String::from("a"), algae_system), 0, 7;
-    Lindenmayer::new(String::from("X"), peano_curve), 0, 3;
-    Lindenmayer::new(String::from("VZFFF"), complex_bush), 0, 4;
+    Lindenmayer::new("0", tree_system), 0, 4;
+    Lindenmayer::new("a", cantor_system), 0, 4;
+    Lindenmayer::new("a", algae_system), 0, 7;
+    Lindenmayer::new("X", peano_curve), 0, 3;
+    Lindenmayer::new("VZFFF", complex_bush), 0, 4;
+    Lindenmayer::new("0", thue_morse), 0, 6;
 );

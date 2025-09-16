@@ -2,6 +2,7 @@
 pub mod ackermann_sets;
 pub mod lindenmayer_system;
 pub mod tag_system;
+pub mod markov_algorithm;
 
 pub use ackermann_sets::*;
 pub use lindenmayer_system::*;

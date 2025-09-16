@@ -12,14 +12,14 @@ pub struct TagSystem {
 }
 
 impl TagSystem {
-    pub fn new<T>(init: String, deletion: usize, transition: T, halt: char) -> Self
+    pub fn new<T>(init: &str, deletion: usize, transition: T, halt: char) -> Self
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
-        assert!(deletion >= 1);
+        assert!(deletion > 1);
         Self {
             deletion,
-            string: init,
+            string: init.to_string(),
             transition: Box::new(transition),
             halted: false,
             halt,
@@ -64,7 +64,7 @@ impl Iterator for TagSystem {
 
 #[macro_export]
 macro_rules! tag_system {
-    ($name:ident; $($a:literal => $b:literal);+ $(;)?) => {
+    ($name:ident; $($a:literal => $b:literal),+ $(,)?) => {
         fn $name(x: char) -> Option<&'static str> {
             match x {
                 $(
@@ -79,20 +79,20 @@ macro_rules! tag_system {
 #[cfg(test)]
 tag_system!(
     illustration_system;
-    'a' => "ccbaH";
-    'b' => "cca";
-    'c' => "cc";
+    'a' => "ccbaH",
+    'b' => "cca",
+    'c' => "cc",
 );
 
 #[cfg(test)]
 tag_system!(
     collatz_system;
-    'a' => "bc";
-    'b' => "a";
-    'c' => "aaa";
+    'a' => "bc",
+    'b' => "a",
+    'c' => "aaa",
 );
 
 crate::print_values!(
-    TagSystem::new(String::from("baa"), 2, illustration_system, 'H'), 0, 10;
-    TagSystem::new(String::from("aaa"), 2, collatz_system, 'H'), 0, 30;
+    TagSystem::new("baa", 2, illustration_system, 'H'), 0, 10;
+    TagSystem::new("aaa", 2, collatz_system, 'H'), 0, 30;
 );
