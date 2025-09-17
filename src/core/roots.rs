@@ -1,15 +1,28 @@
-use num::{BigInt, rational::Ratio};
+use num::{
+    BigInt, CheckedAdd, CheckedDiv, CheckedMul, FromPrimitive, Integer, PrimInt, rational::Ratio,
+};
 
-/// Convergents of the square root of a rational number by Newton's Method (Heron's Method).
-pub struct SquareRoot {
-    convergent: Ratio<BigInt>,
-    s: Ratio<BigInt>,
+/// Convergents of the principal square root of a rational number by Newton's Method.
+pub struct SquareRoot<T> {
+    convergent: Ratio<T>,
+    s: Ratio<T>,
 }
 
-impl SquareRoot {
-    pub fn new<T>(num: T, den: T) -> Self
+impl<T: PrimInt + Integer> SquareRoot<T> {
+    pub fn new_prim(num: T, den: T) -> Self {
+        let n = num;
+        let d = den;
+        Self {
+            convergent: Ratio::new(n.clone(), d.clone()),
+            s: Ratio::new(n.clone(), d.clone()),
+        }
+    }
+}
+
+impl SquareRoot<BigInt> {
+    pub fn new<N>(num: N, den: N) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<N>,
     {
         let n = BigInt::from(num);
         let d = BigInt::from(den);
@@ -20,26 +33,44 @@ impl SquareRoot {
     }
 }
 
-impl Iterator for SquareRoot {
-    type Item = Ratio<BigInt>;
+impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> Iterator
+    for SquareRoot<T>
+{
+    type Item = Ratio<T>;
 
+    // (x+s/x)/2
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.convergent.clone();
-        self.convergent = (&self.convergent + &self.s / &self.convergent) / BigInt::from(2);
+        let half = Ratio::new(T::from_i32(1)?, T::from_i32(2)?);
+        self.convergent = self
+            .convergent
+            .checked_add(&self.s.checked_div(&self.convergent)?)?
+            .checked_mul(&half)?;
         Some(out)
     }
 }
 
-/// Convergents of the cube root of a rational number by Newton's Method (Heron's Method).
-pub struct CubeRoot {
-    convergent: Ratio<BigInt>,
-    s: Ratio<BigInt>,
+/// Convergents of the principal cube root of a rational number by Newton's Method.
+pub struct CubeRoot<T> {
+    convergent: Ratio<T>,
+    s: Ratio<T>,
 }
 
-impl CubeRoot {
-    pub fn new<T>(num: T, den: T) -> Self
+impl<T: PrimInt + Integer> CubeRoot<T> {
+    pub fn new_prim(num: T, den: T) -> Self {
+        let n = num;
+        let d = den;
+        Self {
+            convergent: Ratio::new(n.clone(), d.clone()),
+            s: Ratio::new(n.clone(), d.clone()),
+        }
+    }
+}
+
+impl CubeRoot<BigInt> {
+    pub fn new<N>(num: N, den: N) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<N>,
     {
         let n = BigInt::from(num);
         let d = BigInt::from(den);
@@ -50,14 +81,22 @@ impl CubeRoot {
     }
 }
 
-impl Iterator for CubeRoot {
-    type Item = Ratio<BigInt>;
+impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> Iterator
+    for CubeRoot<T>
+{
+    type Item = Ratio<T>;
 
+    // (s/x^2 + 2x)/3
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.convergent.clone();
-        self.convergent = ((&self.convergent * BigInt::from(2))
-            + &self.s / (&self.convergent * &self.convergent))
-            / BigInt::from(3);
+        let two_x = self.convergent.checked_add(&self.convergent)?;
+        let third = Ratio::new(T::from_i32(1)?, T::from_i32(3)?);
+        let squ = self.convergent.checked_mul(&self.convergent)?;
+        self.convergent = self
+            .s
+            .checked_div(&squ)?
+            .checked_add(&two_x)?
+            .checked_mul(&third)?;
         Some(out)
     }
 }
