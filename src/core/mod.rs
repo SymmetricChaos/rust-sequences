@@ -12,6 +12,7 @@ pub mod nth_powers;
 pub mod parity;
 pub mod powers;
 pub mod prime;
+pub mod rational_digits;
 pub mod recurrence;
 pub mod roots;
 pub mod transforms;
