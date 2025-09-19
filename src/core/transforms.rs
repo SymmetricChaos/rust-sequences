@@ -28,6 +28,41 @@ impl<T: CheckedAdd + Clone> Iterator for PartialSums<T> {
     }
 }
 
+/// Sequence of alternating partial sums. Returns None if overflow occurs or sequence ends.
+pub struct PartialSumsAlternating<T> {
+    sum: T,
+    iter: Box<dyn Iterator<Item = T>>,
+    subtract: bool,
+}
+
+impl<T: Zero> PartialSumsAlternating<T> {
+    pub fn new<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            sum: T::zero(),
+            iter: Box::new(iter),
+            subtract: false,
+        }
+    }
+}
+
+impl<T: CheckedAdd + CheckedSub + Clone> Iterator for PartialSumsAlternating<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.sum.clone();
+        if self.subtract {
+            self.sum = self.sum.checked_add(&self.iter.next()?)?;
+        } else {
+            self.sum = self.sum.checked_sub(&self.iter.next()?)?;
+        }
+        self.subtract = !self.subtract;
+        Some(out)
+    }
+}
+
 /// Sequence of partial products. Returns None if overflow occurs or sequence ends.
 pub struct PartialProds<T> {
     prod: T,

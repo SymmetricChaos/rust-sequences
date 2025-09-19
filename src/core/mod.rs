@@ -31,6 +31,7 @@ pub use nth_powers::*;
 pub use parity::*;
 pub use powers::*;
 pub use prime::*;
+pub use rational_digits::*;
 pub use recurrence::*;
 pub use roots::*;
 pub use transforms::*;
