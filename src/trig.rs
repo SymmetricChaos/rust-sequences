@@ -2,7 +2,7 @@ use num::{BigInt, One, Zero, rational::Ratio};
 
 use crate::core::Factorial;
 
-/// Partial sums of the Taylor series expansion of the sine function evaluated at x.
+/// Partial sums of the Taylor series expansion of the sine function evaluated at n/d.
 pub struct Sin {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
@@ -46,7 +46,7 @@ impl Iterator for Sin {
     }
 }
 
-/// Partial sums of the Taylor series expansion of the hyperbolic sine function evaluated at x.
+/// Partial sums of the Taylor series expansion of the hyperbolic sine function evaluated at n/d.
 pub struct SinH {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
@@ -83,7 +83,7 @@ impl Iterator for SinH {
     }
 }
 
-// /// Partial sums of the Taylor series expansion of the hyperbolic sine function evaluated at x.
+// /// Partial sums of the Taylor series expansion of the hyperbolic sine function evaluated at n/d.
 // pub struct ArcSin {
 //     sum: Ratio<BigInt>,
 //     val: Ratio<BigInt>,
@@ -128,8 +128,11 @@ impl Iterator for SinH {
 //     }
 // }
 
-crate::print_values!(
-    Sin::new(2,1), 0, 7; // converges to 0.90929742682...
-    Sin::new(1,3), 0, 6; // converges to 0.32719469679...
-    SinH::new(1,1), 0, 7; // converges to 1.17520119364...
+#[cfg(test)]
+use crate::core::rational_digits::DecimalDigits;
+
+crate::check_sequences!(
+    DecimalDigits::from_ratio(Sin::new(2,1).skip(8).next().unwrap()), 0, 10, [0,9,0,9,2,9,7,4,2,6];
+    DecimalDigits::from_ratio(Sin::new(1,3).skip(8).next().unwrap()), 0, 10, [0,3,2,7,1,9,4,6,9,6];
+    DecimalDigits::from_ratio(SinH::new(1,1).skip(8).next().unwrap()), 0, 10, [1,1,7,5,2,0,1,1,9,3];
 );
