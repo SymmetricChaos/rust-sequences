@@ -1,5 +1,5 @@
 use num::{
-    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, One, PrimInt, Zero,
+    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, PrimInt, Zero,
     rational::Ratio,
 };
 
@@ -13,10 +13,14 @@ impl<T: PrimInt + Integer> RationalDigits<T> {
     pub fn new_prim(num: T, den: T) -> Self {
         assert!(num >= T::zero());
         assert!(den > T::zero());
-        Self { den, rem: num }
+        let g = num.gcd(&den);
+        Self {
+            den: den / g,
+            rem: num / g,
+        }
     }
 
-    pub fn new_prim_ratio(q: Ratio<T>) -> Self {
+    pub fn from_prim_ratio(q: Ratio<T>) -> Self {
         assert!(q > Ratio::<T>::zero());
         Self {
             den: q.denom().clone(),
@@ -32,14 +36,16 @@ impl RationalDigits<BigInt> {
     {
         assert!(num >= F::zero());
         assert!(den > F::zero());
+        let num = BigInt::from(num);
         let den = BigInt::from(den);
+        let g = num.gcd(&den);
         Self {
-            den,
-            rem: BigInt::from(num),
+            den: den / &g,
+            rem: num / &g,
         }
     }
 
-    pub fn new_ratio(q: Ratio<BigInt>) -> Self {
+    pub fn from_ratio(q: Ratio<BigInt>) -> Self {
         assert!(q > Ratio::<BigInt>::zero());
         Self {
             den: q.denom().clone(),
@@ -62,6 +68,7 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + FromPrimitive> Iterator for Ratio
 }
 
 crate::print_values!(
-    digits, formatter "{}", sep "";
-    RationalDigits::new_prim(665857, 941664), 0, 20;
+    digits, formatter "{}", sep " ";
+    RationalDigits::new_prim(665857, 941664), 0, 20; // should be close to 0.70710678118
+    RationalDigits::new_prim(127, 11), 0, 20;
 );
