@@ -31,7 +31,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for Factorial<T> {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         self.val = self.val.checked_mul(&self.ctr)?;
-        self.ctr = self.ctr.checked_mul(&T::one())?;
+        self.ctr = self.ctr.checked_add(&T::one())?;
         Some(out)
     }
 }
