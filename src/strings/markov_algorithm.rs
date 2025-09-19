@@ -4,9 +4,9 @@ pub struct Markov {
 }
 
 impl Markov {
-    pub fn new(init: &str, patterns: &[(&'static str, &'static str)]) -> Self {
+    pub fn new(initial: &str, patterns: &[(&'static str, &'static str)]) -> Self {
         Self {
-            string: init.to_string(),
+            string: initial.to_string(),
             patterns: patterns.to_vec(),
         }
     }
@@ -28,7 +28,7 @@ impl Iterator for Markov {
 }
 
 #[macro_export]
-macro_rules! markov_algorithm {
+macro_rules! markov_pairs {
     ($($a:literal => $b:literal),+ $(,)?) => {
         &[
             $(
@@ -41,7 +41,7 @@ macro_rules! markov_algorithm {
 crate::print_values!(
     print_markov, formatter "{}", sep "\n";
     Markov::new("101",
-        markov_algorithm!(
+        markov_pairs!(
             "I0" => "0II",
             "1" => "0I",
             "0" => "",

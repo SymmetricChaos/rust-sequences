@@ -12,14 +12,14 @@ pub struct TagSystem {
 }
 
 impl TagSystem {
-    pub fn new<T>(init: &str, deletion: usize, transition: T, halt: char) -> Self
+    pub fn new<T>(initial: &str, deletion: usize, transition: T, halt: char) -> Self
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
         assert!(deletion > 1);
         Self {
             deletion,
-            string: init.to_string(),
+            string: initial.to_string(),
             transition: Box::new(transition),
             halted: false,
             halt,
