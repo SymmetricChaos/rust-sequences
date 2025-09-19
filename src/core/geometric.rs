@@ -2,24 +2,27 @@ use num::{BigInt, CheckedMul, PrimInt};
 
 /// Geometric sequence with chosen initial value and multiplier
 pub struct Geometric<T> {
-    val: T,
-    mul: T,
+    value: T,
+    multiplier: T,
 }
 
 impl<T: PrimInt> Geometric<T> {
-    pub fn new_prim(init: T, mul: T) -> Self {
-        Self { val: init, mul }
+    pub fn new_prim(initial: T, multiplier: T) -> Self {
+        Self {
+            value: initial,
+            multiplier,
+        }
     }
 }
 
 impl Geometric<BigInt> {
-    pub fn new<T>(init: T, mul: T) -> Self
+    pub fn new<T>(initial: T, multiplier: T) -> Self
     where
         BigInt: From<T>,
     {
         Self {
-            val: BigInt::from(init),
-            mul: BigInt::from(mul),
+            value: BigInt::from(initial),
+            multiplier: BigInt::from(multiplier),
         }
     }
 }
@@ -28,8 +31,8 @@ impl<T: Clone + CheckedMul> Iterator for Geometric<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val = self.val.checked_mul(&self.mul)?;
+        let out = self.value.clone();
+        self.value = self.value.checked_mul(&self.multiplier)?;
         Some(out)
     }
 }

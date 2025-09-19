@@ -10,14 +10,14 @@ pub struct Exponential {
 }
 
 impl Exponential {
-    pub fn new<T>(n: T, d: T) -> Self
+    pub fn new<T>(numer: T, denom: T) -> Self
     where
         BigInt: From<T>,
     {
         Self {
             sum: Ratio::one(),
             val: Ratio::one(),
-            x: Ratio::new(BigInt::from(n), BigInt::from(d)),
+            x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
             factorials: Factorial::new(),
         }
     }

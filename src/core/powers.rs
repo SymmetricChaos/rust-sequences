@@ -2,7 +2,7 @@ use num::{BigInt, One};
 
 /// The powers of n.
 pub struct Powers {
-    val: BigInt,
+    value: BigInt,
     n: BigInt,
 }
 
@@ -12,7 +12,7 @@ impl Powers {
         BigInt: From<T>,
     {
         Self {
-            val: BigInt::one(),
+            value: BigInt::one(),
             n: BigInt::from(n),
         }
     }
@@ -22,16 +22,16 @@ impl Iterator for Powers {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val *= &self.n;
+        let out = self.value.clone();
+        self.value *= &self.n;
         Some(out)
     }
 
     // Should be slightly faster than iteration with .next()
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        self.val *= self.n.pow(n.try_into().unwrap());
-        let out = self.val.clone();
-        self.val *= &self.n;
+        self.value *= self.n.pow(n.try_into().unwrap());
+        let out = self.value.clone();
+        self.value *= &self.n;
         Some(out)
     }
 }

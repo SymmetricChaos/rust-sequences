@@ -6,8 +6,8 @@ pub struct ContinuedFraction<T> {
     b0: T,
     a1: T,
     b1: T,
-    nums: Box<dyn Iterator<Item = T>>,
-    dens: Box<dyn Iterator<Item = T>>,
+    numerators: Box<dyn Iterator<Item = T>>,
+    denominators: Box<dyn Iterator<Item = T>>,
 }
 
 impl<T: Clone + Integer + 'static> ContinuedFraction<T> {
@@ -21,8 +21,8 @@ impl<T: Clone + Integer + 'static> ContinuedFraction<T> {
             b0: T::zero(),
             a1: d.next().unwrap(),
             b1: T::one(),
-            nums: Box::new(n),
-            dens: Box::new(d),
+            numerators: Box::new(n),
+            denominators: Box::new(d),
         }
     }
 
@@ -37,13 +37,13 @@ impl<T: Clone + Integer + 'static> ContinuedFraction<T> {
             b0: T::one(),
             a1: fixed_d[0].clone(),
             b1: T::one(),
-            nums: Box::new(
+            numerators: Box::new(
                 fixed_n
                     .into_iter()
                     .chain(periodic_n.into_iter().cycle())
                     .skip(1),
             ),
-            dens: Box::new(
+            denominators: Box::new(
                 fixed_d
                     .into_iter()
                     .chain(periodic_d.into_iter().cycle())
@@ -59,8 +59,8 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ContinuedFractio
     fn next(&mut self) -> Option<Self::Item> {
         let out = Ratio::new(self.a1.clone(), self.b1.clone());
 
-        let n = self.nums.next()?;
-        let d = self.dens.next()?;
+        let n = self.numerators.next()?;
+        let d = self.denominators.next()?;
 
         let a2 = d
             .checked_mul(&self.a1)?

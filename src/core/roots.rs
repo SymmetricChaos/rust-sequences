@@ -9,9 +9,9 @@ pub struct SquareRoot<T> {
 }
 
 impl<T: PrimInt + Integer> SquareRoot<T> {
-    pub fn new_prim(num: T, den: T) -> Self {
-        let n = num;
-        let d = den;
+    pub fn new_prim(numer: T, denom: T) -> Self {
+        let n = numer;
+        let d = denom;
         Self {
             convergent: Ratio::new(n.clone(), d.clone()),
             s: Ratio::new(n.clone(), d.clone()),
@@ -20,12 +20,12 @@ impl<T: PrimInt + Integer> SquareRoot<T> {
 }
 
 impl SquareRoot<BigInt> {
-    pub fn new<N>(num: N, den: N) -> Self
+    pub fn new<N>(numer: N, denom: N) -> Self
     where
         BigInt: From<N>,
     {
-        let n = BigInt::from(num);
-        let d = BigInt::from(den);
+        let n = BigInt::from(numer);
+        let d = BigInt::from(denom);
         Self {
             convergent: Ratio::new(n.clone(), d.clone()),
             s: Ratio::new(n.clone(), d.clone()),

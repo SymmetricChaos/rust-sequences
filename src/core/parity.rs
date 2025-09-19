@@ -5,14 +5,14 @@ use num::{BigInt, One, PrimInt, Signed, Zero};
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
 pub struct Parity<T> {
-    val: bool,
+    value: bool,
     _type: PhantomData<T>,
 }
 
 impl<T: PrimInt> Parity<T> {
     pub fn new_prim() -> Self {
         Self {
-            val: false,
+            value: false,
             _type: PhantomData,
         }
     }
@@ -21,7 +21,7 @@ impl<T: PrimInt> Parity<T> {
 impl Parity<BigInt> {
     pub fn new() -> Self {
         Self {
-            val: false,
+            value: false,
             _type: PhantomData,
         }
     }
@@ -31,8 +31,8 @@ impl<T: One + Zero> Iterator for Parity<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.val = !self.val;
-        if self.val {
+        self.value = !self.value;
+        if self.value {
             Some(T::zero())
         } else {
             Some(T::one())
