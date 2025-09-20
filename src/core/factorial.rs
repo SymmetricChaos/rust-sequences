@@ -1,6 +1,6 @@
 use std::iter::Skip;
 
-use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, One, PrimInt};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One, PrimInt};
 
 /// The factorial numbers.
 /// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
