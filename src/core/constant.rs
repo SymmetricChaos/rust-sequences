@@ -1,11 +1,11 @@
-use num::{BigInt, PrimInt};
+use num::BigInt;
 
 /// A constant sequence that always returns the same value.
 pub struct Constant<T> {
     val: T,
 }
 
-impl<T: PrimInt> Constant<T> {
+impl<T> Constant<T> {
     pub fn new(val: T) -> Self {
         Self { val }
     }

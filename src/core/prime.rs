@@ -15,15 +15,6 @@ impl<T: PrimInt> Prime<T> {
             n: T::one(),
         }
     }
-
-    /// An older definition of primes also known as the non-composite numbers.
-    /// 1, 2, 3, 5, 7, 11, 13, 17, 19, 23...
-    pub fn with_one_prim() -> Self {
-        Self {
-            sieve: HashMap::<T, Vec<T>>::new(),
-            n: T::zero(),
-        }
-    }
 }
 
 impl Prime<BigInt> {
@@ -33,25 +24,12 @@ impl Prime<BigInt> {
             n: BigInt::one(),
         }
     }
-
-    /// An older definition of primes also known as the non-composite numbers.
-    /// 1, 2, 3, 5, 7, 11, 13, 17, 19, 23...
-    pub fn with_one() -> Self {
-        Self {
-            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
-            n: BigInt::zero(),
-        }
-    }
 }
 
 impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Prime<T> {
     type Item = T;
 
-    fn next(&mut self) -> Option<T> {
-        if self.n.is_zero() {
-            self.n = self.n.checked_add(&T::one())?;
-            return Some(T::one());
-        }
+    fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.n = self.n.checked_add(&T::one())?;
             if !self.sieve.contains_key(&self.n) {
