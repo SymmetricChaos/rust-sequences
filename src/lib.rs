@@ -13,6 +13,7 @@ pub mod odious;
 pub mod partition;
 pub mod pell;
 pub mod playground;
+pub mod rowland;
 pub mod smooth;
 pub mod squarefree;
 pub mod strings;
