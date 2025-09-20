@@ -10,7 +10,7 @@ pub struct AdditiveLinearRecurrence {
 
 impl AdditiveLinearRecurrence {
     /// The simplest linear recurrence with two terms and two coefficients.
-    pub fn new<T>(a: T, b: T, p: T, q: T) -> Self
+    pub fn new_big<T>(a: T, b: T, p: T, q: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -22,7 +22,7 @@ impl AdditiveLinearRecurrence {
 
     /// Linear recurrence with any number of terms and coefficients.
     /// Panics if inits.len() != coefs.len()
-    pub fn new_from_slices<T: Clone>(inits: &[T], coefs: &[T]) -> Self
+    pub fn new_big_from_slices<T: Clone>(inits: &[T], coefs: &[T]) -> Self
     where
         BigInt: From<T>,
     {
@@ -63,18 +63,6 @@ pub struct AdditiveRecurrence {
 }
 
 impl AdditiveRecurrence {
-    pub fn new(
-        a: i64,
-        b: i64,
-        p: Box<dyn Fn(&BigInt) -> BigInt>,
-        q: Box<dyn Fn(&BigInt) -> BigInt>,
-    ) -> Self {
-        Self {
-            vals: vec![BigInt::from(a), BigInt::from(b)],
-            funcs: vec![p, q],
-        }
-    }
-
     pub fn new_big(
         a: BigInt,
         b: BigInt,
@@ -87,19 +75,9 @@ impl AdditiveRecurrence {
         }
     }
 
-    pub fn new_from_slices(inits: &[i64], funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>) -> Self {
+    pub fn new_big_from_slices(inits: &[i64], funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>) -> Self {
         Self {
             vals: inits.iter().map(|x| BigInt::from(*x)).collect_vec(),
-            funcs,
-        }
-    }
-
-    pub fn new_from_slices_big(
-        inits: &[BigInt],
-        funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>,
-    ) -> Self {
-        Self {
-            vals: inits.to_owned(),
             funcs,
         }
     }
@@ -121,8 +99,8 @@ impl Iterator for AdditiveRecurrence {
 }
 
 crate::print_values!(
-    AdditiveLinearRecurrence::new(0, 1, 2, 3), 0, 10;
-    AdditiveLinearRecurrence::new_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
-    AdditiveRecurrence::new(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;
-    AdditiveRecurrence::new_from_slices(&[0, 1, 2], vec![Box::new(|x| x + 1), Box::new(|x| x * -2), Box::new(|x| x + x/2 + 4)]), 0, 10;
+    AdditiveLinearRecurrence::new_big(0, 1, 2, 3), 0, 10;
+    AdditiveLinearRecurrence::new_big_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
+    // AdditiveRecurrence::new_big(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;
+    // AdditiveRecurrence::new_big_from_slices(&[0, 1, 2], vec![Box::new(|x| x + 1), Box::new(|x| x * -2), Box::new(|x| x + x/2 + 4)]), 0, 10;
 );

@@ -7,7 +7,7 @@ pub struct Odious {
 }
 
 impl Odious {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self { ctr: BigInt::one() }
     }
 }
@@ -34,10 +34,9 @@ impl Iterator for Odious {
 }
 
 crate::check_iteration_times!(
-    Odious::new(), 1_000_000;
+    Odious::new_big(), 1_000_000;
 );
 
-
 crate::check_sequences!(
-    Odious::new(), 0, 10, [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
+    Odious::new_big(), 0, 10, [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
 );

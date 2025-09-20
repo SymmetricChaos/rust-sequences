@@ -11,7 +11,7 @@ pub struct Farey {
 
 impl Farey {
     /// The ascending Farey sequence of order k.
-    pub fn new<T>(k: T) -> Self
+    pub fn new_big<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -27,7 +27,7 @@ impl Farey {
     }
 
     /// The ascending Farey sequence of order k.
-    pub fn new_ascending<T>(k: T) -> Self
+    pub fn new_big_ascending<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -43,7 +43,7 @@ impl Farey {
     }
 
     /// The descending Farey sequence of order k.
-    pub fn new_descending<T>(k: T) -> Self
+    pub fn new_big_descending<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -81,8 +81,8 @@ impl Iterator for Farey {
 }
 
 crate::print_values!(
-    Farey::new(3), 0, 10;
-    Farey::new(7), 0, 19;
-    Farey::new_descending(3), 0, 10;
-    Farey::new_descending(7), 0, 19;
+    Farey::new_big(3), 0, 10;
+    Farey::new_big(7), 0, 19;
+    Farey::new_big_descending(3), 0, 10;
+    Farey::new_big_descending(7), 0, 19;
 );

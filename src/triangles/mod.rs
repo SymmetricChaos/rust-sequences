@@ -8,7 +8,7 @@ pub use pascal::*;
 
 crate::print_values!(
     print_triangles, formatter "{:?}", sep "\n";
-    BellTriangle::new(), 0, 10;
-    BernoullisTriangle::new(), 0, 10;
-    PascalsTriangle::new(), 0, 10;
+    BellTriangle::new_big(), 0, 10;
+    BernoullisTriangle::new_big(), 0, 10;
+    PascalsTriangle::new_big(), 0, 10;
 );

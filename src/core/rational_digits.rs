@@ -10,7 +10,7 @@ pub struct DecimalDigits<T> {
 }
 
 impl<T: PrimInt + Integer> DecimalDigits<T> {
-    pub fn new_prim(numer: T, denom: T) -> Self {
+    pub fn new(numer: T, denom: T) -> Self {
         assert!(numer >= T::zero());
         assert!(denom > T::zero());
         let g = numer.gcd(&denom);
@@ -30,7 +30,7 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
 }
 
 impl DecimalDigits<BigInt> {
-    pub fn new<F: Zero + Ord>(numer: F, denom: F) -> Self
+    pub fn new_big<F: Zero + Ord>(numer: F, denom: F) -> Self
     where
         BigInt: From<F>,
     {
@@ -69,6 +69,6 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + FromPrimitive> Iterator for Decim
 
 crate::print_values!(
     digits, formatter "{}", sep " ";
-    DecimalDigits::new_prim(665857, 941664), 0, 20; // should be close to 0.70710678118
-    DecimalDigits::new_prim(127, 11), 0, 20;
+    DecimalDigits::new(665857, 941664), 0, 20; // should be close to 0.70710678118
+    DecimalDigits::new(127, 11), 0, 20;
 );

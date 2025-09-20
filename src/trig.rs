@@ -12,7 +12,7 @@ pub struct Sin {
 }
 
 impl Sin {
-    pub fn new<T>(n: T, d: T) -> Self
+    pub fn new_big<T>(n: T, d: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -21,7 +21,7 @@ impl Sin {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new(),
+            factorials: Factorial::new_big(),
             neg: true,
         }
     }
@@ -55,7 +55,7 @@ pub struct SinH {
 }
 
 impl SinH {
-    pub fn new<T>(n: T, d: T) -> Self
+    pub fn new_big<T>(n: T, d: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -64,7 +64,7 @@ impl SinH {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new(),
+            factorials: Factorial::new_big(),
         }
     }
 }
@@ -94,7 +94,7 @@ pub struct ArcSin {
 }
 
 impl ArcSin {
-    pub fn new<T>(n: T, d: T) -> Self
+    pub fn new_big<T>(n: T, d: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -103,8 +103,8 @@ impl ArcSin {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new(),
-            factorials_slow: Factorial::new(),
+            factorials: Factorial::new_big(),
+            factorials_slow: Factorial::new_big(),
             ctr: 0,
         }
     }
@@ -133,11 +133,11 @@ impl Iterator for ArcSin {
 use crate::core::rational_digits::DecimalDigits;
 
 crate::check_sequences!(
-    DecimalDigits::from_ratio(Sin::new(2,1).skip(8).next().unwrap()), 0, 10, [0,9,0,9,2,9,7,4,2,6];
-    DecimalDigits::from_ratio(Sin::new(1,3).skip(8).next().unwrap()), 0, 10, [0,3,2,7,1,9,4,6,9,6];
-    DecimalDigits::from_ratio(SinH::new(1,1).skip(8).next().unwrap()), 0, 10, [1,1,7,5,2,0,1,1,9,3];
+    DecimalDigits::from_ratio(Sin::new_big(2,1).skip(8).next().unwrap()), 0, 10, [0,9,0,9,2,9,7,4,2,6];
+    DecimalDigits::from_ratio(Sin::new_big(1,3).skip(8).next().unwrap()), 0, 10, [0,3,2,7,1,9,4,6,9,6];
+    DecimalDigits::from_ratio(SinH::new_big(1,1).skip(8).next().unwrap()), 0, 10, [1,1,7,5,2,0,1,1,9,3];
 );
 
 crate::print_values!(
-    ArcSin::new(1,2), 0, 5;
+    ArcSin::new_big(1,2), 0, 5;
 );

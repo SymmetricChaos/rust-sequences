@@ -8,7 +8,7 @@ pub struct Oblong {
 }
 
 impl Oblong {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
             ctr: BigInt::from(2),
@@ -36,9 +36,9 @@ impl Iterator for Oblong {
 }
 
 crate::check_iteration_times!(
-    Oblong::new(), 3_200_000;
+    Oblong::new_big(), 3_200_000;
 );
 
 crate::check_sequences!(
-    Oblong::new(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
+    Oblong::new_big(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
 );

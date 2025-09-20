@@ -12,7 +12,7 @@ pub struct LucasU {
 }
 
 impl LucasU {
-    pub fn new<T>(p: T, q: T) -> Self
+    pub fn new_big<T>(p: T, q: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -48,7 +48,7 @@ pub struct LucasV {
 }
 
 impl LucasV {
-    pub fn new<T: Clone>(p: T, q: T) -> Self
+    pub fn new_big<T: Clone>(p: T, q: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -74,7 +74,7 @@ impl Iterator for LucasV {
 }
 
 crate::check_sequences!(
-    LucasU::new(1, -1), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]; // Fibonacci
-    LucasV::new(1, -1), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]; // Lucas
-    LucasU::new(1, -2), 0, 10, [0, 1, 2, 5, 12, 29, 70, 169, 408, 985]; // Pell
+    LucasU::new_big(1, -1), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]; // Fibonacci
+    LucasV::new_big(1, -1), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]; // Lucas
+    LucasU::new_big(1, -2), 0, 10, [0, 1, 2, 5, 12, 29, 70, 169, 408, 985]; // Pell
 );

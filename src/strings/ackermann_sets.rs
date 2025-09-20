@@ -76,7 +76,7 @@ pub struct AckermannSet {
 }
 
 impl AckermannSet {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self { ctr: BigInt::ZERO }
     }
 

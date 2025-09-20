@@ -10,7 +10,7 @@ pub struct Exponential {
 }
 
 impl Exponential {
-    pub fn new<T>(numer: T, denom: T) -> Self
+    pub fn new_big<T>(numer: T, denom: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -18,7 +18,7 @@ impl Exponential {
             sum: Ratio::one(),
             val: Ratio::one(),
             x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
-            factorials: Factorial::new(),
+            factorials: Factorial::new_big(),
         }
     }
 }
@@ -36,5 +36,5 @@ impl Iterator for Exponential {
 }
 
 crate::print_values!(
-    Exponential::new(1,1), 0, 10; // converges on e
+    Exponential::new_big(1,1), 0, 10; // converges on e
 );

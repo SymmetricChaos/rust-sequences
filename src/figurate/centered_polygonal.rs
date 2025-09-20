@@ -12,13 +12,13 @@ impl CenteredPolygonal {
     /// k = 3 produces the centered triangular numbers
     /// k = 4 produces the centered square numbers
     /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
-    pub fn new<T: One>(k: T) -> Self
+    pub fn new_big<T: One>(k: T) -> Self
     where
         BigInt: From<T>,
     {
         Self {
             k: BigInt::from(k),
-            polygonal: Polygonal::new::<i32>(3),
+            polygonal: Polygonal::new_big::<i32>(3),
         }
     }
 
@@ -46,13 +46,13 @@ impl Iterator for CenteredPolygonal {
 
 // These low order values are the same as two versions of Hogben's central polygonal numbers
 crate::print_values!(
-    CenteredPolygonal::new(1), 0, 10;
-    CenteredPolygonal::new(2), 0, 10;
+    CenteredPolygonal::new_big(1), 0, 10;
+    CenteredPolygonal::new_big(2), 0, 10;
 );
 
 crate::check_sequences!(
-    CenteredPolygonal::new(3), 0, 10, [1, 4, 10, 19, 31, 46, 64, 85, 109, 136];
-    CenteredPolygonal::new(4), 0, 10, [1, 5, 13, 25, 41, 61, 85, 113, 145, 181];
-    CenteredPolygonal::new(5), 0, 10, [1, 6, 16, 31, 51, 76, 106, 141, 181, 226];
-    CenteredPolygonal::new(6), 0, 10, [1, 7, 19, 37, 61, 91, 127, 169, 217, 271];
+    CenteredPolygonal::new_big(3), 0, 10, [1, 4, 10, 19, 31, 46, 64, 85, 109, 136];
+    CenteredPolygonal::new_big(4), 0, 10, [1, 5, 13, 25, 41, 61, 85, 113, 145, 181];
+    CenteredPolygonal::new_big(5), 0, 10, [1, 6, 16, 31, 51, 76, 106, 141, 181, 226];
+    CenteredPolygonal::new_big(6), 0, 10, [1, 7, 19, 37, 61, 91, 127, 169, 217, 271];
 );

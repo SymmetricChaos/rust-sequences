@@ -7,7 +7,7 @@ pub struct Square {
 }
 
 impl Square {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::zero(),
         }
@@ -35,9 +35,9 @@ impl Iterator for Square {
 }
 
 crate::check_iteration_times!(
-    Square::new(), 4_500_000;
+    Square::new_big(), 4_500_000;
 );
 
 crate::check_sequences!(
-    Square::new(), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
+    Square::new_big(), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
 );

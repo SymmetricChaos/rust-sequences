@@ -8,7 +8,7 @@ pub struct Triangular {
 }
 
 impl Triangular {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::zero(),
             ctr: BigInt::one(),
@@ -49,13 +49,13 @@ impl Iterator for Triangular {
 }
 
 crate::print_values!(
-    Triangular::new(), 0, 10;
-    Triangular::new(), 1, 10;
-    Triangular::new(), 2, 10;
-    Triangular::new(), 3, 10;
-    Triangular::new(), 4, 10;
+    Triangular::new_big(), 0, 10;
+    Triangular::new_big(), 1, 10;
+    Triangular::new_big(), 2, 10;
+    Triangular::new_big(), 3, 10;
+    Triangular::new_big(), 4, 10;
 );
 
 crate::check_sequences!(
-    Triangular::new(), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
+    Triangular::new_big(), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
 );

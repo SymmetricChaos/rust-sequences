@@ -227,54 +227,6 @@ impl<T: Clone + CheckedAdd> Iterator for BoustrophedonTriangle<T> {
     }
 }
 
-/// Sequence of numerators of a sequence of ratios.
-pub struct Numerators<T> {
-    iter: Box<dyn Iterator<Item = Ratio<T>>>,
-}
-
-impl<T> Numerators<T> {
-    pub fn new<I>(iter: I) -> Self
-    where
-        I: Iterator<Item = Ratio<T>> + 'static,
-    {
-        Self {
-            iter: Box::new(iter),
-        }
-    }
-}
-
-impl<T: Clone> Iterator for Numerators<T> {
-    type Item = T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        Some(self.iter.next()?.numer().clone())
-    }
-}
-
-/// Sequence of denominators of a sequence of ratios.
-pub struct Denominator<T> {
-    iter: Box<dyn Iterator<Item = Ratio<T>>>,
-}
-
-impl<T> Denominator<T> {
-    pub fn new<I>(iter: I) -> Self
-    where
-        I: Iterator<Item = Ratio<T>> + 'static,
-    {
-        Self {
-            iter: Box::new(iter),
-        }
-    }
-}
-
-impl<T: Clone> Iterator for Denominator<T> {
-    type Item = T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        Some(self.iter.next()?.denom().clone())
-    }
-}
-
 /// Sequence of reciprocals of a sequence of integers. Returns None if the integer is zero.
 pub struct IntegerReciprocals<T> {
     iter: Box<dyn Iterator<Item = T>>,
@@ -300,35 +252,6 @@ impl<T: Clone + Integer> Iterator for IntegerReciprocals<T> {
             None
         } else {
             Some(Ratio::<T>::new(T::one(), n))
-        }
-    }
-}
-
-/// Sequence of reciprocals of a sequence of ratios. Returns None whenever the numerator of the original sequence is zero.
-pub struct Reciprocals<T> {
-    iter: Box<dyn Iterator<Item = Ratio<T>>>,
-}
-
-impl<T> Reciprocals<T> {
-    pub fn new<I>(iter: I) -> Self
-    where
-        I: Iterator<Item = Ratio<T>> + 'static,
-    {
-        Self {
-            iter: Box::new(iter),
-        }
-    }
-}
-
-impl<T: Clone + Integer> Iterator for Reciprocals<T> {
-    type Item = Ratio<T>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let n = self.iter.next()?;
-        if n.numer().is_zero() {
-            None
-        } else {
-            Some(n.recip())
         }
     }
 }
@@ -364,5 +287,37 @@ impl<T: Clone + Integer> Iterator for Ratios<T> {
         } else {
             Some(Ratio::<T>::new(num, den))
         }
+    }
+}
+
+/// The partial sums of Cesaro's summation method.
+pub struct CesaroPartialSums<T> {
+    sum: T,
+    iter: Box<dyn Iterator<Item = T>>,
+    ctr: T,
+}
+
+impl<T: One + Zero> CesaroPartialSums<T> {
+    pub fn new<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = T> + 'static,
+    {
+        Self {
+            sum: T::zero(),
+            iter: Box::new(iter),
+            ctr: T::zero(),
+        }
+    }
+}
+
+impl<T: Clone + CheckedAdd + Integer> Iterator for CesaroPartialSums<T> {
+    type Item = Ratio<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.sum = self.sum.checked_add(&self.iter.next()?)?;
+        let out = Ratio::new(self.sum.clone(), self.ctr.clone());
+
+        Some(out)
     }
 }

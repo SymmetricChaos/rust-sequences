@@ -14,7 +14,7 @@ impl Polygonal {
     /// k = 4 produces the square numbers
     /// and so on for higher orders
     /// Lower values of k are allowed but do not have standard names.
-    pub fn new<T>(k: T) -> Self
+    pub fn new_big<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -75,23 +75,23 @@ impl Iterator for Polygonal {
 
 crate::print_values!(
     // For testing that .nth() words
-    Polygonal::new(3), 0, 10;
-    Polygonal::new(3), 1, 10;
-    Polygonal::new(3), 2, 10;
-    Polygonal::new(3), 3, 10;
-    Polygonal::new(3), 4, 10;
+    Polygonal::new_big(3), 0, 10;
+    Polygonal::new_big(3), 1, 10;
+    Polygonal::new_big(3), 2, 10;
+    Polygonal::new_big(3), 3, 10;
+    Polygonal::new_big(3), 4, 10;
 
-    Polygonal::new(4), 0, 10;
-    Polygonal::new(4), 1, 10;
-    Polygonal::new(4), 2, 10;
-    Polygonal::new(4), 3, 10;
-    Polygonal::new(4), 4, 10;
+    Polygonal::new_big(4), 0, 10;
+    Polygonal::new_big(4), 1, 10;
+    Polygonal::new_big(4), 2, 10;
+    Polygonal::new_big(4), 3, 10;
+    Polygonal::new_big(4), 4, 10;
 
 );
 
 crate::check_sequences!(
-    Polygonal::new(2), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Polygonal::new(3), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
+    Polygonal::new_big(2), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Polygonal::new_big(3), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
 );
 
 #[test]

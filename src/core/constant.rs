@@ -6,13 +6,13 @@ pub struct Constant<T> {
 }
 
 impl<T: PrimInt> Constant<T> {
-    pub fn new_prim(val: T) -> Self {
+    pub fn new(val: T) -> Self {
         Self { val }
     }
 }
 
 impl Constant<BigInt> {
-    pub fn new<G>(val: G) -> Self
+    pub fn new_big<G>(val: G) -> Self
     where
         BigInt: From<G>,
     {
@@ -31,6 +31,6 @@ impl<T: Clone> Iterator for Constant<T> {
 }
 
 crate::check_sequences!(
+    Constant::new_big(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
     Constant::new(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
-    Constant::new_prim(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
 );

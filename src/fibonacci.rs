@@ -9,7 +9,7 @@ pub struct Fibonacci {
 }
 
 impl Fibonacci {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             a: BigInt::zero(),
             b: BigInt::one(),
@@ -51,7 +51,7 @@ impl Default for FibonacciWord<BigInt> {
 impl<T: One + Zero + PartialEq> FibonacciWord<T> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             word: VecDeque::from(vec![false]),
             zero: T::zero(),
@@ -104,7 +104,7 @@ pub struct FibonacciStrings {
 }
 
 impl FibonacciStrings {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             a: String::from("0"),
             b: String::from("01"),
@@ -126,14 +126,14 @@ impl Iterator for FibonacciStrings {
 }
 
 crate::check_iteration_times!(
-    Fibonacci::new(), 160_000;
+    Fibonacci::new_big(), 160_000;
 );
 
 crate::check_sequences!(
-    Fibonacci::new(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+    Fibonacci::new_big(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
     FibonacciWord::default(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
 );
 
 crate::print_values!(
-    FibonacciStrings::new(), 0, 7;
+    FibonacciStrings::new_big(), 0, 7;
 );

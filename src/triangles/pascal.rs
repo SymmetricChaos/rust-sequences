@@ -6,7 +6,7 @@ pub struct PascalsTriangle {
 }
 
 impl PascalsTriangle {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             row: vec![BigInt::one()],
         }

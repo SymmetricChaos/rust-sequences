@@ -7,7 +7,7 @@ pub struct Collatz {
 
 impl Collatz {
     /// Start a Collatz sequence from n.
-    pub fn new<T>(n: T) -> Self
+    pub fn new_big<T>(n: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -39,7 +39,7 @@ pub struct CollatzOdd {
 
 impl CollatzOdd {
     /// Start an odd Collatz sequence from n.
-    pub fn new<T>(n: T) -> Self
+    pub fn new_big<T>(n: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -64,8 +64,8 @@ impl Iterator for CollatzOdd {
 }
 
 crate::check_sequences!(
-    Collatz::new(19), 0, 10, [19, 58, 29, 88, 44, 22, 11, 34, 17, 52];
-    Collatz::new(27), 0, 10, [27, 82, 41, 124, 62, 31, 94, 47, 142, 71];
-    CollatzOdd::new(27), 0, 10, [27, 41, 31, 47, 71, 107, 161, 121, 91, 137];
-    Collatz::new(-5), 0, 10, [-5, -14, -7, -20, -10, -5, -14, -7, -20, -10];
+    Collatz::new_big(19), 0, 10, [19, 58, 29, 88, 44, 22, 11, 34, 17, 52];
+    Collatz::new_big(27), 0, 10, [27, 82, 41, 124, 62, 31, 94, 47, 142, 71];
+    CollatzOdd::new_big(27), 0, 10, [27, 41, 31, 47, 71, 107, 161, 121, 91, 137];
+    Collatz::new_big(-5), 0, 10, [-5, -14, -7, -20, -10, -5, -14, -7, -20, -10];
 );

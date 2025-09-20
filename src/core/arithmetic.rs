@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, PrimInt};
+use num::{BigInt, CheckedAdd};
 
 /// Arithmetic sequence with chosen initial value and increment
 pub struct Arithmetic<T> {
@@ -6,16 +6,16 @@ pub struct Arithmetic<T> {
     inc: T,
 }
 
-impl<T: PrimInt> Arithmetic<T> {
+impl<T> Arithmetic<T> {
     /// Sequence using a primitive integer type.
-    pub fn new_prim(init: T, inc: T) -> Self {
+    pub fn new(init: T, inc: T) -> Self {
         Self { val: init, inc }
     }
 }
 
 impl Arithmetic<BigInt> {
     /// Sequence using the BigInt type.
-    pub fn new<G>(init: G, inc: G) -> Self
+    pub fn new_big<G>(init: G, inc: G) -> Self
     where
         BigInt: From<G>,
     {
@@ -38,7 +38,7 @@ impl<T: Clone + CheckedAdd> Iterator for Arithmetic<T> {
 
 crate::check_iteration_times!(
     Arithmetic::new(4, 3), 3_500_000;
-    Arithmetic::<u64>::new_prim(4, 3), 3_500_000;
+    Arithmetic::<u64>::new(4, 3), 3_500_000;
 );
 
 crate::check_sequences!(

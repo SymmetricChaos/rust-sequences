@@ -6,7 +6,7 @@ pub struct BellTriangle {
 }
 
 impl BellTriangle {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             row: vec![BigInt::one()],
         }
@@ -14,7 +14,7 @@ impl BellTriangle {
 
     /// Return an iterator over the elements in each row.
     pub fn as_ints() -> impl Iterator<Item = BigInt> {
-        Self::new().flatten()
+        Self::new_big().flatten()
     }
 }
 

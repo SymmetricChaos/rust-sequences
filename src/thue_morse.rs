@@ -22,7 +22,7 @@ impl<T: One + Zero> ThueMorse<T> {
 }
 
 impl ThueMorse<BigInt> {
-    pub fn new_big_int() -> Self {
+    pub fn new_big() -> Self {
         Self {
             value: TWO.to_owned(),
             ctr: 0,

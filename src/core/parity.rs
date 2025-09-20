@@ -10,7 +10,7 @@ pub struct Parity<T> {
 }
 
 impl<T: PrimInt> Parity<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self {
             value: false,
             _type: PhantomData,
@@ -19,7 +19,7 @@ impl<T: PrimInt> Parity<T> {
 }
 
 impl Parity<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             value: false,
             _type: PhantomData,
@@ -47,7 +47,7 @@ pub struct Even {
 }
 
 impl Even {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
         }
@@ -77,7 +77,7 @@ pub struct Odd {
 }
 
 impl Odd {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self { val: BigInt::one() }
     }
 }
@@ -105,7 +105,7 @@ pub struct EvenInteger {
 }
 
 impl EvenInteger {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
         }
@@ -135,7 +135,7 @@ pub struct OddInteger {
 }
 
 impl OddInteger {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
         }
@@ -160,13 +160,13 @@ impl Iterator for OddInteger {
 }
 
 crate::check_iteration_times!(
-    Even::new(), 1_000_000;
-    Even::new().skip(1_000_000), 1;
+    Even::new_big(), 1_000_000;
+    Even::new_big().skip(1_000_000), 1;
 );
 
 crate::check_sequences!(
-    Even::new(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
-    EvenInteger::new(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
-    Odd::new(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
-    OddInteger::new(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
+    Even::new_big(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    EvenInteger::new_big(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
+    Odd::new_big(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    OddInteger::new_big(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
 );

@@ -8,8 +8,8 @@ pub struct Squarefree {
 }
 
 impl Squarefree {
-    pub fn new() -> Self {
-        let mut primes = crate::core::Prime::new();
+    pub fn new_big() -> Self {
+        let mut primes = crate::core::Prime::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),
@@ -48,8 +48,8 @@ pub struct Squareful {
 }
 
 impl Squareful {
-    pub fn new() -> Self {
-        let mut primes = crate::core::Prime::new();
+    pub fn new_big() -> Self {
+        let mut primes = crate::core::Prime::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),
@@ -80,6 +80,6 @@ impl Iterator for Squareful {
 }
 
 crate::check_sequences!(
-    Squarefree::new(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
-    Squareful::new(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
+    Squarefree::new_big(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
+    Squareful::new_big(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
 );

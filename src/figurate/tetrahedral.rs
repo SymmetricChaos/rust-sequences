@@ -9,7 +9,7 @@ pub struct Tetrahedral {
 }
 
 impl Tetrahedral {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             a: BigInt::zero(),
             b: BigInt::one(),
@@ -32,5 +32,5 @@ impl Iterator for Tetrahedral {
 }
 
 crate::check_sequences!(
-    Tetrahedral::new(), 0, 10, [0, 1, 4, 10, 20, 35, 56, 84, 120, 165];
+    Tetrahedral::new_big(), 0, 10, [0, 1, 4, 10, 20, 35, 56, 84, 120, 165];
 );

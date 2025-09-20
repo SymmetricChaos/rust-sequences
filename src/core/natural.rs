@@ -7,13 +7,13 @@ pub struct Natural<T> {
 }
 
 impl<T: PrimInt> Natural<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
 }
 
 impl Natural<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             ctr: BigInt::zero(),
         }
@@ -31,6 +31,6 @@ impl<T: Clone + CheckedAdd + One> Iterator for Natural<T> {
 }
 
 crate::check_sequences!(
-    Natural::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Natural::<u8>::new_prim(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Natural::new_big(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Natural::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );

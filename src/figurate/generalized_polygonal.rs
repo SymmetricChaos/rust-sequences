@@ -13,12 +13,12 @@ impl GeneralizedPolygonal {
     /// k = 4 produces the square numbers
     /// and so on for higher orders
     /// Lower values of k are allowed but do not have standard names.
-    pub fn new<T: One>(k: T) -> Self
+    pub fn new_big<T: One>(k: T) -> Self
     where
         BigInt: From<T>,
     {
         Self {
-            integers: crate::core::Integer::new(),
+            integers: crate::core::Integer::new_big(),
             k: BigInt::from(k),
         }
     }
@@ -63,9 +63,9 @@ pub struct GeneralizedPentagonal {
 }
 
 impl GeneralizedPentagonal {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
-            integers: crate::core::Integer::new(),
+            integers: crate::core::Integer::new_big(),
         }
     }
 
@@ -97,7 +97,7 @@ pub struct GeneralizedPentagonalGeneric<T> {
 impl<T: PrimInt + Signed> GeneralizedPentagonalGeneric<T> {
     pub fn new() -> Self {
         Self {
-            integers: crate::core::Integer::<T>::new_prim(),
+            integers: crate::core::Integer::<T>::new(),
         }
     }
 
@@ -119,21 +119,21 @@ impl<T: PrimInt + Signed> Iterator for GeneralizedPentagonalGeneric<T> {
 }
 
 crate::check_iteration_times!(
-    GeneralizedPolygonal::new(5), 700_000;
-    GeneralizedPentagonal::new(), 1_500_000;
+    GeneralizedPolygonal::new_big(5), 700_000;
+    GeneralizedPentagonal::new_big(), 1_500_000;
     GeneralizedPentagonalGeneric::<i64>::new(), 35_000_000;
 );
 
 crate::print_values!(
-    GeneralizedPolygonal::new(1), 0, 10;
-    GeneralizedPolygonal::new(2), 0, 10;
-    GeneralizedPolygonal::new(3), 0, 10;
-    GeneralizedPolygonal::new(4), 0, 10;
-    GeneralizedPolygonal::new(5), 0, 10;
-    GeneralizedPolygonal::new(6), 0, 10;
+    GeneralizedPolygonal::new_big(1), 0, 10;
+    GeneralizedPolygonal::new_big(2), 0, 10;
+    GeneralizedPolygonal::new_big(3), 0, 10;
+    GeneralizedPolygonal::new_big(4), 0, 10;
+    GeneralizedPolygonal::new_big(5), 0, 10;
+    GeneralizedPolygonal::new_big(6), 0, 10;
 );
 
 crate::check_sequences!(
-    GeneralizedPolygonal::new(5), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35]; // Generalized pentagonal numbers are particularly important
-    GeneralizedPentagonal::new(), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35];
+    GeneralizedPolygonal::new_big(5), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35]; // Generalized pentagonal numbers are particularly important
+    GeneralizedPentagonal::new_big(), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35];
 );

@@ -7,7 +7,7 @@ pub struct Partition {
 }
 
 impl Partition {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             values: vec![BigInt::one()],
             ctr: 0,
@@ -46,9 +46,9 @@ impl Iterator for Partition {
 }
 
 crate::check_iteration_times!(
-    Partition::new(), 27_000;
+    Partition::new_big(), 27_000;
 );
 
 crate::check_sequences!(
-    Partition::new(), 0, 10, [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+    Partition::new_big(), 0, 10, [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );

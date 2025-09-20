@@ -7,7 +7,7 @@ pub struct Rowland<T> {
 }
 
 impl<T: PrimInt> Rowland<T> {
-    pub fn new_prim(initial: T) -> Self {
+    pub fn new(initial: T) -> Self {
         Self {
             value: initial,
             ctr: T::one() + T::one(),
@@ -16,7 +16,7 @@ impl<T: PrimInt> Rowland<T> {
 }
 
 impl Rowland<BigInt> {
-    pub fn new<G>(initial: G) -> Self
+    pub fn new_big<G>(initial: G) -> Self
     where
         BigInt: From<G>,
     {
@@ -45,7 +45,7 @@ pub struct RowlandPrime<T> {
 }
 
 impl<T: PrimInt> RowlandPrime<T> {
-    pub fn new_prim(initial: T) -> Self {
+    pub fn new(initial: T) -> Self {
         Self {
             value: initial,
             ctr: T::one() + T::one(),
@@ -54,7 +54,7 @@ impl<T: PrimInt> RowlandPrime<T> {
 }
 
 impl RowlandPrime<BigInt> {
-    pub fn new<G>(initial: G) -> Self
+    pub fn new_big<G>(initial: G) -> Self
     where
         BigInt: From<G>,
     {

@@ -11,7 +11,7 @@ pub struct Smooth {
 impl Smooth {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
-    pub fn new<T>(n: T) -> Self
+    pub fn new_big<T>(n: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -19,7 +19,7 @@ impl Smooth {
         assert!(n.is_positive());
         Self {
             ctr: BigInt::zero(),
-            primes: Prime::new().take_while(|x| *x <= n).collect_vec(),
+            primes: Prime::new_big().take_while(|x| *x <= n).collect_vec(),
         }
     }
 }
@@ -46,9 +46,9 @@ impl Iterator for Smooth {
 // TODO: Optimized methods exist for generating the regular aka 5-Smooth numbers
 
 crate::check_iteration_times!(
-    Smooth::new(5), 500;
+    Smooth::new_big(5), 500;
 );
 
 crate::check_sequences!(
-    Smooth::new(5), 9, 10, [12, 15, 16, 18, 20, 24, 25, 27, 30, 32];
+    Smooth::new_big(5), 9, 10, [12, 15, 16, 18, 20, 24, 25, 27, 30, 32];
 );

@@ -9,7 +9,7 @@ pub struct SquareRoot<T> {
 }
 
 impl<T: PrimInt + Integer> SquareRoot<T> {
-    pub fn new_prim(numer: T, denom: T) -> Self {
+    pub fn new(numer: T, denom: T) -> Self {
         let n = numer;
         let d = denom;
         Self {
@@ -20,7 +20,7 @@ impl<T: PrimInt + Integer> SquareRoot<T> {
 }
 
 impl SquareRoot<BigInt> {
-    pub fn new<N>(numer: N, denom: N) -> Self
+    pub fn new_big<N>(numer: N, denom: N) -> Self
     where
         BigInt: From<N>,
     {
@@ -57,7 +57,7 @@ pub struct CubeRoot<T> {
 }
 
 impl<T: PrimInt + Integer> CubeRoot<T> {
-    pub fn new_prim(num: T, den: T) -> Self {
+    pub fn new(num: T, den: T) -> Self {
         let n = num;
         let d = den;
         Self {
@@ -68,7 +68,7 @@ impl<T: PrimInt + Integer> CubeRoot<T> {
 }
 
 impl CubeRoot<BigInt> {
-    pub fn new<N>(num: N, den: N) -> Self
+    pub fn new_big<N>(num: N, den: N) -> Self
     where
         BigInt: From<N>,
     {
@@ -101,6 +101,12 @@ impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> 
     }
 }
 
+// pub struct PolynomialRoot<T> {
+//     func: Box<dyn Fn(T) -> T>,
+//     derivative: Box<dyn Fn(T) -> T>,
+//     convergent: Ratio<T>,
+// }
+
 // /// Convergents of the principal nth root of a rational number by Newton's Method.
 // pub struct NthRoot<T> {
 //     convergent: Ratio<T>,
@@ -110,7 +116,7 @@ impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> 
 // }
 
 // impl<T: PrimInt + Integer + FromPrimitive + Bounded> NthRoot<T> {
-//     pub fn new_prim(num: T, den: T, nth: u32) -> Self {
+//     pub fn new(num: T, den: T, nth: u32) -> Self {
 //         assert!(nth > 2);
 //         assert!(
 //             T::from_u32(nth).unwrap() <= T::max_value(),
@@ -130,7 +136,7 @@ impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> 
 // }
 
 // impl NthRoot<BigInt> {
-//     pub fn new<N>(num: N, den: N, nth: u32) -> Self
+//     pub fn new_big<N>(num: N, den: N, nth: u32) -> Self
 //     where
 //         BigInt: From<N>,
 //     {

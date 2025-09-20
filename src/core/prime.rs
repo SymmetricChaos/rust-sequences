@@ -9,7 +9,7 @@ pub struct Prime<T> {
 }
 
 impl<T: PrimInt> Prime<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
             n: T::one(),
@@ -27,7 +27,7 @@ impl<T: PrimInt> Prime<T> {
 }
 
 impl Prime<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
             n: BigInt::one(),
@@ -75,11 +75,11 @@ impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Prime<T> {
 }
 
 crate::check_iteration_times!(
-    Prime::new(), 21_000;
-    Prime::<u32>::new_prim(), 21_000;
+    Prime::new_big(), 21_000;
+    Prime::<u32>::new(), 21_000;
 );
 
 crate::check_sequences!(
-    Prime::new(), 0, 10, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
-    Prime::new(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
+    Prime::new_big(), 0, 10, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+    Prime::new_big(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
 );

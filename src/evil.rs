@@ -7,7 +7,7 @@ pub struct Evil {
 }
 
 impl Evil {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             ctr: BigInt::zero(),
         }
@@ -36,9 +36,9 @@ impl Iterator for Evil {
 }
 
 crate::check_iteration_times!(
-    Evil::new(), 1_000_000;
+    Evil::new_big(), 1_000_000;
 );
 
 crate::check_sequences!(
-    Evil::new(), 0, 10, [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
+    Evil::new_big(), 0, 10, [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
 );

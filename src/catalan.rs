@@ -8,7 +8,7 @@ pub struct Catalan {
 }
 
 impl Catalan {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::one(),
             ctr: BigInt::one(),
@@ -28,9 +28,9 @@ impl Iterator for Catalan {
 }
 
 crate::check_iteration_times!(
-    Catalan::new(), 60_000;
+    Catalan::new_big(), 60_000;
 );
 
 crate::check_sequences!(
-    Catalan::new(), 0, 10, [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+    Catalan::new_big(), 0, 10, [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
 );

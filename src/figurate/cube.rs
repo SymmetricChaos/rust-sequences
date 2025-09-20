@@ -7,7 +7,7 @@ pub struct Cube {
 }
 
 impl Cube {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::zero(),
         }
@@ -35,9 +35,9 @@ impl Iterator for Cube {
 }
 
 crate::check_iteration_times!(
-    Cube::new(), 4_500_000;
+    Cube::new_big(), 4_500_000;
 );
 
 crate::check_sequences!(
-    Cube::new(), 0, 10, [0, 1, 8, 27, 64, 125, 216, 343, 512, 729];
+    Cube::new_big(), 0, 10, [0, 1, 8, 27, 64, 125, 216, 343, 512, 729];
 );

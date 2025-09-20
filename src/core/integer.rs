@@ -7,13 +7,13 @@ pub struct Integer<T> {
 }
 
 impl<T: PrimInt + Signed> Integer<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self { val: T::zero() }
     }
 }
 
 impl Integer<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
         }
@@ -36,14 +36,14 @@ impl<T: Clone + CheckedAdd + Signed> Iterator for Integer<T> {
 }
 
 crate::check_iteration_times!(
-    Integer::new(), 4_000_000;
-    Integer::<i32>::new_prim(), 4_000_000;
+    Integer::new_big(), 4_000_000;
+    Integer::<i32>::new(), 4_000_000;
 );
 
 crate::print_values!(
-    Integer::new(), 5, 10;
+    Integer::new_big(), 5, 10;
 );
 
 crate::check_sequences!(
-    Integer::new(), 0, 10, [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
+    Integer::new_big(), 0, 10, [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
 );

@@ -9,7 +9,7 @@ pub struct Composite {
 }
 
 impl Composite {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
             n: BigInt::from(1),
@@ -71,7 +71,7 @@ impl Iterator for Composite {
 }
 
 crate::check_sequences!(
-    Composite::new(), 0, 10, [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
+    Composite::new_big(), 0, 10, [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
     Composite::with_one(), 0, 10, [1, 4, 6, 8, 9, 10, 12, 14, 15, 16];
     Composite::with_zero(), 0, 10, [0, 1, 4, 6, 8, 9, 10, 12, 14, 15];
 );

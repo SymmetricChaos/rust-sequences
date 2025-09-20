@@ -6,7 +6,7 @@ pub struct BernoullisTriangle {
 }
 
 impl BernoullisTriangle {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             row: vec![BigInt::one()],
         }
@@ -14,7 +14,7 @@ impl BernoullisTriangle {
 
     /// Return an iterator over the elements in each row.
     pub fn as_ints() -> impl Iterator<Item = BigInt> {
-        Self::new().flatten()
+        Self::new_big().flatten()
     }
 }
 

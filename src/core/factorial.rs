@@ -10,7 +10,7 @@ pub struct Factorial<T> {
 }
 
 impl<T: PrimInt> Factorial<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self {
             val: T::one(),
             ctr: T::one() + T::one(),
@@ -19,7 +19,7 @@ impl<T: PrimInt> Factorial<T> {
 }
 
 impl Factorial<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
             ctr: BigInt::from(1),
@@ -46,19 +46,19 @@ pub struct AlternatingFactorial<T> {
 }
 
 impl<T: PrimInt> AlternatingFactorial<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self {
             val: T::one(),
-            factorials: Factorial::<T>::new_prim().skip(2),
+            factorials: Factorial::<T>::new().skip(2),
         }
     }
 }
 
 impl AlternatingFactorial<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
-            factorials: Factorial::new().skip(2),
+            factorials: Factorial::new_big().skip(2),
         }
     }
 }
@@ -81,7 +81,7 @@ pub struct DoubleFactorial<T> {
 }
 
 impl<T: PrimInt> DoubleFactorial<T> {
-    pub fn new_prim() -> Self {
+    pub fn new() -> Self {
         Self {
             val: T::one(),
             ctr: T::one() + T::one(),
@@ -90,7 +90,7 @@ impl<T: PrimInt> DoubleFactorial<T> {
 }
 
 impl DoubleFactorial<BigInt> {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
             ctr: BigInt::from(1),
@@ -111,11 +111,11 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for DoubleFactorial<T> {
 }
 
 crate::check_iteration_times!(
-    Factorial::new(), 37_000;
+    Factorial::new_big(), 37_000;
 );
 
 crate::check_sequences!(
-    Factorial::new(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
-    DoubleFactorial::new(), 0, 10, [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
-    AlternatingFactorial::new(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
+    Factorial::new_big(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
+    DoubleFactorial::new_big(), 0, 10, [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
+    AlternatingFactorial::new_big(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
 );

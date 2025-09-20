@@ -8,7 +8,7 @@ pub struct Lucas {
 }
 
 impl Lucas {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             a: BigInt::from(2),
             b: BigInt::from(1),
@@ -29,9 +29,9 @@ impl Iterator for Lucas {
 }
 
 crate::check_iteration_times!(
-    Lucas::new(), 157_500;
+    Lucas::new_big(), 157_500;
 );
 
 crate::check_sequences!(
-    Lucas::new(), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+    Lucas::new_big(), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
 );

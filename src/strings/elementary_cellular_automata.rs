@@ -1,3 +1,5 @@
+/// Create an elementary cellular automaton from a rule number and an initial string.
+/// At each stage the string is assumed to be padded with zeroes on each size.
 pub struct ElementaryCellularAutomaton {
     string: String,
     rule: [char; 8],
@@ -11,9 +13,8 @@ impl ElementaryCellularAutomaton {
         );
         let mut arr: [char; 8] = ['0'; 8];
         for i in 0..8 {
-            arr[i as usize] = char::from(((rule >> (7 - i)) & 1) + 48);
+            arr[i] = char::from(((rule >> (7 - i)) & 1) + 48); // bit twiddle to extract bits and get the '0' an '1' chars
         }
-        println!("{:?}", arr);
         Self {
             string: initial.to_string(),
             rule: arr,
@@ -52,5 +53,5 @@ impl Iterator for ElementaryCellularAutomaton {
 
 crate::print_values!(
     automata, formatter "{}", sep "\n";
-    ElementaryCellularAutomaton::new(30, "000000000000010000000000000"), 0, 12;
+    ElementaryCellularAutomaton::new(30, "00000000000100000000000"), 0, 12;
 );

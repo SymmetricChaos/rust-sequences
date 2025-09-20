@@ -9,7 +9,7 @@ pub struct Harmonic {
 }
 
 impl Harmonic {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
             ctr: BigRational::from_i32(0).unwrap(),
         }
@@ -32,9 +32,9 @@ pub struct HarmonicSums {
 }
 
 impl HarmonicSums {
-    pub fn new() -> Self {
+    pub fn new_big() -> Self {
         Self {
-            ctr: PartialSums::new(Harmonic::new()),
+            ctr: PartialSums::new(Harmonic::new_big()),
         }
     }
 }
@@ -48,6 +48,6 @@ impl Iterator for HarmonicSums {
 }
 
 crate::print_values!(
-    Harmonic::new(), 0, 10;
-    HarmonicSums::new(), 0, 8;
+    Harmonic::new_big(), 0, 10;
+    HarmonicSums::new_big(), 0, 8;
 );

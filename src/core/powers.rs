@@ -7,7 +7,7 @@ pub struct Powers {
 }
 
 impl Powers {
-    pub fn new<T: Clone>(n: T) -> Self
+    pub fn new_big<T: Clone>(n: T) -> Self
     where
         BigInt: From<T>,
     {
@@ -37,13 +37,13 @@ impl Iterator for Powers {
 }
 
 crate::print_values!(
-    Powers::new(3), 5, 10;
+    Powers::new_big(3), 5, 10;
 );
 
 crate::check_sequences!(
-    Powers::new(-2), 0, 10, [1, -2, 4, -8, 16, -32, 64, -128, 256, -512];
-    Powers::new(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    Powers::new(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
-    Powers::new(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
-    Powers::new(4), 0, 10, [1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144];
+    Powers::new_big(-2), 0, 10, [1, -2, 4, -8, 16, -32, 64, -128, 256, -512];
+    Powers::new_big(1), 0, 10, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    Powers::new_big(2), 0, 10, [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+    Powers::new_big(3), 0, 10, [1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683];
+    Powers::new_big(4), 0, 10, [1, 4, 16, 64, 256, 1024, 4096, 16384, 65536, 262144];
 );
