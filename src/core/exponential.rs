@@ -1,4 +1,4 @@
-use crate::core::Factorial;
+use crate::core::Factorials;
 use num::{BigInt, One, rational::Ratio};
 
 /// The partial sums of the Taylor series form of the exponential function evaluated at x.
@@ -6,7 +6,7 @@ pub struct Exponential {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorial<BigInt>,
+    factorials: Factorials<BigInt>,
 }
 
 impl Exponential {
@@ -18,7 +18,7 @@ impl Exponential {
             sum: Ratio::one(),
             val: Ratio::one(),
             x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
-            factorials: Factorial::new_big(),
+            factorials: Factorials::new_big(),
         }
     }
 }

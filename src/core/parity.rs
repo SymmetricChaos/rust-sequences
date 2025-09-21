@@ -42,11 +42,11 @@ impl<T: One + Zero> Iterator for Parity<T> {
 
 /// The even natural numbers.
 /// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...
-pub struct Even {
+pub struct Evens {
     val: BigInt,
 }
 
-impl Even {
+impl Evens {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
@@ -54,7 +54,7 @@ impl Even {
     }
 }
 
-impl Iterator for Even {
+impl Iterator for Evens {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -72,17 +72,17 @@ impl Iterator for Even {
 
 /// The odd natural numbers.
 /// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19...
-pub struct Odd {
+pub struct Odds {
     val: BigInt,
 }
 
-impl Odd {
+impl Odds {
     pub fn new_big() -> Self {
         Self { val: BigInt::one() }
     }
 }
 
-impl Iterator for Odd {
+impl Iterator for Odds {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -100,11 +100,11 @@ impl Iterator for Odd {
 
 /// The even integers.
 /// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10...
-pub struct EvenInteger {
+pub struct EvenIntegers {
     val: BigInt,
 }
 
-impl EvenInteger {
+impl EvenIntegers {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
@@ -112,7 +112,7 @@ impl EvenInteger {
     }
 }
 
-impl Iterator for EvenInteger {
+impl Iterator for EvenIntegers {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -130,11 +130,11 @@ impl Iterator for EvenInteger {
 
 /// The odd integers.
 /// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9...
-pub struct OddInteger {
+pub struct OddIntegers {
     val: BigInt,
 }
 
-impl OddInteger {
+impl OddIntegers {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
@@ -142,7 +142,7 @@ impl OddInteger {
     }
 }
 
-impl Iterator for OddInteger {
+impl Iterator for OddIntegers {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -160,13 +160,13 @@ impl Iterator for OddInteger {
 }
 
 crate::check_iteration_times!(
-    Even::new_big(), 1_000_000;
-    Even::new_big().skip(1_000_000), 1;
+    Evens::new_big(), 1_000_000;
+    Evens::new_big().skip(1_000_000), 1;
 );
 
 crate::check_sequences!(
-    Even::new_big(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
-    EvenInteger::new_big(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
-    Odd::new_big(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
-    OddInteger::new_big(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
+    Evens::new_big(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    EvenIntegers::new_big(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
+    Odds::new_big(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    OddIntegers::new_big(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
 );

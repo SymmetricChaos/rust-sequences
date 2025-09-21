@@ -2,17 +2,17 @@ use num::{BigInt, CheckedAdd, PrimInt, Signed};
 
 /// The integers in the canonical ordering.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
-pub struct Integer<T> {
+pub struct Integers<T> {
     val: T,
 }
 
-impl<T: PrimInt + Signed> Integer<T> {
+impl<T: PrimInt + Signed> Integers<T> {
     pub fn new() -> Self {
         Self { val: T::zero() }
     }
 }
 
-impl Integer<BigInt> {
+impl Integers<BigInt> {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(0),
@@ -20,7 +20,7 @@ impl Integer<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + Signed> Iterator for Integer<T> {
+impl<T: Clone + CheckedAdd + Signed> Iterator for Integers<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -36,14 +36,14 @@ impl<T: Clone + CheckedAdd + Signed> Iterator for Integer<T> {
 }
 
 crate::check_iteration_times!(
-    Integer::new_big(), 4_000_000;
-    Integer::<i32>::new(), 4_000_000;
+    Integers::new_big(), 4_000_000;
+    Integers::<i32>::new(), 4_000_000;
 );
 
 crate::print_values!(
-    Integer::new_big(), 5, 10;
+    Integers::new_big(), 5, 10;
 );
 
 crate::check_sequences!(
-    Integer::new_big(), 0, 10, [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
+    Integers::new_big(), 0, 10, [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
 );

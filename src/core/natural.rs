@@ -2,17 +2,17 @@ use num::{BigInt, CheckedAdd, One, PrimInt, Zero};
 
 /// The natural numbers. The non-negative integers.
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
-pub struct Natural<T> {
+pub struct Naturals<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> Natural<T> {
+impl<T: PrimInt> Naturals<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
 }
 
-impl Natural<BigInt> {
+impl Naturals<BigInt> {
     pub fn new_big() -> Self {
         Self {
             ctr: BigInt::zero(),
@@ -20,7 +20,7 @@ impl Natural<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + One> Iterator for Natural<T> {
+impl<T: Clone + CheckedAdd + One> Iterator for Naturals<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -31,6 +31,6 @@ impl<T: Clone + CheckedAdd + One> Iterator for Natural<T> {
 }
 
 crate::check_sequences!(
-    Natural::new_big(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Natural::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Naturals::new_big(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Naturals::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );

@@ -4,12 +4,12 @@ use num::{BigInt, Integer, Zero};
 pub struct Squarefree {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Prime<BigInt>,
+    primes: crate::core::Primes<BigInt>,
 }
 
 impl Squarefree {
     pub fn new_big() -> Self {
-        let mut primes = crate::core::Prime::new_big();
+        let mut primes = crate::core::Primes::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),
@@ -44,12 +44,12 @@ impl Iterator for Squarefree {
 pub struct Squareful {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Prime<BigInt>,
+    primes: crate::core::Primes<BigInt>,
 }
 
 impl Squareful {
     pub fn new_big() -> Self {
-        let mut primes = crate::core::Prime::new_big();
+        let mut primes = crate::core::Primes::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),

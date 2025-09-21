@@ -1,13 +1,13 @@
 use num::{BigInt, One, Zero, rational::Ratio};
 
-use crate::core::Factorial;
+use crate::core::Factorials;
 
 /// Partial sums of the Taylor series expansion of the sine function evaluated at n/d.
 pub struct Sin {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorial<BigInt>,
+    factorials: Factorials<BigInt>,
     neg: bool,
 }
 
@@ -21,7 +21,7 @@ impl Sin {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new_big(),
+            factorials: Factorials::new_big(),
             neg: true,
         }
     }
@@ -51,7 +51,7 @@ pub struct SinH {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorial<BigInt>,
+    factorials: Factorials<BigInt>,
 }
 
 impl SinH {
@@ -64,7 +64,7 @@ impl SinH {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new_big(),
+            factorials: Factorials::new_big(),
         }
     }
 }
@@ -88,8 +88,8 @@ pub struct ArcSin {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorial<BigInt>,
-    factorials_slow: Factorial<BigInt>,
+    factorials: Factorials<BigInt>,
+    factorials_slow: Factorials<BigInt>,
     ctr: u32,
 }
 
@@ -103,8 +103,8 @@ impl ArcSin {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorial::new_big(),
-            factorials_slow: Factorial::new_big(),
+            factorials: Factorials::new_big(),
+            factorials_slow: Factorials::new_big(),
             ctr: 0,
         }
     }

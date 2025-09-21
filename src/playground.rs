@@ -2,7 +2,7 @@
 use crate::{
     core::{
         AbsDiffs, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums, Constant, CubeRoot,
-        Exponential, PartialSums, Prime, Ratios, SimpleContinuedFraction, SquareRoot,
+        Exponential, PartialSums, Primes, Ratios, SimpleContinuedFraction, SquareRoot,
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
@@ -16,8 +16,8 @@ crate::print_values!(
     print_integers, formatter "{}", sep ", ";
     PartialSums::new(Harmonic::new_big()), 0, 10;
     HarmonicSums::new_big(), 0, 10;
-    Ratios::new(Prime::new_big(),Fibonacci::new_big().skip(1)), 0, 10;
-    AbsDiffs::new(Prime::new_big()), 0, 10;
+    Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 0, 10;
+    AbsDiffs::new(Primes::new_big()), 0, 10;
     Triangular::new_big().skip(1_234_567), 0, 5; // show fast skip ahead
     Boustrophedon::new(Constant::new(1)), 0, 10;
     Exponential::new_big(1,1), 0, 8; // converges on e
@@ -32,5 +32,5 @@ crate::print_values!(
 
 crate::print_values!(
     print_triangles, formatter "{:?}", sep "\n";
-    BoustrophedonTriangle::new(Prime::new_big()), 0, 5;
+    BoustrophedonTriangle::new(Primes::new_big()), 0, 5;
 );

@@ -1,4 +1,4 @@
-use crate::core::Prime;
+use crate::core::Primes;
 use itertools::Itertools;
 use num::{BigInt, Integer, One, Signed, Zero};
 
@@ -19,7 +19,7 @@ impl Smooth {
         assert!(n.is_positive());
         Self {
             ctr: BigInt::zero(),
-            primes: Prime::new_big().take_while(|x| *x <= n).collect_vec(),
+            primes: Primes::new_big().take_while(|x| *x <= n).collect_vec(),
         }
     }
 }

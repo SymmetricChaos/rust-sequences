@@ -1,17 +1,17 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, PrimInt};
 
-use crate::core::Natural;
+use crate::core::Naturals;
 
 /// The natural numbers raised to a fixed power.
 pub struct NthPowers<T> {
-    nats: Natural<T>,
+    nats: Naturals<T>,
     p: usize,
 }
 
 impl<T: PrimInt> NthPowers<T> {
     pub fn new(p: u32) -> Self {
         Self {
-            nats: Natural::<T>::new(),
+            nats: Naturals::<T>::new(),
             p: usize::try_from(p).expect("failed to convert u32 to usize"),
         }
     }
@@ -20,7 +20,7 @@ impl<T: PrimInt> NthPowers<T> {
 impl NthPowers<BigInt> {
     pub fn new_big(p: u32) -> Self {
         Self {
-            nats: Natural::new_big(),
+            nats: Naturals::new_big(),
             p: usize::try_from(p).expect("failed to convert u32 to usize"),
         }
     }

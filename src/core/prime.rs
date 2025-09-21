@@ -6,12 +6,12 @@ use std::{
 
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
-pub struct Prime<T> {
+pub struct Primes<T> {
     sieve: HashMap<T, Vec<T>>,
     n: T,
 }
 
-impl<T: PrimInt> Prime<T> {
+impl<T: PrimInt> Primes<T> {
     pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
@@ -20,7 +20,7 @@ impl<T: PrimInt> Prime<T> {
     }
 }
 
-impl Prime<BigInt> {
+impl Primes<BigInt> {
     pub fn new_big() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
@@ -29,7 +29,7 @@ impl Prime<BigInt> {
     }
 }
 
-impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Prime<T> {
+impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Primes<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -95,14 +95,14 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
 
 pub struct PrimePowers<T: Eq> {
     queue: BinaryHeap<PrimePower<T>>,
-    primes: Prime<T>,
+    primes: Primes<T>,
 }
 
 impl<T: PrimInt> PrimePowers<T> {
     pub fn new() -> Self {
         Self {
             queue: BinaryHeap::new(),
-            primes: Prime::new(),
+            primes: Primes::new(),
         }
     }
 }
@@ -111,7 +111,7 @@ impl PrimePowers<BigInt> {
     pub fn new_big() -> Self {
         Self {
             queue: BinaryHeap::new(),
-            primes: Prime::new_big(),
+            primes: Primes::new_big(),
         }
     }
 }
@@ -138,12 +138,12 @@ impl<T: Eq + CheckedAdd + CheckedMul + Clone + Hash + One + Zero + Ord + Partial
 }
 
 crate::check_iteration_times!(
-    Prime::new_big(), 21_000;
-    Prime::<u32>::new(), 21_000;
+    Primes::new_big(), 21_000;
+    Primes::<u32>::new(), 21_000;
 );
 
 crate::check_sequences!(
-    Prime::new_big(), 0, 10, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
-    Prime::new_big(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
+    Primes::new_big(), 0, 10, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+    Primes::new_big(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
     PrimePowers::<u32>::new(), 0, 20, [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
 );

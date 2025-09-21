@@ -3,12 +3,12 @@ use std::{collections::HashMap, hash::Hash}; // Found to be much faster than BTr
 
 /// The composite numbers. A002808
 /// 4, 6, 8, 9, 10, 12, 14, 15, 16...
-pub struct Composite<T> {
+pub struct Composites<T> {
     sieve: HashMap<T, Vec<T>>,
     n: T,
 }
 
-impl<T: PrimInt> Composite<T> {
+impl<T: PrimInt> Composites<T> {
     pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
@@ -17,7 +17,7 @@ impl<T: PrimInt> Composite<T> {
     }
 }
 
-impl Composite<BigInt> {
+impl Composites<BigInt> {
     pub fn new_big() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
@@ -26,7 +26,7 @@ impl Composite<BigInt> {
     }
 }
 
-impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Composite<T> {
+impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Composites<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -53,5 +53,5 @@ impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Composite<T> {
 }
 
 crate::check_sequences!(
-    Composite::new_big(), 0, 10, [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
+    Composites::new_big(), 0, 10, [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
 );

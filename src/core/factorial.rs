@@ -4,12 +4,12 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One, PrimInt};
 
 /// The factorial numbers.
 /// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
-pub struct Factorial<T> {
+pub struct Factorials<T> {
     val: T,
     ctr: T,
 }
 
-impl<T: PrimInt> Factorial<T> {
+impl<T: PrimInt> Factorials<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
@@ -18,7 +18,7 @@ impl<T: PrimInt> Factorial<T> {
     }
 }
 
-impl Factorial<BigInt> {
+impl Factorials<BigInt> {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
@@ -27,7 +27,7 @@ impl Factorial<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for Factorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for Factorials<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -40,30 +40,30 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for Factorial<T> {
 
 /// The alternating factorial numbers.
 /// 1, 1, 5, 19, 101, 619, 4421, 35899, 326981...
-pub struct AlternatingFactorial<T> {
+pub struct AlternatingFactorials<T> {
     val: T,
-    factorials: Skip<Factorial<T>>,
+    factorials: Skip<Factorials<T>>,
 }
 
-impl<T: PrimInt> AlternatingFactorial<T> {
+impl<T: PrimInt> AlternatingFactorials<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
-            factorials: Factorial::<T>::new().skip(2),
+            factorials: Factorials::<T>::new().skip(2),
         }
     }
 }
 
-impl AlternatingFactorial<BigInt> {
+impl AlternatingFactorials<BigInt> {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::from(1),
-            factorials: Factorial::new_big().skip(2),
+            factorials: Factorials::new_big().skip(2),
         }
     }
 }
 
-impl<T: CheckedMul + CheckedAdd + CheckedSub + Clone + One> Iterator for AlternatingFactorial<T> {
+impl<T: CheckedMul + CheckedAdd + CheckedSub + Clone + One> Iterator for AlternatingFactorials<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -111,11 +111,11 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for DoubleFactorial<T> {
 }
 
 crate::check_iteration_times!(
-    Factorial::new_big(), 37_000;
+    Factorials::new_big(), 37_000;
 );
 
 crate::check_sequences!(
-    Factorial::new_big(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
+    Factorials::new_big(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
     DoubleFactorial::new_big(), 0, 10, [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
-    AlternatingFactorial::new_big(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
+    AlternatingFactorials::new_big(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
 );
