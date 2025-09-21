@@ -16,6 +16,7 @@ pub mod rational_digits;
 pub mod recurrence;
 pub mod roots;
 pub mod transforms;
+pub mod utils;
 
 // Easy imports from other places
 pub use arithmetic::*;
