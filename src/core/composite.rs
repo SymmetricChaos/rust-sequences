@@ -21,7 +21,7 @@ impl Composites<BigInt> {
     pub fn new_big() -> Self {
         Self {
             sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
-            n: BigInt::from(1),
+            n: BigInt::one(),
         }
     }
 }

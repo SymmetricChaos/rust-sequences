@@ -1,6 +1,6 @@
 use std::iter::Skip;
 
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One, PrimInt};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt};
 
 /// The factorial numbers.
 /// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
@@ -13,7 +13,7 @@ impl<T: PrimInt> Factorials<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
-            ctr: T::one() + T::one(),
+            ctr: T::one(),
         }
     }
 }
@@ -84,7 +84,7 @@ impl<T: PrimInt> DoubleFactorial<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
-            ctr: T::one() + T::one(),
+            ctr: T::one(),
         }
     }
 }
@@ -98,7 +98,7 @@ impl DoubleFactorial<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for DoubleFactorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for DoubleFactorial<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -111,11 +111,14 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for DoubleFactorial<T> {
 }
 
 crate::check_iteration_times!(
-    Factorials::new_big(), 37_000;
+    Factorials::new_big(), 1_000;
 );
 
 crate::check_sequences!(
     Factorials::new_big(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
+    Factorials::<i32>::new(), 0, 10, [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
     DoubleFactorial::new_big(), 0, 10, [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
+    DoubleFactorial::<i32>::new(), 0, 10, [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
     AlternatingFactorials::new_big(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
+    AlternatingFactorials::<i32>::new(), 0, 10, [1, 1, 5, 19, 101, 619, 4421, 35899, 326981, 3301819];
 );
