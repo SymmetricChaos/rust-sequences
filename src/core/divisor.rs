@@ -1,6 +1,7 @@
 use crate::core::utils::number_of_divisors;
 
 /// Number of divisors for each positive integer.
+/// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
 pub struct NumberOfDivisors {
     ctr: u32,
 }
@@ -39,3 +40,7 @@ impl Iterator for SumOfDivisors {
         Some(todo!())
     }
 }
+
+crate::print_values!(
+    NumberOfDivisors::new(), 0, 10;
+);

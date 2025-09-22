@@ -1,8 +1,6 @@
-use std::collections::BTreeMap;
-
-use crate::core::Primes;
 use itertools::Itertools;
 use num::{Integer, PrimInt};
+use std::collections::BTreeMap;
 
 // Modular exponentiation I got from a website
 fn modular_exponent<N>(n: N, x: N, p: N) -> u64
@@ -31,6 +29,9 @@ where
     }
 }
 
+// These primes are sufficient witnessses for all 64 bit values
+const WITNESSES_64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+
 // 64-bit primality test
 // First checks small prime factors then switches to deterministic Miller-Rabin
 pub fn is_prime<N>(n: N) -> bool
@@ -43,11 +44,8 @@ where
         return false;
     }
 
-    // These primes are sufficient witnessses
-    let witnesses = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-
     // Check by trial
-    for witness in witnesses {
+    for witness in WITNESSES_64 {
         if n == witness {
             return true;
         }
@@ -64,7 +62,41 @@ where
         r += 1;
     }
 
-    'outer: for w in witnesses.into_iter() {
+    'outer: for w in WITNESSES_64.into_iter() {
+        let mut x = modular_exponent(w, d, n);
+
+        if x == 1 || x == n - 1 {
+            continue 'outer;
+        }
+        for _ in 0..r - 1 {
+            x = modular_exponent(x, 2, n);
+
+            if x == n - 1 {
+                continue 'outer;
+            }
+        }
+        return false;
+    }
+    true
+}
+
+// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
+// This is true in the hybrid factoring algorithm after partial trial division
+pub fn is_prime_partial<N>(n: N) -> bool
+where
+    u64: From<N>,
+{
+    let n = u64::from(n);
+
+    // Begin Miller-Rabin
+    let mut d = (n - 1) / 2;
+    let mut r = 1_u64;
+    while d % 2 == 0 {
+        d /= 2;
+        r += 1;
+    }
+
+    'outer: for w in WITNESSES_64.into_iter() {
         let mut x = modular_exponent(w, d, n);
 
         if x == 1 || x == n - 1 {
@@ -83,24 +115,30 @@ where
 }
 
 /// Find a factor using Pollard's Rho
-fn pollards_rho<N: PrimInt>(n: N, s: N) -> Option<u32>
+fn pollards_rho<N: PrimInt>(n: N) -> Option<(u32, u32)>
 where
     u64: From<N>,
 {
     let n = u64::from(n);
-    let mut x = u64::from(s);
-    let mut y = u64::from(s);
-    let mut d = 1;
-    while d == 1 {
-        x = ((x * x) + 1) % n;
-        y = ((y * y) + 1) % n;
-        y = ((y * y) + 1) % n;
-        d = x.abs_diff(y).gcd(&n);
+    for s in 2..(n - 2) {
+        let mut x = s;
+        let mut y = s;
+        let mut d = 1;
+        while d == 1 {
+            x = ((x * x) + 1) % n;
+            y = ((y * y) + 1) % n;
+            y = ((y * y) + 1) % n;
+            d = x.abs_diff(y).gcd(&n);
+        }
+        if d != n {
+            return Some((d as u32, (n / d) as u32));
+        }
     }
-    if d == n { None } else { Some(d as u32) }
+    None
 }
 
 // Factor out all primes up to 37 and returns what is left
+// Can completely factor any number up 1369
 fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
@@ -123,39 +161,39 @@ fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
     n
 }
 
-fn trial_division(mut n: u32) -> Vec<(u32, u32)> {
-    let mut out = Vec::new();
-    for p in Primes::new() {
-        if n <= 1 {
-            break;
-        }
-        if is_prime(n) {
-            out.push((n, 1));
-            break;
-        }
-        let mut ctr = 0;
-        while n % p == 0 {
-            ctr += 1;
-            n = n / p;
-        }
-        if ctr != 0 {
-            out.push((p, ctr));
-        }
-    }
-    out
-}
+// fn trial_division(mut n: u32) -> Vec<(u32, u32)> {
+//     let mut out = Vec::new();
+//     for p in Primes::new() {
+//         if n <= 1 {
+//             break;
+//         }
+//         if is_prime(n) {
+//             out.push((n, 1));
+//             break;
+//         }
+//         let mut ctr = 0;
+//         while n % p == 0 {
+//             ctr += 1;
+//             n = n / p;
+//         }
+//         if ctr != 0 {
+//             out.push((p, ctr));
+//         }
+//     }
+//     out
+// }
 
-macro_rules! apply_trial_division {
-    ($n:ident, $map:ident) => {
-        if is_prime($n) {
-            $map.entry($n).and_modify(|x| *x += 1).or_insert(1);
-        } else {
-            for (pr, ct) in trial_division($n) {
-                $map.entry(pr).and_modify(|x| *x += ct).or_insert(ct);
-            }
-        }
-    };
-}
+// macro_rules! apply_trial_division {
+//     ($n:ident, $map:ident) => {
+//         if is_prime($n) {
+//             $map.entry($n).and_modify(|x| *x += 1).or_insert(1);
+//         } else {
+//             for (pr, ct) in trial_division($n) {
+//                 $map.entry(pr).and_modify(|x| *x += ct).or_insert(ct);
+//             }
+//         }
+//     };
+// }
 
 // Not practical to factor numbers beyond u32s this way, even large u32s are generally not possible
 /// Each prime factor and its multiplicity
@@ -181,13 +219,21 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
         return map.into_iter().collect_vec();
     }
 
-    // Try every value for pollard's rho method to split into two factors then use trial division
-    for s in 2..n - 2 {
-        if let Some(p) = pollards_rho(n, s) {
-            apply_trial_division!(p, map);
-            let q = n / p;
-            apply_trial_division!(q, map);
-            return map.into_iter().collect_vec();
+    let mut factors = vec![n];
+    while !factors.is_empty() {
+        if let Some(f) = pollards_rho(factors.pop().unwrap()) {
+            if is_prime_partial(f.0) {
+                map.entry(f.0).and_modify(|x| *x += 1).or_insert(1);
+            } else {
+                factors.push(f.0);
+            }
+            if is_prime_partial(f.1) {
+                map.entry(f.1).and_modify(|x| *x += 1).or_insert(1);
+            } else {
+                factors.push(f.1);
+            }
+        } else {
+            break;
         }
     }
 
@@ -195,28 +241,14 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
 }
 
 /// Factor a number into prime powers
-pub fn prime_power_factorization(mut n: u32) -> Vec<u32> {
-    // Shortcut primes
-    if is_prime(n) {
-        return vec![n];
-    }
-    let mut out = Vec::new();
-    for p in Primes::<u32>::new() {
-        if n <= 1 {
-            break;
-        }
-        let mut factor = 1;
-        while n % p == 0 {
-            factor *= p;
-            n = n / p;
-        }
-        if factor != 1 {
-            out.push(factor);
-        }
-    }
-    out
+pub fn prime_power_factorization(n: u32) -> Vec<u32> {
+    prime_factorization(n)
+        .iter()
+        .map(|x| x.0.pow(x.1))
+        .collect_vec()
 }
 
+/// Number of divisors of n
 pub fn number_of_divisors(n: u32) -> u32 {
     let mut out = 1;
     for (_, multiplicity) in prime_factorization(n) {
@@ -239,16 +271,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn count_div() {
-        println!("{}", number_of_divisors(363747780));
-    }
-
-    #[test]
     fn prime_factorization_speed_test() {
         let mut sum = 0;
         let mut longest = (0, 0, vec![]);
+        let start = 1;
         std::fs::File::create("src/core/_prime_factorization_speed_test.txt").unwrap();
-        for i in 1..=u32::MAX {
+        for i in start..=u32::MAX {
             let t = std::time::Instant::now();
             let fs = prime_factorization(i);
             let d = std::time::Instant::now() - t;
@@ -268,7 +296,7 @@ mod tests {
                     .append(true)
                     .open("src/core/_prime_factorization_speed_test.txt")
                     .unwrap();
-                file.write_all(format!("searched range 1..={i}\n").as_bytes())
+                file.write_all(format!("searched range {start}..={i}\n").as_bytes())
                     .unwrap();
                 file.write_all(
                     format!(
@@ -279,7 +307,11 @@ mod tests {
                 )
                 .unwrap();
                 file.write_all(
-                    format!("average time to factor: {:?}us\n\n\n", sum / i as u128).as_bytes(),
+                    format!(
+                        "average time to factor: {:?}us\n\n",
+                        sum / (i - start) as u128
+                    )
+                    .as_bytes(),
                 )
                 .unwrap();
                 file.flush().unwrap();
