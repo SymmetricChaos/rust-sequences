@@ -12,12 +12,12 @@ pub mod natural;
 pub mod nth_powers;
 pub mod parity;
 pub mod powers;
+pub mod primality_utils;
 pub mod prime;
 pub mod rational_digits;
 pub mod recurrence;
 pub mod roots;
 pub mod transforms;
-pub mod utils;
 
 // Easy imports from other places
 pub use arithmetic::*;
@@ -32,6 +32,7 @@ pub use natural::*;
 pub use nth_powers::*;
 pub use parity::*;
 pub use powers::*;
+pub use primality_utils::*;
 pub use prime::*;
 pub use rational_digits::*;
 pub use recurrence::*;

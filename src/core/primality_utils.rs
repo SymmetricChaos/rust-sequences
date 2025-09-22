@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use num::{Integer, PrimInt};
+use num::{CheckedAdd, CheckedMul, Integer, PrimInt};
 use std::collections::BTreeMap;
 
 // Modular exponentiation I got from a website
@@ -257,6 +257,34 @@ pub fn number_of_divisors(n: u32) -> u32 {
     out
 }
 
+/// Sum of divisors of n
+pub fn sum_of_divisors(n: u32) -> Option<u32> {
+    if n == 0 {
+        None
+    } else {
+        let v = prime_factorization(n);
+        let mut out = 1;
+        for (prime, multiplicity) in v {
+            let mut s = 1;
+            let mut n = prime;
+            for _ in 0..multiplicity {
+                s = s.checked_add(&n)?;
+                n = n.checked_mul(prime)?;
+            }
+            out = out.checked_mul(&s)?;
+        }
+        Some(out)
+    }
+}
+
+/// Aliquot sum n, sum of proper divisors
+pub fn aliquot_sum(n: u32) -> Option<u32> {
+    match sum_of_divisors(n) {
+        Some(total) => Some(total - n),
+        None => None,
+    }
+}
+
 crate::print_values!(
     factors, formatter "{:?}", sep ", ";
     prime_factorization(363747780).into_iter(), 0, 10;
@@ -269,6 +297,12 @@ mod tests {
     use std::{io::Write, u32};
 
     use super::*;
+
+    #[test]
+    fn sum_of_divisors_test() {
+        println!("{}", sum_of_divisors(120).unwrap());
+        println!("{}", aliquot_sum(120).unwrap());
+    }
 
     #[test]
     fn prime_factorization_speed_test() {

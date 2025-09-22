@@ -3,6 +3,13 @@ name = "rust-sequences"
 version = "0.1.0"
 edition = "2024"
 
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+
 [dependencies]
 num = "0.4.3"
 itertools = "0.14.0"
+
