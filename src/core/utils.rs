@@ -100,9 +100,9 @@ where
     if d == n { None } else { Some(d as u32) }
 }
 
-// Factor out all primes up to 19 and returns what is left
+// Factor out all primes up to 37 and returns what is left
 fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
-    for p in [2, 3, 5, 7, 11, 13, 17, 19] {
+    for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
             break;
         }
@@ -190,8 +190,6 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
             return map.into_iter().collect_vec();
         }
     }
-
-    // apply_trial_division!(n, map);
 
     map.into_iter().collect_vec()
 }
