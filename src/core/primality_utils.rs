@@ -137,16 +137,11 @@ where
     None
 }
 
-// Factor out all primes up to 37 and returns what is left
+// Factor out all primes up to 37 and return what is left
 // Can completely factor any number up 1369
 fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
-            break;
-        }
-        if is_prime(n) {
-            map.entry(n).and_modify(|x| *x += 1).or_insert(1);
-            n = 1;
             break;
         }
         let mut ctr = 0;
@@ -155,70 +150,40 @@ fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
             n = n / p;
         }
         if ctr != 0 {
-            map.entry(p).and_modify(|x| *x += ctr).or_insert(ctr);
+            map.insert(p, ctr);
         }
+    }
+    if is_prime(n) {
+        map.insert(n, 1);
+        n = 1;
     }
     n
 }
 
-// fn trial_division(mut n: u32) -> Vec<(u32, u32)> {
-//     let mut out = Vec::new();
-//     for p in Primes::new() {
-//         if n <= 1 {
-//             break;
-//         }
-//         if is_prime(n) {
-//             out.push((n, 1));
-//             break;
-//         }
-//         let mut ctr = 0;
-//         while n % p == 0 {
-//             ctr += 1;
-//             n = n / p;
-//         }
-//         if ctr != 0 {
-//             out.push((p, ctr));
-//         }
-//     }
-//     out
-// }
-
-// macro_rules! apply_trial_division {
-//     ($n:ident, $map:ident) => {
-//         if is_prime($n) {
-//             $map.entry($n).and_modify(|x| *x += 1).or_insert(1);
-//         } else {
-//             for (pr, ct) in trial_division($n) {
-//                 $map.entry(pr).and_modify(|x| *x += ct).or_insert(ct);
-//             }
-//         }
-//     };
-// }
-
-// Not practical to factor numbers beyond u32s this way, even large u32s are generally not possible
+// Not practical to factor numbers beyond u32s this way
 /// Each prime factor and its multiplicity
 pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
     // Handle 0 and 1
     if n <= 1 {
         return Vec::new();
     }
+
     // Shortcut primes
     if is_prime(n) {
         return vec![(n, 1)];
     }
 
     // BTreeMap will provide us with easy way reference each prime and its multiplicity, and eventually an ordered output
+    // Doesn't seem to be a large performance difference if using HashMap
     let mut map = BTreeMap::new();
 
     // Handle small factors
     n = partial_trial_division(n, &mut map);
-    if is_prime(n) {
-        map.entry(n).and_modify(|x| *x += 1).or_insert(1);
-        return map.into_iter().collect_vec();
-    } else if n == 1 {
+    if n == 1 {
         return map.into_iter().collect_vec();
     }
 
+    // Iteratively use Pollard's Rho
     let mut factors = vec![n];
     while !factors.is_empty() {
         if let Some(f) = pollards_rho(factors.pop().unwrap()) {
@@ -258,9 +223,10 @@ pub fn number_of_divisors(n: u32) -> u32 {
 }
 
 /// Sum of divisors of n
+/// Defined as 0 for n = 0
 pub fn sum_of_divisors(n: u32) -> Option<u32> {
     if n == 0 {
-        None
+        Some(0)
     } else {
         let v = prime_factorization(n);
         let mut out = 1;
@@ -278,11 +244,17 @@ pub fn sum_of_divisors(n: u32) -> Option<u32> {
 }
 
 /// Aliquot sum n, sum of proper divisors
+/// Defined as 0 for n = 0
 pub fn aliquot_sum(n: u32) -> Option<u32> {
     match sum_of_divisors(n) {
         Some(total) => Some(total - n),
         None => None,
     }
+}
+
+/// Squarefree kernel (radical) of a number, product of unique prime factors, largest squarefree factor
+pub fn squarefree_kernel(n: u32) -> u32 {
+    prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
 
 crate::print_values!(
@@ -297,12 +269,6 @@ mod tests {
     use std::{io::Write, u32};
 
     use super::*;
-
-    #[test]
-    fn sum_of_divisors_test() {
-        println!("{}", sum_of_divisors(120).unwrap());
-        println!("{}", aliquot_sum(120).unwrap());
-    }
 
     #[test]
     fn prime_factorization_speed_test() {

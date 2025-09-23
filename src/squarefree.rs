@@ -1,6 +1,9 @@
 use num::{BigInt, Integer, Zero};
 
-// Natural numbers that are not divisible twice by any natural number except one.
+use crate::core::squarefree_kernel;
+
+/// Natural numbers that are not divisible twice by any natural number except one.
+/// 1, 2, 3, 5, 6, 7, 10, 11, 13, 14...
 pub struct Squarefree {
     ctr: BigInt,
     squares: Vec<BigInt>,
@@ -40,7 +43,30 @@ impl Iterator for Squarefree {
     }
 }
 
-// Natural numbers that are divisible twice by at least one natural number other than one.
+/// The squarefree kernels of the positive integers. The product of their unique prime divisors.
+/// 1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19...
+pub struct SquarefreeKernels {
+    ctr: u32,
+}
+
+impl SquarefreeKernels {
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for SquarefreeKernels {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = squarefree_kernel(self.ctr);
+        self.ctr += 1;
+        Some(out)
+    }
+}
+
+/// Natural numbers that are divisible at least twice by at least one natural number other than one.
+/// 4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28...
 pub struct Squareful {
     ctr: BigInt,
     squares: Vec<BigInt>,
@@ -81,5 +107,6 @@ impl Iterator for Squareful {
 
 crate::check_sequences!(
     Squarefree::new_big(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
+    SquarefreeKernels::new(), 0, 20, [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19];
     Squareful::new_big(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
 );

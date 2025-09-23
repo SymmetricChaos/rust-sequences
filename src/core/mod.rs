@@ -24,6 +24,7 @@ pub use arithmetic::*;
 pub use composite::*;
 pub use constant::*;
 pub use continued_fraction::*;
+pub use divisor::*;
 pub use exponential::*;
 pub use factorial::*;
 pub use geometric::*;

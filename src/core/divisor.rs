@@ -1,8 +1,4 @@
-use crate::core::{
-    aliquot_sum,
-    primality_utils::{number_of_divisors, prime_factorization},
-    sum_of_divisors,
-};
+use crate::core::{aliquot_sum, primality_utils::number_of_divisors, sum_of_divisors};
 
 /// Number of divisors for each positive integer.
 /// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
@@ -67,12 +63,12 @@ impl Iterator for AliquotSums {
 
 /// The aliquot sequence starting from n.
 pub struct AliquotSequence {
-    ctr: u32,
+    n: u32,
 }
 
 impl AliquotSequence {
     pub fn new(n: u32) -> Self {
-        Self { ctr: n }
+        Self { n }
     }
 }
 
@@ -80,8 +76,8 @@ impl Iterator for AliquotSequence {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr;
-        self.ctr = aliquot_sum(self.ctr)?;
+        let out = self.n;
+        self.n = aliquot_sum(self.n)?;
         Some(out)
     }
 }
