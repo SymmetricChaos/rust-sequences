@@ -59,9 +59,8 @@ impl Iterator for SquarefreeKernels {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = squarefree_kernel(self.ctr);
         self.ctr += 1;
-        Some(out)
+        Some(squarefree_kernel(self.ctr))
     }
 }
 
