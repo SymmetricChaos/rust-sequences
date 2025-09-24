@@ -1,6 +1,6 @@
 use itertools::Itertools;
-use num::{CheckedAdd, CheckedMul, Integer, PrimInt};
-use std::collections::BTreeMap;
+use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, Integer, One};
+use std::{cell::LazyCell, collections::BTreeMap};
 
 // Modular exponentiation I got from a website
 fn modular_exponent<N>(n: N, x: N, p: N) -> u64
@@ -31,15 +31,12 @@ where
 
 // These primes are sufficient witnessses for all 64 bit values
 const WITNESSES_64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+const WITNESSES_64_BIG: LazyCell<[BigInt; 12]> =
+    LazyCell::new(|| WITNESSES_64.map(|n| BigInt::from_u64(n).unwrap()));
 
 // 64-bit primality test
 // First checks small prime factors then switches to deterministic Miller-Rabin
-pub fn is_prime<N>(n: N) -> bool
-where
-    u64: From<N>,
-{
-    let n = u64::from(n);
-
+pub fn is_prime(n: u64) -> bool {
     if n <= 1 {
         return false;
     }
@@ -56,11 +53,9 @@ where
 
     // Begin Miller-Rabin
     let mut d = (n - 1) / 2;
-    let mut r = 1_u64;
-    while d % 2 == 0 {
-        d /= 2;
-        r += 1;
-    }
+    // Slight optimization for dividing out 2 and counting them
+    let r = 1_u64 + d.trailing_zeros() as u64;
+    d >>= d.trailing_zeros();
 
     'outer: for w in WITNESSES_64.into_iter() {
         let mut x = modular_exponent(w, d, n);
@@ -80,21 +75,58 @@ where
     true
 }
 
-// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
-// This is true in the hybrid factoring algorithm after partial trial division
-pub fn is_prime_partial<N>(n: N) -> bool
+// This is ridiculously slow
+pub fn is_prime_big<N>(n: N) -> bool
 where
-    u64: From<N>,
+    BigInt: From<N>,
 {
-    let n = u64::from(n);
+    let n = BigInt::from(n);
+
+    if n <= BigInt::one() {
+        return false;
+    }
+
+    // Check by trial
+    for witness in WITNESSES_64_BIG.iter() {
+        if &n == witness {
+            return true;
+        }
+        if n.is_multiple_of(&witness) {
+            return false;
+        }
+    }
 
     // Begin Miller-Rabin
-    let mut d = (n - 1) / 2;
-    let mut r = 1_u64;
-    while d % 2 == 0 {
-        d /= 2;
-        r += 1;
+    let mut d: BigInt = (n.clone() - 1) / 2;
+    let r = 1_u64 + d.trailing_zeros().expect("d should never be zero");
+    d >>= d.trailing_zeros().expect("d should never be zero");
+
+    'outer: for w in WITNESSES_64_BIG.iter() {
+        let mut x = w.modpow(&d, &n);
+
+        if x.is_one() || x == n.clone() - 1 {
+            continue 'outer;
+        }
+        for _ in 0..r - 1 {
+            x = x.modpow(&WITNESSES_64_BIG[0], &n);
+
+            if x == n.clone() - 1 {
+                continue 'outer;
+            }
+        }
+        return false;
     }
+    true
+}
+
+// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
+// This is true in the hybrid factoring algorithm after partial trial division
+pub fn is_prime_partial(n: u64) -> bool {
+    // Begin Miller-Rabin
+    let mut d = (n - 1) / 2;
+    // Slight optimization for dividing out 2 and counting them
+    let r = 1_u64 + d.trailing_zeros() as u64;
+    d >>= d.trailing_zeros();
 
     'outer: for w in WITNESSES_64.into_iter() {
         let mut x = modular_exponent(w, d, n);
@@ -115,10 +147,7 @@ where
 }
 
 /// Find a factor using Pollard's Rho
-fn pollards_rho<N: PrimInt>(n: N) -> Option<(u32, u32)>
-where
-    u64: From<N>,
-{
+fn pollards_rho(n: u32) -> Option<(u32, u32)> {
     let n = u64::from(n);
     for s in 2..(n - 2) {
         let mut x = s;
@@ -153,7 +182,7 @@ fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
             map.insert(p, ctr);
         }
     }
-    if is_prime(n) {
+    if is_prime(n as u64) {
         map.insert(n, 1);
         n = 1;
     }
@@ -169,7 +198,7 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
     }
 
     // Shortcut primes
-    if is_prime(n) {
+    if is_prime(n as u64) {
         return vec![(n, 1)];
     }
 
@@ -187,12 +216,12 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
     let mut factors = vec![n];
     while !factors.is_empty() {
         if let Some(f) = pollards_rho(factors.pop().unwrap()) {
-            if is_prime_partial(f.0) {
+            if is_prime_partial(f.0 as u64) {
                 map.entry(f.0).and_modify(|x| *x += 1).or_insert(1);
             } else {
                 factors.push(f.0);
             }
-            if is_prime_partial(f.1) {
+            if is_prime_partial(f.1 as u64) {
                 map.entry(f.1).and_modify(|x| *x += 1).or_insert(1);
             } else {
                 factors.push(f.1);
@@ -201,6 +230,13 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
             break;
         }
     }
+
+    // if map.len() == 1 && *map.last_key_value().unwrap().0 == 1 {
+    //     panic!(
+    //         "improperly factored {n} as prime {:?}",
+    //         map.into_iter().collect_vec()
+    //     )
+    // }
 
     map.into_iter().collect_vec()
 }
@@ -268,7 +304,29 @@ mod tests {
 
     use std::{io::Write, u32};
 
+    use crate::core::{Composites, Primes};
+
     use super::*;
+
+    #[test]
+    fn is_prime_correctness() {
+        for p in Primes::<u64>::new().take(1_000_000) {
+            assert!(is_prime(p));
+        }
+        for c in Composites::<u64>::new().take(1_000_000) {
+            assert!(!is_prime(c));
+        }
+    }
+
+    #[test]
+    fn is_prime_big_correctness() {
+        for p in Primes::<u64>::new().take(100_000) {
+            assert!(is_prime_big(p));
+        }
+        for c in Composites::<u64>::new().take(100_000) {
+            assert!(!is_prime_big(c));
+        }
+    }
 
     #[test]
     fn prime_factorization_speed_test() {

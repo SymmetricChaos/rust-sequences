@@ -22,7 +22,7 @@ fn prime_factorization_speed_test() {
         }
         sum = sum + &m;
 
-        if i % 500_000 == 0 {
+        if i % 1_000_000 == 0 {
             let mut file = std::fs::File::options()
                 .append(true)
                 .open("src/_prime_factorization_speed_test.txt")

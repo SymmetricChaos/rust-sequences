@@ -64,7 +64,7 @@ impl Iterator for SquarefreeKernels {
     }
 }
 
-/// Natural numbers that are divisible at least twice by at least one natural number other than one.
+/// Positive natural numbers that are divisible at least twice by at least one natural number other than one.
 /// 4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28...
 pub struct Squareful {
     ctr: BigInt,
