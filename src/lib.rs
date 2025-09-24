@@ -20,6 +20,7 @@ pub mod strings;
 pub mod thue_morse;
 pub mod triangles;
 pub mod trig;
+pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
