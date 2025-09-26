@@ -1,36 +1,5 @@
 use num::{BigInt, CheckedAdd, Integer, PrimInt, Zero, traits::CheckedRem};
 
-// pub struct Weyl<T> {
-//     q: Ratio<T>,
-// }
-
-// impl<T: PrimInt + Integer> Weyl<T> {
-//     pub fn new(numer: T, denom: T) -> Self {
-//         Self {
-//             q: Ratio::new(numer, denom),
-//         }
-//     }
-// }
-
-// impl Weyl<BigInt> {
-//     pub fn new_big<N>(numer: N, denom: N) -> Self
-//     where
-//         BigInt: From<N>,
-//     {
-//         Self {
-//             q: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
-//         }
-//     }
-// }
-
-// impl<T> Iterator for Weyl<T> {
-//     type Item = T;
-
-//     fn next(&mut self) -> Option<Self::Item> {
-//         todo!()
-//     }
-// }
-
 /// A Weyl-Marsaglia sequence starting at zero. A permutation of all integers 0..n that repeats every n values.
 pub struct WeylMarsaglia<T> {
     n: T,

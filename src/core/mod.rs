@@ -3,6 +3,7 @@ pub mod arithmetic;
 pub mod composite;
 pub mod constant;
 pub mod continued_fraction;
+pub mod digits;
 pub mod divisor;
 pub mod exponential;
 pub mod factorial;
