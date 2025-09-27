@@ -12,6 +12,7 @@ pub mod lucas_sequence;
 pub mod odious;
 pub mod partition;
 pub mod pell;
+pub mod pi;
 pub mod playground;
 pub mod rowland;
 pub mod smooth;

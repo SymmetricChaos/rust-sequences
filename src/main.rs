@@ -12,7 +12,7 @@ fn prime_factorization_speed_test() {
         let fs = prime_factorization(i);
         let d = std::time::Instant::now() - t;
 
-        // Correctness check
+        // Correctness checks
         assert!(
             (is_prime(i) && fs.len() == 1 && fs.iter().next().unwrap().1 == 1)
                 || (!is_prime(i) && (fs.len() != 1 || fs.iter().next().unwrap().1 > 1)),

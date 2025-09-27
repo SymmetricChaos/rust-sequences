@@ -24,6 +24,7 @@ impl Iterator for NumberOfDivisors {
 }
 
 /// Sum of divisors of each positive integer.
+/// 1, 3, 4, 7, 6, 12, 8, 15, 13, 18...
 pub struct SumOfDivisors {
     ctr: u64,
 }
@@ -43,7 +44,8 @@ impl Iterator for SumOfDivisors {
     }
 }
 
-/// The aliquot sum of  each positive integer.
+/// The aliquot sum of each positive integer.
+/// 0, 1, 1, 3, 1, 6, 1, 7, 4, 8...
 pub struct AliquotSums {
     ctr: u64,
 }
@@ -85,6 +87,7 @@ impl Iterator for AliquotSequence {
 }
 
 /// The totient of each positive integer.
+/// 1, 1, 2, 2, 4, 2, 6, 4, 6, 4...
 pub struct Totients {
     ctr: u64,
 }
@@ -105,6 +108,7 @@ impl Iterator for Totients {
 }
 
 /// The cototient of each positive integer.
+/// 0, 1, 1, 2, 1, 4, 1, 4, 3, 6...
 pub struct Cototients {
     ctr: u64,
 }
@@ -123,15 +127,6 @@ impl Iterator for Cototients {
         Some(cototient(self.ctr))
     }
 }
-
-crate::print_values!(
-    NumberOfDivisors::new(), 0, 10;
-    SumOfDivisors::new(), 0, 10;
-    AliquotSums::new(), 0, 10;
-    AliquotSequence::new(10), 0, 10;
-    Totients::new(), 0, 10;
-    Cototients::new(), 0, 10;
-);
 
 crate::check_sequences!(
     NumberOfDivisors::new(), 0, 10, [1, 2, 2, 3, 2, 4, 2, 4, 3, 4];
