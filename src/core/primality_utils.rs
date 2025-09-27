@@ -1,6 +1,6 @@
 use itertools::Itertools;
-use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, Integer, One};
-use std::{cell::LazyCell, collections::BTreeMap};
+use num::{CheckedAdd, CheckedMul, Integer};
+use std::collections::BTreeMap;
 
 // Modular exponentiation I got from a website
 fn modular_exponent<N>(n: N, x: N, p: N) -> u64
@@ -31,8 +31,6 @@ where
 
 // These primes are sufficient witnessses for all 64 bit values
 const WITNESSES_64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-const WITNESSES_64_BIG: LazyCell<[BigInt; 12]> =
-    LazyCell::new(|| WITNESSES_64.map(|n| BigInt::from_u64(n).unwrap()));
 
 // 64-bit primality test
 // First checks small prime factors then switches to deterministic Miller-Rabin
@@ -75,50 +73,6 @@ pub fn is_prime(n: u64) -> bool {
     true
 }
 
-// This is ridiculously slow
-pub fn is_prime_big<N>(n: N) -> bool
-where
-    BigInt: From<N>,
-{
-    let n = BigInt::from(n);
-
-    if n <= BigInt::one() {
-        return false;
-    }
-
-    // Check by trial
-    for witness in WITNESSES_64_BIG.iter() {
-        if &n == witness {
-            return true;
-        }
-        if n.is_multiple_of(&witness) {
-            return false;
-        }
-    }
-
-    // Begin Miller-Rabin
-    let mut d: BigInt = (n.clone() - 1) / 2;
-    let r = 1_u64 + d.trailing_zeros().expect("d should never be zero");
-    d >>= d.trailing_zeros().expect("d should never be zero");
-
-    'outer: for w in WITNESSES_64_BIG.iter() {
-        let mut x = w.modpow(&d, &n);
-
-        if x.is_one() || x == n.clone() - 1 {
-            continue 'outer;
-        }
-        for _ in 0..r - 1 {
-            x = x.modpow(&WITNESSES_64_BIG[0], &n);
-
-            if x == n.clone() - 1 {
-                continue 'outer;
-            }
-        }
-        return false;
-    }
-    true
-}
-
 // Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
 // This is true in the hybrid factoring algorithm after partial trial division
 pub fn is_prime_partial(n: u64) -> bool {
@@ -147,8 +101,8 @@ pub fn is_prime_partial(n: u64) -> bool {
 }
 
 /// Find a factor using Pollard's Rho
-fn pollards_rho(n: u32) -> Option<(u32, u32)> {
-    let n = u64::from(n);
+fn pollards_rho(n: u64) -> Option<(u64, u64)> {
+    let n = u128::from(n);
     for s in 2..(n - 2) {
         let mut x = s;
         let mut y = s;
@@ -160,7 +114,7 @@ fn pollards_rho(n: u32) -> Option<(u32, u32)> {
             d = x.abs_diff(y).gcd(&n);
         }
         if d != n {
-            return Some((d as u32, (n / d) as u32));
+            return Some((d as u64, (n / d) as u64));
         }
     }
     None
@@ -168,7 +122,7 @@ fn pollards_rho(n: u32) -> Option<(u32, u32)> {
 
 // Factor out all primes up to 37 and return what is left
 // Can completely factor any number up 1369
-fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
+fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
             break;
@@ -182,7 +136,7 @@ fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
             map.insert(p, ctr);
         }
     }
-    if is_prime(n as u64) {
+    if is_prime(n) {
         map.insert(n, 1);
         n = 1;
     }
@@ -191,14 +145,14 @@ fn partial_trial_division(mut n: u32, map: &mut BTreeMap<u32, u32>) -> u32 {
 
 // Not practical to factor numbers beyond u32s this way
 /// Each prime factor and its multiplicity
-pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
+pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     // Handle 0 and 1
     if n <= 1 {
         return Vec::new();
     }
 
     // Shortcut primes
-    if is_prime(n as u64) {
+    if is_prime(n) {
         return vec![(n, 1)];
     }
 
@@ -231,26 +185,19 @@ pub fn prime_factorization(mut n: u32) -> Vec<(u32, u32)> {
         }
     }
 
-    // if map.len() == 1 && *map.last_key_value().unwrap().0 == 1 {
-    //     panic!(
-    //         "improperly factored {n} as prime {:?}",
-    //         map.into_iter().collect_vec()
-    //     )
-    // }
-
     map.into_iter().collect_vec()
 }
 
 /// Factor a number into prime powers
-pub fn prime_power_factorization(n: u32) -> Vec<u32> {
+pub fn prime_power_factorization(n: u64) -> Vec<u64> {
     prime_factorization(n)
         .iter()
-        .map(|x| x.0.pow(x.1))
+        .map(|x| x.0.pow(x.1 as u32))
         .collect_vec()
 }
 
 /// Number of divisors of n
-pub fn number_of_divisors(n: u32) -> u32 {
+pub fn number_of_divisors(n: u64) -> u64 {
     let mut out = 1;
     for (_, multiplicity) in prime_factorization(n) {
         out *= multiplicity + 1;
@@ -260,7 +207,7 @@ pub fn number_of_divisors(n: u32) -> u32 {
 
 /// Sum of divisors of n
 /// Defined as 0 for n = 0
-pub fn sum_of_divisors(n: u32) -> Option<u32> {
+pub fn sum_of_divisors(n: u64) -> Option<u64> {
     if n == 0 {
         Some(0)
     } else {
@@ -281,7 +228,7 @@ pub fn sum_of_divisors(n: u32) -> Option<u32> {
 
 /// Aliquot sum n, sum of proper divisors
 /// Defined as 0 for n = 0
-pub fn aliquot_sum(n: u32) -> Option<u32> {
+pub fn aliquot_sum(n: u64) -> Option<u64> {
     match sum_of_divisors(n) {
         Some(total) => Some(total - n),
         None => None,
@@ -289,8 +236,20 @@ pub fn aliquot_sum(n: u32) -> Option<u32> {
 }
 
 /// Squarefree kernel (radical) of a number, product of unique prime factors, largest squarefree factor
-pub fn squarefree_kernel(n: u32) -> u32 {
+pub fn squarefree_kernel(n: u64) -> u64 {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
+}
+
+/// Euler's totient function. Number of positive integers coprime to n and less than n.
+pub fn totient(n: u64) -> u64 {
+    prime_factorization(n)
+        .iter()
+        .fold(1, |acc, x| acc * (x.0.pow((x.1 - 1) as u32) * (x.0 - 1)))
+}
+
+/// Euler's cototient function. Number of positive integers not coprime to n and less than n.
+pub fn cototient(n: u64) -> u64 {
+    n - totient(n)
 }
 
 crate::print_values!(
@@ -319,28 +278,18 @@ mod tests {
     }
 
     #[test]
-    fn is_prime_big_correctness() {
-        for p in Primes::<u64>::new().take(100_000) {
-            assert!(is_prime_big(p));
-        }
-        for c in Composites::<u64>::new().take(100_000) {
-            assert!(!is_prime_big(c));
-        }
-    }
-
-    #[test]
     fn prime_factorization_speed_test() {
         let mut sum = 0;
         let mut longest = (0, 0, vec![]);
         let start = 1;
         std::fs::File::create("src/core/_prime_factorization_speed_test.txt").unwrap();
-        for i in start..=u32::MAX {
+        for i in start..=(u32::MAX as u64) {
             let t = std::time::Instant::now();
             let fs = prime_factorization(i);
             let d = std::time::Instant::now() - t;
 
             // Correctness check
-            let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct));
+            let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
             assert_eq!(i, prod);
 
             let m = d.as_micros();

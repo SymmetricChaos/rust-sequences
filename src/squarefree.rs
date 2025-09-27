@@ -46,7 +46,7 @@ impl Iterator for Squarefree {
 /// The squarefree kernels of the positive integers. The product of their unique prime divisors.
 /// 1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19...
 pub struct SquarefreeKernels {
-    ctr: u32,
+    ctr: u64,
 }
 
 impl SquarefreeKernels {
@@ -56,7 +56,7 @@ impl SquarefreeKernels {
 }
 
 impl Iterator for SquarefreeKernels {
-    type Item = u32;
+    type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr += 1;
