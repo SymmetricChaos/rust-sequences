@@ -37,5 +37,5 @@ use num::BigInt;
 
 crate::print_values!(
     WallisProduct::<u64>::new(), 0, 10;
-    WallisProduct::<BigInt>::new().map(|x| DecimalDigits::from_ratio(x).map(|d| d.to_string()).take(6).join("")), 0, 20;
+    WallisProduct::<BigInt>::new().map(|x| DecimalDigits::from_ratio_big(x).map(|d| d.to_string()).take(6).join("")), 0, 20;
 );

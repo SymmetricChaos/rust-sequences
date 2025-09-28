@@ -3,7 +3,7 @@ use std::iter::Skip;
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt};
 
 /// The factorial numbers.
-/// 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
+/// 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
 pub struct Factorials<T> {
     val: T,
     ctr: T,
@@ -74,7 +74,7 @@ impl<T: CheckedMul + CheckedAdd + CheckedSub + Clone + One> Iterator for Alterna
 }
 
 /// The double factorial numbers. The sum of the products of the odd naturals.
-/// 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425...
+/// 1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425...
 pub struct DoubleFactorial<T> {
     val: T,
     ctr: T,

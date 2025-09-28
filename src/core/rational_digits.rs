@@ -1,5 +1,5 @@
 use num::{
-    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, PrimInt, Zero,
+    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, PrimInt, Signed, Zero,
     rational::Ratio,
 };
 
@@ -20,7 +20,7 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
         }
     }
 
-    pub fn from_prim_ratio(q: Ratio<T>) -> Self {
+    pub fn from_ratio(q: Ratio<T>) -> Self {
         assert!(q > Ratio::<T>::zero());
         Self {
             denom: q.denom().clone(),
@@ -30,14 +30,12 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
 }
 
 impl DecimalDigits<BigInt> {
-    pub fn new_big<F: Zero + Ord>(numer: F, denom: F) -> Self
+    pub fn new_big<F>(numer: F, denom: F) -> Self
     where
         BigInt: From<F>,
     {
-        assert!(numer >= F::zero());
-        assert!(denom > F::zero());
-        let num = BigInt::from(numer);
-        let den = BigInt::from(denom);
+        let num = BigInt::from(numer).abs();
+        let den = BigInt::from(denom).abs();
         let g = num.gcd(&den);
         Self {
             denom: den / &g,
@@ -45,11 +43,14 @@ impl DecimalDigits<BigInt> {
         }
     }
 
-    pub fn from_ratio(q: Ratio<BigInt>) -> Self {
-        assert!(q > Ratio::<BigInt>::zero());
+    pub fn from_ratio_big<F>(q: Ratio<F>) -> Self
+    where
+        BigInt: From<F>,
+    {
+        let (num, den) = q.into_raw();
         Self {
-            denom: q.denom().clone(),
-            remdr: q.numer().clone(),
+            denom: BigInt::from(den).abs(),
+            remdr: BigInt::from(num).abs(),
         }
     }
 }
