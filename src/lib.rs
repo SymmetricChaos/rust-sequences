@@ -1,6 +1,7 @@
 pub mod catalan;
 pub mod collatz;
 pub mod core;
+pub mod eulers_number;
 pub mod evil;
 pub mod farey;
 pub mod fibonacci;
