@@ -89,7 +89,7 @@ impl Iterator for Cosine {
     }
 }
 
-/// Partial sums of the Taylor series expansion of the cosecant = 1/sin(x) function evaluated at n/d.
+/// Partial sums of the Taylor series expansion of the cosecant function evaluated at n/d.
 pub struct Cosecant {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
@@ -137,7 +137,7 @@ impl Iterator for Cosecant {
     }
 }
 
-/// Partial sums of the Taylor series expansion of the secant = 1/cos(x) function evaluated at n/d.
+/// Partial sums of the Taylor series expansion of the secant function evaluated at n/d.
 pub struct Secant {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
