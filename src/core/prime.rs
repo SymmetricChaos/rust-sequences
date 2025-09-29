@@ -1,8 +1,8 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, PrimInt, Zero};
 use std::{
     collections::{BinaryHeap, HashMap},
-    hash::Hash,
-}; // Found to be much faster than BTreeMap
+    hash::Hash, // Found to be much faster than BTreeMap
+};
 
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
@@ -55,6 +55,8 @@ impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Primes<T> {
     }
 }
 
+/// The perfect powers of primes.
+/// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
 #[derive(Eq, PartialEq)]
 struct PrimePower<T: Eq + PartialEq> {
     value: T,

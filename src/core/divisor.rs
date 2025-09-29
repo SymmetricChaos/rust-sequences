@@ -1,5 +1,8 @@
+use itertools::Itertools;
+
 use crate::core::{
-    aliquot_sum, cototient, primality_utils::number_of_divisors, sum_of_divisors, totient,
+    aliquot_sum, cototient, primality_utils::number_of_divisors, prime_factorization,
+    sum_of_divisors, totient,
 };
 
 /// Number of divisors for each positive integer.
@@ -127,6 +130,41 @@ impl Iterator for Cototients {
         Some(cototient(self.ctr))
     }
 }
+
+/// The the prime signature of each positive integer. The powers of the prime factorization in decreasing order.
+/// For instance the prime signature of 3918213 is [4, 2,1] because 3918213 = 3^4 * 13^1 * 61^2.
+/// [], [1], [1], [2], [1], [1, 1], [1], [3], [2], [1, 1]...
+pub struct PrimeSignatures {
+    ctr: u64,
+}
+
+impl PrimeSignatures {
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for PrimeSignatures {
+    type Item = Vec<u64>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(1)?;
+
+        Some(
+            prime_factorization(self.ctr)
+                .iter()
+                .map(|x| x.1)
+                .sorted()
+                .rev()
+                .collect_vec(),
+        )
+    }
+}
+
+crate::print_values!(
+    lists, formatter "{:?}", sep ", ";
+    PrimeSignatures::new(), 0, 30;
+);
 
 crate::check_sequences!(
     NumberOfDivisors::new(), 0, 10, [1, 2, 2, 3, 2, 4, 2, 4, 3, 4];
