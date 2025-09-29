@@ -188,6 +188,17 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     map.into_iter().collect_vec()
 }
 
+/// Powers of the prime factors of n in descending order
+/// returns [] for both 0 and 1
+pub fn prime_signature(n: u64) -> Vec<u64> {
+    prime_factorization(n)
+        .iter()
+        .map(|x| x.1)
+        .sorted()
+        .rev()
+        .collect_vec()
+}
+
 /// Factor a number into prime powers
 pub fn prime_power_factorization(n: u64) -> Vec<u64> {
     prime_factorization(n)

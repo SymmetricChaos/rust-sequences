@@ -4,6 +4,8 @@ use std::{
     hash::Hash, // Found to be much faster than BTreeMap
 };
 
+use crate::core::{prime_factorization, prime_signature};
+
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
 pub struct Primes<T> {
@@ -52,6 +54,50 @@ impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Primes<T> {
                 self.sieve.remove(&self.n);
             }
         }
+    }
+}
+
+/// The the prime factorization of each positive integer.
+pub struct PrimeFactorizations {
+    ctr: u64,
+}
+
+impl PrimeFactorizations {
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for PrimeFactorizations {
+    type Item = Vec<(u64, u64)>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(1)?;
+
+        Some(prime_factorization(self.ctr))
+    }
+}
+
+/// The the prime signature of each positive integer. The powers of the prime factorization in decreasing order.
+/// For instance the prime signature of 3918213 is [4, 2,1] because 3918213 = 3^4 * 13^1 * 61^2.
+/// [], [1], [1], [2], [1], [1, 1], [1], [3], [2], [1, 1]...
+pub struct PrimeSignatures {
+    ctr: u64,
+}
+
+impl PrimeSignatures {
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for PrimeSignatures {
+    type Item = Vec<u64>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(1)?;
+
+        Some(prime_signature(self.ctr))
     }
 }
 
@@ -139,9 +185,15 @@ impl<T: Eq + CheckedAdd + CheckedMul + Clone + Hash + One + Zero + Ord + Partial
     }
 }
 
+crate::print_values!(
+    lists, formatter "{:?}", sep ", ";
+    PrimeSignatures::new(), 0, 30;
+    PrimeFactorizations::new(), 0, 15;
+);
+
 crate::check_iteration_times!(
-    Primes::new_big(), 21_000;
-    Primes::<u32>::new(), 21_000;
+    Primes::new_big(), 75_000;
+    Primes::<u32>::new(), 75_000;
 );
 
 crate::check_sequences!(
