@@ -3,7 +3,7 @@ use num::{
     BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt, Zero, rational::Ratio,
 };
 
-/// The partial sums of the Taylor series form of the exponential function evaluated at n/d.
+/// The partial sums of the Taylor series form of the exponential function evaluated at numer/denom.
 pub struct Exponential<T> {
     sum: Ratio<T>,
     val: Ratio<T>,
@@ -20,6 +20,15 @@ impl<T: PrimInt + Integer> Exponential<T> {
             factorials: Factorials::new(),
         }
     }
+
+    pub fn from_ratio(x: Ratio<T>) -> Self {
+        Self {
+            sum: Ratio::one(),
+            val: Ratio::one(),
+            x,
+            factorials: Factorials::new(),
+        }
+    }
 }
 
 impl Exponential<BigInt> {
@@ -31,6 +40,22 @@ impl Exponential<BigInt> {
             sum: Ratio::one(),
             val: Ratio::one(),
             x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
+            factorials: Factorials::new_big(),
+        }
+    }
+
+    pub fn from_ratio_big<G: Clone>(x: Ratio<G>) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let x = Ratio::new(
+            BigInt::from(x.numer().clone()),
+            BigInt::from(x.denom().clone()),
+        );
+        Self {
+            sum: Ratio::one(),
+            val: Ratio::one(),
+            x,
             factorials: Factorials::new_big(),
         }
     }
@@ -58,8 +83,7 @@ pub struct NaturalLog<T> {
 }
 
 impl<T: PrimInt + Integer> NaturalLog<T> {
-    /// Panics if numer/denom <= 0.
-    /// Panics if numer/denom > 2.
+    /// Panics if numer/denom <= 0 or if numer/denom > 2.
     pub fn new(numer: T, denom: T) -> Self {
         assert!(Ratio::new(numer, denom) > Ratio::zero());
         assert!(Ratio::new(numer, denom) <= Ratio::one() + Ratio::one());
@@ -71,16 +95,48 @@ impl<T: PrimInt + Integer> NaturalLog<T> {
             add: true,
         }
     }
+
+    /// Panics if x <= 0 or if x > 2.
+    pub fn from_ratio(x: Ratio<T>) -> Self {
+        assert!(x > Ratio::zero());
+        assert!(x <= Ratio::one() + Ratio::one());
+        Self {
+            sum: Ratio::zero(),
+            val: Ratio::one(),
+            x: x - Ratio::one(),
+            ctr: T::one(),
+            add: true,
+        }
+    }
 }
 
 impl NaturalLog<BigInt> {
-    /// Panics if numer/denom <= 0.
-    /// Panics if numer/denom > 2.
+    /// Panics if numer/denom <= 0 or if numer/denom > 2.
     pub fn new_big<G>(numer: G, denom: G) -> Self
     where
         BigInt: From<G>,
     {
         let x = Ratio::new(BigInt::from(numer), BigInt::from(denom));
+        assert!(x > Ratio::zero());
+        assert!(x <= Ratio::one() + Ratio::one());
+        Self {
+            sum: Ratio::zero(),
+            val: Ratio::one(),
+            x: x - Ratio::one(),
+            ctr: BigInt::one(),
+            add: true,
+        }
+    }
+
+    /// Panics if x <= 0 or if x > 2.
+    pub fn from_ratio_big<G: Clone>(x: Ratio<G>) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let x = Ratio::new(
+            BigInt::from(x.numer().clone()),
+            BigInt::from(x.denom().clone()),
+        );
         assert!(x > Ratio::zero());
         assert!(x <= Ratio::one() + Ratio::one());
         Self {
@@ -116,4 +172,5 @@ crate::print_values!(
     Exponential::new_big(1,1), 0, 15; // converges on e
     Exponential::new(1,1), 0, 15; // converges on e
     NaturalLog::new(3,2), 0, 10;
+    NaturalLog::from_ratio_big(Ratio::new(3,2)), 0, 10;
 );
