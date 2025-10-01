@@ -1,18 +1,24 @@
-use std::io::Write;
+use std::{io::Write, u64};
 
 use rust_sequences::core::{is_prime, primality_utils::prime_factorization};
 
 fn prime_factorization_speed_test() {
-    let mut sum = 0;
-    let mut longest = (0, 0, vec![]);
+    let mut total_time = 0;
+    let mut longest_time = (0, 0, vec![]);
     let start = 1;
+    let end = u64::MAX;
+    let mut ctr = 0;
     std::fs::File::create("src/_prime_factorization_speed_test.txt").unwrap();
-    for i in start..=(u32::MAX as u64) {
+    for i in start..=end {
+        ctr += 1;
+
+        // Timed section
         let t = std::time::Instant::now();
         let fs = prime_factorization(i);
         let d = std::time::Instant::now() - t;
 
         // Correctness checks
+        // Also prevents factorization from being optimized away
         assert!(
             (is_prime(i) && fs.len() == 1 && fs.iter().next().unwrap().1 == 1)
                 || (!is_prime(i) && (fs.len() != 1 || fs.iter().next().unwrap().1 > 1)),
@@ -23,13 +29,15 @@ fn prime_factorization_speed_test() {
         let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
         assert_eq!(i, prod);
 
+        // Convert time to microseconds and check if new record had been found
         let m = d.as_micros();
-        if m > longest.0 {
-            longest = (m, i, fs)
+        if m > longest_time.0 {
+            longest_time = (m, i, fs)
         }
-        sum = sum + &m;
+        total_time = total_time + &m;
 
-        if i % 1_000_000 == 0 {
+        // Save information to file
+        if i % 1_000_000 == 0 || i == end {
             let mut file = std::fs::File::options()
                 .append(true)
                 .open("src/_prime_factorization_speed_test.txt")
@@ -38,18 +46,14 @@ fn prime_factorization_speed_test() {
                 .unwrap();
             file.write_all(
                 format!(
-                    "longest time to factor: {:?}us ({} = {:?})\n",
-                    longest.0, longest.1, longest.2
+                    "longest time to factor: {:?}μs ({} = {:?})\n",
+                    longest_time.0, longest_time.1, longest_time.2
                 )
                 .as_bytes(),
             )
             .unwrap();
             file.write_all(
-                format!(
-                    "average time to factor: {:?}us\n\n",
-                    sum / (i - start) as u128
-                )
-                .as_bytes(),
+                format!("average time to factor: {:?}μs\n\n", total_time / ctr).as_bytes(),
             )
             .unwrap();
             file.flush().unwrap();

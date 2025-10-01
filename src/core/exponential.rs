@@ -266,6 +266,7 @@ impl<T: Clone + Integer + One + CheckedAdd + CheckedSub + CheckedMul> Iterator f
 crate::print_values!(
     Exponential::new_big(1,1), 0, 15; // converges on e
     Exponential::new(1,1), 0, 15; // converges on e
-    NaturalLog::new(3,2), 0, 10;
-    NaturalLog::from_ratio_big(Ratio::new(3,2)), 0, 10;
+    NaturalLog::new(3,2), 0, 10; // note that overflow end the sequence
+    NaturalLog::from_ratio_big(Ratio::new(3,2)), 0, 5;
+    NaturalLog::new_big(8,1), 0, 5;
 );
