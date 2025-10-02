@@ -1,5 +1,6 @@
 // These sequences are core in the sense that any other sequence may depend on them but none of them can depend on others
 pub mod arithmetic;
+pub mod bernoulli_numbers;
 pub mod composite;
 pub mod constant;
 pub mod continued_fraction;
@@ -12,6 +13,7 @@ pub mod integer;
 pub mod natural;
 pub mod nth_powers;
 pub mod parity;
+pub mod pascal;
 pub mod powers;
 pub mod primality_utils;
 pub mod prime;
@@ -23,6 +25,7 @@ pub mod transforms;
 
 // Easy imports from other places
 pub use arithmetic::*;
+pub use bernoulli_numbers::*;
 pub use composite::*;
 pub use constant::*;
 pub use continued_fraction::*;
@@ -35,6 +38,7 @@ pub use integer::*;
 pub use natural::*;
 pub use nth_powers::*;
 pub use parity::*;
+pub use pascal::*;
 pub use powers::*;
 pub use primality_utils::*;
 pub use prime::*;
