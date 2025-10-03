@@ -1,18 +1,20 @@
+use std::marker::PhantomData;
+
 use num::{
     BigInt, CheckedAdd, CheckedMul, FromPrimitive, Integer, One, PrimInt, Signed, Zero,
     rational::Ratio,
 };
 
 pub struct BernoulliPlus<T> {
-    bernoullis: Vec<Ratio<T>>,
     m: usize,
+    phantom: PhantomData<T>,
 }
 
 impl<T: PrimInt + Signed + Integer> BernoulliPlus<T> {
     pub fn new() -> Self {
         Self {
-            bernoullis: vec![Ratio::one()],
             m: 1,
+            phantom: PhantomData,
         }
     }
 }
@@ -20,30 +22,37 @@ impl<T: PrimInt + Signed + Integer> BernoulliPlus<T> {
 impl BernoulliPlus<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            bernoullis: vec![Ratio::one()],
             m: 1,
+            phantom: PhantomData,
         }
     }
 }
 
-impl<T: Clone + Integer + FromPrimitive + Zero + CheckedAdd + CheckedMul> Iterator
+impl<T: Clone + Integer + FromPrimitive + CheckedAdd + CheckedMul + Signed> Iterator
     for BernoulliPlus<T>
 {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.bernoullis.last().unwrap().clone();
-        let mut sum = Ratio::<T>::zero();
-        for k in 0..self.m {
-            let b = num::integer::binomial(self.m, k);
-            let frac = Ratio::new(T::one(), T::from_usize(self.m - k + 1)?)
-                * self.bernoullis[k].clone()
-                * T::from_usize(b)?;
-            sum = sum.checked_add(&frac)?;
+        let mut sum = Ratio::zero();
+        for k in 0..=self.m {
+            let frac = Ratio::new(T::one(), T::from_usize(k)? + T::one());
+            let mut j_sum = Ratio::zero();
+            let mut sign = T::one();
+            for j in 0..=k {
+                j_sum = j_sum
+                    + T::from_usize(num::integer::binomial(k, j))?
+                        * sign.clone()
+                        * T::from_usize((j + 1).pow(self.m as u32))?;
+                sign = -sign;
+            }
+            sum = sum.checked_add(&(frac * j_sum))?;
         }
-        self.bernoullis.push(sum);
-        Some(out)
+        self.m += 1;
+        Some(sum)
     }
 }
 
-crate::print_values!(BernoulliPlus::<i32>::new(), 0, 20;);
+crate::print_values!(
+    BernoulliPlus::new_big(), 0, 10;
+);
