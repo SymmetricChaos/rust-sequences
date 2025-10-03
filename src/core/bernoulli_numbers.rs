@@ -5,7 +5,8 @@ use num::{
 };
 
 /// The Bernoulli numbers.
-/// 1, -1/2, 1/6, 0, -1/30, 0, 1/42, 0, -1/30, 0, 5/66...
+/// Either the plus or minus version of the sequence may be chosen.
+/// 1, ±1/2, 1/6, 0, -1/30, 0, 1/42, 0, -1/30, 0, 5/66...
 pub struct Bernoulli<T> {
     m: usize,
     phantom: PhantomData<T>,
