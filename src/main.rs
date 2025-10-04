@@ -1,12 +1,47 @@
-use std::{io::Write, u64};
+use std::{collections::BTreeMap, io::Write, u64};
 
-use rust_sequences::core::{is_prime, primality_utils::prime_factorization};
+use rust_sequences::core::{
+    is_prime, partial_trial_division, primality_utils::prime_factorization,
+};
+
+fn partial_factorization_density_test() {
+    let start = 1;
+    let end = u32::MAX as u64;
+    let mut num_factored = 0;
+    std::fs::File::create(format!("src/_partial_factorization_density.txt")).unwrap();
+    for i in start..=end {
+        let mut map = BTreeMap::new();
+        let r = partial_trial_division(i, &mut map);
+        if is_prime(r) || r == 1 {
+            num_factored += 1;
+        }
+
+        // Save information to file
+        if i % 10_000_000 == 0 || i == end {
+            let mut file = std::fs::File::options()
+                .append(true)
+                .open("src/_partial_factorization_density.txt")
+                .unwrap();
+            file.write_all(format!("searched range {start}..={i}\n").as_bytes())
+                .unwrap();
+            file.write_all(
+                format!(
+                    "density of integers fully factored: {}\n\n",
+                    num_factored as f64 / i as f64,
+                )
+                .as_bytes(),
+            )
+            .unwrap();
+            file.flush().unwrap();
+        }
+    }
+}
 
 fn prime_factorization_speed_test() {
     let mut total_time = 0;
     let mut longest_time = (0, 0, vec![]);
     let start = 1;
-    let end = u64::MAX;
+    let end = u32::MAX as u64;
     let mut ctr = 0;
     std::fs::File::create("src/_prime_factorization_speed_test.txt").unwrap();
     for i in start..=end {
@@ -63,5 +98,6 @@ fn prime_factorization_speed_test() {
 
 // run with cargo run --release
 fn main() {
-    prime_factorization_speed_test()
+    // prime_factorization_speed_test()
+    partial_factorization_density_test();
 }

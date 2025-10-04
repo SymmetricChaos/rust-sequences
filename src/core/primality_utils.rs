@@ -122,7 +122,8 @@ fn pollards_rho(n: u64) -> Option<(u64, u64)> {
 
 // Factor out all primes up to 37 and return what is left
 // Can completely factor any number up 1369
-fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
+// This is sufficient to factor ~38% of 32-bit numbers
+pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
             break;
@@ -136,10 +137,15 @@ fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
             map.insert(p, ctr);
         }
     }
-    if is_prime(n) {
+    if n == 1 {
+        return n;
+    }
+
+    if is_prime_partial(n) {
         map.insert(n, 1);
         n = 1;
     }
+
     n
 }
 
@@ -151,10 +157,10 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
         return Vec::new();
     }
 
-    // Shortcut primes
-    if is_prime(n) {
-        return vec![(n, 1)];
-    }
+    // // Shortcut primes
+    // if is_prime(n) {
+    //     return vec![(n, 1)];
+    // }
 
     // BTreeMap will provide us with easy way reference each prime and its multiplicity, and eventually an ordered output
     // Doesn't seem to be a large performance difference if using HashMap
@@ -272,8 +278,6 @@ crate::print_values!(
 #[cfg(test)]
 mod tests {
 
-    use std::{io::Write, u32};
-
     use crate::core::{Composites, Primes};
 
     use super::*;
@@ -285,55 +289,6 @@ mod tests {
         }
         for c in Composites::<u64>::new().take(1_000_000) {
             assert!(!is_prime(c));
-        }
-    }
-
-    #[test]
-    fn prime_factorization_speed_test() {
-        let mut sum = 0;
-        let mut longest = (0, 0, vec![]);
-        let start = 1;
-        std::fs::File::create("src/core/_prime_factorization_speed_test.txt").unwrap();
-        for i in start..=(u32::MAX as u64) {
-            let t = std::time::Instant::now();
-            let fs = prime_factorization(i);
-            let d = std::time::Instant::now() - t;
-
-            // Correctness check
-            let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-            assert_eq!(i, prod);
-
-            let m = d.as_micros();
-            if m > longest.0 {
-                longest = (m, i, fs)
-            }
-            sum = sum + &m;
-
-            if i % 500_000 == 0 {
-                let mut file = std::fs::File::options()
-                    .append(true)
-                    .open("src/core/_prime_factorization_speed_test.txt")
-                    .unwrap();
-                file.write_all(format!("searched range {start}..={i}\n").as_bytes())
-                    .unwrap();
-                file.write_all(
-                    format!(
-                        "longest time to factor: {:?}us ({} = {:?})\n",
-                        longest.0, longest.1, longest.2
-                    )
-                    .as_bytes(),
-                )
-                .unwrap();
-                file.write_all(
-                    format!(
-                        "average time to factor: {:?}us\n\n",
-                        sum / (i - start) as u128
-                    )
-                    .as_bytes(),
-                )
-                .unwrap();
-                file.flush().unwrap();
-            }
         }
     }
 }
