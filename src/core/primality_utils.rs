@@ -120,7 +120,7 @@ fn pollards_rho(n: u64) -> Option<(u64, u64)> {
     None
 }
 
-// Factor out all primes up to 37 and return what is left
+// Factor out all primes up to 37 and return what is left after checking the remainder is prime
 // Can completely factor any number up 1369
 // This is sufficient to factor ~38% of 32-bit numbers
 pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
@@ -137,6 +137,7 @@ pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
             map.insert(p, ctr);
         }
     }
+    // is_prime_partial(n) will not catch this
     if n == 1 {
         return n;
     }
@@ -157,16 +158,11 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
         return Vec::new();
     }
 
-    // // Shortcut primes
-    // if is_prime(n) {
-    //     return vec![(n, 1)];
-    // }
-
     // BTreeMap will provide us with easy way reference each prime and its multiplicity, and eventually an ordered output
     // Doesn't seem to be a large performance difference if using HashMap
     let mut map = BTreeMap::new();
 
-    // Handle small factors
+    // Handle primes and numbers with small factors. This is sufficient to factor ~38% of 32-bit numbers
     n = partial_trial_division(n, &mut map);
     if n == 1 {
         return map.into_iter().collect_vec();
@@ -176,12 +172,12 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     let mut factors = vec![n];
     while !factors.is_empty() {
         if let Some(f) = pollards_rho(factors.pop().unwrap()) {
-            if is_prime_partial(f.0 as u64) {
+            if is_prime_partial(f.0) {
                 map.entry(f.0).and_modify(|x| *x += 1).or_insert(1);
             } else {
                 factors.push(f.0);
             }
-            if is_prime_partial(f.1 as u64) {
+            if is_prime_partial(f.1) {
                 map.entry(f.1).and_modify(|x| *x += 1).or_insert(1);
             } else {
                 factors.push(f.1);
@@ -222,8 +218,9 @@ pub fn number_of_divisors(n: u64) -> u64 {
     out
 }
 
-/// Sum of divisors of n
-/// Defined as 0 for n = 0
+/// Sum of divisors of n.
+/// Defined as 0 for n = 0.
+/// Returns None if overflow occurs.
 pub fn sum_of_divisors(n: u64) -> Option<u64> {
     if n == 0 {
         Some(0)
@@ -243,8 +240,9 @@ pub fn sum_of_divisors(n: u64) -> Option<u64> {
     }
 }
 
-/// Aliquot sum n, sum of proper divisors
-/// Defined as 0 for n = 0
+/// Aliquot sum of n. The sum of proper divisors.
+/// Defined as 0 for n = 0.
+/// Returns None if overflow occurs.
 pub fn aliquot_sum(n: u64) -> Option<u64> {
     match sum_of_divisors(n) {
         Some(total) => Some(total - n),
@@ -252,7 +250,7 @@ pub fn aliquot_sum(n: u64) -> Option<u64> {
     }
 }
 
-/// Squarefree kernel (radical) of a number, product of unique prime factors, largest squarefree factor
+/// Squarefree kernel (radical) of a number, product of unique prime factors. The largest squarefree factor.
 pub fn squarefree_kernel(n: u64) -> u64 {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
