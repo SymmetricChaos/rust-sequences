@@ -29,7 +29,7 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
-macro_rules! incr {
+macro_rules! incrcement {
     ($n:expr) => {
         $n = $n.checked_add(&T::one())?;
     };
