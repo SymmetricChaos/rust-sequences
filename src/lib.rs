@@ -14,6 +14,7 @@ pub mod lucas_sequence;
 pub mod odious;
 pub mod partition;
 pub mod pell;
+pub mod phythagorean;
 pub mod pi;
 pub mod playground;
 pub mod prime_factor_density;

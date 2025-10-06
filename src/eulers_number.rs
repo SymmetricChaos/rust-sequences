@@ -2,7 +2,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer, PrimInt, Zero, rational::Rati
 
 use crate::core::Factorials;
 
-/// Convergents of e as defined in the usual ways as the series of reciprocals of factorials.
+/// Convergents of e as the series of partial sums of the reciprocals of factorials.
 /// 0, 1, 2, 5/2, 8/3, 65/24, 163/60...
 pub struct Euler<T> {
     factorials: Factorials<T>,
@@ -12,8 +12,8 @@ pub struct Euler<T> {
 impl<T: PrimInt + Integer> Euler<T> {
     pub fn new() -> Self {
         Self {
-            factorials: Factorials::<T>::new(),
-            sum: Ratio::<T>::zero(),
+            factorials: Factorials::new(),
+            sum: Ratio::zero(),
         }
     }
 }
@@ -22,7 +22,7 @@ impl Euler<BigInt> {
     pub fn new_big() -> Self {
         Self {
             factorials: Factorials::new_big(),
-            sum: Ratio::<BigInt>::zero(),
+            sum: Ratio::zero(),
         }
     }
 }

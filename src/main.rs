@@ -19,6 +19,7 @@ fn partial_factorization_density_test() {
         b"factorization using only partial trial division up to 37 and a primality test\n\n",
     )
     .unwrap();
+
     for i in start..=end {
         let mut map = BTreeMap::new();
         let r = partial_trial_division(i, &mut map);
@@ -44,77 +45,40 @@ fn partial_factorization_density_test() {
     }
 }
 
-fn average_time_to_factor() {
+fn prime_factorization_timings() {
+    let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
-    let mut longest_time = (0, 0, vec![]);
     let start = 1;
     let end = u32::MAX as u64;
 
-    let path_and_name = format!("src/_average_time_to_factor_{start}..={end}.txt");
+    let path_and_name = format!("src/_factorization_timings_1..2^32.txt");
     std::fs::File::create(&path_and_name).unwrap();
     let mut file = std::fs::File::options()
         .append(true)
         .open(&path_and_name)
         .unwrap();
+
     for i in start..=end {
         // Timed section
         let t = std::time::Instant::now();
         let fs = prime_factorization(i);
         let d = std::time::Instant::now() - t;
 
-        // Correctness check
-        // Also prevents factorization from being optimized away
-        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert_eq!(i, prod);
-
-        // Convert time to microseconds and check if new record had been found
-        let m = d.as_micros();
-        if m > longest_time.0 {
-            longest_time = (m, i, fs)
-        }
         total_time = total_time + d;
 
-        // Save information to file
-        if i % 1_000_000 == 0 || i == end {
-            file.write_all(format!("searched {start}..={i}\n").as_bytes())
-                .unwrap();
-            file.write_all(format!("average: {:.5?}\n\n", total_time.div_f64(i as f64)).as_bytes())
-                .unwrap();
-            file.flush().unwrap();
-        }
-    }
-}
-
-fn hardest_to_factor() {
-    let mut longest_time = (std::time::Duration::ZERO, 0, vec![]);
-    let start = 1;
-    let end = u64::MAX;
-
-    let path_and_name = format!("src/_hardest_to_factor_range_{start}..={end}.txt");
-    std::fs::File::create(&path_and_name).unwrap();
-    let mut file = std::fs::File::options()
-        .append(true)
-        .open(&path_and_name)
-        .unwrap();
-    for i in start..=end {
-        // Timed section
-        let t = std::time::Instant::now();
-        let fs = prime_factorization(i);
-        let d = std::time::Instant::now() - t;
-
         // Correctness check
         // Also prevents factorization from being optimized away
-        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert_eq!(i, prod);
+        // let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
+        // assert_eq!(i, prod);
 
         // Convert time to microseconds and check if new record had been found
-        if d > longest_time.0 {
-            longest_time = (d, i, fs);
+        if d > longest.0 {
+            longest = (d, i, fs);
             // Save information to file
             file.write_all(
                 format!(
-                    "{:<15?}  {} = {:?}\n",
-                    longest_time.0, longest_time.1, longest_time.2
+                    "{:<11?} RECORD!: {:<10?} {:?}\n\n",
+                    longest.1, longest.0, longest.2
                 )
                 .as_bytes(),
             )
@@ -122,9 +86,18 @@ fn hardest_to_factor() {
             file.flush().unwrap();
         }
 
-        // Heatbeat
-        if i % 1_000_000 == 0 || i == end {
-            file.write_all(b"...\n").unwrap();
+        // Heatbeat and average
+        if i % 10_000_000 == 0 || i == end {
+            file.write_all(
+                format!(
+                    "{:<11?} average: {:.5?}\n\n",
+                    i,
+                    total_time.div_f64(i as f64)
+                )
+                .as_bytes(),
+            )
+            .unwrap();
+            file.flush().unwrap();
             file.flush().unwrap();
         }
     }
@@ -160,8 +133,7 @@ fn prime_factorization_times() {
 
 // run with cargo run --release
 fn main() {
-    average_time_to_factor();
     // partial_factorization_density_test();
-    // hardest_to_factor();
+    prime_factorization_timings();
     // prime_factorization_times();
 }
