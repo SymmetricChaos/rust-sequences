@@ -29,6 +29,13 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
+macro_rules! incr {
+    ($n:expr) => {
+        $n = $n.checked_add(&T::one())?;
+    };
+}
+
+#[macro_export]
 macro_rules! big {
     ($seq: expr) => {
         $seq.into_iter().map(|x| BigInt::from(x)).collect()
