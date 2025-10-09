@@ -1,21 +1,21 @@
 use crate::core::prime_factorization;
 use std::marker::PhantomData;
 
-pub struct Hypotenuse<T> {
+pub struct Hypotenuse {
     ctr: u64,
-    _phantom: PhantomData<T>,
+    // _phantom: PhantomData<T>,
 }
 
-impl<T> Hypotenuse<T> {
+impl Hypotenuse {
     pub fn new() -> Self {
         Self {
             ctr: 1,
-            _phantom: PhantomData,
+            // _phantom: PhantomData,
         }
     }
 }
 
-impl<T> Iterator for Hypotenuse<T> {
+impl Iterator for Hypotenuse {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -34,21 +34,21 @@ impl<T> Iterator for Hypotenuse<T> {
     }
 }
 
-pub struct Nonhypotenuse<T> {
+pub struct Nonhypotenuse {
     ctr: u64,
-    _phantom: PhantomData<T>,
+    // _phantom: PhantomData<T>,
 }
 
-impl<T> Nonhypotenuse<T> {
+impl Nonhypotenuse {
     pub fn new() -> Self {
         Self {
             ctr: 0,
-            _phantom: PhantomData,
+            // _phantom: PhantomData,
         }
     }
 }
 
-impl<T> Iterator for Nonhypotenuse<T> {
+impl Iterator for Nonhypotenuse {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -67,7 +67,7 @@ impl<T> Iterator for Nonhypotenuse<T> {
     }
 }
 
-crate::print_values!(
-    Hypotenuse::<u32>::new(), 0, 20;
-    Nonhypotenuse::<u32>::new(), 0, 20;
+crate::check_sequences!(
+    Hypotenuse::new(), 0, 20, [5, 13, 17, 25, 29, 37, 41, 53, 61, 65, 73, 85, 89, 97, 101, 109, 113, 125, 137, 145];
+    Nonhypotenuse::new(), 0, 20, [1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 14, 16, 18, 19, 21, 22, 23, 24, 27, 28];
 );
