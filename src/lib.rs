@@ -11,6 +11,7 @@ pub mod gray;
 pub mod harmonic;
 pub mod lucas;
 pub mod lucas_sequence;
+pub mod nonhypotenuse;
 pub mod odious;
 pub mod partition;
 pub mod pell;
