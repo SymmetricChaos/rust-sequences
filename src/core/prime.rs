@@ -58,11 +58,14 @@ impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Primes<T> {
 }
 
 /// The the prime factorization of each positive integer.
+/// For instance 20 = 2^2 + 5 ^1 and is written here as [(2,2), (5,1)]
+/// [], [(2, 1)], [(3, 1)], [(2, 2)], [(5, 1)], [(2, 1), (3, 1)], [(7, 1)], [(2, 3)], [(3, 2)], [(2, 1), (5, 1)]
 pub struct PrimeFactorizations {
     ctr: u64,
 }
 
 impl PrimeFactorizations {
+    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -86,6 +89,7 @@ pub struct PrimeSignatures {
 }
 
 impl PrimeSignatures {
+    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -101,8 +105,7 @@ impl Iterator for PrimeSignatures {
     }
 }
 
-/// The perfect powers of primes.
-/// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
+// Representation of a prime power
 #[derive(Eq, PartialEq)]
 struct PrimePower<T: Eq + PartialEq> {
     value: T,
@@ -141,6 +144,8 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
     }
 }
 
+/// The perfect powers of primes.
+/// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
 pub struct PrimePowers<T: Eq> {
     queue: BinaryHeap<PrimePower<T>>,
     primes: Primes<T>,
