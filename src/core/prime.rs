@@ -190,6 +190,39 @@ impl<T: Eq + CheckedAdd + CheckedMul + Clone + Hash + One + Zero + Ord + Partial
     }
 }
 
+pub struct Primorial<T> {
+    prod: T,
+    primes: Primes<T>,
+}
+
+impl<T: PrimInt> Primorial<T> {
+    pub fn new() -> Self {
+        Self {
+            prod: T::one(),
+            primes: Primes::new(),
+        }
+    }
+}
+
+impl Primorial<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            prod: BigInt::one(),
+            primes: Primes::new_big(),
+        }
+    }
+}
+
+impl<T: Zero + One + CheckedAdd + CheckedMul + Clone + Hash + Eq> Iterator for Primorial<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.prod.clone();
+        self.prod = self.prod.checked_mul(&self.primes.next()?)?;
+        Some(out)
+    }
+}
+
 crate::print_values!(
     lists, formatter "{:?}", sep ", ";
     PrimeSignatures::new(), 0, 30;
@@ -205,4 +238,5 @@ crate::check_sequences!(
     Primes::new_big(), 0, 10, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
     Primes::new_big(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
     PrimePowers::<u32>::new(), 0, 20, [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
+    Primorial::<u32>::new(), 0, 5, [1, 2, 6, 30, 210];
 );
