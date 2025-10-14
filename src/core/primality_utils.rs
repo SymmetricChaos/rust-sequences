@@ -267,8 +267,51 @@ pub fn cototient(n: u64) -> u64 {
     n - totient(n)
 }
 
+/// All of the factors of n, including itself and 1.
+pub fn factors(n: u64) -> Vec<u64> {
+    let mut out = vec![1, n];
+
+    if is_prime(n) {
+        return out;
+    }
+
+    for f in 2..n.isqrt() {
+        let (d, r) = n.div_rem(&f);
+        if r == 0 {
+            out.push(f);
+            out.push(d);
+        }
+    }
+
+    out.sort();
+
+    out
+}
+
+/// All of the proper factors of n (excluding itself and 1).
+pub fn proper_factors(n: u64) -> Vec<u64> {
+    let mut out = Vec::new();
+
+    if is_prime(n) {
+        return out;
+    }
+
+    for f in 2..n.isqrt() {
+        let (d, r) = n.div_rem(&f);
+        if r == 0 {
+            out.push(f);
+            out.push(d);
+        }
+    }
+
+    out.sort();
+
+    out
+}
+
 crate::print_values!(
-    factors, formatter "{:?}", sep ", ";
+    factorization_tests, formatter "{:?}", sep ", ";
+    factors(2*3*5*7).into_iter(), 0, 20;
     prime_factorization(363747780).into_iter(), 0, 10;
     prime_power_factorization(363747780).into_iter(), 0, 10;
 );
