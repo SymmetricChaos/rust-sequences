@@ -9,6 +9,7 @@ pub mod fibonacci;
 pub mod figurate;
 pub mod gray;
 pub mod harmonic;
+pub mod jordan_polya;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod nonhypotenuse;

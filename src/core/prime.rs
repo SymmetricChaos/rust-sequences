@@ -190,6 +190,8 @@ impl<T: Eq + CheckedAdd + CheckedMul + Clone + Hash + One + Zero + Ord + Partial
     }
 }
 
+/// The primorials, the products of the sequential primes.
+/// 1, 2, 6, 30, 210, 2310, 30030, 510510, 9699690
 pub struct Primorial<T> {
     prod: T,
     primes: Primes<T>,

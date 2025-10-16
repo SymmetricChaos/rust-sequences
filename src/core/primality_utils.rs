@@ -311,7 +311,7 @@ pub fn proper_factors(n: u64) -> Vec<u64> {
 
 crate::print_values!(
     factorization_tests, formatter "{:?}", sep ", ";
-    factors(2*3*5*7).into_iter(), 0, 20;
+    factors(2*2*5*7).into_iter(), 0, 20;
     prime_factorization(363747780).into_iter(), 0, 10;
     prime_power_factorization(363747780).into_iter(), 0, 10;
 );
