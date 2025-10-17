@@ -1,5 +1,5 @@
-use crate::core::{
-    aliquot_sum, cototient, primality_utils::number_of_divisors, sum_of_divisors, totient,
+use crate::core::primality_utils::{
+    aliquot_sum, cototient, number_of_divisors, sum_of_divisors, totient,
 };
 
 /// Number of divisors for each positive integer.

@@ -1,4 +1,4 @@
-use crate::core::prime_factorization;
+use crate::core::primality_utils::prime_factorization;
 
 /// Integers that can be the length of the hypotenuse of a primitive Pythagorean triple.
 /// 5, 13, 17, 25, 29, 37, 41, 53, 61, 65...

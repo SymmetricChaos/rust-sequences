@@ -1,6 +1,6 @@
 use num::{BigRational, FromPrimitive};
 
-use crate::core::PartialSums;
+use crate::core::transforms::PartialSums;
 
 /// The terms of the harmonic series.
 /// 1, 1/2, 1/3, 1/4, 1/5...

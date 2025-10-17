@@ -1,4 +1,4 @@
-use crate::core::Factorials;
+use crate::core::factorial::Factorials;
 
 /// The Jordan–Pólya numbers, those that can be completely factored into factorial numbers
 pub struct JordanPolya {

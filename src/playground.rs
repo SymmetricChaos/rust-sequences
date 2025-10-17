@@ -1,8 +1,14 @@
 #[cfg(test)]
 use crate::{
     core::{
-        AbsDiffs, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums, Constant, CubeRoot,
-        Exponential, PartialSums, Primes, Ratios, SimpleContinuedFraction, SquareRoot,
+        constant::Constant,
+        continued_fraction::SimpleContinuedFraction,
+        exponential::Exponential,
+        prime::Primes,
+        roots::{CubeRoot, SquareRoot},
+        transforms::{
+            AbsDiffs, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums, PartialSums, Ratios,
+        },
     },
     fibonacci::Fibonacci,
     figurate::Triangular,

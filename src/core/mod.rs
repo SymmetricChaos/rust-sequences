@@ -23,31 +23,7 @@ pub mod rationals;
 pub mod recurrence;
 pub mod roots;
 pub mod transforms;
-
-// Easy imports from other places
-pub use arithmetic::*;
-pub use bernoulli_numbers::*;
-pub use composite::*;
-pub use constant::*;
-pub use continued_fraction::*;
-pub use digital_sum::*;
-pub use divisor::*;
-pub use exponential::*;
-pub use factorial::*;
-pub use geometric::*;
-pub use integer::*;
-pub use natural::*;
-pub use nth_powers::*;
-pub use parity::*;
-pub use pascal::*;
-pub use powers::*;
-pub use primality_utils::*;
-pub use prime::*;
-pub use rational_digits::*;
-pub use rationals::*;
-pub use recurrence::*;
-pub use roots::*;
-pub use transforms::*;
+pub mod unit;
 
 use num::{BigInt, FromPrimitive};
 use std::cell::LazyCell;

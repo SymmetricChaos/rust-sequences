@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, PrimInt};
 
-use crate::core::Naturals;
+use crate::core::natural::Naturals;
 
 /// The natural numbers raised to a fixed power.
 pub struct NthPowers<T> {

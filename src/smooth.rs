@@ -1,6 +1,7 @@
-use crate::core::Primes;
 use itertools::Itertools;
 use num::{BigInt, Integer, One, Signed, Zero};
+
+use crate::core::prime::Primes;
 
 /// The smooth numbers, those natural numbers for which the only prime divisors are less than or equal to n.
 pub struct Smooth {

@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, PrimInt, Zero, rational::Ratio};
 
-use crate::core::Factorials;
+use crate::core::factorial::Factorials;
 
 /// Convergents of e as the series of partial sums of the reciprocals of factorials.
 /// 0, 1, 2, 5/2, 8/3, 65/24, 163/60...

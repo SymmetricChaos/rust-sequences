@@ -1,4 +1,4 @@
-use crate::core::Factorials;
+use crate::core::factorial::Factorials;
 use num::{
     BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt, Zero, rational::Ratio,
 };

@@ -1,4 +1,4 @@
-use crate::core::Factorials;
+use crate::core::factorial::Factorials;
 use num::{BigInt, One, Zero, rational::Ratio};
 
 /// Partial sums of the Taylor series expansion of the sine function evaluated at n/d.

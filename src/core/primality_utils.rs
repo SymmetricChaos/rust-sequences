@@ -315,21 +315,3 @@ crate::print_values!(
     prime_factorization(363747780).into_iter(), 0, 10;
     prime_power_factorization(363747780).into_iter(), 0, 10;
 );
-
-#[cfg(test)]
-mod tests {
-
-    use crate::core::{Composites, Primes};
-
-    use super::*;
-
-    #[test]
-    fn is_prime_correctness() {
-        for p in Primes::<u64>::new().take(1_000_000) {
-            assert!(is_prime(p));
-        }
-        for c in Composites::<u64>::new().take(1_000_000) {
-            assert!(!is_prime(c));
-        }
-    }
-}

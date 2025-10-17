@@ -1,18 +1,18 @@
 use num::{BigInt, Integer, Zero};
 
-use crate::core::squarefree_kernel;
+use crate::core::{primality_utils::squarefree_kernel, prime::Primes};
 
 /// Natural numbers that are not divisible twice by any natural number except one.
 /// 1, 2, 3, 5, 6, 7, 10, 11, 13, 14...
 pub struct Squarefree {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Primes<BigInt>,
+    primes: Primes<BigInt>,
 }
 
 impl Squarefree {
     pub fn new_big() -> Self {
-        let mut primes = crate::core::Primes::new_big();
+        let mut primes = Primes::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),
@@ -69,12 +69,12 @@ impl Iterator for SquarefreeKernels {
 pub struct Squareful {
     ctr: BigInt,
     squares: Vec<BigInt>,
-    primes: crate::core::Primes<BigInt>,
+    primes: Primes<BigInt>,
 }
 
 impl Squareful {
     pub fn new_big() -> Self {
-        let mut primes = crate::core::Primes::new_big();
+        let mut primes = Primes::new_big();
         primes.next();
         Self {
             ctr: BigInt::zero(),

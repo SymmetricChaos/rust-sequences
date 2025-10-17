@@ -1,7 +1,7 @@
 use std::{collections::BTreeMap, io::Write, u64};
 
-use rust_sequences::core::{
-    is_prime, partial_trial_division, primality_utils::prime_factorization,
+use rust_sequences::core::primality_utils::{
+    is_prime, partial_trial_division, prime_factorization,
 };
 
 fn partial_factorization_density_test() {
