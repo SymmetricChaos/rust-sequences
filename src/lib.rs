@@ -14,6 +14,7 @@ pub mod harmonic;
 pub mod jordan_polya;
 pub mod lucas;
 pub mod lucas_sequence;
+pub mod mobius;
 pub mod nonhypotenuse;
 pub mod odious;
 pub mod partition;
@@ -32,7 +33,7 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
-macro_rules! incrcement {
+macro_rules! increment {
     ($n:expr) => {
         $n = $n.checked_add(&T::one())?;
     };
