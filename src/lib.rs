@@ -1,3 +1,5 @@
+pub mod bell;
+pub mod bernoulli;
 pub mod catalan;
 pub mod collatz;
 pub mod core;
@@ -25,7 +27,6 @@ pub mod smooth;
 pub mod squarefree;
 pub mod strings;
 pub mod thue_morse;
-pub mod triangles;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;

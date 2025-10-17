@@ -1,6 +1,4 @@
-use std::ops::Sub;
-
-use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, One, Signed, rational::Ratio};
+use num::{CheckedAdd, CheckedMul, Integer, One, rational::Ratio};
 
 /// Sequence of partial products. Returns None if overflow occurs or sequence ends.
 pub struct PartialProds<T> {
@@ -64,7 +62,7 @@ impl<T: Clone + CheckedAdd> Iterator for Boustrophedon<T> {
     }
 }
 
-/// The boustrophedon transform of a sequence
+/// The entire triangle produced to generated the boustrophedon transform of a sequence
 pub struct BoustrophedonTriangle<T> {
     iter: Box<dyn Iterator<Item = T>>,
     row: Vec<T>,
