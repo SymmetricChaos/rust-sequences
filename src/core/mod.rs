@@ -5,6 +5,7 @@ pub mod combinations;
 pub mod composite;
 pub mod constant;
 pub mod continued_fraction;
+pub mod differences;
 pub mod digital_sum;
 pub mod divisor;
 pub mod exponential;
@@ -22,6 +23,7 @@ pub mod rational_digits;
 pub mod rationals;
 pub mod recurrence;
 pub mod roots;
+pub mod summation;
 pub mod transforms;
 pub mod unit;
 

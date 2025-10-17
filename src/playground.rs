@@ -3,12 +3,12 @@ use crate::{
     core::{
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
+        differences::AbsDiffs,
         exponential::Exponential,
         prime::Primes,
         roots::{CubeRoot, SquareRoot},
-        transforms::{
-            AbsDiffs, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums, PartialSums, Ratios,
-        },
+        summation::{CesaroPartialSums, PartialSums},
+        transforms::{Boustrophedon, BoustrophedonTriangle, Ratios},
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
