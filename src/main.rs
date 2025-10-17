@@ -45,13 +45,43 @@ fn partial_factorization_density_test() {
     }
 }
 
+// let mut reader = EventStream::new();
+
+// loop {
+//     let mut delay = Delay::new(Duration::from_millis(1_000)).fuse();
+//     let mut event = reader.next().fuse();
+
+//     select! {
+//         _ = delay => { println!(".\r"); },
+//         maybe_event = event => {
+//             match maybe_event {
+//                 Some(Ok(event)) => {
+//                     println!("Event::{event:?}\r");
+
+//                     if event == Event::Key(KeyCode::Char('c').into()) {
+//                         println!("Cursor position: {:?}\r", position());
+//                     }
+
+//                     if event == Event::Key(KeyCode::Esc.into()) {
+//                         break;
+//                     }
+//                 }
+//                 Some(Err(e)) => println!("Error: {e:?}\r"),
+//                 None => break,
+//             }
+//         }
+//     };
+// }
+
 fn prime_factorization_timings() {
+    let start_time = std::time::Instant::now();
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
-    let start = 1;
-    let end = u32::MAX as u64;
 
-    let path_and_name = format!("src/_factorization_timings_1..2^32.txt");
+    let start = 1;
+    let end = u64::MAX;
+
+    let path_and_name = format!("src/_factorization_timings_1..txt");
     std::fs::File::create(&path_and_name).unwrap();
     let mut file = std::fs::File::options()
         .append(true)
@@ -68,8 +98,8 @@ fn prime_factorization_timings() {
 
         // Correctness check
         // Also prevents factorization from being optimized away
-        // let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        // assert_eq!(i, prod);
+        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
+        assert_eq!(i, prod);
 
         // Convert time to microseconds and check if new record had been found
         if d > longest.0 {
@@ -77,8 +107,8 @@ fn prime_factorization_timings() {
             // Save information to file
             file.write_all(
                 format!(
-                    "{:<11?} RECORD!: {:<10?} {:?}\n\n",
-                    longest.1, longest.0, longest.2
+                    "RECORD!: {:<11?}    {:?} = {:?}\n\n",
+                    longest.0, longest.1, longest.2
                 )
                 .as_bytes(),
             )
@@ -90,14 +120,15 @@ fn prime_factorization_timings() {
         if i % 10_000_000 == 0 || i == end {
             file.write_all(
                 format!(
-                    "{:<11?} average: {:.5?}\n\n",
+                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.4?}\nTOTAL RUNNING TIME:      {:.4?}\n\n",
                     i,
-                    total_time.div_f64(i as f64)
+                    total_time.div_f64(i as f64),
+                    total_time,
+                    std::time::Instant::now() - start_time,
                 )
                 .as_bytes(),
             )
             .unwrap();
-            file.flush().unwrap();
             file.flush().unwrap();
         }
     }
