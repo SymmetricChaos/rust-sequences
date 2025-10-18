@@ -1,13 +1,22 @@
-use num::BigInt;
+use num::{BigInt, CheckedAdd, PrimInt};
 
 /// The Lucas numbers.
 /// 2, 1, 3, 4, 7, 11, 18, 29, 47, 76...
-pub struct Lucas {
-    a: BigInt,
-    b: BigInt,
+pub struct Lucas<T> {
+    a: T,
+    b: T,
 }
 
-impl Lucas {
+impl<T: PrimInt> Lucas<T> {
+    pub fn new() -> Self {
+        Self {
+            a: T::one() + T::one(),
+            b: T::one(),
+        }
+    }
+}
+
+impl Lucas<BigInt> {
     pub fn new_big() -> Self {
         Self {
             a: BigInt::from(2),
@@ -16,12 +25,12 @@ impl Lucas {
     }
 }
 
-impl Iterator for Lucas {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd> Iterator for Lucas<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = &self.a + &self.b;
+        let t = self.a.checked_add(&self.b)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)

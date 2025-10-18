@@ -45,34 +45,6 @@ fn partial_factorization_density_test() {
     }
 }
 
-// let mut reader = EventStream::new();
-
-// loop {
-//     let mut delay = Delay::new(Duration::from_millis(1_000)).fuse();
-//     let mut event = reader.next().fuse();
-
-//     select! {
-//         _ = delay => { println!(".\r"); },
-//         maybe_event = event => {
-//             match maybe_event {
-//                 Some(Ok(event)) => {
-//                     println!("Event::{event:?}\r");
-
-//                     if event == Event::Key(KeyCode::Char('c').into()) {
-//                         println!("Cursor position: {:?}\r", position());
-//                     }
-
-//                     if event == Event::Key(KeyCode::Esc.into()) {
-//                         break;
-//                     }
-//                 }
-//                 Some(Err(e)) => println!("Error: {e:?}\r"),
-//                 None => break,
-//             }
-//         }
-//     };
-// }
-
 fn prime_factorization_timings() {
     let start_time = std::time::Instant::now();
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
