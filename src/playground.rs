@@ -1,6 +1,7 @@
 #[cfg(test)]
 use crate::{
     core::{
+        boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
         differences::AbsDiffs,
@@ -8,7 +9,7 @@ use crate::{
         prime::Primes,
         roots::{CubeRoot, SquareRoot},
         summation::{CesaroPartialSums, PartialSums},
-        transforms::{Boustrophedon, BoustrophedonTriangle, Ratios},
+        transforms::Ratios,
     },
     fibonacci::Fibonacci,
     figurate::Triangular,

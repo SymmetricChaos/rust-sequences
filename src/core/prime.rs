@@ -105,7 +105,7 @@ impl Iterator for PrimeSignatures {
     }
 }
 
-// Representation of a prime power
+// Representation of a prime power for use in the generator
 #[derive(Eq, PartialEq)]
 struct PrimePower<T: Eq + PartialEq> {
     value: T,
@@ -113,19 +113,19 @@ struct PrimePower<T: Eq + PartialEq> {
 }
 
 impl<T: Clone + CheckedMul + Eq + PartialEq> PrimePower<T> {
-    pub fn new(p: T) -> Self {
+    fn new(p: T) -> Self {
         Self {
             value: p.clone(),
             prime: p,
         }
     }
 
-    pub fn next(mut self) -> Option<Self> {
+    fn next(mut self) -> Option<Self> {
         self.value = self.value.checked_mul(&self.prime)?;
         Some(self)
     }
 
-    pub fn is_prime(&self) -> bool {
+    fn is_prime(&self) -> bool {
         self.value == self.prime
     }
 }

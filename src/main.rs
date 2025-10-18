@@ -1,8 +1,8 @@
-use std::{collections::BTreeMap, io::Write, u64};
-
+use num_format::ToFormattedString;
 use rust_sequences::core::primality_utils::{
     is_prime, partial_trial_division, prime_factorization,
 };
+use std::{collections::BTreeMap, io::Write, u64};
 
 fn partial_factorization_density_test() {
     let start = 1;
@@ -73,14 +73,16 @@ fn prime_factorization_timings() {
         let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
         assert_eq!(i, prod);
 
-        // Convert time to microseconds and check if new record had been found
+        // Record and print a new record for time to factor
         if d > longest.0 {
             longest = (d, i, fs);
             // Save information to file
             file.write_all(
                 format!(
-                    "RECORD!: {:<11?}    {:?} = {:?}\n\n",
-                    longest.0, longest.1, longest.2
+                    "RECORD! {:<11?}    {:?} = {:?}\n\n",
+                    longest.0,
+                    longest.1.to_formatted_string(&num_format::Locale::en),
+                    longest.2
                 )
                 .as_bytes(),
             )
@@ -89,11 +91,11 @@ fn prime_factorization_timings() {
         }
 
         // Heatbeat and average
-        if i % 10_000_000 == 0 || i == end {
+        if i % 50_000_000 == 0 || i == end {
             file.write_all(
                 format!(
                     "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.4?}\nTOTAL RUNNING TIME:      {:.4?}\n\n",
-                    i,
+                    i.to_formatted_string(&num_format::Locale::en),
                     total_time.div_f64(i as f64),
                     total_time,
                     std::time::Instant::now() - start_time,
@@ -106,37 +108,8 @@ fn prime_factorization_timings() {
     }
 }
 
-fn prime_factorization_times() {
-    let start = 2_u64.pow(60);
-    let end = start + 2_u64.pow(16);
-
-    let path_and_name = format!("src/_prime_factorization_times_range_{start}..={end}.txt");
-    std::fs::File::create(&path_and_name).unwrap();
-    let mut file = std::fs::File::options()
-        .append(true)
-        .open(&path_and_name)
-        .unwrap();
-    for i in start..=end {
-        // Timed section
-        let t = std::time::Instant::now();
-        let fs = prime_factorization(i);
-        let d = std::time::Instant::now() - t;
-
-        // Correctness check
-        // Also prevents factorization from being optimized away
-        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert_eq!(i, prod);
-
-        // Save information to file
-        file.write_all(format!("{:<15?}  {} = {:?}\n", d, i, fs).as_bytes())
-            .unwrap();
-        file.flush().unwrap();
-    }
-}
-
 // run with cargo run --release
 fn main() {
     // partial_factorization_density_test();
     prime_factorization_timings();
-    // prime_factorization_times();
 }

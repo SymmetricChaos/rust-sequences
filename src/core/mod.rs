@@ -1,6 +1,7 @@
 // These sequences are core in the sense that any other sequence may depend on them but none of them can depend on others
 pub mod arithmetic;
 pub mod bernoulli_numbers;
+pub mod boustrophedon;
 pub mod combinations;
 pub mod composite;
 pub mod constant;
