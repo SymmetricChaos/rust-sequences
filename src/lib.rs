@@ -23,7 +23,7 @@ pub mod phythagorean;
 pub mod pi;
 pub mod playground;
 pub mod prime_factor_density;
-pub mod repdigit;
+pub mod repint;
 pub mod rowland;
 pub mod smooth;
 pub mod squarefree;

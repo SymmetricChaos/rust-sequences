@@ -1,13 +1,15 @@
 use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, PrimInt, Zero};
 
-/// The integers created by repeating the digits of an integer repeatedly
-pub struct Repdigit<T> {
+/// The integers created by repeating the digits of a positive integer.
+/// The repints of 12
+/// 12, 1212, 121212, 12121212...
+pub struct Repint<T> {
     digit: T,
     val: T,
     m: T,
 }
 
-impl<T: PrimInt> Repdigit<T> {
+impl<T: PrimInt> Repint<T> {
     /// Panics if digit is less than one.
     pub fn new(digit: T) -> Self {
         assert!(digit > T::zero());
@@ -28,7 +30,7 @@ impl<T: PrimInt> Repdigit<T> {
     }
 }
 
-impl Repdigit<BigInt> {
+impl Repint<BigInt> {
     /// Panics if digit is less than one.
     pub fn new_big<N>(digit: N) -> Self
     where
@@ -47,7 +49,7 @@ impl Repdigit<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul> Iterator for Repdigit<T> {
+impl<T: Clone + CheckedAdd + CheckedMul> Iterator for Repint<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -58,8 +60,8 @@ impl<T: Clone + CheckedAdd + CheckedMul> Iterator for Repdigit<T> {
 }
 
 crate::check_sequences!(
-    Repdigit::new_big(5), 0, 5, [5, 55, 555, 5555, 55555];
-    Repdigit::new_big(12), 0, 5, [12, 1212, 121212, 12121212, 1212121212];
-    Repdigit::new(7), 0, 5, [7, 77, 777, 7777, 77777];
-    Repdigit::new(35), 0, 5, [35, 3535, 353535, 35353535]; // notice only four values returned because i32 overflowss
+    Repint::new_big(5), 0, 5, [5, 55, 555, 5555, 55555];
+    Repint::new_big(12), 0, 5, [12, 1212, 121212, 12121212, 1212121212];
+    Repint::new(7), 0, 5, [7, 77, 777, 7777, 77777];
+    Repint::new(35), 0, 5, [35, 3535, 353535, 35353535]; // notice only four values returned because i32 overflowss
 );
