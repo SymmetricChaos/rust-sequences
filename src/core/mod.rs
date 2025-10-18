@@ -26,8 +26,3 @@ pub mod roots;
 pub mod summation;
 pub mod transforms;
 pub mod unit;
-
-use num::{BigInt, FromPrimitive};
-use std::cell::LazyCell;
-pub const TWO: LazyCell<BigInt> = LazyCell::new(|| BigInt::from_i32(2).unwrap());
-pub const NEG_TWO: LazyCell<BigInt> = LazyCell::new(|| BigInt::from_i32(-2).unwrap());

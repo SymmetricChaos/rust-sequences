@@ -1,4 +1,3 @@
-use crate::core::TWO;
 use num::{BigInt, One, Zero};
 
 /// The bits of the Thue-Morse sequence.
@@ -13,7 +12,7 @@ pub struct ThueMorse<T> {
 impl<T: One + Zero> ThueMorse<T> {
     pub fn new() -> Self {
         Self {
-            value: TWO.to_owned(),
+            value: BigInt::one() + BigInt::one(),
             ctr: 0,
             zero: T::zero(),
             one: T::one(),
@@ -24,7 +23,7 @@ impl<T: One + Zero> ThueMorse<T> {
 impl ThueMorse<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            value: TWO.to_owned(),
+            value: BigInt::one() + BigInt::one(),
             ctr: 0,
             zero: BigInt::zero(),
             one: BigInt::one(),
@@ -35,7 +34,7 @@ impl ThueMorse<BigInt> {
 impl ThueMorse<bool> {
     pub fn new_bool() -> Self {
         Self {
-            value: TWO.to_owned(),
+            value: BigInt::one() + BigInt::one(),
             ctr: 0,
             zero: false,
             one: true,

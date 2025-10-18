@@ -1,6 +1,6 @@
 use num::{BigInt, Zero};
 
-/// The Gray codes each differing by a single bit. A permutation of the integers.
+/// The Gray codes, bit sequences each differing by a single bit. A permutation of the integers.
 pub struct Gray {
     ctr: BigInt,
 }

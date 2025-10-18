@@ -1,17 +1,27 @@
-use crate::core::TWO;
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedMul, CheckedSub, One, PrimInt, Zero};
 
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
 /// beginning with a_0 = 0 and a_1 = 1
-pub struct LucasU {
-    a: BigInt,
-    b: BigInt,
-    p: BigInt,
-    q: BigInt,
+pub struct LucasU<T> {
+    a: T,
+    b: T,
+    p: T,
+    q: T,
 }
 
-impl LucasU {
+impl<T: PrimInt> LucasU<T> {
+    pub fn new(p: T, q: T) -> Self {
+        Self {
+            a: T::zero(),
+            b: T::one(),
+            p,
+            q,
+        }
+    }
+}
+
+impl LucasU<BigInt> {
     pub fn new_big<T>(p: T, q: T) -> Self
     where
         BigInt: From<T>,
@@ -25,12 +35,14 @@ impl LucasU {
     }
 }
 
-impl Iterator for LucasU {
-    type Item = BigInt;
+impl<T: Clone + CheckedMul + CheckedSub> Iterator for LucasU<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = (&self.p * &self.a) - (&self.q * &self.b);
+        let x = self.p.checked_mul(&self.a)?;
+        let y = self.q.checked_mul(&self.b)?;
+        let t = x.checked_sub(&y)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -40,33 +52,47 @@ impl Iterator for LucasU {
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
 /// beginning with a_0 = 2 and a_1 = p
-pub struct LucasV {
-    a: BigInt,
-    b: BigInt,
-    p: BigInt,
-    q: BigInt,
+pub struct LucasV<T> {
+    a: T,
+    b: T,
+    p: T,
+    q: T,
 }
 
-impl LucasV {
-    pub fn new_big<T: Clone>(p: T, q: T) -> Self
-    where
-        BigInt: From<T>,
-    {
+impl<T: PrimInt> LucasV<T> {
+    pub fn new(p: T, q: T) -> Self {
         Self {
-            a: TWO.to_owned(),
-            b: BigInt::from(p.clone()),
-            p: BigInt::from(p),
+            a: T::one() + T::one(),
+            b: p,
+            p,
+            q,
+        }
+    }
+}
+
+impl LucasV<BigInt> {
+    pub fn new_big<N>(p: N, q: N) -> Self
+    where
+        BigInt: From<N>,
+    {
+        let p = BigInt::from(p);
+        Self {
+            a: BigInt::one() + BigInt::one(),
+            b: p.clone(),
+            p: p,
             q: BigInt::from(q),
         }
     }
 }
 
-impl Iterator for LucasV {
-    type Item = BigInt;
+impl<T: Clone + CheckedMul + CheckedSub> Iterator for LucasV<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = (&self.p * &self.a) - (&self.q * &self.b);
+        let x = self.p.checked_mul(&self.a)?;
+        let y = self.q.checked_mul(&self.b)?;
+        let t = x.checked_sub(&y)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
