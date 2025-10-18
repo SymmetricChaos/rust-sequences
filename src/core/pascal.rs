@@ -11,6 +11,11 @@ impl PascalsTriangle {
             row: vec![BigInt::one()],
         }
     }
+
+    /// Return an iterator over the elements in each row.
+    pub fn as_ints() -> impl Iterator<Item = BigInt> {
+        Self::new_big().flatten()
+    }
 }
 
 impl Iterator for PascalsTriangle {
@@ -28,3 +33,8 @@ impl Iterator for PascalsTriangle {
         Some(out)
     }
 }
+
+crate::print_values!(
+    print_triangles, formatter "{:?}", sep "\n";
+    PascalsTriangle::new_big(), 0, 5;
+);

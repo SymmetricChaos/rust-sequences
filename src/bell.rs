@@ -32,3 +32,8 @@ impl Iterator for BellTriangle {
         Some(out)
     }
 }
+
+crate::print_values!(
+    print_triangles, formatter "{:?}", sep "\n";
+    BellTriangle::new_big(), 0, 5;
+);

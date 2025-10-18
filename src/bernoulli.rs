@@ -1,6 +1,6 @@
 use num::{BigInt, One};
 
-/// The partial sums of the rows of Pascal's triangle.
+/// Bernoulli's triangle. The partial sums of the rows of Pascal's triangle.
 pub struct BernoullisTriangle {
     row: Vec<BigInt>,
 }
@@ -33,3 +33,8 @@ impl Iterator for BernoullisTriangle {
         Some(out)
     }
 }
+
+crate::print_values!(
+    print_triangles, formatter "{:?}", sep "\n";
+    BernoullisTriangle::new_big(), 0, 5;
+);
