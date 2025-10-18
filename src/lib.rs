@@ -1,5 +1,4 @@
 pub mod bell;
-pub mod bernoulli;
 pub mod catalan;
 pub mod collatz;
 pub mod core;
