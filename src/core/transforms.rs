@@ -152,12 +152,18 @@ impl<T: Clone + Integer> Iterator for Ratios<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let num = self.n.next()?;
-        let den = self.d.next()?;
-        if den.is_zero() {
-            None
+        // Often iteration will stop if either num or den is None but if it doesn't we must ensure they do not get out of sync.
+        let num = self.n.next();
+        let den = self.d.next();
+
+        if let (Some(n), Some(d)) = (num, den) {
+            if d.is_zero() {
+                None
+            } else {
+                Some(Ratio::<T>::new(n, d))
+            }
         } else {
-            Some(Ratio::<T>::new(num, den))
+            None
         }
     }
 }
