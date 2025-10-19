@@ -7,7 +7,6 @@ pub mod composite;
 pub mod constant;
 pub mod continued_fraction;
 pub mod differences;
-pub mod digital_sum;
 pub mod divisor;
 pub mod exponential;
 pub mod factorial;

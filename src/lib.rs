@@ -3,6 +3,8 @@ pub mod catalan;
 pub mod collatz;
 pub mod core;
 pub mod derangement;
+pub mod digital_product;
+pub mod digital_sum;
 pub mod eulers_number;
 pub mod evil;
 pub mod farey;
@@ -30,6 +32,13 @@ pub mod thue_morse;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;
+
+// #[macro_export]
+// macro_rules! generic_two {
+//     ($n:ty) => {
+//         <$n>::one() + <$n>::one()
+//     };
+// }
 
 #[macro_export]
 macro_rules! increment {
