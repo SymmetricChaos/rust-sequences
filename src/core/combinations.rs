@@ -61,9 +61,9 @@ mod test {
 
     #[test]
     fn combi() {
-        let arr = (0..20).map(|x| BigInt::from(x)).collect();
+        let arr = (0..10).map(|x| BigInt::from(x)).collect();
 
-        for c in Combinations::new(arr, 10) {
+        for c in Combinations::new(arr, 3) {
             println!("{:?}", c)
         }
     }

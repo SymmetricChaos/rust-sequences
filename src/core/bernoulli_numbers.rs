@@ -14,7 +14,7 @@ pub struct Bernoulli<T> {
 }
 
 impl<T: Signed + PrimInt> Bernoulli<T> {
-    /// Internal calculations are still done using BigInt and converted for output so there is no gain in speed or memoriy usage.
+    /// Internal calculations are done using BigInt and converted for output so there is no gain in speed or memory usage over ::new_big().
     pub fn new_plus() -> Self {
         Self {
             m: 0,
@@ -23,7 +23,7 @@ impl<T: Signed + PrimInt> Bernoulli<T> {
         }
     }
 
-    /// Internal calculations are still done using BigInt and converted for output so there is no gain in speed or memoriy usage.
+    /// Internal calculations are done using BigInt and converted for output so there is no gain in speed or memory usage over ::new_big().
     pub fn new_minus() -> Self {
         Self {
             m: 0,

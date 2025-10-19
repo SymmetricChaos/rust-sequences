@@ -79,7 +79,7 @@ fn prime_factorization_timings() {
             // Save information to file
             file.write_all(
                 format!(
-                    "RECORD! {:<11?}    {:?} = {:?}\n\n",
+                    "RECORD! {:<11?}    {} = {:?}\n\n",
                     longest.0,
                     longest.1.to_formatted_string(&num_format::Locale::en),
                     longest.2
@@ -91,10 +91,11 @@ fn prime_factorization_timings() {
         }
 
         // Heatbeat and average
-        if i % 50_000_000 == 0 || i == end {
+        // Before 4,294,967,295 update every fifty million, after check only every 4,294,967,295
+        if (i % 50_000_000 == 0 && i < u32::MAX as u64) || i % u32::MAX as u64 == 0 {
             file.write_all(
                 format!(
-                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.4?}\nTOTAL RUNNING TIME:      {:.4?}\n\n",
+                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.1?}\nTOTAL RUNNING TIME:      {:.1?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
                     total_time.div_f64(i as f64),
                     total_time,

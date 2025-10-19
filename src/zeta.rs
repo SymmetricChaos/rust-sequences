@@ -1,6 +1,8 @@
 use num::BigRational;
 
-use crate::core::{nth_powers::NthPowers, summation::PartialSums, transforms::IntegerReciprocals};
+use crate::core::{
+    nth_powers::NthPowers, rational_transforms::IntegerReciprocals, summation::PartialSums,
+};
 
 /// The partial sums of the Riemann zeta function for natural numbers greater than zero
 pub struct Zeta {

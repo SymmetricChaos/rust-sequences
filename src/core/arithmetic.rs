@@ -7,14 +7,12 @@ pub struct Arithmetic<T> {
 }
 
 impl<T> Arithmetic<T> {
-    /// Sequence using a primitive integer type.
     pub fn new(init: T, inc: T) -> Self {
         Self { val: init, inc }
     }
 }
 
 impl Arithmetic<BigInt> {
-    /// Sequence using the BigInt type.
     pub fn new_big<G>(init: G, inc: G) -> Self
     where
         BigInt: From<G>,
