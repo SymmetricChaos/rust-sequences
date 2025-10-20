@@ -32,7 +32,9 @@ pub fn factoradic_permutation<N: Integer>(mut n: N, size: usize) -> Option<Vec<N
     Some(out.into_iter().rev().collect())
 }
 
-/// The factoradic representation of each non-negative integer. Also known as the factorial base representation. These can be used to define an ordering for permutations.
+/// The factoradic representation of each non-negative integer.
+/// When size is 0 this is also known as the factorial base representation and is infinite.
+/// For any other value of size the output is finite and orders the permutations of set.
 pub struct Factoradic<T> {
     ctr: T,
     size: usize,
@@ -68,6 +70,8 @@ impl<T: Clone + CheckedAdd + Integer> Iterator for Factoradic<T> {
 
 crate::print_values!(
     print_array, formatter "{:?}", sep "\n";
-    Factoradic::new_big(0), 0, 12;
-    Factoradic::new_big(3), 0, 12;
+    Factoradic::new_big(0), 0, 10;
+    Factoradic::new_big(1), 0, 10;
+    Factoradic::new_big(2), 0, 10;
+    Factoradic::new_big(3), 0, 10;
 );
