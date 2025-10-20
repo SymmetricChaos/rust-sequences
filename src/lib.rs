@@ -13,11 +13,11 @@ pub mod fibonacci;
 pub mod figurate;
 pub mod gray;
 pub mod harmonic;
+pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod mobius;
-pub mod nonhypotenuse;
 pub mod odious;
 pub mod partition;
 pub mod pell;
@@ -33,13 +33,6 @@ pub mod thue_morse;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;
-
-// #[macro_export]
-// macro_rules! generic_two {
-//     ($n:ty) => {
-//         <$n>::one() + <$n>::one()
-//     };
-// }
 
 #[macro_export]
 macro_rules! increment {

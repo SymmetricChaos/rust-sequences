@@ -4,16 +4,12 @@ use crate::core::primality_utils::prime_factorization;
 /// 5, 13, 17, 25, 29, 37, 41, 53, 61, 65...
 pub struct Hypotenuse {
     ctr: u64,
-    // _phantom: PhantomData<T>,
 }
 
 impl Hypotenuse {
     /// Only u64 output is currently supported.
     pub fn new() -> Self {
-        Self {
-            ctr: 1,
-            // _phantom: PhantomData,
-        }
+        Self { ctr: 1 }
     }
 }
 
@@ -40,16 +36,12 @@ impl Iterator for Hypotenuse {
 /// 1, 2, 3, 4, 6, 7, 8, 9, 11, 12...
 pub struct Nonhypotenuse {
     ctr: u64,
-    // _phantom: PhantomData<T>,
 }
 
 impl Nonhypotenuse {
     /// Only u64 output is currently supported.
     pub fn new() -> Self {
-        Self {
-            ctr: 0,
-            // _phantom: PhantomData,
-        }
+        Self { ctr: 0 }
     }
 }
 

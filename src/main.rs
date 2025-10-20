@@ -109,7 +109,7 @@ fn prime_factorization_timings() {
     }
 }
 
-// run with cargo run --release
+// cargo run --release
 fn main() {
     // partial_factorization_density_test();
     prime_factorization_timings();
