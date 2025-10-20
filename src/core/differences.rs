@@ -1,6 +1,6 @@
 use num::{CheckedSub, Signed};
 
-/// The absolute differences of every adjecent pair from a sequence. |f(x+1) - f(x)|
+/// The first absolute differences of a sequence: |f(x+1) - f(x)|
 pub struct AbsDiffs<T> {
     prev: T,
     iter: Box<dyn Iterator<Item = T>>,

@@ -7,6 +7,7 @@ pub mod digital_product;
 pub mod digital_sum;
 pub mod eulers_number;
 pub mod evil;
+pub mod factoradic;
 pub mod farey;
 pub mod fibonacci;
 pub mod figurate;
