@@ -1,20 +1,32 @@
-use itertools::Itertools;
-use num::{BigInt, Integer, One, Signed, Zero};
-
 use crate::core::prime::Primes;
+use itertools::Itertools;
+use num::{BigInt, CheckedAdd, CheckedDiv, Integer, PrimInt, Signed, Zero};
+use std::hash::Hash;
 
 /// The smooth numbers, those natural numbers for which the only prime divisors are less than or equal to n.
-pub struct Smooth {
-    ctr: BigInt,
-    primes: Vec<BigInt>,
+pub struct Smooth<T> {
+    ctr: T,
+    primes: Vec<T>,
 }
 
-impl Smooth {
+impl<T: PrimInt + Hash> Smooth<T> {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
-    pub fn new_big<T>(n: T) -> Self
+    pub fn new(n: T) -> Self {
+        assert!(n > T::one());
+        Self {
+            ctr: T::zero(),
+            primes: Primes::new().take_while(|x| *x <= n).collect_vec(),
+        }
+    }
+}
+
+impl Smooth<BigInt> {
+    /// Panics if n is less than two.
+    /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
+    pub fn new_big<N>(n: N) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<N>,
     {
         let n = BigInt::from(n);
         assert!(n.is_positive());
@@ -25,16 +37,16 @@ impl Smooth {
     }
 }
 
-impl Iterator for Smooth {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer + CheckedDiv> Iterator for Smooth<T> {
+    type Item = T;
 
-    fn next(&mut self) -> Option<BigInt> {
+    fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.ctr += 1;
+            self.ctr = self.ctr.checked_add(&T::one())?;
             let mut n = self.ctr.clone();
             for p in self.primes.iter() {
                 while n.is_multiple_of(p) {
-                    n = n / p
+                    n = n.checked_div(&p)?; // this always succeeds but is the only way I could find to allow division without cloning p
                 }
             }
             if n.is_one() {

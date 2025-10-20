@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, FromPrimitive, Integer, PrimInt};
+use num::{BigInt, CheckedAdd, Integer, One, PrimInt};
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1))
 pub struct Rowland<T> {
@@ -22,7 +22,7 @@ impl Rowland<BigInt> {
     {
         Self {
             value: BigInt::from(initial),
-            ctr: BigInt::from_i32(2).unwrap(),
+            ctr: BigInt::one() + BigInt::one(),
         }
     }
 }
@@ -38,7 +38,7 @@ impl<T: Clone + Integer + CheckedAdd> Iterator for Rowland<T> {
     }
 }
 
-/// Rowland's prime generating sequence. The
+/// Rowland's prime generating sequence. The first differences of Rowland's sequence.
 pub struct RowlandPrime<T> {
     value: T,
     ctr: T,
@@ -60,7 +60,7 @@ impl RowlandPrime<BigInt> {
     {
         Self {
             value: BigInt::from(initial),
-            ctr: BigInt::from_i32(2).unwrap(),
+            ctr: BigInt::one() + BigInt::one(),
         }
     }
 }
