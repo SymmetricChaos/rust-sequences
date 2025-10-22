@@ -1,16 +1,30 @@
-use num::{BigInt, Integer, Zero};
+use std::hash::Hash;
+
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, PrimInt, Zero};
 
 use crate::core::{primality_utils::squarefree_kernel, prime::Primes};
 
 /// Natural numbers that are not divisible twice by any natural number except one.
 /// 1, 2, 3, 5, 6, 7, 10, 11, 13, 14...
-pub struct Squarefree {
-    ctr: BigInt,
-    squares: Vec<BigInt>,
-    primes: Primes<BigInt>,
+pub struct Squarefree<T> {
+    ctr: T,
+    squares: Vec<T>,
+    primes: Primes<T>,
 }
 
-impl Squarefree {
+impl<T: PrimInt + Hash> Squarefree<T> {
+    pub fn new() -> Self {
+        let mut primes = Primes::new();
+        primes.next();
+        Self {
+            ctr: T::zero(),
+            squares: vec![T::one() + T::one() + T::one() + T::one()],
+            primes,
+        }
+    }
+}
+
+impl Squarefree<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();
         primes.next();
@@ -22,15 +36,18 @@ impl Squarefree {
     }
 }
 
-impl Iterator for Squarefree {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Squarefree<T>
+where
+    T: Hash,
+{
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
-            self.ctr += 1;
+            self.ctr = self.ctr.checked_add(&T::one())?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(&n * &n);
+                self.squares.push(n.checked_mul(&n)?);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {
