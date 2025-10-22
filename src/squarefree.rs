@@ -4,7 +4,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer, PrimInt, Zero};
 
 use crate::core::{primality_utils::squarefree_kernel, prime::Primes};
 
-/// Natural numbers that are not divisible twice by any natural number except one.
+/// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
 /// 1, 2, 3, 5, 6, 7, 10, 11, 13, 14...
 pub struct Squarefree<T> {
     ctr: T,
