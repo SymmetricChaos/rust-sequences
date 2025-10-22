@@ -67,6 +67,7 @@ pub struct SquarefreeKernels {
 }
 
 impl SquarefreeKernels {
+    /// Only u64 currently supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -83,13 +84,25 @@ impl Iterator for SquarefreeKernels {
 
 /// Positive natural numbers that are divisible at least twice by at least one natural number other than one.
 /// 4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28...
-pub struct Squareful {
-    ctr: BigInt,
-    squares: Vec<BigInt>,
-    primes: Primes<BigInt>,
+pub struct Squareful<T> {
+    ctr: T,
+    squares: Vec<T>,
+    primes: Primes<T>,
 }
 
-impl Squareful {
+impl<T: PrimInt + Hash> Squareful<T> {
+    pub fn new() -> Self {
+        let mut primes = Primes::new();
+        primes.next();
+        Self {
+            ctr: T::zero(),
+            squares: vec![T::one() + T::one() + T::one() + T::one()],
+            primes,
+        }
+    }
+}
+
+impl Squareful<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();
         primes.next();
@@ -101,15 +114,18 @@ impl Squareful {
     }
 }
 
-impl Iterator for Squareful {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Squareful<T>
+where
+    T: Hash,
+{
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
-            self.ctr += 1;
+            self.ctr = self.ctr.checked_add(&T::one())?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(&n * &n);
+                self.squares.push(n.checked_mul(&n)?);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {
@@ -123,6 +139,6 @@ impl Iterator for Squareful {
 
 crate::check_sequences!(
     Squarefree::new_big(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
-    SquarefreeKernels::new(), 0, 20, [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19];
+    SquarefreeKernels::new(), 0, 20, [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19, 10];
     Squareful::new_big(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
 );
