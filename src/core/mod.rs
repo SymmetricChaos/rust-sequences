@@ -10,6 +10,7 @@ pub mod differences;
 pub mod divisor;
 pub mod exponential;
 pub mod factorial;
+pub mod finite_int;
 pub mod geometric;
 pub mod integer;
 pub mod natural;
