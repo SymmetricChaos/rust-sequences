@@ -91,11 +91,14 @@ fn prime_factorization_timings() {
         }
 
         // Heatbeat and average
-        // Before 4,294,967,295 update every fifty million, after check only every 4,294,967,295
-        if (i % 50_000_000 == 0 && i < u32::MAX as u64) || i % u32::MAX as u64 == 0 {
+        // Before 4,294,967,295 update every fifty million, after check at one tenth the rate
+        if (i % 50_000_000 == 0 && i < u32::MAX as u64)
+            || i == u32::MAX as u64
+            || i % 500_000_000 == 0
+        {
             file.write_all(
                 format!(
-                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.1?}\nTOTAL RUNNING TIME:      {:.1?}\n\n",
+                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.0?}\nTOTAL RUNNING TIME:      {:.0?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
                     total_time.div_f64(i as f64),
                     total_time,
