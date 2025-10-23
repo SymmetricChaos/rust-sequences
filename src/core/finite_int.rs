@@ -3,13 +3,13 @@ use num::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, One, Zero};
 use std::fmt::{Debug, Display};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-/// FiniteInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication
+/// FiniteInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication.
 /// If N is not prime, division will fail for some inputs.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct FiniteInt<const N: i32>(i32);
 
 impl<const N: i32> FiniteInt<N> {
-    /// Create a new FiniteInt by reducing the input to ensure it is valid
+    /// Create a new FiniteInt from an i32 and force it to a valid value
     pub fn new(n: i32) -> Self {
         Self(mod_floor(n, N))
     }
