@@ -1,5 +1,7 @@
 use num::{BigInt, Zero};
 
+//TODO: Is there a reasonable way to make this generic?
+
 /// The evil numbers, those having an even number of bits set in their binary representation.
 /// 0, 3, 5, 6, 9, 10, 12, 15, 17, 18...
 pub struct Evil {
@@ -19,12 +21,12 @@ impl Iterator for Evil {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            let mut odious = false;
+            let mut evil = false;
             for i in 0..self.ctr.bits() {
-                odious ^= self.ctr.bit(i);
+                evil ^= self.ctr.bit(i);
             }
 
-            if odious {
+            if evil {
                 self.ctr += 1;
             } else {
                 let out = self.ctr.clone();

@@ -10,7 +10,7 @@ pub struct Farey {
 }
 
 impl Farey {
-    /// The ascending Farey sequence of order k.
+    /// The ascending Farey sequence of order k. Panics if k is not positive.
     pub fn new_big<T>(k: T) -> Self
     where
         BigInt: From<T>,
@@ -26,7 +26,7 @@ impl Farey {
         }
     }
 
-    /// The ascending Farey sequence of order k.
+    /// The ascending Farey sequence of order k. Panics if k is not positive.
     pub fn new_big_ascending<T>(k: T) -> Self
     where
         BigInt: From<T>,
@@ -42,7 +42,7 @@ impl Farey {
         }
     }
 
-    /// The descending Farey sequence of order k.
+    /// The descending Farey sequence of order k. Panics if k is not positive.
     pub fn new_big_descending<T>(k: T) -> Self
     where
         BigInt: From<T>,
