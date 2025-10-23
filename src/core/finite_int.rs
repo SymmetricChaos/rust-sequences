@@ -5,7 +5,7 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssi
 
 /// FiniteInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication
 /// If N is not prime, division will fail for some inputs.
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct FiniteInt<const N: i32>(i32);
 
 impl<const N: i32> FiniteInt<N> {

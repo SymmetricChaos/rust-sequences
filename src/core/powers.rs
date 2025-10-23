@@ -1,12 +1,18 @@
-use num::{BigInt, One};
+use num::{BigInt, CheckedMul, One};
 
 /// The powers of n.
-pub struct Powers {
-    value: BigInt,
-    n: BigInt,
+pub struct Powers<T> {
+    value: T,
+    n: T,
 }
 
-impl Powers {
+impl<T: One> Powers<T> {
+    pub fn new(n: T) -> Self {
+        Self { value: T::one(), n }
+    }
+}
+
+impl Powers<BigInt> {
     pub fn new_big<T: Clone>(n: T) -> Self
     where
         BigInt: From<T>,
@@ -18,26 +24,27 @@ impl Powers {
     }
 }
 
-impl Iterator for Powers {
-    type Item = BigInt;
+impl<T: CheckedMul + Clone> Iterator for Powers<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.value.clone();
-        self.value *= &self.n;
+        self.value = self.value.checked_mul(&self.n)?;
         Some(out)
     }
 
     // Should be slightly faster than iteration with .next()
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        self.value *= self.n.pow(n.try_into().unwrap());
-        let out = self.value.clone();
-        self.value *= &self.n;
-        Some(out)
-    }
+    // fn nth(&mut self, n: usize) -> Option<Self::Item> {
+    //     self.value *= self.n.pow(n.try_into().unwrap());
+    //     let out = self.value.clone();
+    //     self.value *= &self.n;
+    //     Some(out)
+    // }
 }
 
 crate::print_values!(
     Powers::new_big(3), 5, 10;
+    Powers::new(crate::core::finite_int::FiniteInt::<17>::new(2)), 0, 20;
 );
 
 crate::check_sequences!(
