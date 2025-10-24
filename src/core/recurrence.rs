@@ -8,7 +8,7 @@ pub struct AdditiveLinearRecurrence<T> {
     coefs: Vec<T>,
 }
 
-impl<T: Clone> AdditiveLinearRecurrence<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Zero> AdditiveLinearRecurrence<T> {
     /// The simplest linear recurrence with two terms and two coefficients.
     pub fn new(a: T, b: T, p: T, q: T) -> Self {
         Self {
@@ -60,7 +60,7 @@ impl AdditiveLinearRecurrence<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Zero> Iterator for AdditiveLinearRecurrence<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Zero> Iterator for AdditiveLinearRecurrence<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

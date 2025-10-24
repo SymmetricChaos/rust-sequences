@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Zero, rational::Ratio};
+use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, rational::Ratio};
 
 // The positive rational numbers in anti-diagonal order
 pub struct Rationals<N> {
@@ -7,7 +7,7 @@ pub struct Rationals<N> {
     row: N,
 }
 
-impl<N: One + Zero> Rationals<N> {
+impl<N: CheckedAdd + CheckedSub + Clone + One + Ord + Integer> Rationals<N> {
     pub fn new() -> Self {
         Self {
             numer: N::one(),

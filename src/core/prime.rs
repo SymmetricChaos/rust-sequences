@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, PrimInt, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 use std::{
     collections::{BinaryHeap, HashMap},
     hash::Hash, // Found to be much faster than BTreeMap
@@ -13,7 +13,7 @@ pub struct Primes<T> {
     n: T,
 }
 
-impl<T: PrimInt> Primes<T> {
+impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Primes<T> {
     pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
@@ -31,7 +31,7 @@ impl Primes<BigInt> {
     }
 }
 
-impl<T: Zero + One + CheckedAdd + Clone + Hash + Eq> Iterator for Primes<T> {
+impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Primes<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -151,7 +151,7 @@ pub struct PrimePowers<T: Eq> {
     primes: Primes<T>,
 }
 
-impl<T: PrimInt> PrimePowers<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Ord + Zero> PrimePowers<T> {
     pub fn new() -> Self {
         Self {
             queue: BinaryHeap::new(),
@@ -169,7 +169,7 @@ impl PrimePowers<BigInt> {
     }
 }
 
-impl<T: Eq + CheckedAdd + CheckedMul + Clone + Hash + One + Zero + Ord + PartialOrd> Iterator
+impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Ord + Zero> Iterator
     for PrimePowers<T>
 {
     type Item = T;
@@ -197,7 +197,7 @@ pub struct Primorial<T> {
     primes: Primes<T>,
 }
 
-impl<T: PrimInt> Primorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Zero> Primorial<T> {
     pub fn new() -> Self {
         Self {
             prod: T::one(),
@@ -215,7 +215,7 @@ impl Primorial<BigInt> {
     }
 }
 
-impl<T: Zero + One + CheckedAdd + CheckedMul + Clone + Hash + Eq> Iterator for Primorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Zero> Iterator for Primorial<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

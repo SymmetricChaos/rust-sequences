@@ -1,6 +1,4 @@
-use num::{
-    BigInt, CheckedAdd, CheckedDiv, CheckedMul, FromPrimitive, Integer, PrimInt, rational::Ratio,
-};
+use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer, One, rational::Ratio};
 
 /// Convergents of the principal square root of a rational number by Newton's Method.
 pub struct SquareRoot<T> {
@@ -8,7 +6,7 @@ pub struct SquareRoot<T> {
     s: Ratio<T>,
 }
 
-impl<T: PrimInt + Integer> SquareRoot<T> {
+impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> SquareRoot<T> {
     pub fn new(numer: T, denom: T) -> Self {
         let n = numer;
         let d = denom;
@@ -33,15 +31,13 @@ impl SquareRoot<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> Iterator
-    for SquareRoot<T>
-{
+impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> Iterator for SquareRoot<T> {
     type Item = Ratio<T>;
 
     // (x+s/x)/2
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.convergent.clone();
-        let half = Ratio::new(T::from_i32(1)?, T::from_i32(2)?);
+        let half = Ratio::new(T::one(), T::one() + T::one());
         self.convergent = self
             .convergent
             .checked_add(&self.s.checked_div(&self.convergent)?)?
@@ -56,7 +52,7 @@ pub struct CubeRoot<T> {
     s: Ratio<T>,
 }
 
-impl<T: PrimInt + Integer> CubeRoot<T> {
+impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> CubeRoot<T> {
     pub fn new(num: T, den: T) -> Self {
         let n = num;
         let d = den;
@@ -81,16 +77,14 @@ impl CubeRoot<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedDiv + CheckedAdd + CheckedMul + Integer + FromPrimitive> Iterator
-    for CubeRoot<T>
-{
+impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> Iterator for CubeRoot<T> {
     type Item = Ratio<T>;
 
     // (s/x^2 + 2x)/3
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.convergent.clone();
         let two_x = self.convergent.checked_add(&self.convergent)?;
-        let third = Ratio::new(T::from_i32(1)?, T::from_i32(3)?);
+        let third = Ratio::new(T::one(), T::one() + T::one() + T::one());
         let squ = self.convergent.checked_mul(&self.convergent)?;
         self.convergent = self
             .s

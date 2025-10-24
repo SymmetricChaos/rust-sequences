@@ -1,4 +1,4 @@
-use num::{CheckedAdd, CheckedSub, Integer, One, Zero, rational::Ratio};
+use num::{CheckedAdd, CheckedSub, Integer, Zero, rational::Ratio};
 
 /// Sequence of partial sums. Returns None if overflow occurs or sequence ends.
 pub struct PartialSums<T> {
@@ -6,7 +6,7 @@ pub struct PartialSums<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: Zero> PartialSums<T> {
+impl<T: CheckedAdd + Clone + Zero> PartialSums<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -35,7 +35,7 @@ pub struct PartialSumsAlternating<T> {
     subtract: bool,
 }
 
-impl<T: Zero> PartialSumsAlternating<T> {
+impl<T: CheckedAdd + CheckedSub + Clone + Zero> PartialSumsAlternating<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -70,7 +70,7 @@ pub struct CesaroPartialSums<T> {
     ctr: T,
 }
 
-impl<T: One + Zero> CesaroPartialSums<T> {
+impl<T: CheckedAdd + Clone + Integer> CesaroPartialSums<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -83,7 +83,7 @@ impl<T: One + Zero> CesaroPartialSums<T> {
     }
 }
 
-impl<T: Clone + CheckedAdd + Integer> Iterator for CesaroPartialSums<T> {
+impl<T: CheckedAdd + Clone + Integer> Iterator for CesaroPartialSums<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

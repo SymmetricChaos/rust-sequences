@@ -6,7 +6,7 @@ pub struct PartialProds<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: One> PartialProds<T> {
+impl<T: CheckedMul + Clone + One> PartialProds<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,

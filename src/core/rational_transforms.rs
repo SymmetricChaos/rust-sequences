@@ -5,7 +5,7 @@ pub struct IntegerReciprocals<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T> IntegerReciprocals<T> {
+impl<T: Clone + Integer> IntegerReciprocals<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
