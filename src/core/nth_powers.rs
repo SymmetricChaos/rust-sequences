@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, PrimInt};
+use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 use crate::core::natural::Naturals;
 
@@ -8,7 +8,7 @@ pub struct NthPowers<T> {
     p: usize,
 }
 
-impl<T: PrimInt> NthPowers<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> NthPowers<T> {
     pub fn new(p: u32) -> Self {
         Self {
             nats: Naturals::<T>::new(),
@@ -26,7 +26,7 @@ impl NthPowers<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + One + CheckedMul> Iterator for NthPowers<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for NthPowers<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

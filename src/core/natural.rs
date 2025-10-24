@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, One, PrimInt, Zero};
+use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The natural numbers. The non-negative integers.
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
@@ -6,7 +6,7 @@ pub struct Naturals<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> Naturals<T> {
+impl<T: CheckedAdd + Clone + One + Zero> Naturals<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -20,7 +20,7 @@ impl Naturals<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + One> Iterator for Naturals<T> {
+impl<T: CheckedAdd + Clone + One> Iterator for Naturals<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

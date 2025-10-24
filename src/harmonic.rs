@@ -68,4 +68,6 @@ impl<T: Integer + Clone + CheckedAdd + CheckedMul> Iterator for HarmonicSums<T> 
 crate::print_values!(
     Harmonic::new_big(), 0, 10;
     HarmonicSums::new_big(), 0, 10;
+    Harmonic::<i32>::new(), 0, 10;
+    HarmonicSums::<i32>::new(), 0, 10;
 );
