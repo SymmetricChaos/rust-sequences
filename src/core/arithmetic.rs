@@ -6,7 +6,7 @@ pub struct Arithmetic<T> {
     inc: T,
 }
 
-impl<T> Arithmetic<T> {
+impl<T: CheckedAdd + Clone> Arithmetic<T> {
     pub fn new(init: T, inc: T) -> Self {
         Self { val: init, inc }
     }

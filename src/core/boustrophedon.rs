@@ -6,7 +6,7 @@ pub struct Boustrophedon<T> {
     row: Vec<T>,
 }
 
-impl<T> Boustrophedon<T> {
+impl<T: CheckedAdd + Clone> Boustrophedon<T> {
     pub fn new<I>(mut iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -18,7 +18,7 @@ impl<T> Boustrophedon<T> {
     }
 }
 
-impl<T: Clone + CheckedAdd> Iterator for Boustrophedon<T> {
+impl<T: CheckedAdd + Clone> Iterator for Boustrophedon<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -40,7 +40,7 @@ pub struct BoustrophedonTriangle<T> {
     row: Vec<T>,
 }
 
-impl<T> BoustrophedonTriangle<T> {
+impl<T: CheckedAdd + Clone> BoustrophedonTriangle<T> {
     pub fn new<I>(mut iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -52,7 +52,7 @@ impl<T> BoustrophedonTriangle<T> {
     }
 }
 
-impl<T: Clone + CheckedAdd> Iterator for BoustrophedonTriangle<T> {
+impl<T: CheckedAdd + Clone> Iterator for BoustrophedonTriangle<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
