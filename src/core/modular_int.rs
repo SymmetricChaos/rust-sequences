@@ -1,14 +1,15 @@
 use num::integer::mod_floor;
 use num::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, One, Zero};
 use std::fmt::{Debug, Display};
+use std::hash::Hash;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 /// FiniteInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication.
 /// If N is not prime, division will fail for some inputs.
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub struct FiniteInt<const N: i32>(i32);
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct ModInt<const N: i32>(i32);
 
-impl<const N: i32> FiniteInt<N> {
+impl<const N: i32> ModInt<N> {
     /// Create a new FiniteInt from an i32 and force it to a valid value
     pub fn new(n: i32) -> Self {
         Self(mod_floor(n, N))
@@ -30,9 +31,9 @@ impl<const N: i32> FiniteInt<N> {
     }
 }
 
-impl<const N: i32> Zero for FiniteInt<N> {
+impl<const N: i32> Zero for ModInt<N> {
     fn zero() -> Self {
-        FiniteInt(0)
+        ModInt(0)
     }
 
     fn is_zero(&self) -> bool {
@@ -40,9 +41,9 @@ impl<const N: i32> Zero for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> One for FiniteInt<N> {
+impl<const N: i32> One for ModInt<N> {
     fn one() -> Self {
-        FiniteInt(1)
+        ModInt(1)
     }
 
     fn is_one(&self) -> bool {
@@ -50,19 +51,19 @@ impl<const N: i32> One for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> Display for FiniteInt<N> {
+impl<const N: i32> Display for ModInt<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
 }
 
-impl<const N: i32> Debug for FiniteInt<N> {
+impl<const N: i32> Debug for ModInt<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}[{}]", self.0, N)
     }
 }
 
-impl<const N: i32> Add for FiniteInt<N> {
+impl<const N: i32> Add for ModInt<N> {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -70,19 +71,19 @@ impl<const N: i32> Add for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> AddAssign for FiniteInt<N> {
+impl<const N: i32> AddAssign for ModInt<N> {
     fn add_assign(&mut self, rhs: Self) {
         *self = Self((self.0 + rhs.0) % N)
     }
 }
 
-impl<const N: i32> CheckedAdd for FiniteInt<N> {
+impl<const N: i32> CheckedAdd for ModInt<N> {
     fn checked_add(&self, v: &Self) -> Option<Self> {
         Some(Self(self.0.checked_add(v.0)? % N))
     }
 }
 
-impl<const N: i32> Sub for FiniteInt<N> {
+impl<const N: i32> Sub for ModInt<N> {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -90,19 +91,19 @@ impl<const N: i32> Sub for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> SubAssign for FiniteInt<N> {
+impl<const N: i32> SubAssign for ModInt<N> {
     fn sub_assign(&mut self, rhs: Self) {
         *self = *self + -rhs;
     }
 }
 
-impl<const N: i32> CheckedSub for FiniteInt<N> {
+impl<const N: i32> CheckedSub for ModInt<N> {
     fn checked_sub(&self, v: &Self) -> Option<Self> {
         Some(Self((self.0 + N).checked_sub(v.0)? % N))
     }
 }
 
-impl<const N: i32> Mul for FiniteInt<N> {
+impl<const N: i32> Mul for ModInt<N> {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self::Output {
@@ -110,19 +111,19 @@ impl<const N: i32> Mul for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> MulAssign for FiniteInt<N> {
+impl<const N: i32> MulAssign for ModInt<N> {
     fn mul_assign(&mut self, rhs: Self) {
         *self = Self((self.0 * rhs.0) % N)
     }
 }
 
-impl<const N: i32> CheckedMul for FiniteInt<N> {
+impl<const N: i32> CheckedMul for ModInt<N> {
     fn checked_mul(&self, v: &Self) -> Option<Self> {
         Some(Self(self.0.checked_mul(v.0)? % N))
     }
 }
 
-impl<const N: i32> Div for FiniteInt<N> {
+impl<const N: i32> Div for ModInt<N> {
     type Output = Self;
 
     fn div(self, rhs: Self) -> Self::Output {
@@ -130,25 +131,33 @@ impl<const N: i32> Div for FiniteInt<N> {
     }
 }
 
-impl<const N: i32> DivAssign for FiniteInt<N> {
+impl<const N: i32> DivAssign for ModInt<N> {
     fn div_assign(&mut self, rhs: Self) {
         *self = *self * rhs.recip().unwrap()
     }
 }
 
-impl<const N: i32> CheckedDiv for FiniteInt<N> {
+impl<const N: i32> CheckedDiv for ModInt<N> {
     fn checked_div(&self, v: &Self) -> Option<Self> {
         self.checked_mul(&v.recip()?)
     }
 }
 
-impl<const N: i32> Neg for FiniteInt<N> {
+impl<const N: i32> Neg for ModInt<N> {
     type Output = Self;
 
     fn neg(self) -> Self::Output {
         Self::new(-self.0)
     }
 }
+
+// Unclear if separating hashes by the value of N is meaningful
+// impl<const N: i32> Hash for FiniteInt<N> {
+//     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+//         self.0.hash(state);
+//         N.hash(state);
+//     }
+// }
 
 #[cfg(test)]
 mod math_tests {
@@ -157,7 +166,7 @@ mod math_tests {
 
     #[test]
     fn mul() {
-        type FI26 = FiniteInt<26>;
+        type FI26 = ModInt<26>;
         let a = FI26::new(5);
         let b = FI26::new(7);
         println!("{} * {} = {}", a, b, a * b);
@@ -168,37 +177,37 @@ mod math_tests {
 
     #[test]
     fn add() {
-        let a = FiniteInt::<26>(5);
-        let b = FiniteInt::<26>(7);
+        let a = ModInt::<26>(5);
+        let b = ModInt::<26>(7);
         println!("{} + {} = {}", a, b, a + b);
-        let a = FiniteInt::<26>(20);
-        let b = FiniteInt::<26>(10);
+        let a = ModInt::<26>(20);
+        let b = ModInt::<26>(10);
         println!("{} + {} = {}", a, b, a + b)
     }
 
     #[test]
     fn sub() {
-        let a = FiniteInt::<26>(5);
-        let b = FiniteInt::<26>(7);
+        let a = ModInt::<26>(5);
+        let b = ModInt::<26>(7);
         println!("{} - {} = {}", a, b, a - b)
     }
 
     #[test]
     fn div() {
-        let a = FiniteInt::<26>(5);
-        let b = FiniteInt::<26>(7);
+        let a = ModInt::<26>(5);
+        let b = ModInt::<26>(7);
         println!("{} / {} = {}", a, b, a / b)
     }
 
     #[test]
     fn recip() {
-        let a = FiniteInt::<26>(5);
+        let a = ModInt::<26>(5);
         println!("1 / {} = {}", a, a.recip().unwrap())
     }
 
     #[test]
     fn neg() {
-        let a = FiniteInt::<26>(11);
+        let a = ModInt::<26>(11);
         println!("{} + {} = {}", a, -a, a + -a)
     }
 }

@@ -44,7 +44,7 @@ impl<T: CheckedMul + Clone> Iterator for Powers<T> {
 
 crate::print_values!(
     Powers::new_big(3), 5, 10;
-    Powers::new(crate::core::finite_int::FiniteInt::<17>::new(2)), 0, 20;
+    Powers::new(crate::core::modular_int::ModInt::<17>::new(2)), 0, 20;
 );
 
 crate::check_sequences!(
