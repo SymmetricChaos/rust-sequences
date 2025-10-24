@@ -6,7 +6,7 @@ pub struct Powers<T> {
     n: T,
 }
 
-impl<T: One> Powers<T> {
+impl<T: CheckedMul + Clone + One> Powers<T> {
     pub fn new(n: T) -> Self {
         Self { value: T::one(), n }
     }

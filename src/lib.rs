@@ -96,7 +96,7 @@ macro_rules! check_iteration_times {
                 };
                 let n = s.next().unwrap();
                 let elapsed = t.elapsed();
-                println!("{} {} -> {:?}\nduration: {:?}", stringify!($seq), $skip, n, elapsed);
+                println!("{} {} -> {:?}\nduration: {:?}\n", stringify!($seq), $skip, n, elapsed);
             )+
         }
     };

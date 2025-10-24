@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use num::{BigInt, One, PrimInt, Signed, Zero};
+use num::{BigInt, CheckedAdd, One, Signed, Zero};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
@@ -9,7 +9,7 @@ pub struct Parity<T> {
     _type: PhantomData<T>,
 }
 
-impl<T: PrimInt> Parity<T> {
+impl<T: One + Zero> Parity<T> {
     pub fn new() -> Self {
         Self {
             value: false,
@@ -42,86 +42,92 @@ impl<T: One + Zero> Iterator for Parity<T> {
 
 /// The even natural numbers.
 /// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...
-pub struct Evens {
-    val: BigInt,
+pub struct Evens<T> {
+    val: T,
 }
 
-impl Evens {
+impl<T: CheckedAdd + Clone + One + Zero> Evens<T> {
+    pub fn new() -> Self {
+        Self { val: T::zero() }
+    }
+}
+
+impl Evens<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            val: BigInt::from(0),
+            val: BigInt::zero(),
         }
     }
 }
 
-impl Iterator for Evens {
-    type Item = BigInt;
+impl<T: CheckedAdd + Clone + One> Iterator for Evens<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val += 2;
+        self.val = self.val.checked_add(&(T::one() + T::one()))?;
         Some(out)
-    }
-
-    // Nearly constant time optimization for .skip()
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        self.val += BigInt::from(n) * 2;
-        Some(self.val.clone())
     }
 }
 
 /// The odd natural numbers.
 /// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19...
-pub struct Odds {
-    val: BigInt,
+pub struct Odds<T> {
+    val: T,
 }
 
-impl Odds {
+impl<T: CheckedAdd + Clone + One> Odds<T> {
+    pub fn new() -> Self {
+        Self { val: T::one() }
+    }
+}
+
+impl Odds<BigInt> {
     pub fn new_big() -> Self {
         Self { val: BigInt::one() }
     }
 }
 
-impl Iterator for Odds {
-    type Item = BigInt;
+impl<T: CheckedAdd + Clone + One> Iterator for Odds<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val += 2;
+        self.val = self.val.checked_add(&(T::one() + T::one()))?;
         Some(out)
-    }
-
-    // Nearly constant time optimization for .skip()
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        self.val += 2 * BigInt::from(n);
-        Some(self.val.clone())
     }
 }
 
 /// The even integers.
 /// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10...
-pub struct EvenIntegers {
-    val: BigInt,
+pub struct EvenIntegers<T> {
+    val: T,
 }
 
-impl EvenIntegers {
+impl<T: CheckedAdd + Clone + One + Signed + Zero> EvenIntegers<T> {
+    pub fn new() -> Self {
+        Self { val: T::zero() }
+    }
+}
+
+impl EvenIntegers<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            val: BigInt::from(0),
+            val: BigInt::zero(),
         }
     }
 }
 
-impl Iterator for EvenIntegers {
-    type Item = BigInt;
+impl<T: CheckedAdd + Clone + Signed + One> Iterator for EvenIntegers<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
         if self.val.is_positive() {
-            self.val = -&self.val;
+            self.val = -self.val.clone();
         } else {
-            self.val = -&self.val;
-            self.val += 2;
+            self.val = -self.val.clone();
+            self.val = self.val.checked_add(&(T::one() + T::one()))?;
         };
 
         Some(out)
@@ -130,29 +136,33 @@ impl Iterator for EvenIntegers {
 
 /// The odd integers.
 /// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9...
-pub struct OddIntegers {
-    val: BigInt,
+pub struct OddIntegers<T> {
+    val: T,
 }
 
-impl OddIntegers {
-    pub fn new_big() -> Self {
-        Self {
-            val: BigInt::from(1),
-        }
+impl<T: CheckedAdd + Clone + Signed + One> OddIntegers<T> {
+    pub fn new() -> Self {
+        Self { val: T::one() }
     }
 }
 
-impl Iterator for OddIntegers {
-    type Item = BigInt;
+impl OddIntegers<BigInt> {
+    pub fn new_big() -> Self {
+        Self { val: BigInt::one() }
+    }
+}
+
+impl<T: CheckedAdd + Clone + Signed + One> Iterator for OddIntegers<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
 
         if self.val.is_positive() {
-            self.val = -&self.val;
+            self.val = -self.val.clone();
         } else {
-            self.val = -&self.val;
-            self.val += 2;
+            self.val = -self.val.clone();
+            self.val = self.val.checked_add(&(T::one() + T::one()))?;
         };
 
         Some(out)
@@ -160,12 +170,14 @@ impl Iterator for OddIntegers {
 }
 
 crate::check_iteration_times!(
-    Evens::new_big(), 1_000_000;
-    Evens::new_big().skip(1_000_000), 1;
+    Evens::new_big(), 5_000_000;
+    Evens::<i32>::new(), 5_000_000;
+    EvenIntegers::new_big(), 5_000_000;
+    EvenIntegers::<i32>::new(), 5_000_000;
 );
 
 crate::check_sequences!(
-    Evens::new_big(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    Evens::<i32>::new(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
     EvenIntegers::new_big(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
     Odds::new_big(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
     OddIntegers::new_big(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
