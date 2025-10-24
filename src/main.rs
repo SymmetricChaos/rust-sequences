@@ -4,7 +4,7 @@ use rust_sequences::core::primality_utils::{
 };
 use std::{collections::BTreeMap, io::Write, u64};
 
-fn partial_factorization_density_test() {
+fn _partial_factorization_density_test() {
     let start = 1;
     let end = u32::MAX as u64;
     let mut num_factored = 0;

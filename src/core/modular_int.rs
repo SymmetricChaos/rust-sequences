@@ -4,18 +4,20 @@ use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-/// FiniteInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication.
+//TODO: This could be made generic over architecture pointer size
+
+/// ModInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication.
 /// If N is not prime, division will fail for some inputs.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ModInt<const N: i32>(i32);
 
 impl<const N: i32> ModInt<N> {
-    /// Create a new FiniteInt from an i32 and force it to a valid value
+    /// Create a new ModInt from an i32 and force it to a valid value
     pub fn new(n: i32) -> Self {
         Self(mod_floor(n, N))
     }
 
-    /// Create a new FiniteInt without checking the input
+    /// Create a new ModInt without checking the input
     pub fn new_raw(n: i32) -> Self {
         Self(n)
     }
@@ -59,7 +61,7 @@ impl<const N: i32> Display for ModInt<N> {
 
 impl<const N: i32> Debug for ModInt<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}[{}]", self.0, N)
+        write!(f, "{} (mod {})", self.0, N)
     }
 }
 
@@ -166,48 +168,51 @@ mod math_tests {
 
     #[test]
     fn mul() {
-        type FI26 = ModInt<26>;
-        let a = FI26::new(5);
-        let b = FI26::new(7);
+        type MI26 = ModInt<26>;
+        let a = MI26::new(5);
+        let b = MI26::new(7);
         println!("{} * {} = {}", a, b, a * b);
-        let a = FI26::new(5);
-        let b = FI26::new(21);
+        let a = MI26::new(5);
+        let b = MI26::new(21);
         println!("{} * {} = {}", a, b, a * b);
     }
 
     #[test]
     fn add() {
-        let a = ModInt::<26>(5);
-        let b = ModInt::<26>(7);
+        type MI26 = ModInt<26>;
+        let a = MI26::new(5);
+        let b = MI26::new(7);
         println!("{} + {} = {}", a, b, a + b);
-        let a = ModInt::<26>(20);
-        let b = ModInt::<26>(10);
-        println!("{} + {} = {}", a, b, a + b)
+        let a = MI26::new(20);
+        let b = MI26::new(10);
+        println!("{} + {} = {}", a, b, a + b);
     }
 
     #[test]
     fn sub() {
         let a = ModInt::<26>(5);
         let b = ModInt::<26>(7);
-        println!("{} - {} = {}", a, b, a - b)
+        println!("{} - {} = {}", a, b, a - b);
     }
 
     #[test]
     fn div() {
         let a = ModInt::<26>(5);
         let b = ModInt::<26>(7);
-        println!("{} / {} = {}", a, b, a / b)
+        println!("{} / {} = {}", a, b, a / b);
     }
 
     #[test]
     fn recip() {
         let a = ModInt::<26>(5);
-        println!("1 / {} = {}", a, a.recip().unwrap())
+        println!("1 / {} = {:?}", a, a.recip());
+        let b = ModInt::<26>(2);
+        println!("1 / {} = {:?}", b, b.recip());
     }
 
     #[test]
     fn neg() {
         let a = ModInt::<26>(11);
-        println!("{} + {} = {}", a, -a, a + -a)
+        println!("{} + {} = {}", a, -a, a + -a);
     }
 }
