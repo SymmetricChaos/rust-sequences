@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, PrimInt};
+use num::{BigInt, CheckedAdd, One};
 
 /// The Lucas numbers.
 /// 2, 1, 3, 4, 7, 11, 18, 29, 47, 76...
@@ -7,7 +7,7 @@ pub struct Lucas<T> {
     b: T,
 }
 
-impl<T: PrimInt> Lucas<T> {
+impl<T: CheckedAdd + Clone + One> Lucas<T> {
     pub fn new() -> Self {
         Self {
             a: T::one() + T::one(),
@@ -25,7 +25,7 @@ impl Lucas<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd> Iterator for Lucas<T> {
+impl<T: CheckedAdd + Clone> Iterator for Lucas<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

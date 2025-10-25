@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, PrimInt, Zero, rational::Ratio};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero, rational::Ratio};
 
 use crate::core::factorial::Factorials;
 
@@ -9,7 +9,7 @@ pub struct Euler<T> {
     sum: Ratio<T>,
 }
 
-impl<T: PrimInt + Integer> Euler<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Euler<T> {
     pub fn new() -> Self {
         Self {
             factorials: Factorials::new(),
@@ -27,7 +27,7 @@ impl Euler<BigInt> {
     }
 }
 
-impl<T: Clone + Integer + CheckedMul + CheckedAdd> Iterator for Euler<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for Euler<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

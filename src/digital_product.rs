@@ -40,7 +40,7 @@ pub struct DigitalProds<N> {
     base: N,
 }
 
-impl<N: Integer> DigitalProds<N> {
+impl<N: CheckedAdd + Clone + Integer> DigitalProds<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -64,7 +64,7 @@ impl DigitalProds<BigInt> {
     }
 }
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for DigitalProds<N> {
+impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalProds<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -80,7 +80,7 @@ pub struct MultiplicativeDigitalRoots<N> {
     base: N,
 }
 
-impl<N: Integer> MultiplicativeDigitalRoots<N> {
+impl<N: CheckedAdd + Clone + Integer> MultiplicativeDigitalRoots<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -89,8 +89,21 @@ impl<N: Integer> MultiplicativeDigitalRoots<N> {
         }
     }
 }
+impl MultiplicativeDigitalRoots<BigInt> {
+    pub fn new_big<G>(base: G) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let b = BigInt::from(base);
+        assert!(b >= BigInt::one() + BigInt::one());
+        Self {
+            ctr: BigInt::zero(),
+            base: b,
+        }
+    }
+}
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for MultiplicativeDigitalRoots<N> {
+impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativeDigitalRoots<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -106,7 +119,7 @@ pub struct MultiplicativePersistence<N> {
     base: N,
 }
 
-impl<N: Integer> MultiplicativePersistence<N> {
+impl<N: CheckedAdd + Clone + Integer> MultiplicativePersistence<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -116,7 +129,7 @@ impl<N: Integer> MultiplicativePersistence<N> {
     }
 }
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for MultiplicativePersistence<N> {
+impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativePersistence<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {

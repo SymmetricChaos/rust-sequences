@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedMul, CheckedSub, One, PrimInt, Zero};
+use num::{BigInt, CheckedMul, CheckedSub, One, Zero};
 
 /// Any recurrence of the form
 /// a_x = p * a_{x-1} - q * a_{x-2}
@@ -10,7 +10,7 @@ pub struct LucasU<T> {
     q: T,
 }
 
-impl<T: PrimInt> LucasU<T> {
+impl<T: CheckedMul + CheckedSub + Clone + One + Zero> LucasU<T> {
     pub fn new(p: T, q: T) -> Self {
         Self {
             a: T::zero(),
@@ -35,7 +35,7 @@ impl LucasU<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedMul + CheckedSub> Iterator for LucasU<T> {
+impl<T: CheckedMul + CheckedSub + Clone> Iterator for LucasU<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -59,11 +59,11 @@ pub struct LucasV<T> {
     q: T,
 }
 
-impl<T: PrimInt> LucasV<T> {
+impl<T: CheckedMul + CheckedSub + Clone + One + Zero> LucasV<T> {
     pub fn new(p: T, q: T) -> Self {
         Self {
             a: T::one() + T::one(),
-            b: p,
+            b: p.clone(),
             p,
             q,
         }
@@ -85,7 +85,7 @@ impl LucasV<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedMul + CheckedSub> Iterator for LucasV<T> {
+impl<T: CheckedMul + CheckedSub + Clone> Iterator for LucasV<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, PrimInt, Signed};
+use num::{BigInt, CheckedAdd, Signed};
 
 /// The integers in the canonical ordering.
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
@@ -6,7 +6,7 @@ pub struct Integers<T> {
     val: T,
 }
 
-impl<T: PrimInt + Signed> Integers<T> {
+impl<T: CheckedAdd + Clone + Signed> Integers<T> {
     pub fn new() -> Self {
         Self { val: T::zero() }
     }

@@ -1,11 +1,11 @@
-use num::{BigInt, CheckedAdd, One, PrimInt};
+use num::{BigInt, CheckedAdd, One};
 
 /// The rows of Pascal's triangle, aka the binomial coefficients.
 pub struct PascalsTriangle<T> {
     row: Vec<T>,
 }
 
-impl<T: PrimInt> PascalsTriangle<T> {
+impl<T: CheckedAdd + Clone + One> PascalsTriangle<T> {
     pub fn new() -> Self {
         Self {
             row: vec![T::one()],
@@ -52,7 +52,7 @@ pub struct BernoullisTriangle<T> {
     row: Vec<T>,
 }
 
-impl<T: PrimInt> BernoullisTriangle<T> {
+impl<T: CheckedAdd + Clone + One> BernoullisTriangle<T> {
     pub fn new() -> Self {
         Self {
             row: vec![T::one()],

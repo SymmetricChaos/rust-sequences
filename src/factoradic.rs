@@ -30,7 +30,7 @@ pub struct Factoradic<T> {
     size: usize,
 }
 
-impl<T: Zero> Factoradic<T> {
+impl<T: CheckedAdd + Clone + Integer + Zero> Factoradic<T> {
     pub fn new(size: usize) -> Self {
         Self {
             ctr: T::zero(),
@@ -48,7 +48,7 @@ impl Factoradic<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + Integer> Iterator for Factoradic<T> {
+impl<T: CheckedAdd + Clone + Integer> Iterator for Factoradic<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, One, PrimInt, Zero};
+use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The Pell numbers.
 /// 0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
@@ -7,7 +7,7 @@ pub struct Pell<T> {
     b: T,
 }
 
-impl<T: PrimInt> Pell<T> {
+impl<T: CheckedAdd + Clone + One + Zero> Pell<T> {
     pub fn new() -> Self {
         Self {
             a: T::zero(),
@@ -25,7 +25,7 @@ impl Pell<BigInt> {
     }
 }
 
-impl<T: One + Zero + CheckedAdd + Clone> Iterator for Pell<T> {
+impl<T: CheckedAdd + Clone + One + Zero> Iterator for Pell<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -44,7 +44,7 @@ pub struct CompanionPell<T> {
     b: T,
 }
 
-impl<T: PrimInt> CompanionPell<T> {
+impl<T: CheckedAdd + Clone + One + Zero> CompanionPell<T> {
     pub fn new() -> Self {
         Self {
             a: T::one() + T::one(),
@@ -62,7 +62,7 @@ impl CompanionPell<BigInt> {
     }
 }
 
-impl<T: One + Zero + CheckedAdd + Clone> Iterator for CompanionPell<T> {
+impl<T: CheckedAdd + Clone + One + Zero> Iterator for CompanionPell<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

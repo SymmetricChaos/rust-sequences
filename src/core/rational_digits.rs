@@ -1,5 +1,5 @@
 use num::{
-    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, PrimInt, Signed, Zero,
+    BigInt, CheckedDiv, CheckedMul, CheckedSub, FromPrimitive, Integer, One, PrimInt, Signed, Zero,
     rational::Ratio,
 };
 
@@ -7,6 +7,7 @@ use num::{
 pub struct DecimalDigits<T> {
     denom: T,
     remdr: T,
+    ten: T,
 }
 
 impl<T: PrimInt + Integer> DecimalDigits<T> {
@@ -17,6 +18,16 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
         Self {
             denom: denom / g,
             remdr: numer / g,
+            ten: T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one(),
         }
     }
 
@@ -25,6 +36,16 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
         Self {
             denom: q.denom().clone(),
             remdr: q.numer().clone(),
+            ten: T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one(),
         }
     }
 }
@@ -36,10 +57,22 @@ impl DecimalDigits<BigInt> {
     {
         let num = BigInt::from(numer).abs();
         let den = BigInt::from(denom).abs();
+        assert!(num >= BigInt::zero());
+        assert!(den > BigInt::zero());
         let g = num.gcd(&den);
         Self {
             denom: den / &g,
             remdr: num / &g,
+            ten: BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one(),
         }
     }
 
@@ -51,6 +84,16 @@ impl DecimalDigits<BigInt> {
         Self {
             denom: BigInt::from(den).abs(),
             remdr: BigInt::from(num).abs(),
+            ten: BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one()
+                + BigInt::one(),
         }
     }
 }
@@ -63,7 +106,7 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + FromPrimitive> Iterator for Decim
         self.remdr = self
             .remdr
             .checked_sub(&self.denom.checked_mul(&out)?)?
-            .checked_mul(&T::from_u32(10).unwrap())?;
+            .checked_mul(&self.ten)?;
         Some(out)
     }
 }

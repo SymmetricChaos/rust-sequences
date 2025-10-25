@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, One, PrimInt, Zero};
+use num::{BigInt, CheckedAdd, One, Zero};
 use std::collections::VecDeque;
 
 /// The Fibonacci numbers.
@@ -8,7 +8,7 @@ pub struct Fibonacci<T> {
     b: T,
 }
 
-impl<T: PrimInt> Fibonacci<T> {
+impl<T: CheckedAdd + Clone + One + Zero> Fibonacci<T> {
     pub fn new() -> Self {
         Self {
             a: T::zero(),
@@ -26,7 +26,7 @@ impl Fibonacci<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd> Iterator for Fibonacci<T> {
+impl<T: CheckedAdd + Clone> Iterator for Fibonacci<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -47,7 +47,7 @@ pub struct FibonacciWord<T> {
     one: T,
 }
 
-impl<T: One + Zero + PartialEq> FibonacciWord<T> {
+impl<T: One + PartialEq + Zero> FibonacciWord<T> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.
     pub fn new() -> Self {
@@ -135,7 +135,7 @@ pub struct FibonacciStrings {
 }
 
 impl FibonacciStrings {
-    pub fn new_big() -> Self {
+    pub fn new() -> Self {
         Self {
             a: String::from("0"),
             b: String::from("01"),
@@ -166,5 +166,5 @@ crate::check_sequences!(
 );
 
 crate::print_values!(
-    FibonacciStrings::new_big(), 0, 7;
+    FibonacciStrings::new(), 0, 7;
 );

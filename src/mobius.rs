@@ -55,7 +55,7 @@ pub struct Mertens<T> {
     sum: T,
 }
 
-impl<T: One + Zero + Signed> Mertens<T> {
+impl<T: CheckedAdd + Clone + One + Signed + Zero> Mertens<T> {
     pub fn new() -> Self {
         Self {
             n: 0,
@@ -73,7 +73,7 @@ impl Mertens<BigInt> {
     }
 }
 
-impl<T: One + Zero + Signed + CheckedAdd + Clone> Iterator for Mertens<T> {
+impl<T: CheckedAdd + Clone + One + Signed + Zero> Iterator for Mertens<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

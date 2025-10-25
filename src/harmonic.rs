@@ -6,7 +6,7 @@ pub struct Harmonic<T> {
     ctr: Ratio<T>,
 }
 
-impl<T: Integer + Clone> Harmonic<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Harmonic<T> {
     pub fn new() -> Self {
         Self { ctr: Ratio::zero() }
     }
@@ -20,7 +20,7 @@ impl Harmonic<BigInt> {
     }
 }
 
-impl<T: Integer + Clone + CheckedAdd + CheckedMul> Iterator for Harmonic<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for Harmonic<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -36,7 +36,7 @@ pub struct HarmonicSums<T> {
     ctr: Ratio<T>,
 }
 
-impl<T: Integer + Clone> HarmonicSums<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> HarmonicSums<T> {
     pub fn new() -> Self {
         Self {
             sum: Ratio::zero(),
@@ -54,7 +54,7 @@ impl HarmonicSums<BigInt> {
     }
 }
 
-impl<T: Integer + Clone + CheckedAdd + CheckedMul> Iterator for HarmonicSums<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for HarmonicSums<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

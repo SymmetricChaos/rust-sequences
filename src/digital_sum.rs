@@ -37,7 +37,7 @@ pub struct DigitalSums<N> {
     base: N,
 }
 
-impl<N: Integer> DigitalSums<N> {
+impl<N: CheckedAdd + Clone + Integer> DigitalSums<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -61,7 +61,7 @@ impl DigitalSums<BigInt> {
     }
 }
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for DigitalSums<N> {
+impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalSums<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -77,7 +77,7 @@ pub struct DigitalRoots<N> {
     base: N,
 }
 
-impl<N: Integer> DigitalRoots<N> {
+impl<N: CheckedAdd + Clone + Integer> DigitalRoots<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -87,7 +87,21 @@ impl<N: Integer> DigitalRoots<N> {
     }
 }
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for DigitalRoots<N> {
+impl DigitalRoots<BigInt> {
+    pub fn new_big<G>(base: G) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::one() + BigInt::one());
+        Self {
+            ctr: BigInt::zero(),
+            base,
+        }
+    }
+}
+
+impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalRoots<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -103,7 +117,7 @@ pub struct AdditivePersistence<N> {
     base: N,
 }
 
-impl<N: Integer> AdditivePersistence<N> {
+impl<N: CheckedAdd + Clone + Integer> AdditivePersistence<N> {
     pub fn new(base: N) -> Self {
         assert!(base >= N::one() + N::one());
         Self {
@@ -113,7 +127,21 @@ impl<N: Integer> AdditivePersistence<N> {
     }
 }
 
-impl<N: Integer + CheckedAdd + Clone> Iterator for AdditivePersistence<N> {
+impl AdditivePersistence<BigInt> {
+    pub fn new_big<G>(base: G) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::one() + BigInt::one());
+        Self {
+            ctr: BigInt::zero(),
+            base,
+        }
+    }
+}
+
+impl<N: CheckedAdd + Clone + Integer> Iterator for AdditivePersistence<N> {
     type Item = N;
 
     fn next(&mut self) -> Option<Self::Item> {

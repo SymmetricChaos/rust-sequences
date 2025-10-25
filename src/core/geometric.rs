@@ -6,7 +6,7 @@ pub struct Geometric<T> {
     multiplier: T,
 }
 
-impl<T> Geometric<T> {
+impl<T: CheckedMul + Clone> Geometric<T> {
     pub fn new(initial: T, multiplier: T) -> Self {
         Self {
             value: initial,
@@ -27,7 +27,7 @@ impl Geometric<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedMul> Iterator for Geometric<T> {
+impl<T: CheckedMul + Clone> Iterator for Geometric<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

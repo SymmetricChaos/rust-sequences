@@ -1,6 +1,6 @@
 use std::iter::Skip;
 
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 
 /// The factorial numbers.
 /// 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
@@ -9,7 +9,7 @@ pub struct Factorials<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> Factorials<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One> Factorials<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
@@ -45,7 +45,7 @@ pub struct AlternatingFactorials<T> {
     factorials: Skip<Factorials<T>>,
 }
 
-impl<T: PrimInt> AlternatingFactorials<T> {
+impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + One> AlternatingFactorials<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
@@ -80,7 +80,7 @@ pub struct DoubleFactorial<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> DoubleFactorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One> DoubleFactorial<T> {
     pub fn new() -> Self {
         Self {
             val: T::one(),
@@ -98,7 +98,7 @@ impl DoubleFactorial<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for DoubleFactorial<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for DoubleFactorial<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
