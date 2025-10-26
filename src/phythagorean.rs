@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, PrimInt, integer::gcd};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, integer::gcd};
 
 use crate::increment;
 
@@ -8,7 +8,7 @@ pub struct PythagoreanTriples<T> {
     n: T,
 }
 
-impl<T: PrimInt> PythagoreanTriples<T> {
+impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> PythagoreanTriples<T> {
     pub fn new() -> Self {
         Self {
             m: T::one() + T::one(),
@@ -26,7 +26,7 @@ impl PythagoreanTriples<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + CheckedSub + Integer + Clone> Iterator for PythagoreanTriples<T> {
+impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> Iterator for PythagoreanTriples<T> {
     type Item = (T, T, T);
 
     fn next(&mut self) -> Option<Self::Item> {
