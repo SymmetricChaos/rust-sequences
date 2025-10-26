@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, One, PrimInt};
+use num::{BigInt, CheckedAdd, Integer, One};
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1))
 pub struct Rowland<T> {
@@ -6,7 +6,7 @@ pub struct Rowland<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> Rowland<T> {
+impl<T: CheckedAdd + Clone + Integer> Rowland<T> {
     pub fn new(initial: T) -> Self {
         Self {
             value: initial,
@@ -27,7 +27,7 @@ impl Rowland<BigInt> {
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd> Iterator for Rowland<T> {
+impl<T: CheckedAdd + Clone + Integer> Iterator for Rowland<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -44,7 +44,7 @@ pub struct RowlandPrime<T> {
     ctr: T,
 }
 
-impl<T: PrimInt> RowlandPrime<T> {
+impl<T: CheckedAdd + Clone + Integer> RowlandPrime<T> {
     pub fn new(initial: T) -> Self {
         Self {
             value: initial,
@@ -65,7 +65,7 @@ impl RowlandPrime<BigInt> {
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd> Iterator for RowlandPrime<T> {
+impl<T: CheckedAdd + Clone + Integer> Iterator for RowlandPrime<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

@@ -10,12 +10,12 @@ pub struct Repint<T> {
 }
 
 impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + One + Ord + Zero> Repint<T> {
-    /// Panics if digit is less than one.
+    /// Panics if digit is less than one or if base is greater than T::max()
     pub fn new(digit: T, base: usize) -> Self {
         assert!(digit > T::zero());
         let mut b = T::zero();
         for _ in 0..base {
-            b = b + T::one();
+            b = b.checked_add(&T::one()).unwrap();
         }
         let mut m = T::one();
         let mut d = digit.clone();

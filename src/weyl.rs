@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, PrimInt, Zero, traits::CheckedRem};
+use num::{BigInt, CheckedAdd, Integer, Zero, traits::CheckedRem};
 
 /// A Weyl-Marsaglia sequence starting at zero. A permutation of all integers 0..n that repeats every n values.
 pub struct WeylMarsaglia<T> {
@@ -7,7 +7,7 @@ pub struct WeylMarsaglia<T> {
     modulus: T,
 }
 
-impl<T: PrimInt + Integer> WeylMarsaglia<T> {
+impl<T: CheckedAdd + CheckedRem + Clone + Integer> WeylMarsaglia<T> {
     /// Create a new sequence with the given step and modulus.
     /// Panics if step is not coprime to modulus.
     pub fn new(step: T, modulus: T) -> Self {

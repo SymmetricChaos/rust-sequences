@@ -1,6 +1,6 @@
 use crate::core::prime::Primes;
 use itertools::Itertools;
-use num::{BigInt, CheckedAdd, CheckedDiv, Integer, PrimInt, Signed, Zero};
+use num::{BigInt, CheckedAdd, CheckedDiv, Integer, Signed, Zero};
 use std::hash::Hash;
 
 /// The smooth numbers, those natural numbers for which the only prime divisors are less than or equal to n.
@@ -9,7 +9,7 @@ pub struct Smooth<T> {
     primes: Vec<T>,
 }
 
-impl<T: PrimInt + Hash> Smooth<T> {
+impl<T: CheckedAdd + CheckedDiv + Clone + Hash + Integer> Smooth<T> {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
     pub fn new(n: T) -> Self {
@@ -37,7 +37,7 @@ impl Smooth<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + Integer + CheckedDiv> Iterator for Smooth<T> {
+impl<T: CheckedAdd + CheckedDiv + Clone + Integer> Iterator for Smooth<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
