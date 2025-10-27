@@ -20,7 +20,7 @@ impl Integers<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + Signed> Iterator for Integers<T> {
+impl<T: CheckedAdd + Clone + Signed> Iterator for Integers<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
