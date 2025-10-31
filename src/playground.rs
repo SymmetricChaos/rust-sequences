@@ -5,6 +5,7 @@ use crate::{
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
         differences::AbsDiffs,
+        dirichlet_convolution::DirichletConvolution,
         exponential::Exponential,
         prime::Primes,
         rational_transforms::Ratios,
@@ -17,7 +18,7 @@ use crate::{
     zeta::Zeta,
 };
 #[cfg(test)]
-use num::BigInt;
+use num::{BigInt, One};
 
 crate::print_values!(
     print_integers, formatter "{}", sep ", ";
@@ -35,6 +36,7 @@ crate::print_values!(
     SquareRoot::new_big(1,2), 0, 6; // converges on sqrt(1/2) 0.70710678118...
     CubeRoot::<u64>::new(2,1), 0, 5; // converges on cbrt(2) 1.25992104989...
     CesaroPartialSums::new([1,0].into_iter().cycle()), 0, 10;
+    DirichletConvolution::new_big(|_| BigInt::one(),|_| BigInt::one()), 0, 10; // identical to number of divisors function
 );
 
 crate::print_values!(

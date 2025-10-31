@@ -10,7 +10,7 @@ pub struct ContinuedFraction<T> {
     denominators: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: Clone + Integer + 'static> ContinuedFraction<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> ContinuedFraction<T> {
     pub fn new<N, D>(n: N, mut d: D) -> Self
     where
         N: Iterator<Item = T> + 'static,
@@ -87,7 +87,7 @@ pub struct SimpleContinuedFraction<T> {
     dens: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: Clone + Integer + 'static> SimpleContinuedFraction<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFraction<T> {
     pub fn new<I>(mut d: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
