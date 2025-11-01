@@ -1,5 +1,17 @@
 use num::{BigInt, One, Zero};
 
+pub fn unit(n: BigInt) -> BigInt {
+    if n.is_one() {
+        BigInt::one()
+    } else {
+        BigInt::zero()
+    }
+}
+
+pub fn one(_n: BigInt) -> BigInt {
+    BigInt::one()
+}
+
 pub struct DirichletConvolution {
     ctr: usize,
     f: Box<dyn Fn(BigInt) -> BigInt>,
@@ -25,7 +37,7 @@ impl Iterator for DirichletConvolution {
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut out = BigInt::zero();
-        for i in 1..(self.ctr + 1) {
+        for i in 1..=self.ctr {
             if (self.ctr % i).is_zero() {
                 out += (self.f)(BigInt::from(i)) * (self.g)(BigInt::from(self.ctr / i))
             }
