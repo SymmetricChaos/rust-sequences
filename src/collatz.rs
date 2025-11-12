@@ -44,7 +44,7 @@ pub struct CollatzOdd<T> {
     value: T,
 }
 
-impl<T> CollatzOdd<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> CollatzOdd<T> {
     /// Start an odd Collatz sequence from n.
     pub fn new(n: T) -> Self {
         Self { value: n }

@@ -1,13 +1,14 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
-// The number of derangements for a set of n elements range over all natural numbers.
-pub struct Deramgements<T> {
+// The number of derangements for a set of n elements (starting from 0)
+/// 1, 0, 1, 2, 9, 44, 265, 1854...
+pub struct Derangements<T> {
     a: T,
     b: T,
     ctr: T,
 }
 
-impl<T: One + Zero> Deramgements<T> {
+impl<T: One + Zero> Derangements<T> {
     pub fn new() -> Self {
         Self {
             a: T::one(),
@@ -17,7 +18,7 @@ impl<T: One + Zero> Deramgements<T> {
     }
 }
 
-impl Deramgements<BigInt> {
+impl Derangements<BigInt> {
     pub fn new_big() -> Self {
         Self {
             a: BigInt::one(),
@@ -27,7 +28,7 @@ impl Deramgements<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Deramgements<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Derangements<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -43,5 +44,5 @@ impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Deramgements<T> {
 }
 
 crate::check_sequences!(
-    Deramgements::<i32>::new(), 0, 10, [1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496];
+    Derangements::<i32>::new(), 0, 10, [1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496];
 );

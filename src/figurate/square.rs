@@ -1,34 +1,30 @@
-use num::{BigInt, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 /// The square numbers.
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
-pub struct Square {
-    val: BigInt,
+pub struct Square<T> {
+    val: T,
+}
+impl<T: Clone + CheckedAdd + CheckedMul + One + Zero> Square<T> {
+    pub fn new() -> Self {
+        Self { val: T::zero() }
+    }
 }
 
-impl Square {
+impl Square<BigInt> {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::zero(),
         }
     }
-
-    /// The nth square number. Negative values are generalized squares.
-    pub fn nth<T>(n: T) -> BigInt
-    where
-        BigInt: From<T>,
-    {
-        let n = BigInt::from(n);
-        &n * &n
-    }
 }
 
-impl Iterator for Square {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Square<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = &self.val * &self.val;
-        self.val += 1;
+        let out = self.val.checked_mul(&self.val)?;
+        self.val = self.val.checked_add(&T::one())?;
 
         Some(out)
     }
