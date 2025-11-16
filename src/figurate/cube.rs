@@ -1,34 +1,31 @@
-use num::{BigInt, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 /// The cube numbers.
 /// 0, 1, 8, 27, 64, 125, 216, 343, 512, 729...
-pub struct Cube {
-    val: BigInt,
+pub struct Cube<T> {
+    val: T,
 }
 
-impl Cube {
+impl<T: CheckedMul + CheckedAdd + One + Zero> Cube<T> {
+    pub fn new() -> Self {
+        Self { val: T::zero() }
+    }
+}
+
+impl Cube<BigInt> {
     pub fn new_big() -> Self {
         Self {
             val: BigInt::zero(),
         }
     }
-
-    /// The nth cube number.
-    pub fn nth<T>(n: T) -> BigInt
-    where
-        BigInt: From<T>,
-    {
-        let n = BigInt::from(n);
-        &n * &n * &n
-    }
 }
 
-impl Iterator for Cube {
-    type Item = BigInt;
+impl<T: CheckedMul + CheckedAdd + One> Iterator for Cube<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = &self.val * &self.val * &self.val;
-        self.val += 1;
+        let out = self.val.checked_mul(&self.val)?.checked_mul(&self.val)?;
+        self.val = self.val.checked_add(&T::one())?;
 
         Some(out)
     }
@@ -40,4 +37,5 @@ crate::check_iteration_times!(
 
 crate::check_sequences!(
     Cube::new_big(), 0, 10, [0, 1, 8, 27, 64, 125, 216, 343, 512, 729];
+    Cube::<i32>::new(), 0, 10, [0, 1, 8, 27, 64, 125, 216, 343, 512, 729];
 );
