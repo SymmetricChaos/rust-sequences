@@ -1,6 +1,8 @@
 use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 
 /// The Farey sequence with selectable order.
+/// For instance Farey::new_big(4) produces
+/// 0, 1/4, 1/3, 1/2, 2/3, 3/4, 1
 pub struct Farey {
     n0: BigInt,
     d0: BigInt,
@@ -82,7 +84,7 @@ impl Iterator for Farey {
 
 crate::print_values!(
     Farey::new_big(3), 0, 10;
-    Farey::new_big(7), 0, 19;
+    Farey::new_big(4), 0, 19;
     Farey::new_big_descending(3), 0, 10;
     Farey::new_big_descending(7), 0, 19;
 );

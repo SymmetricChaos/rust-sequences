@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, rational::Ratio};
 
-/// The partial sums of the Wallis product, converting on pi.
+/// The partial sums of the Wallis product, converging on pi.
 pub struct WallisProduct<T> {
     ctr: T,
     product: Ratio<T>,
