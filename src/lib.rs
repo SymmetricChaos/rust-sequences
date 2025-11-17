@@ -15,6 +15,7 @@ pub mod gray;
 pub mod harmonic;
 pub mod hypotenuse;
 pub mod jordan_polya;
+pub mod look_and_say;
 pub mod lucas;
 pub mod lucas_sequence;
 pub mod mobius;
