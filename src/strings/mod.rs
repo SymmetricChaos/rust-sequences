@@ -4,6 +4,7 @@ pub mod elementary_cellular_automata;
 pub mod lindenmayer_system;
 pub mod markov_algorithm;
 pub mod tag_system;
+pub mod look_and_say;
 
 pub use ackermann_sets::*;
 pub use lindenmayer_system::*;
