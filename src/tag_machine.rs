@@ -1,4 +1,4 @@
-/// An tag system defined by:
+/// A tag system defined by:
 /// The deletion number (the number of symbols deleted from the left of the word)
 /// A function from char to Option<&'static str>
 ///     Constant symbols should return None and variables Some
