@@ -1,6 +1,7 @@
 pub struct Markov {
     string: String,
     patterns: Vec<(&'static str, &'static str)>,
+    halted: bool,
 }
 
 impl Markov {
@@ -8,6 +9,7 @@ impl Markov {
         Self {
             string: initial.to_string(),
             patterns: patterns.to_vec(),
+            halted: false,
         }
     }
 }
@@ -16,6 +18,9 @@ impl Iterator for Markov {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if self.halted {
+            return None;
+        }
         let out = self.string.clone();
         for (pat, rep) in self.patterns.iter() {
             if self.string.contains(pat) {
@@ -23,10 +28,14 @@ impl Iterator for Markov {
                 break;
             }
         }
+        if self.string == out {
+            self.halted = true;
+        }
         Some(out)
     }
 }
 
+// Converts a number from binary to bijective-unary
 #[macro_export]
 macro_rules! markov_pairs {
     ($($a:literal => $b:literal),+ $(,)?) => {
@@ -46,5 +55,5 @@ crate::print_values!(
             "1" => "0I",
             "0" => "",
         )
-    ), 0, 9;
+    ), 0, 12;
 );
