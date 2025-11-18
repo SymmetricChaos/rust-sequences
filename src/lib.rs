@@ -36,6 +36,7 @@ pub mod squarefree;
 pub mod tag_machine;
 pub mod thue_morse;
 pub mod trig;
+pub mod turing_machine;
 pub mod weyl;
 pub mod zeta;
 
