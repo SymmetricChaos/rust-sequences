@@ -84,9 +84,10 @@ pub struct TuringMachine {
 }
 
 impl TuringMachine {
-    /// A new TuringMachine with a tape that has the
+    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape.
     pub fn new(
-        tape: Vec<char>,
+        initial_tape: Vec<char>,
+        position: usize,
         blank: char,
         states: Vec<Box<dyn Fn(char) -> (char, Move, &'static str)>>,
         state_names: Vec<&'static str>,
@@ -94,8 +95,12 @@ impl TuringMachine {
         if state_names.contains(&"HALT") {
             panic!("the HALT state is handled specially")
         }
+        if position >= initial_tape.len() {
+            panic!("position must be within the starting values give")
+        }
+        assert_eq!(states.len(), state_names.len());
         Self {
-            tape: TuringTape::new(tape, 0, blank),
+            tape: TuringTape::new(initial_tape, position, blank),
             states: HashMap::from_iter(state_names.iter().cloned().zip(states.into_iter())),
             current_state: state_names[0],
         }
@@ -181,6 +186,7 @@ fn busy_beaver() {
 
     let machine = TuringMachine::new(
         vec!['0'],
+        0,
         '0',
         vec![Box::new(state0), Box::new(state1), Box::new(state2)],
         vec!["A", "B", "C"],
