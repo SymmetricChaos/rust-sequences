@@ -11,6 +11,16 @@ pub enum Move {
     Stay,
 }
 
+pub struct TuringState {
+    func: Box<dyn Fn(char) -> (char, Move, &'static str)>,
+}
+
+impl TuringState {
+    pub fn transition(&self, symbol: char) -> (char, Move, &'static str) {
+        (self.func)(symbol)
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TuringTape {
     tape: VecDeque<char>,
@@ -79,30 +89,28 @@ impl Display for TuringTape {
 
 pub struct TuringMachine {
     tape: TuringTape,
-    states: HashMap<&'static str, Box<dyn Fn(char) -> (char, Move, &'static str)>>,
+    states: HashMap<&'static str, TuringState>,
     current_state: &'static str,
 }
 
 impl TuringMachine {
-    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape.
+    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape. The states and state_names
     pub fn new(
         initial_tape: Vec<char>,
         position: usize,
         blank: char,
-        states: Vec<Box<dyn Fn(char) -> (char, Move, &'static str)>>,
-        state_names: Vec<&'static str>,
+        states: Vec<(&'static str, TuringState)>,
     ) -> Self {
-        if state_names.contains(&"HALT") {
-            panic!("the HALT state is handled specially")
+        if states.iter().map(|s| s.0).contains(&"HALT") {
+            panic!("the HALT state is handled specially and must not be supplied")
         }
         if position >= initial_tape.len() {
             panic!("position must be within the starting values give")
         }
-        assert_eq!(states.len(), state_names.len());
         Self {
             tape: TuringTape::new(initial_tape, position, blank),
-            states: HashMap::from_iter(state_names.iter().cloned().zip(states.into_iter())),
-            current_state: state_names[0],
+            current_state: states[0].0,
+            states: HashMap::from_iter(states),
         }
     }
 }
@@ -118,7 +126,8 @@ impl Iterator for TuringMachine {
         }
 
         let cur_symbol = self.tape.read();
-        let (symbol, direction, next_state) = self.states[self.current_state](cur_symbol);
+        let (symbol, direction, next_state) =
+            self.states[self.current_state].transition(cur_symbol);
         self.tape.write(symbol);
         self.tape.shift(direction);
         self.current_state = next_state;
@@ -130,36 +139,17 @@ impl Iterator for TuringMachine {
 #[macro_export]
 macro_rules! turing_state {
     ($name:ident; $($a:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
-        fn $name(x: char) -> (char, Move, &'static str) {
-            match x {
-                $(
-                    $a => ($symbol, $movement, $state),
-                )+
-                _ => panic!("symbol not handled"),
-            }
-        }
+        let $name = TuringState {
+            func: Box::new(|x: char| -> (char, Move, &'static str) {
+                match x {
+                    $(
+                        $a => ($symbol, $movement, $state),
+                    )+
+                    _ => panic!("symbol not handled"),
+                }
+            })
+        };
     };
-}
-
-#[cfg(test)]
-#[ignore = "visualization"]
-#[test]
-fn test_tape() {
-    let mut tape = TuringTape::new(vec!['1', '1', '1'], 0, '0');
-    println!("{}", tape);
-    for i in [
-        Move::Left,
-        Move::Left,
-        Move::Right,
-        Move::Right,
-        Move::Right,
-        Move::Right,
-        Move::Right,
-        Move::Right,
-    ] {
-        tape.shift(i);
-        println!("{}", tape);
-    }
 }
 
 #[cfg(test)]
@@ -167,19 +157,19 @@ fn test_tape() {
 #[test]
 fn busy_beaver() {
     turing_state!(
-        state0;
+        state_a;
         '0' => '1', Move::Right, "B";
         '1' => '1', Move::Left, "C";
     );
 
     turing_state!(
-        state1;
+        state_b;
         '0' => '1', Move::Left, "A";
         '1' => '1', Move::Right, "B";
     );
 
     turing_state!(
-        state2;
+        state_c;
         '0' => '1', Move::Left, "B";
         '1' => '1', Move::Right, "HALT";
     );
@@ -188,10 +178,9 @@ fn busy_beaver() {
         vec!['0'],
         0,
         '0',
-        vec![Box::new(state0), Box::new(state1), Box::new(state2)],
-        vec!["A", "B", "C"],
+        vec![("A", state_a), ("B", state_b), ("C", state_c)],
     );
-    for tape in machine {
-        println!("{}", tape);
+    for (i, tape) in machine.enumerate() {
+        println!("{}  {i}", tape);
     }
 }
