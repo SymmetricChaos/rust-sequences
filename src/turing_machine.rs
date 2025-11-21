@@ -75,6 +75,10 @@ impl TuringTape {
             }
         }
     }
+
+    pub fn tape_symbols(&self) -> String {
+        self.tape.iter().join("")
+    }
 }
 
 impl Display for TuringTape {
@@ -138,8 +142,8 @@ impl Iterator for TuringMachine {
 
 #[macro_export]
 macro_rules! turing_state {
-    ($name:ident; $($a:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
-        let $name = TuringState {
+    ($name:ident, $name_symbol: literal; $($a:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
+        let $name = ($name_symbol, TuringState {
             func: Box::new(|x: char| -> (char, Move, &'static str) {
                 match x {
                     $(
@@ -148,7 +152,7 @@ macro_rules! turing_state {
                     _ => panic!("symbol not handled"),
                 }
             })
-        };
+        });
     };
 }
 
@@ -157,30 +161,25 @@ macro_rules! turing_state {
 #[test]
 fn busy_beaver() {
     turing_state!(
-        state_a;
+        state_a, "A";
         '0' => '1', Move::Right, "B";
         '1' => '1', Move::Left, "C";
     );
 
     turing_state!(
-        state_b;
+        state_b, "B";
         '0' => '1', Move::Left, "A";
         '1' => '1', Move::Right, "B";
     );
 
     turing_state!(
-        state_c;
+        state_c, "C";
         '0' => '1', Move::Left, "B";
         '1' => '1', Move::Right, "HALT";
     );
 
-    let machine = TuringMachine::new(
-        vec!['0'],
-        0,
-        '0',
-        vec![("A", state_a), ("B", state_b), ("C", state_c)],
-    );
+    let machine = TuringMachine::new(vec!['0'], 0, '0', vec![state_a, state_b, state_c]);
     for (i, tape) in machine.enumerate() {
-        println!("{}  {i}", tape);
+        println!("{i}  {}", tape.tape_symbols());
     }
 }
