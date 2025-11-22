@@ -142,17 +142,17 @@ impl Iterator for TuringMachine {
 
 #[macro_export]
 macro_rules! turing_state {
-    ($name:ident, $name_symbol: literal; $($a:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
-        let $name = ($name_symbol, TuringState {
+    ($name_symbol: literal; $($input:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
+        ($name_symbol, TuringState {
             func: Box::new(|x: char| -> (char, Move, &'static str) {
                 match x {
                     $(
-                        $a => ($symbol, $movement, $state),
+                        $input => ($symbol, $movement, $state),
                     )+
                     _ => panic!("symbol not handled"),
                 }
             })
-        });
+        })
     };
 }
 
@@ -160,26 +160,26 @@ macro_rules! turing_state {
 #[ignore = "visualization"]
 #[test]
 fn busy_beaver() {
-    turing_state!(
-        state_a, "A";
-        '0' => '1', Move::Right, "B";
-        '1' => '1', Move::Left, "C";
-    );
+    let states = vec![
+        turing_state!(
+            "A";
+            '0' => '1', Move::Right, "B";
+            '1' => '1', Move::Left, "C";
+        ),
+        turing_state!(
+            "B";
+            '0' => '1', Move::Left, "A";
+            '1' => '1', Move::Right, "B";
+        ),
+        turing_state!(
+            "C";
+            '0' => '1', Move::Left, "B";
+            '1' => '1', Move::Right, "HALT";
+        ),
+    ];
 
-    turing_state!(
-        state_b, "B";
-        '0' => '1', Move::Left, "A";
-        '1' => '1', Move::Right, "B";
-    );
-
-    turing_state!(
-        state_c, "C";
-        '0' => '1', Move::Left, "B";
-        '1' => '1', Move::Right, "HALT";
-    );
-
-    let machine = TuringMachine::new(vec!['0'], 0, '0', vec![state_a, state_b, state_c]);
+    let machine = TuringMachine::new(vec!['0'], 0, '0', states);
     for (i, tape) in machine.enumerate() {
-        println!("{i}  {}", tape.tape_symbols());
+        println!("{i:<2}  {}", tape.tape_symbols());
     }
 }
