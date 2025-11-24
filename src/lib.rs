@@ -33,6 +33,7 @@ pub mod repint;
 pub mod rowland;
 pub mod smooth;
 pub mod squarefree;
+pub mod sylverster;
 pub mod tag_machine;
 pub mod thue_morse;
 pub mod trig;
