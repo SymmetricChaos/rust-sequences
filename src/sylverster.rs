@@ -1,13 +1,13 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 
 pub struct Sylvester<T> {
-    factors: Vec<T>,
+    current: T,
 }
 
 impl<T: Clone + One + CheckedMul + CheckedAdd> Sylvester<T> {
     pub fn new() -> Self {
         Self {
-            factors: vec![T::one()],
+            current: T::one() + T::one(),
         }
     }
 }
@@ -15,22 +15,22 @@ impl<T: Clone + One + CheckedMul + CheckedAdd> Sylvester<T> {
 impl Sylvester<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            factors: vec![BigInt::one()],
+            current: BigInt::one() + BigInt::one(),
         }
     }
 }
 
-impl<T: Clone + One + CheckedMul + CheckedAdd> Iterator for Sylvester<T> {
+impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Iterator for Sylvester<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut out = T::one();
-        for f in self.factors.iter() {
-            out = out.checked_mul(f)?;
-        }
-        out = out.checked_add(&T::one())?;
+        let out = self.current.clone();
 
-        self.factors.push(out.clone());
+        self.current = self
+            .current
+            .checked_mul(&(self.current.checked_sub(&T::one()))?)?
+            .checked_add(&T::one())?;
+
         Some(out)
     }
 }
