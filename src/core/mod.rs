@@ -22,6 +22,7 @@ pub mod roots;
 pub mod unit;
 
 pub mod boustrophedon;
+pub mod characteristic;
 pub mod combinations;
 pub mod continued_fraction;
 pub mod differences;
