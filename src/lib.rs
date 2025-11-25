@@ -40,6 +40,7 @@ pub mod trig;
 pub mod turing_machine;
 pub mod weyl;
 pub mod zeta;
+pub mod leonardo;
 
 #[macro_export]
 macro_rules! increment {
