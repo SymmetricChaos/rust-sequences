@@ -57,6 +57,57 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Primes<T> {
     }
 }
 
+/// The prime counting function evaluated at each positive integer.
+/// 0, 1, 2, 2, 3, ...
+pub struct PrimeCounting<T> {
+    prime: Primes<T>,
+    next_prime: T,
+    n: T,
+    ctr: T,
+}
+
+impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> PrimeCounting<T> {
+    pub fn new() -> Self {
+        let mut prime = Primes::<T>::new();
+        let next_prime = prime.next().unwrap();
+        Self {
+            prime,
+            next_prime,
+            n: T::one(),
+            ctr: T::zero(),
+        }
+    }
+}
+
+impl PrimeCounting<BigInt> {
+    pub fn new_big() -> Self {
+        let mut prime = Primes::new_big();
+        let next_prime = prime.next().unwrap();
+        Self {
+            prime,
+            next_prime,
+            n: BigInt::one(),
+            ctr: BigInt::zero(),
+        }
+    }
+}
+
+impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for PrimeCounting<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.ctr.clone();
+
+        self.n = self.n.checked_add(&T::one())?;
+        if self.n == self.next_prime {
+            self.ctr = self.ctr.checked_add(&T::one())?;
+            self.next_prime = self.prime.next()?;
+        }
+
+        Some(out)
+    }
+}
+
 /// The the prime factorization of each positive integer.
 /// For instance 20 = 2^2 + 5 ^1 and is written here as [(2,2), (5,1)]
 /// [], [(2, 1)], [(3, 1)], [(2, 2)], [(5, 1)], [(2, 1), (3, 1)], [(7, 1)], [(2, 3)], [(3, 2)], [(2, 1), (5, 1)]
@@ -285,4 +336,5 @@ crate::check_sequences!(
     Primes::new_big(), 1000, 10, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
     PrimePowers::<u32>::new(), 0, 20, [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
     Primorial::<u32>::new(), 0, 5, [1, 2, 6, 30, 210];
+    PrimeCounting::<i16>::new(), 0, 10, [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
 );
