@@ -6,6 +6,7 @@ pub mod core;
 pub mod derangement;
 pub mod digital_product;
 pub mod digital_sum;
+pub mod ducci;
 pub mod elementary_cellular_automata;
 pub mod eulers_number;
 pub mod evil;
@@ -17,6 +18,7 @@ pub mod gray;
 pub mod harmonic;
 pub mod hypotenuse;
 pub mod jordan_polya;
+pub mod leonardo;
 pub mod lindenmayer_system;
 pub mod look_and_say;
 pub mod lucas;
@@ -40,7 +42,6 @@ pub mod trig;
 pub mod turing_machine;
 pub mod weyl;
 pub mod zeta;
-pub mod leonardo;
 
 #[macro_export]
 macro_rules! increment {
