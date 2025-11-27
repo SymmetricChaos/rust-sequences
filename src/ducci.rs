@@ -5,7 +5,7 @@ use num::BigInt;
 /// A Ducci sequence.
 /// Each term a tuple containing the absolute difference of each adjacent pair of the previous tuple (with the last adjacent to the first).
 /// Ducci sequences with a number of elements a that is a power of two eventually reach an all zero state.
-/// Ducci sequences with other numbers of elements eventually become periodic and consist of only 0s and 1s (and may reach the all zero state).
+/// Ducci sequences with other numbers of elements eventually become periodic and consist of only 0s and a single positive integer.
 pub struct Ducci<T> {
     tup: Vec<T>,
 }
@@ -43,5 +43,5 @@ impl<T: Clone + Ord + Sub<Output = T>> Iterator for Ducci<T> {
 crate::print_values!(
     ducci, formatter "{:?}", sep "\n";
     Ducci::new(vec![3,7,28,1]), 0, 7;
-    Ducci::new(vec![2,5,10,17,26]), 0, 40; // will eventually become periodic
+    Ducci::new(vec![2,5,2,5,2]), 0, 10;
 );
