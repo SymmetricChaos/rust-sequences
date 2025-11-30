@@ -3,23 +3,26 @@ use num::{BigInt, FromPrimitive, One};
 pub struct Automorphic {
     value: BigInt,
     digits: u32,
-    base: u32,
+    base: BigInt,
 }
 
 impl Automorphic {
-    pub fn new_big<T>(value: T, base: u32) -> Self
+    /// Panics if value is greater than the base.
+    /// Panics if the value is not a product of factors of the base.
+    pub fn new_big<T>(value: T, base: T) -> Self
     where
         BigInt: From<T>,
     {
         let value = BigInt::from(value);
-        assert!(base >= 2);
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
         assert!(
-            value < BigInt::from_u32(base).unwrap(),
+            &value < &base,
             "the starting value must be less than the base"
         );
         assert_eq!(
             value,
-            (&value * &value) % BigInt::from_u32(base).unwrap(),
+            (&value * &value) % &base,
             "this value cannot be the start of an automorphic number in this base"
         );
         Self {
@@ -38,11 +41,9 @@ impl Iterator for Automorphic {
 
         loop {
             self.digits += 1;
-            for digit in 1..=9 {
-                let test: BigInt =
-                    &self.value + BigInt::from(self.base).pow(self.digits - 1) * digit;
-                if (&test * &test) % BigInt::from(self.base).pow(self.digits) == test && test != out
-                {
+            for digit in num::iter::range(BigInt::one(), self.base.clone()) {
+                let test: BigInt = &self.value + self.base.pow(self.digits - 1) * digit;
+                if (&test * &test) % self.base.pow(self.digits) == test && test != out {
                     self.value = test.clone();
                     return Some(out);
                 }
@@ -92,7 +93,7 @@ impl Iterator for AutomorphicDigits {
         let out = self.value.clone() / self.base.pow(self.digits - 1);
 
         self.digits += 1;
-        for digit in num::iter::range_inclusive(BigInt::one(), self.base.clone()) {
+        for digit in num::iter::range(BigInt::one(), self.base.clone()) {
             // no need to test 0
             let test: BigInt = &self.value + self.base.pow(self.digits - 1) * digit;
             if (&test * &test) % self.base.pow(self.digits) == test && test != out {
