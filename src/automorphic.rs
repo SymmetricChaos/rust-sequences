@@ -42,29 +42,40 @@ impl Iterator for Automorphic {
     }
 }
 
-pub struct AutomorphicDigits5 {
+pub struct AutomorphicDigits {
     value: BigInt,
     digits: u32,
 }
 
-impl AutomorphicDigits5 {
-    pub fn new_big() -> Self {
+impl AutomorphicDigits {
+    pub fn new_big_5() -> Self {
         Self {
             value: BigInt::from(5),
             digits: 1,
         }
     }
+
+    pub fn new_big_6() -> Self {
+        Self {
+            value: BigInt::from(6),
+            digits: 1,
+        }
+    }
 }
 
-impl Iterator for AutomorphicDigits5 {
+impl Iterator for AutomorphicDigits {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.value.clone() / BigInt::from(BASE).pow(self.digits - 1);
 
-        // TODO: is it a coincidence that this works? does it stop working at some point? it does not work for six
         self.digits += 1;
-        self.value = (&self.value * &self.value) % BigInt::from(BASE).pow(self.digits);
+        for digit in 1..=9 {
+            let test: BigInt = &self.value + BigInt::from(BASE).pow(self.digits - 1) * digit;
+            if (&test * &test) % BigInt::from(BASE).pow(self.digits) == test && test != out {
+                self.value = test.clone();
+            }
+        }
 
         Some(out)
     }
@@ -72,6 +83,7 @@ impl Iterator for AutomorphicDigits5 {
 
 crate::check_sequences!(
     Automorphic::new_big_5(), 0, 8, [5, 25, 625, 90625, 890625, 2890625, 12890625, 212890625];
-    Automorphic::new_big_6(), 0, 4, [6, 76, 376, 9376];
-    AutomorphicDigits5::new_big(), 0, 10, [5, 2, 6, 0, 9, 8, 2, 1, 2, 8];
+    Automorphic::new_big_6(), 0, 8, [6, 76, 376, 9376, 109376, 7109376, 87109376, 787109376];
+    AutomorphicDigits::new_big_5(), 0, 10, [5, 2, 6, 0, 9, 8, 2, 1, 2, 8];
+    AutomorphicDigits::new_big_6(), 0, 10, [6, 7, 3, 9, 0, 1, 7, 8, 7, 1];
 );
