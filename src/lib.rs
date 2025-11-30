@@ -1,4 +1,5 @@
 pub mod ackermann_sets;
+pub mod automorphic;
 pub mod bell;
 pub mod catalan;
 pub mod collatz;
