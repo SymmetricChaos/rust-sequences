@@ -1,4 +1,4 @@
-use num::{BigInt, FromPrimitive, One};
+use num::{BigInt, One};
 
 pub struct Automorphic {
     value: BigInt,
@@ -15,7 +15,7 @@ impl Automorphic {
     {
         let value = BigInt::from(value);
         let base = BigInt::from(base);
-        assert!(base >= BigInt::from_i32(2).unwrap());
+        assert!(base > BigInt::one());
         assert!(
             &value < &base,
             "the starting value must be less than the base"
@@ -68,7 +68,7 @@ impl AutomorphicDigits {
     {
         let value = BigInt::from(value);
         let base = BigInt::from(base);
-        assert!(base >= BigInt::from_i32(2).unwrap());
+        assert!(base > BigInt::one());
         assert!(
             &value < &base,
             "the starting value must be less than the base"
