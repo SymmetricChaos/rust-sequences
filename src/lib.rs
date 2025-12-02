@@ -1,4 +1,5 @@
 pub mod ackermann_sets;
+pub mod arithmetic_derivative;
 pub mod automorphic;
 pub mod bell;
 pub mod catalan;
