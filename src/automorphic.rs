@@ -1,5 +1,6 @@
 use num::{BigInt, One};
 
+/// A sequence of integers converging on a k-adic number which is equal to itself when squared.
 pub struct Automorphic {
     value: BigInt,
     digits: u32,

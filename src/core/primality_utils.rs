@@ -151,7 +151,7 @@ pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
 }
 
 // Not practical to factor numbers beyond u32s this way
-/// Each prime factor and its multiplicity
+/// Each prime factor and its multiplicity. Returns an empty vector for 0 and 1.
 pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     // Handle 0 and 1
     if n <= 1 {
