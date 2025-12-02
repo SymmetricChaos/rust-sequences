@@ -8,7 +8,7 @@ pub struct Automorphic {
 
 impl Automorphic {
     /// Panics if value is greater than the base.
-    /// Panics if the value is not a product of factors of the base.
+    /// Panics if the value cannot be the start of a sequence.
     pub fn new_big<T>(value: T, base: T) -> Self
     where
         BigInt: From<T>,
@@ -61,7 +61,7 @@ pub struct AutomorphicDigits {
 
 impl AutomorphicDigits {
     /// Panics if value is greater than the base.
-    /// Panics if the value is not a product of factors of the base.
+    /// Panics if the value cannot be the start of a sequence.
     pub fn new_big<T>(value: T, base: T) -> Self
     where
         BigInt: From<T>,
