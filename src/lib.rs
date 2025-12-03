@@ -28,6 +28,7 @@ pub mod lucas_sequence;
 pub mod markov_algorithm;
 pub mod mobius;
 pub mod odious;
+pub mod padic_valuation;
 pub mod partition;
 pub mod pell;
 pub mod phythagorean;
