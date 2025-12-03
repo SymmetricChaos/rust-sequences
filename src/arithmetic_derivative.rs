@@ -26,6 +26,7 @@ pub struct ArithmeticDerivative {
 }
 
 impl ArithmeticDerivative {
+    /// Values are alwaus returned as u64 due to reliance on the prime_factorization function.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -42,6 +43,7 @@ impl Iterator for ArithmeticDerivative {
 }
 
 /// The arithmetic derivatives of the positive rational numbers ordered by antidiagonals.
+/// Values are given as i64 because these values may be negative
 pub struct ArithmeticDerivativeRational {
     numer: u64,
     denom: u64,
@@ -62,6 +64,17 @@ impl Iterator for ArithmeticDerivativeRational {
     type Item = Ratio<i64>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        let a: i64 = arith_deriv(self.numer)
+            .checked_mul(self.denom)?
+            .try_into()
+            .ok()?;
+        let b: i64 = arith_deriv(self.denom)
+            .checked_mul(self.numer)?
+            .try_into()
+            .ok()?;
+        let n: i64 = self.numer.checked_mul(self.numer)?.try_into().ok()?;
+
+        let out = Ratio::new(a - b, n);
         loop {
             self.numer = self.numer.checked_sub(1)?;
             self.denom = self.denom.checked_add(1)?;
@@ -75,17 +88,7 @@ impl Iterator for ArithmeticDerivativeRational {
             }
         }
 
-        let a: i64 = arith_deriv(self.numer)
-            .checked_mul(self.denom)?
-            .try_into()
-            .ok()?;
-        let b: i64 = arith_deriv(self.denom)
-            .checked_mul(self.numer)?
-            .try_into()
-            .ok()?;
-        let n: i64 = self.numer.checked_mul(self.numer)?.try_into().ok()?;
-
-        Some(Ratio::new(a - b, n))
+        Some(out)
     }
 }
 
