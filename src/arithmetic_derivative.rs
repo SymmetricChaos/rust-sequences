@@ -1,4 +1,4 @@
-use num::{Zero, rational::Ratio};
+use num::{Integer, Zero, rational::Ratio};
 
 use crate::core::primality_utils::prime_factorization;
 
@@ -19,8 +19,6 @@ fn arith_deriv(n: u64) -> u64 {
 }
 
 /// The so-called arithmetic derivative of each natural number defined as follows
-/// d(0) = 0
-/// d(1) = 0
 /// d(p) = 1 (for all primes p)
 /// d(mn) = d(m)n + d(n)m (for all naturals m, n)
 pub struct ArithmeticDerivative {
@@ -42,3 +40,59 @@ impl Iterator for ArithmeticDerivative {
         Some(out)
     }
 }
+
+/// The arithmetic derivatives of the positive rational numbers ordered by antidiagonals.
+pub struct ArithmeticDerivativeRational {
+    numer: u64,
+    denom: u64,
+    row: u64,
+}
+
+impl ArithmeticDerivativeRational {
+    pub fn new() -> Self {
+        Self {
+            numer: 1,
+            denom: 1,
+            row: 1,
+        }
+    }
+}
+
+impl Iterator for ArithmeticDerivativeRational {
+    type Item = Ratio<i64>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            self.numer = self.numer.checked_sub(1)?;
+            self.denom = self.denom.checked_add(1)?;
+            if self.numer.is_zero() {
+                self.row = self.row.checked_add(1)?;
+                self.numer = self.row.clone();
+                self.denom = 1;
+            }
+            if self.numer.gcd(&self.denom) == 1 {
+                break;
+            }
+        }
+
+        let a: i64 = arith_deriv(self.numer)
+            .checked_mul(self.denom)?
+            .try_into()
+            .ok()?;
+        let b: i64 = arith_deriv(self.denom)
+            .checked_mul(self.numer)?
+            .try_into()
+            .ok()?;
+        let n: i64 = self.numer.checked_mul(self.numer)?.try_into().ok()?;
+
+        Some(Ratio::new(a - b, n))
+    }
+}
+
+crate::print_values!(
+    ArithmeticDerivativeRational::new(), 0, 10;
+);
+
+crate::check_sequences!(
+    ArithmeticDerivative::new(), 0, 14, [0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9];
+);
