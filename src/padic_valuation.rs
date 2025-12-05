@@ -1,6 +1,21 @@
 use crate::core::rationals::Rationals;
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed};
 
+pub fn padic_valuation<T: CheckedAdd + Clone + Integer>(n: &T, p: &T) -> T {
+    let mut val = T::zero();
+    let mut n = n.clone();
+    loop {
+        let (q, r) = n.div_rem(&p);
+        n = q;
+        if r.is_zero() {
+            val = val + T::one();
+        } else {
+            break;
+        }
+    }
+    val
+}
+
 /// The k-adic valuation of each positive integer. When k is prime it is a p-adic valuation.
 pub struct PadicValuation<T> {
     p: T,
@@ -29,17 +44,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for PadicValuation<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut val = T::zero();
-        let mut n = self.ctr.clone();
-        loop {
-            let (q, r) = n.div_rem(&self.p);
-            n = q;
-            if r.is_zero() {
-                val = val.checked_add(&T::one())?;
-            } else {
-                break;
-            }
-        }
+        let val = padic_valuation(&self.ctr, &self.p);
         self.ctr = self.ctr.checked_add(&T::one())?;
         Some(val)
     }
@@ -72,46 +77,23 @@ impl PadicValuationRational<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer + CheckedSub> Iterator for PadicValuationRational<T> {
+impl<T: CheckedAdd + Clone + Integer + CheckedSub + Signed> Iterator for PadicValuationRational<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let q = self.rationals.next()?;
-        let mut numer = q.numer().clone();
-        let mut denom = q.denom().clone();
 
-        let mut val_numer = T::zero();
-        let mut val_denom = T::zero();
-
-        loop {
-            let (q, r) = numer.div_rem(&self.p);
-            numer = q;
-            if r.is_zero() {
-                val_numer = val_numer.checked_add(&T::one())?;
-            } else {
-                break;
-            }
-        }
-
-        loop {
-            let (q, r) = denom.div_rem(&self.p);
-            denom = q;
-            if r.is_zero() {
-                val_denom = val_denom.checked_add(&T::one())?;
-            } else {
-                break;
-            }
-        }
+        let val_numer = padic_valuation(q.numer(), &self.p);
+        let val_denom = padic_valuation(q.denom(), &self.p);
 
         Some(val_numer - val_denom)
     }
 }
 
 crate::print_values!(
-    PadicValuation::new(3), 0, 30;
+    PadicValuationRational::new_big(2), 0, 30;
 );
 
-crate::print_values!(
-    rational_pairs, formatter "{:?}", sep " ";
-    PadicValuationRational::new_big(3).zip(Rationals::new_big().map(|n| n.to_string())), 0, 40;
+crate::check_sequences!(
+    PadicValuation::new(2), 0, 20, [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2];
 );
