@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
 
-/// The non-negative rational numbers in anti-diagonal order
+/// The rational numbers in anti-diagonal order
 pub struct Rationals<N> {
     numer: N,
     denom: N,
@@ -8,6 +8,7 @@ pub struct Rationals<N> {
 }
 
 impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Rationals<N> {
+    /// The non-negative rationals
     pub fn new() -> Self {
         Self {
             numer: N::one(),
@@ -16,6 +17,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Rationals<N> {
         }
     }
 
+    /// The positive rationals
     pub fn new_pos() -> Self {
         Self {
             numer: N::one(),
@@ -26,6 +28,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Rationals<N> {
 }
 
 impl Rationals<BigInt> {
+    /// The non-negative rationals
     pub fn new_big() -> Self {
         Self {
             numer: BigInt::one(),
@@ -34,6 +37,7 @@ impl Rationals<BigInt> {
         }
     }
 
+    /// The positive rationals
     pub fn new_big_pos() -> Self {
         Self {
             numer: BigInt::one(),
@@ -73,14 +77,14 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
 }
 
 /// All rational numbers, starting from zero, with the positive rationals in anti-diagonal order each followed by its negative.
-pub struct RationalsAll<N> {
+pub struct RationalsSigned<N> {
     numer: N,
     denom: N,
     row: N,
     positive: bool,
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> RationalsAll<N> {
+impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> RationalsSigned<N> {
     pub fn new() -> Self {
         Self {
             numer: N::one(),
@@ -91,7 +95,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> RationalsAll<N
     }
 }
 
-impl RationalsAll<BigInt> {
+impl RationalsSigned<BigInt> {
     pub fn new_big() -> Self {
         Self {
             numer: BigInt::one(),
@@ -102,7 +106,7 @@ impl RationalsAll<BigInt> {
     }
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for RationalsAll<N> {
+impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for RationalsSigned<N> {
     type Item = Ratio<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -136,5 +140,5 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for R
 
 crate::print_values!(
     Rationals::<u32>::new(), 0, 20;
-    RationalsAll::<i32>::new(), 0, 20;
+    RationalsSigned::<i32>::new(), 0, 20;
 );
