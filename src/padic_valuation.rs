@@ -168,7 +168,7 @@ impl<T: CheckedAdd + Clone + Integer + One + Signed + CheckedSub> PadicValuation
     pub fn new(p: T) -> Self {
         Self {
             p,
-            rationals: Rationals::<T>::new(),
+            rationals: Rationals::new_pos(),
         }
     }
 }
@@ -180,7 +180,7 @@ impl PadicValuationRational<BigInt> {
     {
         Self {
             p: BigInt::from(p),
-            rationals: Rationals::new_big(),
+            rationals: Rationals::new_big_pos(),
         }
     }
 }
@@ -208,7 +208,7 @@ impl<T: CheckedAdd + Clone + Integer + One + Signed + CheckedSub> PadicAbsRation
     pub fn new(p: T) -> Self {
         Self {
             p,
-            rationals: Rationals::<T>::new(),
+            rationals: Rationals::<T>::new_pos(),
         }
     }
 }
@@ -220,7 +220,7 @@ impl PadicAbsRational<BigInt> {
     {
         Self {
             p: BigInt::from(p),
-            rationals: Rationals::new_big(),
+            rationals: Rationals::new_big_pos(),
         }
     }
 }
