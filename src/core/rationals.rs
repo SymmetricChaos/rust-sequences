@@ -77,14 +77,14 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
 }
 
 /// All rational numbers, starting from zero, with the positive rationals in anti-diagonal order each followed by its negative.
-pub struct RationalsSigned<N> {
+pub struct SignedRationals<N> {
     numer: N,
     denom: N,
     row: N,
     positive: bool,
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> RationalsSigned<N> {
+impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> SignedRationals<N> {
     pub fn new() -> Self {
         Self {
             numer: N::one(),
@@ -95,7 +95,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> RationalsSigne
     }
 }
 
-impl RationalsSigned<BigInt> {
+impl SignedRationals<BigInt> {
     pub fn new_big() -> Self {
         Self {
             numer: BigInt::one(),
@@ -106,7 +106,7 @@ impl RationalsSigned<BigInt> {
     }
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for RationalsSigned<N> {
+impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for SignedRationals<N> {
     type Item = Ratio<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -140,5 +140,5 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for R
 
 crate::print_values!(
     Rationals::<u32>::new(), 0, 20;
-    RationalsSigned::<i32>::new(), 0, 20;
+    SignedRationals::<i32>::new(), 0, 20;
 );
