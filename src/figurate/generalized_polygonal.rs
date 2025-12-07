@@ -99,7 +99,7 @@ pub struct GeneralizedPentagonalGeneric<T> {
 impl<T: PrimInt + Signed> GeneralizedPentagonalGeneric<T> {
     pub fn new() -> Self {
         Self {
-            integers: Integers::<T>::new(),
+            integers: Integers::new(),
         }
     }
 
