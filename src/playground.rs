@@ -1,4 +1,3 @@
-use crate::core::dirichlet_convolution::one;
 #[cfg(test)]
 use crate::{
     core::{
@@ -6,7 +5,7 @@ use crate::{
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
         differences::AbsDiffs,
-        dirichlet_convolution::DirichletConvolution,
+        dirichlet_convolution::{DirichletConvolution, one},
         exponential::Exponential,
         prime::Primes,
         rational_transforms::Ratios,
@@ -19,7 +18,7 @@ use crate::{
     zeta::Zeta,
 };
 #[cfg(test)]
-use num::{BigInt};
+use num::BigInt;
 
 crate::print_values!(
     print_integers, formatter "{}", sep ", ";

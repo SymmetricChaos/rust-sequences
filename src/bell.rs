@@ -11,11 +11,6 @@ impl BellTriangle {
             row: vec![BigInt::one()],
         }
     }
-
-    /// Return an iterator over the elements in each row.
-    pub fn as_ints() -> impl Iterator<Item = BigInt> {
-        Self::new_big().flatten()
-    }
 }
 
 impl Iterator for BellTriangle {
@@ -36,4 +31,8 @@ impl Iterator for BellTriangle {
 crate::print_values!(
     print_triangles, formatter "{:?}", sep "\n";
     BellTriangle::new_big(), 0, 5;
+);
+
+crate::print_values!(
+    BellTriangle::new_big().flatten(), 0, 15;
 );

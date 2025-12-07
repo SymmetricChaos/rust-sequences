@@ -40,7 +40,7 @@ pub struct Diffs<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: Signed> Diffs<T> {
+impl<T: CheckedSub + Clone + Signed> Diffs<T> {
     pub fn new<I>(mut iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,

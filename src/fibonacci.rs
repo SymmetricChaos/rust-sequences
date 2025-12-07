@@ -40,7 +40,6 @@ impl<T: CheckedAdd + Clone> Iterator for Fibonacci<T> {
 
 /// The bits of the infinite Fibonacci word.
 /// 0, 1, 0, 0, 1, 0, 1, 0, 0, 1...
-
 pub struct FibonacciWord<T> {
     word: VecDeque<bool>,
     zero: T,

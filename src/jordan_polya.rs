@@ -9,7 +9,7 @@ pub struct JordanPolya {
 
 impl JordanPolya {
     pub fn new() -> Self {
-        let mut factorials = Factorials::<u64>::new();
+        let mut factorials = Factorials::new();
         factorials.next();
         factorials.next();
         Self {

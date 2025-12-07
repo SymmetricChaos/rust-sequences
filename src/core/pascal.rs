@@ -11,11 +11,6 @@ impl<T: CheckedAdd + Clone + One> PascalsTriangle<T> {
             row: vec![T::one()],
         }
     }
-
-    /// Return an iterator over the elements in each row.
-    pub fn as_ints() -> impl Iterator<Item = T> {
-        Self::new().flatten()
-    }
 }
 
 impl PascalsTriangle<BigInt> {
@@ -23,11 +18,6 @@ impl PascalsTriangle<BigInt> {
         Self {
             row: vec![BigInt::one()],
         }
-    }
-
-    /// Return an iterator over the elements in each row.
-    pub fn as_ints_big() -> impl Iterator<Item = BigInt> {
-        Self::new_big().flatten()
     }
 }
 
@@ -101,6 +91,6 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    PascalsTriangle::<i32>::as_ints(), 0, 20, [1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1, 1, 5, 10, 10, 5];
-    BernoullisTriangle::<i32>::as_ints(), 0, 20, [1, 1, 2, 1, 3, 4, 1, 4, 7, 8, 1, 5, 11, 15, 16, 1, 6, 16, 26, 31];
+    PascalsTriangle::<i32>::new().flatten(), 0, 20, [1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1, 1, 5, 10, 10, 5];
+    BernoullisTriangle::<i32>::new().flatten(), 0, 20, [1, 1, 2, 1, 3, 4, 1, 4, 7, 8, 1, 5, 11, 15, 16, 1, 6, 16, 26, 31];
 );
