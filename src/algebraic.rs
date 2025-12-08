@@ -20,7 +20,7 @@ impl Iterator for Algebraic {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = Some(polynomial_string_signed(&self.coef, false));
-
+        // Something with integer partitions perhaps?
         out
     }
 }
