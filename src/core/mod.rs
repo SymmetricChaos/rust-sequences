@@ -28,6 +28,7 @@ pub mod continued_fraction;
 pub mod differences;
 pub mod dirichlet_convolution;
 pub mod modular_int;
+pub mod polynomial;
 pub mod products;
 pub mod rational_transforms;
 pub mod stirling;
