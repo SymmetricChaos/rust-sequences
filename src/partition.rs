@@ -46,84 +46,111 @@ impl Iterator for Partition {
     }
 }
 
-//    if n == 0:
-//         yield []
-//     if n <= 0:
-//         return
-//     for p in revlex_partitions(n-1):
-//         if len(p) == 1 or (len(p) > 1 and p[-1] < p[-2]):
-//             p[-1] += 1
-//             yield p
-//             p[-1] -= 1
-//         p.append(1)
-//         yield p
-//         p.pop()
+// https://github.com/quadrupleslap/integer-partitions/blob/master/src/lib.rs
+enum State {
+    A,
+    B { x: usize, l: usize },
+}
 
 /// The partitions of a non-negative integer.
-pub struct PartitionsN<T> {
-    n: T,
-    part: Vec<T>,
+pub struct PartitionsN {
+    k: usize,
+    y: usize,
+    parts: Vec<usize>,
+    state: State,
 }
 
-impl<T: Clone> PartitionsN<T> {
-    pub fn new(n: T) -> Self {
+impl PartitionsN {
+    pub fn new(n: usize) -> Self {
         Self {
-            n: n.clone(),
-            part: vec![n],
+            parts: vec![0; n + 1],
+            k: if n == 0 { 0 } else { 1 },
+            y: if n == 0 { 0 } else { n - 1 },
+            state: State::A,
         }
     }
 }
 
-impl PartitionsN<BigInt> {
-    pub fn new_big<T>(n: T) -> Self
-    where
-        BigInt: From<T>,
-    {
-        let n = BigInt::from(n);
-        Self {
-            n: n.clone(),
-            part: vec![n],
-        }
-    }
-}
-
-impl<T: CheckedSub + Clone + One> Iterator for PartitionsN<T> {
-    type Item = Vec<T>;
+impl Iterator for PartitionsN {
+    type Item = Vec<usize>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.part.clone();
+        let PartitionsN {
+            ref mut parts,
+            ref mut k,
+            ref mut y,
+            ref mut state,
+        } = *self;
+        match *state {
+            State::A => {
+                if *k == 0 {
+                    if parts.len() == 1 {
+                        parts.pop();
+                        Some(vec![])
+                    } else {
+                        None
+                    }
+                } else {
+                    *k -= 1;
+                    let x = parts[*k] + 1;
 
-        for p in PartitionsN::new(self.n.checked_sub(&T::one())?) {}
+                    while 2 * x <= *y {
+                        parts[*k] = x;
+                        *y -= x;
+                        *k += 1;
+                    }
 
-        Some(out)
+                    let l = *k + 1;
+
+                    if x <= *y {
+                        parts[*k] = x;
+                        parts[l] = *y;
+                        *state = State::B { x, l };
+                        Some(parts[..*k + 2].to_vec())
+                    } else {
+                        parts[*k] = x + *y;
+                        *y = x + *y - 1;
+                        Some(parts[..*k + 1].to_vec())
+                    }
+                }
+            }
+            State::B { mut x, l } => {
+                x += 1;
+                *y -= 1;
+
+                if x <= *y {
+                    parts[*k] = x;
+                    parts[l] = *y;
+                    *state = State::B { x, l };
+                    Some(parts[..*k + 2].to_vec())
+                } else {
+                    parts[*k] = x + *y;
+                    *y = x + *y - 1;
+                    *state = State::A;
+                    Some(parts[..*k + 1].to_vec())
+                }
+            }
+        }
     }
 }
 
 /// The partitions of each non-negative integer.
-pub struct Partitions<T> {
-    ctr: T,
+pub struct Partitions {
+    ctr: usize,
 }
 
-impl<T: Zero> Partitions<T> {
+impl Partitions {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
-impl Partitions<BigInt> {
-    pub fn new_big() -> Self {
-        Self {
-            ctr: BigInt::zero(),
-        }
-    }
-}
-
-impl<T: CheckedAdd + Clone + One> Iterator for Partitions<T> {
-    type Item = Vec<Vec<T>>;
+impl Iterator for Partitions {
+    type Item = Vec<Vec<usize>>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = PartitionsN::<T>::new(self.ctr.clone()).collect_vec();
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        let out = PartitionsN::new(self.ctr.clone()).collect_vec();
+        self.ctr = self.ctr.checked_add(1)?;
         Some(out)
     }
 }
@@ -134,4 +161,10 @@ crate::check_iteration_times!(
 
 crate::check_sequences!(
     Partition::new_big(), 0, 10, [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+);
+
+crate::print_values!(
+    print_arrays, formatter "{:?}", sep "\n";
+    PartitionsN::new(5), 0, 10;
+    Partitions::new(), 0, 5;
 );
