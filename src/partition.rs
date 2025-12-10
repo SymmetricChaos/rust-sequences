@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use num::{BigInt, CheckedAdd, CheckedSub, One, Zero};
+use num::{BigInt, One, Zero};
 
 /// The number of partitons for each integer.
 pub struct Partition {
@@ -47,17 +47,17 @@ impl Iterator for Partition {
 }
 
 // https://github.com/quadrupleslap/integer-partitions/blob/master/src/lib.rs
-enum State {
-    A,
-    B { x: usize, l: usize },
-}
-
 /// The partitions of a non-negative integer.
 pub struct PartitionsN {
     k: usize,
     y: usize,
     parts: Vec<usize>,
     state: State,
+}
+
+enum State {
+    A,
+    B { x: usize, l: usize },
 }
 
 impl PartitionsN {
