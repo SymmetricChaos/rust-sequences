@@ -38,6 +38,7 @@ pub mod playground;
 pub mod repint;
 pub mod rowland;
 pub mod smooth;
+pub mod sorted_pairs;
 pub mod squarefree;
 pub mod sylverster;
 pub mod tag_machine;
