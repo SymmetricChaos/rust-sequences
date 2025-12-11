@@ -17,17 +17,14 @@ impl Algebraic {
     }
 }
 
-impl Algebraic {
-    fn next_poly(&mut self) {}
-}
-
+/// TODO: needs to include negatives and permutations
 impl Iterator for Algebraic {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if let Some(arr) = self.partitions.next() {
-                if arr.len() == 1 {
+                if arr.len() <= 1 {
                     continue;
                 } else {
                     let x = arr
