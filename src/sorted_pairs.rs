@@ -5,7 +5,7 @@ pub struct SortedPairs<T> {
     col: T,
 }
 
-impl<T: Zero + One> SortedPairs<T> {
+impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> SortedPairs<T> {
     pub fn new() -> Self {
         Self {
             row: T::one(),

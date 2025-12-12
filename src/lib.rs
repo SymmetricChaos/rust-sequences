@@ -35,6 +35,7 @@ pub mod pell;
 pub mod phythagorean;
 pub mod pi;
 pub mod playground;
+pub mod rado_pairs;
 pub mod repint;
 pub mod rowland;
 pub mod smooth;
@@ -45,6 +46,7 @@ pub mod tag_machine;
 pub mod thue_morse;
 pub mod trig;
 pub mod turing_machine;
+pub mod utils;
 pub mod weyl;
 pub mod zeta;
 
