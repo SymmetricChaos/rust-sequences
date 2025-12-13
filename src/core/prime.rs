@@ -4,7 +4,7 @@ use std::{
     hash::Hash, // Found to be much faster than BTreeMap
 };
 
-use crate::core::primality_utils::{prime_factorization, prime_signature};
+use crate::utils::divisibility::{prime_factorization, prime_signature};
 
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...

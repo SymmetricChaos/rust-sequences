@@ -1,4 +1,4 @@
-use crate::core::primality_utils::prime_factorization;
+use crate::utils::divisibility::prime_factorization;
 use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 

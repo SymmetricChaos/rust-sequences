@@ -13,7 +13,6 @@ pub mod nth_powers;
 pub mod parity;
 pub mod pascal;
 pub mod powers;
-pub mod primality_utils;
 pub mod prime;
 pub mod rational_digits;
 pub mod rationals;

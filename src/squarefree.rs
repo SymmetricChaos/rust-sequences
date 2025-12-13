@@ -1,4 +1,4 @@
-use crate::core::{primality_utils::squarefree_kernel, prime::Primes};
+use crate::{core::prime::Primes, utils::divisibility::squarefree_kernel};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 use std::hash::Hash;
 

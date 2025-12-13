@@ -1,7 +1,5 @@
 use num_format::ToFormattedString;
-use rust_sequences::core::primality_utils::{
-    is_prime, partial_trial_division, prime_factorization,
-};
+use rust_sequences::utils::divisibility::{is_prime, partial_trial_division, prime_factorization};
 use std::{collections::BTreeMap, io::Write, u64};
 
 fn _partial_factorization_density_test() {

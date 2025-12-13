@@ -1,4 +1,4 @@
-use crate::core::primality_utils::{
+use crate::utils::divisibility::{
     aliquot_sum, cototient, number_of_divisors, sum_of_divisors, totient,
 };
 

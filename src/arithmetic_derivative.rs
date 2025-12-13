@@ -1,6 +1,6 @@
 use num::{Integer, Zero, rational::Ratio};
 
-use crate::core::primality_utils::prime_factorization;
+use crate::utils::divisibility::prime_factorization;
 
 fn arith_deriv(n: u64) -> u64 {
     let factors = prime_factorization(n);

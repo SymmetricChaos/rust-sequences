@@ -36,6 +36,23 @@ impl_rado_pairs!(u8);
 impl_rado_pairs!(u16);
 impl_rado_pairs!(u32);
 
+impl Iterator for RadoPairs<BigInt> {
+    type Item = (BigInt, BigInt);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let (a, b) = self.pairs.next()?;
+            let mut t = b.clone();
+            for _ in num::iter::range(BigInt::one(), a.clone()) {
+                t = t / 2;
+            }
+            if (t % BigInt::from(2)).is_one() {
+                return Some((a, b));
+            }
+        }
+    }
+}
+
 crate::print_values!(
     pairs, formatter "{:?}", sep ", ";
     RadoPairs::<u8>::new(), 0, 20;

@@ -1,3 +1,17 @@
+// trait Predicates {
+//     fn bit_predicate(&self, b: &Self) -> bool;
+// }
+
+// macro_rules! impl_predicates {
+//     ($t: ty) => {
+//         impl Predicates for $t {
+//             fn bit_predicate(&self, b: &Self) -> bool {
+
+//             }
+//         }
+//     };
+// }
+
 /// Results true if the ath bit of b is 1.
 pub fn bit_predicate<T>(a: T, b: T) -> bool
 where
