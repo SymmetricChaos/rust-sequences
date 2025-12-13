@@ -210,7 +210,11 @@ pub fn prime_power_factorization(n: u64) -> Vec<u64> {
 }
 
 /// Number of divisors of n
+/// Defined as 0 for n = 0.
 pub fn number_of_divisors(n: u64) -> u64 {
+    if n == 0 {
+        return 0;
+    }
     let mut out = 1;
     for (_, multiplicity) in prime_factorization(n) {
         out *= multiplicity + 1;
@@ -251,24 +255,35 @@ pub fn aliquot_sum(n: u64) -> Option<u64> {
 }
 
 /// Squarefree kernel (radical) of a number, product of unique prime factors. The largest squarefree factor.
+/// Defined as 1 for n == 0
 pub fn squarefree_kernel(n: u64) -> u64 {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
 
 /// Euler's totient function. Number of positive integers coprime to n and less than n.
+/// Defined as 0 for n == 0
 pub fn totient(n: u64) -> u64 {
+    if n == 0 {
+        return 0;
+    }
     prime_factorization(n)
         .iter()
         .fold(1, |acc, x| acc * (x.0.pow((x.1 - 1) as u32) * (x.0 - 1)))
 }
 
 /// Euler's cototient function. Number of positive integers not coprime to n and less than n.
+/// Defined as 0 for n == 0
 pub fn cototient(n: u64) -> u64 {
     n - totient(n)
 }
 
-/// All of the factors of n, including itself and 1.
+/// All of the factors of n.
+/// Defined as [0] for n = 0
 pub fn factors(n: u64) -> Vec<u64> {
+    if n == 0 {
+        return vec![0];
+    }
+
     let mut out = vec![1, n];
 
     if is_prime(n) {
@@ -289,7 +304,12 @@ pub fn factors(n: u64) -> Vec<u64> {
 }
 
 /// All of the proper factors of n (excluding itself and 1).
+/// Defined as [] for n = 0
 pub fn proper_factors(n: u64) -> Vec<u64> {
+    if n == 0 {
+        return vec![];
+    }
+
     let mut out = Vec::new();
 
     if is_prime(n) {
