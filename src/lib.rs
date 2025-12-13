@@ -5,6 +5,7 @@ pub mod automorphic;
 pub mod bell;
 pub mod catalan;
 pub mod collatz;
+pub mod compositions;
 pub mod core;
 pub mod derangement;
 pub mod digital_product;
