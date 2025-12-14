@@ -21,19 +21,25 @@ impl Algebraic {
 
 /// TODO: needs to include negatives and needs to sort correctly by height
 impl Iterator for Algebraic {
-    type Item = String;
+    type Item = Polynomial<i64>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if let Some(comp) = self.weak_comps.next() {
                 let p = Polynomial::new(&comp.iter().map(|x| *x as i64).collect_vec());
-                return Some(p.to_string());
+                if p.cantor_height().unwrap() != self.height {
+                    // println!("{} {} SKIP", p.cantor_height().expect("failed height"), p);
+                    continue;
+                }
+                // println!("{} {}", p.cantor_height().expect("failed height"), p);
+                return Some(p);
             } else {
                 self.width += 1;
-                if self.width >= self.height {
+                if self.width > self.height {
                     self.width = 1;
                     self.height += 1;
                 }
+                println!("{} {}", self.width, self.height);
                 self.weak_comps = WeakCompositionsNK::new(self.height, self.width);
             }
         }
@@ -41,6 +47,6 @@ impl Iterator for Algebraic {
 }
 
 crate::print_values!(
-    print_arrays, formatter "{}", sep "\n";
-    Algebraic::new(), 0, 20;
+    print_arrays, formatter "{:?}", sep "\n";
+    Algebraic::new(), 0, 50;
 );

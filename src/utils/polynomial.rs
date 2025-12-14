@@ -45,9 +45,19 @@ where
         self.coef.len() <= 1
     }
 
-    pub fn height(&self) -> Option<usize> {
+    /// The degree of a polynomial. None if the polynomial is all zero.
+    pub fn degree(&self) -> Option<usize> {
         if self.coef.is_empty() {
-            Some(0)
+            None
+        } else {
+            Some(self.coef.len() - 1)
+        }
+    }
+
+    /// Cantor's height function. The degree of the polynomial plus the sum of the absolute values of the coefficients minus one. None if the polynomial is all zero.
+    pub fn cantor_height(&self) -> Option<usize> {
+        if self.coef.is_empty() {
+            None
         } else {
             let s: usize = self
                 .coef
@@ -55,7 +65,7 @@ where
                 .fold(N::zero(), |acc, x| acc + x.abs())
                 .try_into()
                 .ok()?;
-            Some(self.coef.len() + s - 1)
+            Some(self.degree()? + s - 1)
         }
     }
 }
@@ -223,7 +233,7 @@ mod polynomial_tests {
         let q = Polynomial::new(&[0, 0, 0]);
         assert!(q.is_constant());
 
-        let r = Polynomial::new(&[0, 1, 2]);
-        println!("{:?}", r.height());
+        let r = Polynomial::new(&[1, 1]);
+        assert_eq!(r.cantor_height().unwrap(), 2);
     }
 }
