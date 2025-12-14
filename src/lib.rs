@@ -6,6 +6,7 @@ pub mod bell;
 pub mod catalan;
 pub mod collatz;
 pub mod compositions;
+pub mod compositions_weak;
 pub mod core;
 pub mod derangement;
 pub mod digital_product;
@@ -67,6 +68,11 @@ macro_rules! big {
 
 #[macro_export]
 macro_rules! one_row {
+    ($seq: expr, $formatter:literal, $sep:literal) => {
+        let ns = itertools::Itertools::collect_vec($seq); // better to use fully qualified forms in macros
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
+        println!("{}\n{}\n", stringify!($seq), s);
+    };
     ($seq: expr, $skip: expr, $take: expr, $formatter:literal, $sep:literal) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
@@ -76,6 +82,26 @@ macro_rules! one_row {
 
 #[macro_export]
 macro_rules! print_values {
+    ($($sequence: expr);+;) => {
+        #[cfg(test)]
+        #[ignore = "visualization"]
+        #[test]
+        fn print_values() {
+            $(
+                crate::one_row!($sequence, "{}", ", ");
+            )+
+        }
+    };
+    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr);+;) => {
+        #[cfg(test)]
+        #[ignore = "visualization"]
+        #[test]
+        fn print_values() {
+            $(
+                crate::one_row!($sequence, $formatter, $sep);
+            )+
+        }
+    };
     ($($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
         #[ignore = "visualization"]
