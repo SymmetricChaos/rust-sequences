@@ -1,7 +1,3 @@
-use itertools::Itertools;
-
-use crate::utils::polynomial::Polynomial;
-
 /// Weak compositions of n that have k parts.
 pub struct WeakCompositionsNK {
     k: usize,
@@ -12,7 +8,7 @@ pub struct WeakCompositionsNK {
 impl WeakCompositionsNK {
     pub fn new(n: usize, k: usize) -> Self {
         if n < k {
-            panic!("n must be greater than k")
+            panic!("n must be greater than or equak to k")
         }
         if k < 1 {
             panic!("k must be greater than 1")
@@ -100,9 +96,4 @@ crate::print_values!(
     WeakCompositionsNK::new(5,3), 0, 10;
     WeakCompositionsN::new(5), 0, 20;
 
-);
-
-crate::print_values!(
-    print_polys, formatter "{}", sep "\n";
-    WeakCompositionsN::new(5).map(|x| Polynomial::new(&x.iter().map(|x| *x as i64).collect_vec())), 0, 20;
 );
