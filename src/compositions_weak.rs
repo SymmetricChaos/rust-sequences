@@ -1,3 +1,7 @@
+use itertools::Itertools;
+
+use crate::utils::polynomial::Polynomial;
+
 /// Weak compositions of n that have k parts.
 pub struct WeakCompositionsNK {
     k: usize,
@@ -57,6 +61,7 @@ impl Iterator for WeakCompositionsNK {
     }
 }
 
+/// Weak compositions of n. Unlike normal compositions these are enumerated from shortest to longest and are infinite.
 pub struct WeakCompositionsN {
     n: usize,
     k: usize,
@@ -67,8 +72,8 @@ impl WeakCompositionsN {
     pub fn new(n: usize) -> Self {
         Self {
             n,
-            k: n,
-            comps: WeakCompositionsNK::new(n, n),
+            k: 1,
+            comps: WeakCompositionsNK::new(n, 1),
         }
     }
 }
@@ -77,12 +82,27 @@ impl Iterator for WeakCompositionsN {
     type Item = Vec<usize>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        todo!()
+        loop {
+            let comp = self.comps.next();
+            if comp.is_some() {
+                return comp;
+            } else {
+                self.k += 1;
+                self.comps = WeakCompositionsNK::new(self.n, self.k);
+                return self.comps.next();
+            }
+        }
     }
 }
 
 crate::print_values!(
     print_arrays, formatter "{:?}", sep "\n";
-    WeakCompositionsNK::new(5,3);
-    // WeakCompositionsN::new(5), 0, 20;
+    WeakCompositionsNK::new(5,3), 0, 10;
+    WeakCompositionsN::new(5), 0, 20;
+
+);
+
+crate::print_values!(
+    print_polys, formatter "{}", sep "\n";
+    WeakCompositionsN::new(5).map(|x| Polynomial::new(&x.iter().map(|x| *x as i64).collect_vec())), 0, 20;
 );
