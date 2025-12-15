@@ -97,7 +97,7 @@ l_system!(
 );
 
 crate::print_values!(
-    print_linenmayer, formatter "{}", sep "\n";
+    print_lindenmayer, formatter "{}", sep "\n";
     Lindenmayer::new("0", tree_system), 0, 4;
     Lindenmayer::new("a", cantor_system), 0, 4;
     Lindenmayer::new("a", algae_system), 0, 7;

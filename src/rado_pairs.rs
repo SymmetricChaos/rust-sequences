@@ -23,7 +23,7 @@ macro_rules! impl_rado_pairs {
             fn next(&mut self) -> Option<Self::Item> {
                 loop {
                     let (a, b) = self.pairs.next()?;
-                    if bit_predicate(a, b) {
+                    if bit_predicate(a, b) || bit_predicate(b, a) {
                         return Some((a, b));
                     }
                 }

@@ -53,13 +53,6 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
-macro_rules! increment {
-    ($n:expr) => {
-        $n = $n.checked_add(&T::one())?;
-    };
-}
-
-#[macro_export]
 macro_rules! big {
     ($seq: expr) => {
         $seq.into_iter().map(|x| BigInt::from(x)).collect()
@@ -68,11 +61,13 @@ macro_rules! big {
 
 #[macro_export]
 macro_rules! one_row {
+    // Assume the iterator is finite and take all elements.
     ($seq: expr, $formatter:literal, $sep:literal) => {
         let ns = itertools::Itertools::collect_vec($seq); // better to use fully qualified forms in macros
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
         println!("{}\n{}\n", stringify!($seq), s);
     };
+    // Assume the iterator is infinite. Skip zero or more elements then take a specified number.
     ($seq: expr, $skip: expr, $take: expr, $formatter:literal, $sep:literal) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
@@ -82,9 +77,9 @@ macro_rules! one_row {
 
 #[macro_export]
 macro_rules! print_values {
+    // Assume a finite sequence that needs simple formatting.
     ($($sequence: expr);+;) => {
         #[cfg(test)]
-        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -92,9 +87,9 @@ macro_rules! print_values {
             )+
         }
     };
+    // Assume a finite sequence that needs special formatting.
     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr);+;) => {
         #[cfg(test)]
-        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -102,9 +97,9 @@ macro_rules! print_values {
             )+
         }
     };
+    // Assume an infinite sequence that needs simple formatting.
     ($($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
-        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -112,9 +107,9 @@ macro_rules! print_values {
             )+
         }
     };
+    // Assume an infinite sequence that needs special formatting.
     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
-        // #[ignore = "visualization"]
         #[test]
         fn $name() {
             $(
@@ -128,7 +123,6 @@ macro_rules! print_values {
 macro_rules! check_iteration_times {
     ($($seq: expr, $skip: expr);+ $(;)?) => {
         #[cfg(test)]
-        #[ignore = "visualization"]
         #[test]
         fn check_times() {
             $(
