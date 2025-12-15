@@ -180,17 +180,9 @@ fn first_term_str_debug<N: Debug + Zero + One + PartialEq + Signed>(c: &N, n: us
     if n == 0 {
         format!("{c:?}")
     } else if n == 1 {
-        if c.abs().is_one() {
-            format!("x")
-        } else {
-            format!("{c:?}x")
-        }
+        format!("{c:?}x")
     } else {
-        if c.abs().is_one() {
-            format!("x^{n}")
-        } else {
-            format!("{c:?}x^{n}")
-        }
+        format!("{c:?}x^{n}")
     }
 }
 
@@ -198,17 +190,9 @@ fn term_str_debug<N: Debug + Zero + One + PartialEq + Signed>(c: &N, n: usize) -
     if n == 0 {
         format!("{c:?}")
     } else if n == 1 {
-        if c.abs().is_one() {
-            format!("x")
-        } else {
-            format!("{:?}x", c.abs())
-        }
+        format!("{:?}x", c.abs())
     } else {
-        if c.abs().is_one() {
-            format!("x^{n}")
-        } else {
-            format!("{:?}x^{n}", c.abs())
-        }
+        format!("{:?}x^{n}", c.abs())
     }
 }
 
@@ -221,12 +205,12 @@ mod polynomial_tests {
         assert_eq!(p.to_string(), "1234x - 166x^3 - x^4 + 94x^5");
         assert_eq!(
             format!("{:?}", p),
-            "0 + 1234x + 0x^2 - 166x^3 - x^4 + 94x^5 + 0x^6"
+            "0 + 1234x + 0x^2 - 166x^3 - 1x^4 + 94x^5 + 0x^6"
         );
         p.trim();
         assert_eq!(
             format!("{:?}", p),
-            "0 + 1234x + 0x^2 - 166x^3 - x^4 + 94x^5"
+            "0 + 1234x + 0x^2 - 166x^3 - 1x^4 + 94x^5"
         );
         assert!(!p.is_constant());
 

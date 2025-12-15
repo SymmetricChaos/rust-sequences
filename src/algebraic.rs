@@ -39,7 +39,7 @@ impl Iterator for Algebraic {
                     self.width = 1;
                     self.height += 1;
                 }
-                println!("{} {}", self.width, self.height);
+                // println!("{} {}", self.width, self.height);
                 self.weak_comps = WeakCompositionsNK::new(self.height, self.width);
             }
         }

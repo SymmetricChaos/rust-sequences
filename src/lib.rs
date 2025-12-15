@@ -84,7 +84,7 @@ macro_rules! one_row {
 macro_rules! print_values {
     ($($sequence: expr);+;) => {
         #[cfg(test)]
-        #[ignore = "visualization"]
+        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -94,7 +94,7 @@ macro_rules! print_values {
     };
     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr);+;) => {
         #[cfg(test)]
-        #[ignore = "visualization"]
+        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -104,7 +104,7 @@ macro_rules! print_values {
     };
     ($($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
-        #[ignore = "visualization"]
+        // #[ignore = "visualization"]
         #[test]
         fn print_values() {
             $(
@@ -114,7 +114,7 @@ macro_rules! print_values {
     };
     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr, $skip: expr, $take: expr);+;) => {
         #[cfg(test)]
-        #[ignore = "visualization"]
+        // #[ignore = "visualization"]
         #[test]
         fn $name() {
             $(

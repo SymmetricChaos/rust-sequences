@@ -96,5 +96,4 @@ crate::print_values!(
     WeakCompositionsNK::new(2,2), 0, 10;
     WeakCompositionsNK::new(5,3), 0, 10;
     WeakCompositionsN::new(5), 0, 20;
-
 );
