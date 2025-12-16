@@ -12,9 +12,9 @@ pub struct Algebraic {
 impl Algebraic {
     pub fn new() -> Self {
         Self {
-            height: 1,
-            width: 1,
-            weak_comps: WeakCompositionsNK::new(1, 1),
+            height: 2,
+            width: 2,
+            weak_comps: WeakCompositionsNK::new(2, 2),
         }
     }
 }
@@ -27,11 +27,14 @@ impl Iterator for Algebraic {
         loop {
             if let Some(comp) = self.weak_comps.next() {
                 let p = Polynomial::new(&comp.iter().map(|x| *x as i64).collect_vec());
-                if p.cantor_height().unwrap() != self.height {
-                    // println!("{} {} SKIP", p.cantor_height().expect("failed height"), p);
+                if p.is_constant() {
                     continue;
                 }
-                // println!("{} {}", p.cantor_height().expect("failed height"), p);
+                // if p.cantor_height().unwrap() != self.height {
+                //     // println!("{} {} SKIP", p.cantor_height().expect("failed height"), p);
+                //     continue;
+                // }
+                // // println!("{} {}", p.cantor_height().expect("failed height"), p);
                 return Some(p);
             } else {
                 self.width += 1;
@@ -40,6 +43,7 @@ impl Iterator for Algebraic {
                     self.height += 1;
                 }
                 // println!("{} {}", self.width, self.height);
+
                 self.weak_comps = WeakCompositionsNK::new(self.height, self.width);
             }
         }
@@ -47,6 +51,6 @@ impl Iterator for Algebraic {
 }
 
 crate::print_values!(
-    print_arrays, formatter "{:?}", sep "\n";
+    print_arrays, formatter "{}", sep "\n";
     Algebraic::new(), 0, 50;
 );
