@@ -1,11 +1,12 @@
 use std::{
     fmt::{Debug, Display},
     ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign},
+    sync::Mutex,
 };
 
 use num::{One, Signed, Zero};
 
-pub const ASCENDING_DISPLAY: bool = true;
+pub const DEFAULT_TO_ASCENDING_DISPLAY: bool = true;
 
 pub struct Polynomial<N> {
     pub coef: Vec<N>,
@@ -101,6 +102,25 @@ where
         }
     }
 }
+impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Polynomial<N> {
+    pub fn debug_ascending(&self) -> String {
+        polynomial_debug(&self.coef, true)
+    }
+
+    pub fn debug_descending(&self) -> String {
+        polynomial_debug(&self.coef, false)
+    }
+}
+
+impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
+    pub fn format_ascending(&self) -> String {
+        polynomial_display(&self.coef, true)
+    }
+
+    pub fn format_descending(&self) -> String {
+        polynomial_display(&self.coef, false)
+    }
+}
 
 impl<N> Index<usize> for Polynomial<N> {
     type Output = N;
@@ -118,13 +138,21 @@ impl<N> IndexMut<usize> for Polynomial<N> {
 
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", polynomial_display(&self.coef))
+        write!(
+            f,
+            "{}",
+            polynomial_display(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
+        )
     }
 }
 
 impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", polynomial_debug(&self.coef))
+        write!(
+            f,
+            "{}",
+            polynomial_debug(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
+        )
     }
 }
 
@@ -150,13 +178,14 @@ impl<N: Add + Clone + Zero> Add for Polynomial<N> {
 
 pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
     polynomial: &[N],
+    ascending: bool,
 ) -> String {
     if polynomial.is_empty() {
         return N::zero().to_string();
     }
 
     let mut out = String::new();
-    if ASCENDING_DISPLAY {
+    if ascending {
         let mut coefs = polynomial
             .iter()
             .enumerate()
@@ -177,27 +206,7 @@ pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
             out.push_str(&term_str_display(c, n))
         }
     } else {
-        let mut coefs = polynomial
-            .iter()
-            .rev()
-            .enumerate()
-            .skip_while(|(_, c)| c.is_zero());
-
-        match coefs.next() {
-            Some((n, c)) => out.push_str(&first_term_str_display(c, n)),
-            None => return N::zero().to_string(),
-        };
-        for (n, c) in coefs {
-            if c.is_zero() {
-                continue;
-            }
-            if c.is_negative() {
-                out.push_str(" - ");
-            } else {
-                out.push_str(" + ");
-            }
-            out.push_str(&term_str_display(c, n))
-        }
+        todo!("NOT IMPLEMENTED")
     };
 
     out
@@ -239,16 +248,19 @@ fn term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n: usiz
     }
 }
 
-pub fn polynomial_debug<N: Debug + Zero + One + PartialEq + Signed>(polynomial: &[N]) -> String {
+pub fn polynomial_debug<N: Debug + Zero + One + PartialEq + Signed>(
+    polynomial: &[N],
+    ascending: bool,
+) -> String {
     if polynomial.is_empty() {
         return format!("{:?}", N::zero());
     }
 
     let mut out = String::new();
 
-    if ASCENDING_DISPLAY {
-        let mut coefs = polynomial.iter().enumerate();
+    let mut coefs = polynomial.iter().enumerate();
 
+    if ascending {
         match coefs.next() {
             Some((n, c)) => out.push_str(&first_term_str_debug(c, n)),
             None => return format!("{:?}", N::zero()),
@@ -264,8 +276,7 @@ pub fn polynomial_debug<N: Debug + Zero + One + PartialEq + Signed>(polynomial: 
             out.push_str(&term_str_debug(c, n))
         }
     } else {
-        let mut coefs = polynomial.iter().rev().enumerate();
-
+        let mut coefs = coefs.rev();
         match coefs.next() {
             Some((n, c)) => out.push_str(&first_term_str_debug(c, n)),
             None => return format!("{:?}", N::zero()),
@@ -328,5 +339,19 @@ mod polynomial_tests {
 
         let r = Polynomial::new(&[1, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
+    }
+    #[test]
+    fn polynomial_debug_form() {
+        let mut p = Polynomial::new_raw(&[0, 1234, 0, -166, -1, 94, 0]);
+
+        assert_eq!(
+            format!("{:?}", p),
+            "0x^6 + 94x^5 - 1x^4 - 166x^3 + 0x^2 + 1234x + 0"
+        );
+        p.trim();
+        assert_eq!(
+            format!("{:?}", p),
+            "94x^5 - 1x^4 - 166x^3 + 0x^2 + 1234x + 0"
+        );
     }
 }
