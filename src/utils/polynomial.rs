@@ -1,6 +1,6 @@
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign},
+    ops::{Add, Index, IndexMut},
 };
 
 use num::{One, Signed, Zero};
@@ -243,7 +243,7 @@ fn first_term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n
 
 fn term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n: usize) -> String {
     if n == 0 {
-        format!("{}", c)
+        format!("{}", c.abs())
     } else if n == 1 {
         if c.abs().is_one() {
             format!("x")
@@ -303,7 +303,7 @@ fn first_term_str_debug<N: Debug + Zero + One + PartialEq>(c: &N, n: usize) -> S
 
 fn term_str_debug<N: Debug + Zero + One + PartialEq + Signed>(c: &N, n: usize) -> String {
     if n == 0 {
-        format!("{c:?}")
+        format!("{:?}", c.abs())
     } else if n == 1 {
         format!("{:?}x", c.abs())
     } else {
