@@ -1,7 +1,6 @@
 use std::{
     fmt::{Debug, Display},
     ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign},
-    sync::Mutex,
 };
 
 use num::{One, Signed, Zero};
@@ -102,22 +101,13 @@ where
         }
     }
 }
-impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Polynomial<N> {
-    pub fn debug_ascending(&self) -> String {
-        polynomial_debug(&self.coef, true)
-    }
-
-    pub fn debug_descending(&self) -> String {
-        polynomial_debug(&self.coef, false)
-    }
-}
 
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
-    pub fn format_ascending(&self) -> String {
+    pub fn to_string_ascending(&self) -> String {
         polynomial_display(&self.coef, true)
     }
 
-    pub fn format_descending(&self) -> String {
+    pub fn to_string_descending(&self) -> String {
         polynomial_display(&self.coef, false)
     }
 }
@@ -206,7 +196,28 @@ pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
             out.push_str(&term_str_display(c, n))
         }
     } else {
-        todo!("NOT IMPLEMENTED")
+        let mut coefs = polynomial
+            .iter()
+            .enumerate()
+            .rev()
+            .skip_while(|(_, c)| c.is_zero());
+
+        match coefs.next() {
+            Some((n, c)) => out.push_str(&first_term_str_display(c, n)),
+            None => return format!("{}", N::zero()),
+        };
+        for (n, c) in coefs {
+            if c.is_zero() {
+                continue;
+            }
+            if c.is_negative() {
+                out.push_str(" - ");
+            } else {
+                out.push_str(" + ");
+            }
+
+            out.push_str(&term_str_display(c, n))
+        }
     };
 
     out
@@ -275,22 +286,6 @@ pub fn polynomial_debug<N: Debug + Zero + One + PartialEq + Signed>(
 
             out.push_str(&term_str_debug(c, n))
         }
-    } else {
-        let mut coefs = coefs.rev();
-        match coefs.next() {
-            Some((n, c)) => out.push_str(&first_term_str_debug(c, n)),
-            None => return format!("{:?}", N::zero()),
-        };
-        for (n, c) in coefs {
-            // In debug we will show any zeroes as positive terms
-            if c.is_negative() {
-                out.push_str(" - ");
-            } else {
-                out.push_str(" + ");
-            }
-
-            out.push_str(&term_str_debug(c, n))
-        }
     }
 
     out
@@ -340,18 +335,18 @@ mod polynomial_tests {
         let r = Polynomial::new(&[1, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
     }
+
     #[test]
-    fn polynomial_debug_form() {
-        let mut p = Polynomial::new_raw(&[0, 1234, 0, -166, -1, 94, 0]);
+    fn polynomial_ordering_test() {
+        let p = Polynomial::new(&[0, 1234, 0, -166, -1, 94, 0]);
 
         assert_eq!(
-            format!("{:?}", p),
-            "0x^6 + 94x^5 - 1x^4 - 166x^3 + 0x^2 + 1234x + 0"
+            format!("{}", p.to_string_descending()),
+            "94x^5 - x^4 - 166x^3 + 1234x"
         );
-        p.trim();
         assert_eq!(
-            format!("{:?}", p),
-            "94x^5 - 1x^4 - 166x^3 + 0x^2 + 1234x + 0"
+            format!("{}", p.to_string_ascending()),
+            "1234x - 166x^3 - x^4 + 94x^5"
         );
     }
 }
