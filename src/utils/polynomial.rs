@@ -1,11 +1,15 @@
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, AddAssign, Index, IndexMut},
+    ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign},
 };
 
 use num::{One, Signed, Zero};
 
 pub const ASCENDING_DISPLAY: bool = true;
+
+pub struct Polynomial<N> {
+    pub coef: Vec<N>,
+}
 
 impl<N> Polynomial<N> {
     /// Determine if the polynomial is a constant.
@@ -22,10 +26,12 @@ impl<N> Polynomial<N> {
         }
     }
 
+    /// Returns a reference to the coefficient at the index or None if out of bounds.
     pub fn get(&self, index: usize) -> Option<&N> {
         self.coef.get(index)
     }
 
+    /// Returns a mutable reference to the coefficient at the index or None if out of bounds.
     pub fn get_mut(&mut self, index: usize) -> Option<&mut N> {
         self.coef.get_mut(index)
     }
@@ -34,10 +40,6 @@ impl<N> Polynomial<N> {
     pub fn len(&self) -> usize {
         self.coef.len()
     }
-}
-
-pub struct Polynomial<N> {
-    pub coef: Vec<N>,
 }
 
 impl<N: Clone + Zero> Polynomial<N> {
@@ -69,6 +71,14 @@ impl<N: Clone + Zero> Polynomial<N> {
             }
         }
         self.coef.truncate(last + 1);
+    }
+
+    /// Get irrefutable. Returns a clone of the coefficient or zero if the value is too high.
+    pub fn get_irref(&self, n: usize) -> N {
+        match self.get(n) {
+            Some(n) => n.clone(),
+            None => N::zero(),
+        }
     }
 }
 
@@ -106,43 +116,37 @@ impl<N> IndexMut<usize> for Polynomial<N> {
     }
 }
 
-impl<N: Clone + Display + Zero + One + PartialEq + Signed> Display for Polynomial<N> {
+impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", polynomial_display(&self.coef))
     }
 }
 
-impl<N: Clone + Debug + Zero + One + PartialEq + Signed> Debug for Polynomial<N> {
+impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", polynomial_debug(&self.coef))
     }
 }
 
-impl<N: AddAssign + Clone + Zero> Add for Polynomial<N> {
+impl<N: Add + Clone + Zero> Add for Polynomial<N> {
     type Output = Polynomial<N>;
 
     fn add(self, rhs: Self) -> Self::Output {
         if self.len() >= rhs.len() {
             let mut out = self.coef.clone();
             for (i, c) in rhs.coef.iter().enumerate() {
-                out[i] += c.clone();
+                out[i] = out[i].clone() + c.clone();
             }
             Polynomial::new(&out)
         } else {
             let mut out = rhs.coef.clone();
             for (i, c) in self.coef.iter().enumerate() {
-                out[i] += c.clone();
+                out[i] = out[i].clone() + c.clone();
             }
             Polynomial::new(&out)
         }
     }
 }
-
-// impl<N> AddAssign for Polynomial<N> {
-//     fn add_assign(&mut self, rhs: Self) {
-
-//     }
-// }
 
 pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
     polynomial: &[N],
