@@ -1,6 +1,6 @@
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, Index, IndexMut},
+    ops::{Add, AddAssign, Index, IndexMut},
 };
 
 use num::{One, Signed, Zero};
@@ -11,7 +11,7 @@ pub struct Polynomial<N> {
     pub coef: Vec<N>,
 }
 
-impl<N> Polynomial<N> {
+impl<N: Clone + Zero> Polynomial<N> {
     /// Determine if the polynomial is a constant.
     pub fn is_constant(&self) -> bool {
         self.coef.len() <= 1
@@ -40,9 +40,17 @@ impl<N> Polynomial<N> {
     pub fn len(&self) -> usize {
         self.coef.len()
     }
-}
 
-impl<N: Clone + Zero> Polynomial<N> {
+    /// Iterate over the coefficients in ascending order with immutable references.
+    pub fn iter(&self) -> std::slice::Iter<'_, N> {
+        self.coef.iter()
+    }
+
+    /// Iterate over the coefficients in ascending order with mutable references.
+    pub fn iter_mut(&mut self) -> std::slice::IterMut<'_, N> {
+        self.coef.iter_mut()
+    }
+
     /// A new polynomial with coefficient given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
     pub fn new(coef: &[N]) -> Self {
         let mut p = Self {
@@ -103,10 +111,12 @@ where
 }
 
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
+    /// Print the polynomial with coefficients in ascending order.
     pub fn to_string_ascending(&self) -> String {
         polynomial_display(&self.coef, true)
     }
 
+    /// Print the polynomial with coefficients in descending order.
     pub fn to_string_descending(&self) -> String {
         polynomial_display(&self.coef, false)
     }
@@ -150,7 +160,7 @@ impl<N: Add + Clone + Zero> Add for Polynomial<N> {
     type Output = Polynomial<N>;
 
     fn add(self, rhs: Self) -> Self::Output {
-        if self.len() >= rhs.len() {
+        let mut p = if self.len() >= rhs.len() {
             let mut out = self.coef.clone();
             for (i, c) in rhs.coef.iter().enumerate() {
                 out[i] = out[i].clone() + c.clone();
@@ -162,9 +172,36 @@ impl<N: Add + Clone + Zero> Add for Polynomial<N> {
                 out[i] = out[i].clone() + c.clone();
             }
             Polynomial::new(&out)
+        };
+        p.trim();
+        p
+    }
+}
+
+impl<N: AddAssign + Clone + Zero> AddAssign for Polynomial<N> {
+    fn add_assign(&mut self, rhs: Self) {
+        if self.len() >= rhs.len() {
+            for (i, c) in rhs.coef.iter().enumerate() {
+                self.coef[i] += c.clone();
+            }
+        } else {
+            while self.len() < rhs.len() {
+                self.coef.push(N::zero());
+            }
+            for (i, c) in rhs.coef.iter().enumerate() {
+                self.coef[i] += c.clone();
+            }
         }
     }
 }
+
+// impl<N: Add + Clone + Mul + One + Zero> Mul for Polynomial<N> {
+//     type Output = Polynomial<N>;
+
+//     fn mul(self, rhs: Self) -> Self::Output {
+//         todo!()
+//     }
+// }
 
 pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
     polynomial: &[N],
