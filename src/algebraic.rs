@@ -52,5 +52,5 @@ impl Iterator for Algebraic {
 
 crate::print_values!(
     print_arrays, formatter "{}", sep "\n";
-    Algebraic::new(), 0, 50;
+    Algebraic::new().map(|x| x.to_string_descending()), 0, 30;
 );
