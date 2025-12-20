@@ -69,7 +69,7 @@ impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
         self.coef.iter_mut()
     }
 
-    /// A new polynomial with coefficient given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
+    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
     pub fn new(coef: &[N]) -> Self {
         let mut p = Self {
             coef: coef.to_vec(),
@@ -78,7 +78,7 @@ impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
         p
     }
 
-    /// A new polynomial with coefficient given in increasing order so that constant term is at index zero.
+    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
     /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
     pub fn new_raw(coef: &[N]) -> Self {
         Self {
@@ -119,7 +119,7 @@ impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
     }
 
     /// Evaluate the polynomial at a point, returning None on overflow.
-    pub fn eval_chekced(&self, n: &N) -> Option<N> {
+    pub fn eval_checked(&self, n: &N) -> Option<N> {
         let mut out = <N>::zero();
         let mut x = <N>::one();
         for i in self.iter() {
@@ -180,6 +180,38 @@ impl<N: PrimInt + Signed> Neg for Polynomial<N> {
     }
 }
 
+impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
+    /// Print the polynomial with coefficients in ascending order.
+    pub fn to_string_ascending(&self) -> String {
+        polynomial_display(&self.coef, true)
+    }
+
+    /// Print the polynomial with coefficients in descending order.
+    pub fn to_string_descending(&self) -> String {
+        polynomial_display(&self.coef, false)
+    }
+}
+
+impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            polynomial_display(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
+        )
+    }
+}
+
+impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            polynomial_debug(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
+        )
+    }
+}
+
 macro_rules! poly_extras_unsigned {
     ($t:ty) => {
         impl Polynomial<$t> {
@@ -226,38 +258,6 @@ poly_extras_signed!(i64);
 poly_extras_unsigned!(u64);
 poly_extras_signed!(i32);
 poly_extras_unsigned!(u32);
-
-impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
-    /// Print the polynomial with coefficients in ascending order.
-    pub fn to_string_ascending(&self) -> String {
-        polynomial_display(&self.coef, true)
-    }
-
-    /// Print the polynomial with coefficients in descending order.
-    pub fn to_string_descending(&self) -> String {
-        polynomial_display(&self.coef, false)
-    }
-}
-
-impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}",
-            polynomial_display(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
-        )
-    }
-}
-
-impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{}",
-            polynomial_debug(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
-        )
-    }
-}
 
 #[cfg(test)]
 mod polynomial_tests {
