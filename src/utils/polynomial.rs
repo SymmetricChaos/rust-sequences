@@ -1,17 +1,35 @@
+use num::{One, PrimInt, Signed, Zero};
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, AddAssign, Index, IndexMut},
+    ops::{Add, AddAssign, Index, IndexMut, MulAssign, Neg},
 };
 
-use num::{One, Signed, Zero};
+use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
 
 pub const DEFAULT_TO_ASCENDING_DISPLAY: bool = true;
 
+#[derive(Clone, PartialEq, Eq)]
 pub struct Polynomial<N> {
     pub coef: Vec<N>,
 }
 
-impl<N: Clone + Zero> Polynomial<N> {
+// Implementation for any type
+impl<N> Index<usize> for Polynomial<N> {
+    type Output = N;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.coef[index]
+    }
+}
+
+impl<N> IndexMut<usize> for Polynomial<N> {
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.coef[index]
+    }
+}
+
+// Implementations for primitive integer types
+impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
     /// Determine if the polynomial is a constant.
     pub fn is_constant(&self) -> bool {
         self.coef.len() <= 1
@@ -88,27 +106,126 @@ impl<N: Clone + Zero> Polynomial<N> {
             None => N::zero(),
         }
     }
+
+    /// Evaluate the polynomial at a point, panicking on overflow.
+    pub fn eval(&self, n: &N) -> N {
+        let mut out = <N>::zero();
+        let mut x = <N>::one();
+        for i in self.iter() {
+            out += *i * *n;
+            x *= *n;
+        }
+        out
+    }
+
+    /// Evaluate the polynomial at a point, returning None on overflow.
+    pub fn eval_chekced(&self, n: &N) -> Option<N> {
+        let mut out = <N>::zero();
+        let mut x = <N>::one();
+        for i in self.iter() {
+            out = out.checked_add(&i.checked_mul(n)?)?;
+            x = x.checked_mul(n)?;
+        }
+        Some(out)
+    }
 }
 
-impl<N: Clone + Signed + Zero> Polynomial<N>
-where
-    usize: TryFrom<N>,
-{
-    /// Cantor's height function. The degree of the polynomial plus the sum of the absolute values of the coefficients minus one. None if the polynomial is all zero.
-    pub fn cantor_height(&self) -> Option<usize> {
-        if self.coef.is_empty() {
-            None
+impl<N: PrimInt + AddAssign + MulAssign> Add for Polynomial<N> {
+    type Output = Polynomial<N>;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut p = if self.len() >= rhs.len() {
+            let mut out = self.coef.clone();
+            for (i, c) in rhs.coef.iter().enumerate() {
+                out[i] = out[i] + *c;
+            }
+            Polynomial::new(&out)
         } else {
-            let s: usize = self
-                .coef
-                .iter()
-                .fold(N::zero(), |acc, x| acc + x.abs())
-                .try_into()
-                .ok()?;
-            Some(self.degree()? + s - 1)
+            let mut out = rhs.coef.clone();
+            for (i, c) in self.coef.iter().enumerate() {
+                out[i] = out[i] + *c;
+            }
+            Polynomial::new(&out)
+        };
+        p.trim();
+        p
+    }
+}
+
+impl<N: PrimInt + AddAssign + MulAssign> AddAssign for Polynomial<N> {
+    fn add_assign(&mut self, rhs: Self) {
+        if self.len() >= rhs.len() {
+            for (i, c) in rhs.coef.iter().enumerate() {
+                self.coef[i] += *c;
+            }
+        } else {
+            while self.len() < rhs.len() {
+                self.coef.push(N::zero());
+            }
+            for (i, c) in rhs.coef.iter().enumerate() {
+                self.coef[i] += *c;
+            }
         }
     }
 }
+
+impl<N: PrimInt + Signed> Neg for Polynomial<N> {
+    type Output = Self;
+
+    fn neg(mut self) -> Self::Output {
+        for i in self.coef.iter_mut() {
+            *i = -*i;
+        }
+        self
+    }
+}
+
+macro_rules! poly_extras_unsigned {
+    ($t:ty) => {
+        impl Polynomial<$t> {
+            /// Cantor's height function. The degree of the polynomial plus the sum of the absolute values of the coefficients minus one. None if the polynomial is all zero.
+            pub fn cantor_height(&self) -> Option<usize> {
+                if self.coef.is_empty() {
+                    None
+                } else {
+                    let s: usize = self
+                        .coef
+                        .iter()
+                        .fold(<$t>::zero(), |acc, x| acc + x)
+                        .try_into()
+                        .ok()?;
+                    Some(self.degree()? + s - 1)
+                }
+            }
+        }
+    };
+}
+
+macro_rules! poly_extras_signed {
+    ($t:ty) => {
+        impl Polynomial<$t> {
+            /// Cantor's height function. The degree of the polynomial plus the sum of the absolute values of the coefficients minus one. None if the polynomial is all zero.
+            pub fn cantor_height(&self) -> Option<usize> {
+                if self.coef.is_empty() {
+                    None
+                } else {
+                    let s: usize = self
+                        .coef
+                        .iter()
+                        .fold(<$t>::zero(), |acc, x| acc + x.abs())
+                        .try_into()
+                        .ok()?;
+                    Some(self.degree()? + s - 1)
+                }
+            }
+        }
+    };
+}
+
+poly_extras_signed!(i64);
+poly_extras_unsigned!(u64);
+poly_extras_signed!(i32);
+poly_extras_unsigned!(u32);
 
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
     /// Print the polynomial with coefficients in ascending order.
@@ -119,20 +236,6 @@ impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
     /// Print the polynomial with coefficients in descending order.
     pub fn to_string_descending(&self) -> String {
         polynomial_display(&self.coef, false)
-    }
-}
-
-impl<N> Index<usize> for Polynomial<N> {
-    type Output = N;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self.coef[index]
-    }
-}
-
-impl<N> IndexMut<usize> for Polynomial<N> {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.coef[index]
     }
 }
 
@@ -156,204 +259,12 @@ impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N>
     }
 }
 
-impl<N: Add + Clone + Zero> Add for Polynomial<N> {
-    type Output = Polynomial<N>;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        let mut p = if self.len() >= rhs.len() {
-            let mut out = self.coef.clone();
-            for (i, c) in rhs.coef.iter().enumerate() {
-                out[i] = out[i].clone() + c.clone();
-            }
-            Polynomial::new(&out)
-        } else {
-            let mut out = rhs.coef.clone();
-            for (i, c) in self.coef.iter().enumerate() {
-                out[i] = out[i].clone() + c.clone();
-            }
-            Polynomial::new(&out)
-        };
-        p.trim();
-        p
-    }
-}
-
-impl<N: AddAssign + Clone + Zero> AddAssign for Polynomial<N> {
-    fn add_assign(&mut self, rhs: Self) {
-        if self.len() >= rhs.len() {
-            for (i, c) in rhs.coef.iter().enumerate() {
-                self.coef[i] += c.clone();
-            }
-        } else {
-            while self.len() < rhs.len() {
-                self.coef.push(N::zero());
-            }
-            for (i, c) in rhs.coef.iter().enumerate() {
-                self.coef[i] += c.clone();
-            }
-        }
-    }
-}
-
-// impl<N: Add + Clone + Mul + One + Zero> Mul for Polynomial<N> {
-//     type Output = Polynomial<N>;
-
-//     fn mul(self, rhs: Self) -> Self::Output {
-//         todo!()
-//     }
-// }
-
-pub fn polynomial_display<N: Display + Zero + One + PartialEq + Signed>(
-    polynomial: &[N],
-    ascending: bool,
-) -> String {
-    if polynomial.is_empty() {
-        return N::zero().to_string();
-    }
-
-    let mut out = String::new();
-    if ascending {
-        let mut coefs = polynomial
-            .iter()
-            .enumerate()
-            .skip_while(|(_, c)| c.is_zero());
-        match coefs.next() {
-            Some((n, c)) => out.push_str(&first_term_str_display(c, n)),
-            None => return N::zero().to_string(),
-        };
-        for (n, c) in coefs {
-            if c.is_zero() {
-                continue;
-            }
-            if c.is_negative() {
-                out.push_str(" - ");
-            } else {
-                out.push_str(" + ");
-            }
-            out.push_str(&term_str_display(c, n))
-        }
-    } else {
-        let mut coefs = polynomial
-            .iter()
-            .enumerate()
-            .rev()
-            .skip_while(|(_, c)| c.is_zero());
-
-        match coefs.next() {
-            Some((n, c)) => out.push_str(&first_term_str_display(c, n)),
-            None => return format!("{}", N::zero()),
-        };
-        for (n, c) in coefs {
-            if c.is_zero() {
-                continue;
-            }
-            if c.is_negative() {
-                out.push_str(" - ");
-            } else {
-                out.push_str(" + ");
-            }
-
-            out.push_str(&term_str_display(c, n))
-        }
-    };
-
-    out
-}
-
-fn first_term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n: usize) -> String {
-    if n == 0 {
-        format!("{}", c)
-    } else if n == 1 {
-        if c.abs().is_one() {
-            format!("x")
-        } else {
-            format!("{c}x")
-        }
-    } else {
-        if c.abs().is_one() {
-            format!("x^{n}")
-        } else {
-            format!("{c}x^{n}")
-        }
-    }
-}
-
-fn term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n: usize) -> String {
-    if n == 0 {
-        format!("{}", c.abs())
-    } else if n == 1 {
-        if c.abs().is_one() {
-            format!("x")
-        } else {
-            format!("{}x", c.abs())
-        }
-    } else {
-        if c.abs().is_one() {
-            format!("x^{n}")
-        } else {
-            format!("{}x^{n}", c.abs())
-        }
-    }
-}
-
-pub fn polynomial_debug<N: Debug + Zero + One + PartialEq + Signed>(
-    polynomial: &[N],
-    ascending: bool,
-) -> String {
-    if polynomial.is_empty() {
-        return format!("{:?}", N::zero());
-    }
-
-    let mut out = String::new();
-
-    let mut coefs = polynomial.iter().enumerate();
-
-    if ascending {
-        match coefs.next() {
-            Some((n, c)) => out.push_str(&first_term_str_debug(c, n)),
-            None => return format!("{:?}", N::zero()),
-        };
-        for (n, c) in coefs {
-            // In debug we will show any zeroes as positive terms
-            if c.is_negative() {
-                out.push_str(" - ");
-            } else {
-                out.push_str(" + ");
-            }
-
-            out.push_str(&term_str_debug(c, n))
-        }
-    }
-
-    out
-}
-
-fn first_term_str_debug<N: Debug + Zero + One + PartialEq>(c: &N, n: usize) -> String {
-    if n == 0 {
-        format!("{c:?}")
-    } else if n == 1 {
-        format!("{c:?}x")
-    } else {
-        format!("{c:?}x^{n}")
-    }
-}
-
-fn term_str_debug<N: Debug + Zero + One + PartialEq + Signed>(c: &N, n: usize) -> String {
-    if n == 0 {
-        format!("{:?}", c.abs())
-    } else if n == 1 {
-        format!("{:?}x", c.abs())
-    } else {
-        format!("{:?}x^{n}", c.abs())
-    }
-}
-
 #[cfg(test)]
 mod polynomial_tests {
     use super::*;
     #[test]
     fn polynomial_struct() {
-        let mut p = Polynomial::new_raw(&[0, 1234, 0, -166, -1, 94, 0]);
+        let mut p = Polynomial::new_raw(&[0_i64, 1234, 0, -166, -1, 94, 0]);
         assert_eq!(p.to_string(), "1234x - 166x^3 - x^4 + 94x^5");
         assert_eq!(
             format!("{:?}", p),
@@ -366,10 +277,10 @@ mod polynomial_tests {
         );
         assert!(!p.is_constant());
 
-        let q = Polynomial::new(&[0, 0, 0]);
+        let q = Polynomial::new(&[0_i64, 0, 0]);
         assert!(q.is_constant());
 
-        let r = Polynomial::new(&[1, 1]);
+        let r = Polynomial::new(&[1_i64, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
     }
 
