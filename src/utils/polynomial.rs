@@ -1,7 +1,7 @@
 use num::{One, PrimInt, Signed, Zero};
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, AddAssign, Index, IndexMut, MulAssign, Neg},
+    ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign, Neg},
 };
 
 use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
@@ -134,7 +134,7 @@ impl<N: PrimInt + AddAssign + MulAssign> Add for Polynomial<N> {
     type Output = Polynomial<N>;
 
     fn add(self, rhs: Self) -> Self::Output {
-        let mut p = if self.len() >= rhs.len() {
+        if self.len() >= rhs.len() {
             let mut out = self.coef.clone();
             for (i, c) in rhs.coef.iter().enumerate() {
                 out[i] = out[i] + *c;
@@ -146,9 +146,7 @@ impl<N: PrimInt + AddAssign + MulAssign> Add for Polynomial<N> {
                 out[i] = out[i] + *c;
             }
             Polynomial::new(&out)
-        };
-        p.trim();
-        p
+        }
     }
 }
 
@@ -165,7 +163,8 @@ impl<N: PrimInt + AddAssign + MulAssign> AddAssign for Polynomial<N> {
             for (i, c) in rhs.coef.iter().enumerate() {
                 self.coef[i] += *c;
             }
-        }
+        };
+        self.trim();
     }
 }
 
@@ -177,6 +176,22 @@ impl<N: PrimInt + Signed> Neg for Polynomial<N> {
             *i = -*i;
         }
         self
+    }
+}
+
+impl<N: PrimInt + AddAssign + MulAssign> Mul for Polynomial<N> {
+    type Output = Polynomial<N>;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        let mut out_coefs = vec![N::zero(); self.len() + rhs.len()];
+
+        for (idx_a, a) in self.iter().enumerate() {
+            for (idx_b, b) in rhs.iter().enumerate() {
+                out_coefs[idx_a + idx_b] += *a * *b;
+            }
+        }
+
+        Polynomial::new(&out_coefs)
     }
 }
 
@@ -295,6 +310,32 @@ mod polynomial_tests {
         assert_eq!(
             format!("{}", p.to_string_ascending()),
             "1234x - 166x^3 - x^4 + 94x^5"
+        );
+    }
+
+    #[test]
+    fn poylnomial_addition() {
+        let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
+        let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
+        let z = p.clone() + q.clone();
+        println!(
+            "({}) +\n({}) =\n{}",
+            p.to_string_descending(),
+            q.to_string_descending(),
+            z.to_string_descending()
+        );
+    }
+
+    #[test]
+    fn poylnomial_multiplication() {
+        let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
+        let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
+        let z = p.clone() * q.clone();
+        println!(
+            "({}) +\n({}) =\n{}",
+            p.to_string_descending(),
+            q.to_string_descending(),
+            z.to_string_descending()
         );
     }
 }
