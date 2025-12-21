@@ -1,4 +1,4 @@
-use num::{One, PrimInt, Signed, Zero};
+use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 use std::{
     fmt::{Debug, Display},
     ops::{Add, AddAssign, Index, IndexMut, Mul, MulAssign, Neg},
@@ -13,7 +13,6 @@ pub struct Polynomial<N> {
     pub coef: Vec<N>,
 }
 
-// Implementation for any type
 impl<N> Index<usize> for Polynomial<N> {
     type Output = N;
 
@@ -28,8 +27,37 @@ impl<N> IndexMut<usize> for Polynomial<N> {
     }
 }
 
-// Implementations for primitive integer types
-impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
+impl<N: Clone + Zero> Polynomial<N> {
+    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
+    /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
+    pub fn new_raw(coef: &[N]) -> Self {
+        Self {
+            coef: coef.to_vec(),
+        }
+    }
+
+    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
+    pub fn new(coef: &[N]) -> Self {
+        let mut p = Self {
+            coef: coef.to_vec(),
+        };
+        p.trim();
+        p
+    }
+
+    /// Remove all trailing zero coefficients. This is performed automatically after operations that may change it.
+    pub fn trim(&mut self) {
+        let mut last = self.coef.len() - 1;
+        loop {
+            if self.coef[last].is_zero() && last > 0 {
+                last -= 1;
+            } else {
+                break;
+            }
+        }
+        self.coef.truncate(last + 1);
+    }
+
     /// Determine if the polynomial is a constant.
     pub fn is_constant(&self) -> bool {
         self.coef.len() <= 1
@@ -69,129 +97,12 @@ impl<N: PrimInt + MulAssign + AddAssign> Polynomial<N> {
         self.coef.iter_mut()
     }
 
-    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
-    pub fn new(coef: &[N]) -> Self {
-        let mut p = Self {
-            coef: coef.to_vec(),
-        };
-        p.trim();
-        p
-    }
-
-    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
-    /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
-    pub fn new_raw(coef: &[N]) -> Self {
-        Self {
-            coef: coef.to_vec(),
-        }
-    }
-
-    /// Remove all trailing zero coefficients. This is performed automatically after operations that may change it.
-    pub fn trim(&mut self) {
-        let mut last = self.coef.len() - 1;
-        loop {
-            if self.coef[last].is_zero() && last > 0 {
-                last -= 1;
-            } else {
-                break;
-            }
-        }
-        self.coef.truncate(last + 1);
-    }
-
     /// Get irrefutable. Returns a clone of the coefficient or zero if the value is too high.
     pub fn get_irref(&self, n: usize) -> N {
         match self.get(n) {
             Some(n) => n.clone(),
             None => N::zero(),
         }
-    }
-
-    /// Evaluate the polynomial at a point, panicking on overflow.
-    pub fn eval(&self, n: &N) -> N {
-        let mut out = <N>::zero();
-        let mut x = <N>::one();
-        for i in self.iter() {
-            out += *i * *n;
-            x *= *n;
-        }
-        out
-    }
-
-    /// Evaluate the polynomial at a point, returning None on overflow.
-    pub fn eval_checked(&self, n: &N) -> Option<N> {
-        let mut out = <N>::zero();
-        let mut x = <N>::one();
-        for i in self.iter() {
-            out = out.checked_add(&i.checked_mul(n)?)?;
-            x = x.checked_mul(n)?;
-        }
-        Some(out)
-    }
-}
-
-impl<N: PrimInt + AddAssign + MulAssign> Add for Polynomial<N> {
-    type Output = Polynomial<N>;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        if self.len() >= rhs.len() {
-            let mut out = self.coef.clone();
-            for (i, c) in rhs.coef.iter().enumerate() {
-                out[i] = out[i] + *c;
-            }
-            Polynomial::new(&out)
-        } else {
-            let mut out = rhs.coef.clone();
-            for (i, c) in self.coef.iter().enumerate() {
-                out[i] = out[i] + *c;
-            }
-            Polynomial::new(&out)
-        }
-    }
-}
-
-impl<N: PrimInt + AddAssign + MulAssign> AddAssign for Polynomial<N> {
-    fn add_assign(&mut self, rhs: Self) {
-        if self.len() >= rhs.len() {
-            for (i, c) in rhs.coef.iter().enumerate() {
-                self.coef[i] += *c;
-            }
-        } else {
-            while self.len() < rhs.len() {
-                self.coef.push(N::zero());
-            }
-            for (i, c) in rhs.coef.iter().enumerate() {
-                self.coef[i] += *c;
-            }
-        };
-        self.trim();
-    }
-}
-
-impl<N: PrimInt + Signed> Neg for Polynomial<N> {
-    type Output = Self;
-
-    fn neg(mut self) -> Self::Output {
-        for i in self.coef.iter_mut() {
-            *i = -*i;
-        }
-        self
-    }
-}
-
-impl<N: PrimInt + AddAssign + MulAssign> Mul for Polynomial<N> {
-    type Output = Polynomial<N>;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        let mut out_coefs = vec![N::zero(); self.len() + rhs.len()];
-
-        for (idx_a, a) in self.iter().enumerate() {
-            for (idx_b, b) in rhs.iter().enumerate() {
-                out_coefs[idx_a + idx_b] += *a * *b;
-            }
-        }
-
-        Polynomial::new(&out_coefs)
     }
 }
 
@@ -227,26 +138,94 @@ impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N>
     }
 }
 
-macro_rules! poly_extras_unsigned {
+macro_rules! poly_arith {
     ($t:ty) => {
-        impl Polynomial<$t> {
-            /// Cantor's height function. The degree of the polynomial plus the sum of the absolute values of the coefficients minus one. None if the polynomial is all zero.
-            pub fn cantor_height(&self) -> Option<usize> {
-                if self.coef.is_empty() {
-                    None
+        impl Add for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn add(self, rhs: Self) -> Self::Output {
+                if self.len() >= rhs.len() {
+                    let mut out = self.coef.clone();
+                    for (i, c) in rhs.coef.iter().enumerate() {
+                        out[i] = out[i].clone() + c.clone();
+                    }
+                    Polynomial::new(&out)
                 } else {
-                    let s: usize = self
-                        .coef
-                        .iter()
-                        .fold(<$t>::zero(), |acc, x| acc + x)
-                        .try_into()
-                        .ok()?;
-                    Some(self.degree()? + s - 1)
+                    let mut out = rhs.coef.clone();
+                    for (i, c) in self.coef.iter().enumerate() {
+                        out[i] = out[i].clone() + c.clone();
+                    }
+                    Polynomial::new(&out)
                 }
+            }
+        }
+
+        impl AddAssign for Polynomial<$t> {
+            fn add_assign(&mut self, rhs: Self) {
+                if self.len() >= rhs.len() {
+                    for (i, c) in rhs.coef.iter().enumerate() {
+                        self.coef[i] = self.coef[i].clone() + c.clone();
+                    }
+                } else {
+                    while self.len() < rhs.len() {
+                        self.coef.push(<$t>::zero());
+                    }
+                    for (i, c) in rhs.coef.iter().enumerate() {
+                        self.coef[i] = self.coef[i].clone() + c.clone();
+                    }
+                };
+                self.trim();
+            }
+        }
+
+        impl Neg for Polynomial<$t> {
+            type Output = Self;
+
+            fn neg(mut self) -> Self::Output {
+                for i in self.coef.iter_mut() {
+                    *i = -(i.clone());
+                }
+                self
+            }
+        }
+
+        impl Mul for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn mul(self, rhs: Self) -> Self::Output {
+                let mut out_coefs = vec![<$t>::zero(); self.len() + rhs.len()];
+
+                for (idx_a, a) in self.iter().enumerate() {
+                    for (idx_b, b) in rhs.iter().enumerate() {
+                        out_coefs[idx_a + idx_b] += (a.clone() * b.clone());
+                    }
+                }
+
+                Polynomial::new(&out_coefs)
+            }
+        }
+
+        impl MulAssign for Polynomial<$t> {
+            fn mul_assign(&mut self, rhs: Self) {
+                let mut t = vec![<$t>::zero(); self.len() + rhs.len()];
+                for (idx_a, a) in self.iter().enumerate() {
+                    for (idx_b, b) in rhs.iter().enumerate() {
+                        t[idx_a + idx_b] += (a.clone() * b.clone());
+                    }
+                }
+                self.coef = t;
+                self.trim();
             }
         }
     };
 }
+
+poly_arith!(i64);
+poly_arith!(i32);
+poly_arith!(BigInt);
+poly_arith!(BigRational);
+poly_arith!(Ratio<i32>);
+poly_arith!(Ratio<i64>);
 
 macro_rules! poly_extras_signed {
     ($t:ty) => {
@@ -270,12 +249,12 @@ macro_rules! poly_extras_signed {
 }
 
 poly_extras_signed!(i64);
-poly_extras_unsigned!(u64);
 poly_extras_signed!(i32);
-poly_extras_unsigned!(u32);
 
 #[cfg(test)]
 mod polynomial_tests {
+    use num::rational::Ratio;
+
     use super::*;
     #[test]
     fn polynomial_struct() {
@@ -297,6 +276,9 @@ mod polynomial_tests {
 
         let r = Polynomial::new(&[1_i64, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
+
+        let r = Polynomial::new(&[Ratio::new(1, 2), Ratio::new(-3, 7), Ratio::new(2, 1)]);
+        assert_eq!(format!("{}", r), "1/2 - 3/7x + 2x^2");
     }
 
     #[test]
@@ -317,7 +299,7 @@ mod polynomial_tests {
     fn poylnomial_addition() {
         let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
         let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
-        let z = p.clone() + q.clone();
+        let z: Polynomial<i32> = p.clone() + q.clone();
         println!(
             "({}) +\n({}) =\n{}",
             p.to_string_descending(),
@@ -330,7 +312,7 @@ mod polynomial_tests {
     fn poylnomial_multiplication() {
         let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
         let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
-        let z = p.clone() * q.clone();
+        let z: Polynomial<i32> = p.clone() * q.clone();
         println!(
             "({}) +\n({}) =\n{}",
             p.to_string_descending(),
