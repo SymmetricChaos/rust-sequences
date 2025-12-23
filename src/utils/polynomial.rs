@@ -1,7 +1,7 @@
 use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, Index, IndexMut, Mul, Neg, Sub},
+    ops::{Add, Div, Index, IndexMut, Mul, Neg, Rem, Sub},
 };
 
 use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
@@ -140,6 +140,26 @@ impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N>
 
 macro_rules! poly_arith {
     ($t:ty) => {
+        impl Zero for Polynomial<$t> {
+            fn zero() -> Self {
+                Polynomial::new_raw(&[])
+            }
+
+            fn is_zero(&self) -> bool {
+                self.len() == 0
+            }
+        }
+
+        impl One for Polynomial<$t> {
+            fn one() -> Self {
+                Polynomial::new_raw(&[<$t>::one()])
+            }
+
+            fn is_one(&self) -> bool {
+                self.len() == 1 || self.coef[0].is_one()
+            }
+        }
+
         impl Add for Polynomial<$t> {
             type Output = Polynomial<$t>;
 
@@ -260,6 +280,54 @@ macro_rules! poly_arith {
                     *i = -(i.clone());
                 }
                 self
+            }
+        }
+
+        impl Div for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn div(self, rhs: Self) -> Self::Output {
+                if rhs.is_zero() {
+                    panic!("divide by zero error")
+                }
+                if rhs.is_one() {
+                    return self.clone();
+                }
+                let mut out_coefs: Vec<$t> = Vec::new();
+                let mut dividend_coefs = self.coef.clone();
+
+                todo!()
+            }
+        }
+
+        impl Div<&Polynomial<$t>> for &Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn div(self, rhs: &Polynomial<$t>) -> Self::Output {
+                if rhs.is_zero() {
+                    panic!("divide by zero error")
+                }
+                if rhs.is_one() {
+                    return self.clone();
+                }
+
+                todo!()
+            }
+        }
+
+        impl Rem for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn rem(self, rhs: Self) -> Self::Output {
+                todo!()
+            }
+        }
+
+        impl Rem<&Polynomial<$t>> for &Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn rem(self, rhs: &Polynomial<$t>) -> Self::Output {
+                todo!()
             }
         }
     };
