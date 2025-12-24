@@ -8,6 +8,7 @@ use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
 
 pub const DEFAULT_TO_ASCENDING_DISPLAY: bool = true;
 
+/// A univariate polynomials
 #[derive(Clone, PartialEq, Eq)]
 pub struct Polynomial<N> {
     pub coef: Vec<N>,
@@ -104,6 +105,13 @@ impl<N: Clone + Zero> Polynomial<N> {
             None => N::zero(),
         }
     }
+
+    /// Increase the degree of the polynomial as if multipying by x^n.
+    pub fn increase_degree(&mut self, n: usize) {
+        for _ in 0..n {
+            self.coef.insert(0, N::zero());
+        }
+    }
 }
 
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
@@ -136,6 +144,24 @@ impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N>
             polynomial_debug(&self.coef, DEFAULT_TO_ASCENDING_DISPLAY)
         )
     }
+}
+
+macro_rules! add {
+    () => {
+        if self.len() >= rhs.len() {
+            let mut out = self.coef.clone();
+            for (i, c) in rhs.coef.iter().enumerate() {
+                out[i] += c;
+            }
+            Polynomial::new(&out)
+        } else {
+            let mut out = rhs.coef.clone();
+            for (i, c) in self.coef.iter().enumerate() {
+                out[i] += c;
+            }
+            Polynomial::new(&out)
+        }
+    };
 }
 
 macro_rules! poly_arith {
@@ -200,6 +226,26 @@ macro_rules! poly_arith {
             }
         }
 
+        impl Add<&Polynomial<$t>> for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn add(self, rhs: &Polynomial<$t>) -> Self::Output {
+                if self.len() >= rhs.len() {
+                    let mut out = self.coef.clone();
+                    for (i, c) in rhs.coef.iter().enumerate() {
+                        out[i] += c;
+                    }
+                    Polynomial::new(&out)
+                } else {
+                    let mut out = rhs.coef.clone();
+                    for (i, c) in self.coef.iter().enumerate() {
+                        out[i] += c;
+                    }
+                    Polynomial::new(&out)
+                }
+            }
+        }
+
         impl Sub for Polynomial<$t> {
             type Output = Polynomial<$t>;
 
@@ -221,6 +267,26 @@ macro_rules! poly_arith {
         }
 
         impl Sub<&Polynomial<$t>> for &Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn sub(self, rhs: &Polynomial<$t>) -> Self::Output {
+                if self.len() >= rhs.len() {
+                    let mut out = self.coef.clone();
+                    for (i, c) in rhs.coef.iter().enumerate() {
+                        out[i] -= c;
+                    }
+                    Polynomial::new(&out)
+                } else {
+                    let mut out = rhs.coef.clone();
+                    for (i, c) in self.coef.iter().enumerate() {
+                        out[i] -= c;
+                    }
+                    Polynomial::new(&out)
+                }
+            }
+        }
+
+        impl Sub<&Polynomial<$t>> for Polynomial<$t> {
             type Output = Polynomial<$t>;
 
             fn sub(self, rhs: &Polynomial<$t>) -> Self::Output {
@@ -272,6 +338,22 @@ macro_rules! poly_arith {
             }
         }
 
+        impl Mul<&Polynomial<$t>> for Polynomial<$t> {
+            type Output = Polynomial<$t>;
+
+            fn mul(self, rhs: &Polynomial<$t>) -> Self::Output {
+                let mut out_coefs = vec![<$t>::zero(); self.len() + rhs.len()];
+
+                for (idx_a, a) in self.iter().enumerate() {
+                    for (idx_b, b) in rhs.iter().enumerate() {
+                        out_coefs[idx_a + idx_b] += a * b;
+                    }
+                }
+
+                Polynomial::new(&out_coefs)
+            }
+        }
+
         impl Neg for Polynomial<$t> {
             type Output = Self;
 
@@ -293,10 +375,27 @@ macro_rules! poly_arith {
                 if rhs.is_one() {
                     return self.clone();
                 }
-                let mut out_coefs: Vec<$t> = Vec::new();
-                let mut dividend_coefs = self.coef.clone();
+                if self.len() < rhs.len() {
+                    return Polynomial::zero();
+                }
+                let mut out = Polynomial::<$t>::zero();
+                let mut numer = self.clone();
+                let denom = rhs.clone();
 
-                todo!()
+                while numer.len() >= denom.len() {
+                    let deg_diff = numer.len() - denom.len();
+                    let lead_coeff =
+                        numer.coef[numer.len() - 1].clone() / denom.coef[denom.len() - 1].clone();
+                    let mut term_coefs = vec![<$t>::zero(); deg_diff + 1];
+                    term_coefs[deg_diff] = lead_coeff.clone();
+                    let term_poly = Polynomial::new(&term_coefs);
+                    out = out + &term_poly;
+                    let subtract_poly = &term_poly * &denom;
+                    numer = &numer - &subtract_poly;
+                    numer.trim();
+                }
+
+                out
             }
         }
 
@@ -310,25 +409,91 @@ macro_rules! poly_arith {
                 if rhs.is_one() {
                     return self.clone();
                 }
+                if self.len() < rhs.len() {
+                    return Polynomial::zero();
+                }
+                let mut out = Polynomial::<$t>::zero();
+                let mut numer = self.clone();
+                let denom = rhs.clone();
 
-                todo!()
+                while numer.len() >= denom.len() {
+                    let deg_diff = numer.len() - denom.len();
+                    let lead_coeff =
+                        numer.coef[numer.len() - 1].clone() / denom.coef[denom.len() - 1].clone();
+                    let mut term_coefs = vec![<$t>::zero(); deg_diff + 1];
+                    term_coefs[deg_diff] = lead_coeff.clone();
+                    let term_poly = Polynomial::new(&term_coefs);
+                    out = out + &term_poly;
+                    let subtract_poly = &term_poly * &denom;
+                    numer = &numer - &subtract_poly;
+                    numer.trim();
+                }
+
+                out
             }
         }
 
-        impl Rem for Polynomial<$t> {
-            type Output = Polynomial<$t>;
+        // impl Div<&Polynomial<$t>> for &Polynomial<$t> {
+        //     type Output = Polynomial<$t>;
 
-            fn rem(self, rhs: Self) -> Self::Output {
-                todo!()
+        //     fn div(self, rhs: &Polynomial<$t>) -> Self::Output {
+        //         if rhs.is_zero() {
+        //             panic!("divide by zero error")
+        //         }
+        //         if rhs.is_one() {
+        //             return self.clone();
+        //         }
+
+        //         todo!()
+        //     }
+        // }
+
+        // impl Rem for Polynomial<$t> {
+        //     type Output = Polynomial<$t>;
+
+        //     fn rem(self, rhs: Self) -> Self::Output {
+        //         todo!()
+        //     }
+        // }
+
+        // impl Rem<&Polynomial<$t>> for &Polynomial<$t> {
+        //     type Output = Polynomial<$t>;
+
+        //     fn rem(self, rhs: &Polynomial<$t>) -> Self::Output {
+        //         todo!()
+        //     }
+        // }
+
+        impl Polynomial<$t> {
+            /// Evaluation of the polynomial at x by Horner's method.
+            pub fn eval(&self, x: &$t) -> $t {
+                let mut total = <$t>::zero();
+                for c in self.coef.iter().rev() {
+                    total = total * x + c;
+                }
+                total
             }
-        }
 
-        impl Rem<&Polynomial<$t>> for &Polynomial<$t> {
-            type Output = Polynomial<$t>;
+            // /// Evaluation of the polynomial at x by Horner's method.
+            // pub fn eval_checked(&self, x: &$t) -> Option<$t> {
+            //     let mut total = <$t>::zero();
+            //     for c in self.coef.iter().rev() {
+            //         total = total.checked_mul(x)?.checked_add(c)?;
+            //     }
+            //     Some(total)
+            // }
 
-            fn rem(self, rhs: &Polynomial<$t>) -> Self::Output {
-                todo!()
-            }
+            // pub fn derivative(&self) -> Polynomial<$t> {
+            //     if self.len() <= 1 {
+            //         Polynomial::zero()
+            //     } else {
+            //         let mut deriv_coefs = Vec::with_capacity(self.len() - 1);
+            //         for (n, c) in self.coef.iter().enumerate().skip(1) {
+            //             deriv_coefs.push(c.clone() * <$t>::from(n));
+            //         }
+            //         Polynomial::new(&deriv_coefs)
+            //     }
+            // }
         }
     };
 }
@@ -384,14 +549,18 @@ mod polynomial_tests {
         );
         assert!(!p.is_constant());
 
-        let q = Polynomial::new(&[0_i64, 0, 0]);
+        let q: Polynomial<i64> = Polynomial::new(&[0_i64, 0, 0]);
         assert!(q.is_constant());
 
-        let r = Polynomial::new(&[1_i64, 1]);
+        let r: Polynomial<i64> = Polynomial::new(&[1_i64, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
 
-        let r = Polynomial::new(&[Ratio::new(1, 2), Ratio::new(-3, 7), Ratio::new(2, 1)]);
+        let r: Polynomial<Ratio<i32>> =
+            Polynomial::new(&[Ratio::new(1, 2), Ratio::new(-3, 7), Ratio::new(2, 1)]);
         assert_eq!(format!("{}", r), "1/2 - 3/7x + 2x^2");
+
+        assert_eq!(4132, p.eval(&2));
+        assert_eq!(Ratio::new(109, 126), r.eval(&Ratio::new(-1, 3)));
     }
 
     #[test]
@@ -432,5 +601,20 @@ mod polynomial_tests {
             q.to_string_descending(),
             z.to_string_descending()
         );
+    }
+
+    #[test]
+    fn poylnomial_division() {
+        let p: Polynomial<i32> = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
+        let q: Polynomial<i32> = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
+        let z: Polynomial<i32> = &p * &q;
+        let qt = &z / &q;
+        println!(
+            "({}) /\n({}) =\n{}",
+            z.to_string_descending(),
+            q.to_string_descending(),
+            qt.to_string_descending()
+        );
+        assert!(p == qt);
     }
 }
