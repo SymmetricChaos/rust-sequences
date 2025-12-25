@@ -1,7 +1,7 @@
 use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, Div, Index, IndexMut, Mul, Neg, Rem, Sub},
+    ops::{Add, Index, IndexMut, Mul, Neg, Sub},
 };
 
 use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
@@ -311,98 +311,6 @@ macro_rules! poly_arith {
             }
         }
 
-        impl Div for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn div(self, rhs: Self) -> Self::Output {
-                if rhs.is_zero() {
-                    panic!("divide by zero error")
-                }
-                if rhs.is_one() {
-                    return self.clone();
-                }
-                if self.len() < rhs.len() {
-                    return Polynomial::zero();
-                }
-                let mut out = Polynomial::<$t>::zero();
-                let mut numer = self.clone();
-                let denom = rhs.clone();
-
-                println!("{}", numer);
-                println!("{}", denom);
-
-                while numer.len() >= denom.len() {
-                    let deg_diff = numer.len() - denom.len();
-                    let lead_coeff =
-                        numer.coef[numer.len() - 1].clone() / denom.coef[denom.len() - 1].clone();
-                    println!("{}", lead_coeff);
-                    let mut term_coefs = vec![<$t>::zero(); deg_diff + 1];
-                    term_coefs[deg_diff] = lead_coeff.clone();
-                    let term_poly = Polynomial::new(&term_coefs);
-                    out = out + &term_poly;
-                    let subtract_poly = &term_poly * &denom;
-                    numer = &numer - &subtract_poly;
-                    numer.trim();
-                }
-
-                out
-            }
-        }
-
-        impl Div<&Polynomial<$t>> for &Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn div(self, rhs: &Polynomial<$t>) -> Self::Output {
-                if rhs.is_zero() {
-                    panic!("divide by zero error")
-                }
-                if rhs.is_one() {
-                    return self.clone();
-                }
-                if self.len() < rhs.len() {
-                    return Polynomial::zero();
-                }
-                let mut out = Polynomial::<$t>::zero();
-                let mut numer = self.clone();
-                let denom = rhs.clone();
-
-                println!("{}", numer);
-                println!("{}", denom);
-
-                while numer.len() >= denom.len() {
-                    let deg_diff = numer.len() - denom.len();
-                    let lead_coeff =
-                        numer.coef.last().unwrap().clone() / denom.coef.last().unwrap().clone();
-                    println!("{}", lead_coeff);
-                    let mut term_coefs = vec![<$t>::zero(); deg_diff + 1];
-                    term_coefs[deg_diff] = lead_coeff.clone();
-                    let term_poly = Polynomial::new(&term_coefs);
-                    out = out + &term_poly;
-                    let subtract_poly = &term_poly * &denom;
-                    numer = &numer - &subtract_poly;
-                    numer.trim();
-                }
-
-                out
-            }
-        }
-
-        // impl Rem for Polynomial<$t> {
-        //     type Output = Polynomial<$t>;
-
-        //     fn rem(self, rhs: Self) -> Self::Output {
-        //         todo!()
-        //     }
-        // }
-
-        // impl Rem<&Polynomial<$t>> for &Polynomial<$t> {
-        //     type Output = Polynomial<$t>;
-
-        //     fn rem(self, rhs: &Polynomial<$t>) -> Self::Output {
-        //         todo!()
-        //     }
-        // }
-
         impl Polynomial<$t> {
             /// Evaluation of the polynomial at x by Horner's method.
             pub fn eval(&self, x: &$t) -> $t {
@@ -412,27 +320,6 @@ macro_rules! poly_arith {
                 }
                 total
             }
-
-            // /// Evaluation of the polynomial at x by Horner's method.
-            // pub fn eval_checked(&self, x: &$t) -> Option<$t> {
-            //     let mut total = <$t>::zero();
-            //     for c in self.coef.iter().rev() {
-            //         total = total.checked_mul(x)?.checked_add(c)?;
-            //     }
-            //     Some(total)
-            // }
-
-            // pub fn derivative(&self) -> Polynomial<$t> {
-            //     if self.len() <= 1 {
-            //         Polynomial::zero()
-            //     } else {
-            //         let mut deriv_coefs = Vec::with_capacity(self.len() - 1);
-            //         for (n, c) in self.coef.iter().enumerate().skip(1) {
-            //             deriv_coefs.push(c.clone() * <$t>::from(n));
-            //         }
-            //         Polynomial::new(&deriv_coefs)
-            //     }
-            // }
         }
     };
 }
@@ -541,6 +428,5 @@ mod polynomial_tests {
             q.to_string_descending(),
             z.to_string_descending()
         );
-        assert_eq!(p, z / q);
     }
 }
