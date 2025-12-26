@@ -202,15 +202,15 @@ mod polynomial_tests {
 
     #[test]
     fn polynomial_ordering_test() {
-        let p = Polynomial::new(vec![0, 1234, 0, -166, -1, 94, 0]);
+        let p = Polynomial::new(vec![0, 1234, 0, -166, -1, -94, 0]);
 
         assert_eq!(
             format!("{}", p.to_string_descending()),
-            "94x^5 - x^4 - 166x^3 + 1234x"
+            "-94x^5 - x^4 - 166x^3 + 1234x"
         );
         assert_eq!(
             format!("{}", p.to_string_ascending()),
-            "1234x - 166x^3 - x^4 + 94x^5"
+            "1234x - 166x^3 - x^4 + -94x^5"
         );
     }
 

@@ -64,13 +64,21 @@ fn first_term_str_display<N: Display + Zero + One + PartialEq + Signed>(c: &N, n
         format!("{}", c)
     } else if n == 1 {
         if c.abs().is_one() {
-            format!("x")
+            if c.is_negative() {
+                format!("-x")
+            } else {
+                format!("x")
+            }
         } else {
             format!("{c}x")
         }
     } else {
         if c.abs().is_one() {
-            format!("x^{n}")
+            if c.is_negative() {
+                format!("-x^{n}")
+            } else {
+                format!("x^{n}")
+            }
         } else {
             format!("{c}x^{n}")
         }
@@ -144,5 +152,36 @@ fn term_str_debug<N: Debug + Zero + One + PartialEq + Signed>(c: &N, n: usize) -
         format!("{:?}x", c.abs())
     } else {
         format!("{:?}x^{n}", c.abs())
+    }
+}
+
+#[cfg(test)]
+mod polynomial_tests {
+    use num::rational::Ratio;
+
+    use crate::utils::polynomial::Polynomial;
+
+    #[test]
+    fn polynomial_display_cheks() {
+        let polys = [
+            (vec![2, 3, 4], "2 + 3x + 4x^2"),
+            (vec![-2, -3, -4], "-2 - 3x - 4x^2"),
+            (vec![0, 2, 3], "2x + 3x^2"),
+            (vec![0, -2, -3], "-2x - 3x^2"),
+            (vec![1, 2, 3], "1 + 2x + 3x^2"),
+            (vec![-1, 2, 3], "-1 + 2x + 3x^2"),
+            (vec![2, 1, 3], "2 + x + 3x^2"),
+            (vec![2, -1, 3], "2 - x + 3x^2"),
+            (vec![2, -1, -3], "2 - x - 3x^2"),
+            (vec![2, 0, 3], "2 + 3x^2"),
+            (vec![2, 0, -3], "2 - 3x^2"),
+            (vec![0, -1, 3], "-x + 3x^2"),
+            (vec![0, 0, -1, 2], "-x^2 + 2x^3"),
+            (vec![0, 0, -2, 3], "-2x^2 + 3x^3"),
+        ];
+
+        for p in polys {
+            assert_eq!(p.1, Polynomial::new(p.0).to_string_ascending())
+        }
     }
 }

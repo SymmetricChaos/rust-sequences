@@ -178,7 +178,7 @@ macro_rules! poly_arith {
         }
 
         impl crate::utils::polynomial::Polynomial<$t> {
-            /// Evaluation of the crate::utils::polynomial::polynomial at x by Horner's method.
+            /// Evaluation of the polynomial at x by Horner's method.
             pub fn eval(&self, x: &$t) -> $t {
                 let mut total = <$t>::zero();
                 for c in self.coef.iter().rev() {
