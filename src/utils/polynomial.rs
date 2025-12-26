@@ -1,7 +1,7 @@
-use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
+use num::{One, Signed, Zero};
 use std::{
     fmt::{Debug, Display},
-    ops::{Add, Index, IndexMut, Mul, Neg, Sub},
+    ops::{Index, IndexMut},
 };
 
 use crate::utils::polynomial_printing::{polynomial_debug, polynomial_display};
@@ -21,38 +21,17 @@ impl<N> Index<usize> for Polynomial<N> {
         &self.coef[index]
     }
 }
-
 impl<N> IndexMut<usize> for Polynomial<N> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         &mut self.coef[index]
     }
 }
 
-impl<N: Clone + Zero> Polynomial<N> {
+impl<N> Polynomial<N> {
     /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
     /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
     pub fn new_raw(coef: Vec<N>) -> Self {
         Self { coef }
-    }
-
-    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
-    pub fn new(coef: Vec<N>) -> Self {
-        let mut p = Self { coef };
-        p.trim();
-        p
-    }
-
-    /// Remove all trailing zero coefficients. This is performed automatically after operations that may change it.
-    pub fn trim(&mut self) {
-        let mut last = self.coef.len() - 1;
-        loop {
-            if self.coef[last].is_zero() && last > 0 {
-                last -= 1;
-            } else {
-                break;
-            }
-        }
-        self.coef.truncate(last + 1);
     }
 
     /// Determine if the polynomial is a constant.
@@ -93,6 +72,28 @@ impl<N: Clone + Zero> Polynomial<N> {
     pub fn iter_mut(&mut self) -> std::slice::IterMut<'_, N> {
         self.coef.iter_mut()
     }
+}
+
+impl<N: Clone + Zero> Polynomial<N> {
+    /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
+    pub fn new(coef: Vec<N>) -> Self {
+        let mut p = Self { coef };
+        p.trim();
+        p
+    }
+
+    /// Remove all trailing zero coefficients. This is performed automatically after operations that may change it.
+    pub fn trim(&mut self) {
+        let mut last = self.coef.len() - 1;
+        loop {
+            if self.coef[last].is_zero() && last > 0 {
+                last -= 1;
+            } else {
+                break;
+            }
+        }
+        self.coef.truncate(last + 1);
+    }
 
     /// Get irrefutable. Returns a clone of the coefficient or zero if the value is too high.
     pub fn get_irref(&self, n: usize) -> N {
@@ -110,6 +111,7 @@ impl<N: Clone + Zero> Polynomial<N> {
     }
 }
 
+// Printing methods
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
     /// Print the polynomial with coefficients in ascending order.
     pub fn to_string_ascending(&self) -> String {
@@ -121,7 +123,6 @@ impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
         polynomial_display(&self.coef, false)
     }
 }
-
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -131,7 +132,6 @@ impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomia
         )
     }
 }
-
 impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
@@ -141,191 +141,6 @@ impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Debug for Polynomial<N>
         )
     }
 }
-
-macro_rules! add {
-    ($s:ident, $r:ident) => {
-        if $s.len() >= $r.len() {
-            let mut out = $s.coef.clone();
-            for (i, c) in $r.coef.iter().enumerate() {
-                out[i] += c;
-            }
-            Polynomial::new(out)
-        } else {
-            let mut out = $r.coef.clone();
-            for (i, c) in $s.coef.iter().enumerate() {
-                out[i] += c;
-            }
-            Polynomial::new(out)
-        }
-    };
-}
-
-macro_rules! sub {
-    ($s:ident, $r:ident) => {
-        if $s.len() >= $r.len() {
-            let mut out = $s.coef.clone();
-            for (i, c) in $r.coef.iter().enumerate() {
-                out[i] -= c;
-            }
-            Polynomial::new(out)
-        } else {
-            let mut out = $r.coef.clone();
-            for (i, c) in $s.coef.iter().enumerate() {
-                out[i] -= c;
-            }
-            Polynomial::new(out)
-        }
-    };
-}
-
-macro_rules! poly_arith {
-    ($t:ty) => {
-        impl Zero for Polynomial<$t> {
-            fn zero() -> Self {
-                Polynomial::new_raw(vec![])
-            }
-
-            fn is_zero(&self) -> bool {
-                self.len() == 0
-            }
-        }
-
-        impl One for Polynomial<$t> {
-            fn one() -> Self {
-                Polynomial::new_raw(vec![<$t>::one()])
-            }
-
-            fn is_one(&self) -> bool {
-                self.len() == 1 || self.coef[0].is_one()
-            }
-        }
-
-        impl Add for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn add(self, rhs: Self) -> Self::Output {
-                add!(self, rhs)
-            }
-        }
-
-        impl Add<&Polynomial<$t>> for &Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn add(self, rhs: &Polynomial<$t>) -> Self::Output {
-                add!(self, rhs)
-            }
-        }
-
-        impl Add<&Polynomial<$t>> for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn add(self, rhs: &Polynomial<$t>) -> Self::Output {
-                add!(self, rhs)
-            }
-        }
-
-        impl Sub for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn sub(self, rhs: Self) -> Self::Output {
-                sub!(self, rhs)
-            }
-        }
-
-        impl Sub<&Polynomial<$t>> for &Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn sub(self, rhs: &Polynomial<$t>) -> Self::Output {
-                sub!(self, rhs)
-            }
-        }
-
-        impl Sub<&Polynomial<$t>> for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn sub(self, rhs: &Polynomial<$t>) -> Self::Output {
-                sub!(self, rhs)
-            }
-        }
-
-        impl Mul for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn mul(self, rhs: Self) -> Self::Output {
-                let mut out_coefs = vec![<$t>::zero(); self.len() + rhs.len()];
-
-                for (idx_a, a) in self.iter().enumerate() {
-                    for (idx_b, b) in rhs.iter().enumerate() {
-                        out_coefs[idx_a + idx_b] += a * b;
-                    }
-                }
-
-                Polynomial::new(out_coefs)
-            }
-        }
-
-        impl Mul<&Polynomial<$t>> for &Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn mul(self, rhs: &Polynomial<$t>) -> Self::Output {
-                let mut out_coefs = vec![<$t>::zero(); self.len() + rhs.len()];
-
-                for (idx_a, a) in self.iter().enumerate() {
-                    for (idx_b, b) in rhs.iter().enumerate() {
-                        out_coefs[idx_a + idx_b] += a * b;
-                    }
-                }
-
-                Polynomial::new(out_coefs)
-            }
-        }
-
-        impl Mul<&Polynomial<$t>> for Polynomial<$t> {
-            type Output = Polynomial<$t>;
-
-            fn mul(self, rhs: &Polynomial<$t>) -> Self::Output {
-                let mut out_coefs = vec![<$t>::zero(); self.len() + rhs.len()];
-
-                for (idx_a, a) in self.iter().enumerate() {
-                    for (idx_b, b) in rhs.iter().enumerate() {
-                        out_coefs[idx_a + idx_b] += a * b;
-                    }
-                }
-
-                Polynomial::new(out_coefs)
-            }
-        }
-
-        impl Neg for Polynomial<$t> {
-            type Output = Self;
-
-            fn neg(mut self) -> Self::Output {
-                for i in self.coef.iter_mut() {
-                    *i = -(i.clone());
-                }
-                self
-            }
-        }
-
-        impl Polynomial<$t> {
-            /// Evaluation of the polynomial at x by Horner's method.
-            pub fn eval(&self, x: &$t) -> $t {
-                let mut total = <$t>::zero();
-                for c in self.coef.iter().rev() {
-                    total = total * x + c;
-                }
-                total
-            }
-        }
-    };
-}
-
-poly_arith!(i32);
-poly_arith!(i64);
-poly_arith!(BigInt);
-poly_arith!(Ratio<i32>);
-poly_arith!(Ratio<i64>);
-poly_arith!(BigRational);
 
 macro_rules! poly_extras {
     ($t:ty) => {
