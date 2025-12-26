@@ -31,17 +31,13 @@ impl<N> IndexMut<usize> for Polynomial<N> {
 impl<N: Clone + Zero> Polynomial<N> {
     /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
     /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
-    pub fn new_raw(coef: &[N]) -> Self {
-        Self {
-            coef: coef.to_vec(),
-        }
+    pub fn new_raw(coef: Vec<N>) -> Self {
+        Self { coef }
     }
 
     /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
-    pub fn new(coef: &[N]) -> Self {
-        let mut p = Self {
-            coef: coef.to_vec(),
-        };
+    pub fn new(coef: Vec<N>) -> Self {
+        let mut p = Self { coef };
         p.trim();
         p
     }
@@ -153,13 +149,13 @@ macro_rules! add {
             for (i, c) in $r.coef.iter().enumerate() {
                 out[i] += c;
             }
-            Polynomial::new(&out)
+            Polynomial::new(out)
         } else {
             let mut out = $r.coef.clone();
             for (i, c) in $s.coef.iter().enumerate() {
                 out[i] += c;
             }
-            Polynomial::new(&out)
+            Polynomial::new(out)
         }
     };
 }
@@ -171,13 +167,13 @@ macro_rules! sub {
             for (i, c) in $r.coef.iter().enumerate() {
                 out[i] -= c;
             }
-            Polynomial::new(&out)
+            Polynomial::new(out)
         } else {
             let mut out = $r.coef.clone();
             for (i, c) in $s.coef.iter().enumerate() {
                 out[i] -= c;
             }
-            Polynomial::new(&out)
+            Polynomial::new(out)
         }
     };
 }
@@ -186,7 +182,7 @@ macro_rules! poly_arith {
     ($t:ty) => {
         impl Zero for Polynomial<$t> {
             fn zero() -> Self {
-                Polynomial::new_raw(&[])
+                Polynomial::new_raw(vec![])
             }
 
             fn is_zero(&self) -> bool {
@@ -196,7 +192,7 @@ macro_rules! poly_arith {
 
         impl One for Polynomial<$t> {
             fn one() -> Self {
-                Polynomial::new_raw(&[<$t>::one()])
+                Polynomial::new_raw(vec![<$t>::one()])
             }
 
             fn is_one(&self) -> bool {
@@ -264,7 +260,7 @@ macro_rules! poly_arith {
                     }
                 }
 
-                Polynomial::new(&out_coefs)
+                Polynomial::new(out_coefs)
             }
         }
 
@@ -280,7 +276,7 @@ macro_rules! poly_arith {
                     }
                 }
 
-                Polynomial::new(&out_coefs)
+                Polynomial::new(out_coefs)
             }
         }
 
@@ -296,7 +292,7 @@ macro_rules! poly_arith {
                     }
                 }
 
-                Polynomial::new(&out_coefs)
+                Polynomial::new(out_coefs)
             }
         }
 
@@ -362,7 +358,7 @@ mod polynomial_tests {
     use super::*;
     #[test]
     fn polynomial_struct() {
-        let mut p = Polynomial::new_raw(&[0_i64, 1234, 0, -166, -1, 94, 0]);
+        let mut p = Polynomial::new_raw(vec![0_i64, 1234, 0, -166, -1, 94, 0]);
         assert_eq!(p.to_string(), "1234x - 166x^3 - x^4 + 94x^5");
         assert_eq!(
             format!("{:?}", p),
@@ -375,14 +371,14 @@ mod polynomial_tests {
         );
         assert!(!p.is_constant());
 
-        let q: Polynomial<i64> = Polynomial::new(&[0_i64, 0, 0]);
+        let q: Polynomial<i64> = Polynomial::new(vec![0_i64, 0, 0]);
         assert!(q.is_constant());
 
-        let r: Polynomial<i64> = Polynomial::new(&[1_i64, 1]);
+        let r: Polynomial<i64> = Polynomial::new(vec![1_i64, 1]);
         assert_eq!(r.cantor_height().unwrap(), 2);
 
         let r: Polynomial<Ratio<i32>> =
-            Polynomial::new(&[Ratio::new(1, 2), Ratio::new(-3, 7), Ratio::new(2, 1)]);
+            Polynomial::new(vec![Ratio::new(1, 2), Ratio::new(-3, 7), Ratio::new(2, 1)]);
         assert_eq!(format!("{}", r), "1/2 - 3/7x + 2x^2");
 
         assert_eq!(4132, p.eval(&2));
@@ -391,7 +387,7 @@ mod polynomial_tests {
 
     #[test]
     fn polynomial_ordering_test() {
-        let p = Polynomial::new(&[0, 1234, 0, -166, -1, 94, 0]);
+        let p = Polynomial::new(vec![0, 1234, 0, -166, -1, 94, 0]);
 
         assert_eq!(
             format!("{}", p.to_string_descending()),
@@ -405,8 +401,8 @@ mod polynomial_tests {
 
     #[test]
     fn poylnomial_addition() {
-        let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
-        let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
+        let p = Polynomial::new(vec![0, 1, 2, 3, 4, 5]);
+        let q = Polynomial::new(vec![1, 3, 5, 7, 9, 11]);
         let z: Polynomial<i32> = &p + &q;
         println!(
             "({}) +\n({}) =\n{}",
@@ -419,8 +415,8 @@ mod polynomial_tests {
 
     #[test]
     fn poylnomial_multiplication() {
-        let p = Polynomial::new(&[0, 1, 2, 3, 4, 5]);
-        let q = Polynomial::new(&[1, 3, 5, 7, 9, 11]);
+        let p = Polynomial::new(vec![0, 1, 2, 3, 4, 5]);
+        let q = Polynomial::new(vec![1, 3, 5, 7, 9, 11]);
         let z: Polynomial<i32> = &p * &q;
         println!(
             "({}) +\n({}) =\n{}",

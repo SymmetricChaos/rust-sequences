@@ -26,7 +26,7 @@ impl Iterator for Algebraic {
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if let Some(comp) = self.weak_comps.next() {
-                let p = Polynomial::new(&comp.iter().map(|x| *x as i64).collect_vec());
+                let p = Polynomial::new(comp.iter().map(|x| *x as i64).collect_vec());
                 if p.is_constant() {
                     continue;
                 }
