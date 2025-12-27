@@ -123,6 +123,17 @@ impl<N: Clone + Display + One + PartialEq + Signed + Zero> Polynomial<N> {
         polynomial_display(&self.coef, false)
     }
 }
+impl<N: Clone + Debug + One + PartialEq + Signed + Zero> Polynomial<N> {
+    /// Print the polynomial with coefficients in ascending order, showing all coefficients in debug format.
+    pub fn debug_string_ascending(&self) -> String {
+        polynomial_debug(&self.coef, true)
+    }
+
+    /// Print the polynomial with coefficients in descending order, showing all coefficients in debug format.
+    pub fn debug_string_descending(&self) -> String {
+        polynomial_debug(&self.coef, false)
+    }
+}
 impl<N: Clone + Display + One + PartialEq + Signed + Zero> Display for Polynomial<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
