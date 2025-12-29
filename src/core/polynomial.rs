@@ -35,8 +35,9 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for PolynomialNat
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut total = N::zero();
+        let x = self.ctr.next()?;
         for c in self.coef.iter().rev() {
-            total = total.checked_mul(&self.ctr.next()?)?.checked_add(c)?;
+            total = total.checked_mul(&x)?.checked_add(c)?;
         }
         Some(total)
     }
@@ -62,10 +63,16 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> Iterator for Poly
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut total = N::zero();
-
+        let x = self.ctr.next()?;
         for c in self.coef.iter().rev() {
-            total = total.checked_mul(&self.ctr.next()?)?.checked_add(c)?;
+            total = total.checked_mul(&x)?.checked_add(c)?;
         }
+
         Some(total)
     }
 }
+
+crate::check_sequences!(
+    PolynomialNaturals::<i32>::new(vec![-6,1,2]), 0, 10, [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
+    PolynomialIntegers::<i32>::new(vec![1,-4,3]), 0, 10, [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
+);

@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 
 use num::{BigInt, One, Zero};
 
-/// The unit function in number theory. A single 1 followed by infinite zeroes. It is the identity for the Dirichlet convolution.
+/// The unit function in number theory. A single 1 followed by infinite 0s. It is the identity for the Dirichlet convolution.
 pub struct UnitSequence<T> {
     n: bool,
     _phantom: PhantomData<T>,
