@@ -32,3 +32,4 @@ pub mod products;
 pub mod rational_transforms;
 pub mod stirling;
 pub mod summation;
+pub mod rational_bits;

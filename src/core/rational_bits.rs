@@ -3,14 +3,14 @@ use num::{
     rational::Ratio,
 };
 
-/// Decimal digits for the fractional part of of a non-negative fraction, preceeded by the whole part.
-pub struct DecimalDigits<T> {
+/// Bits of the fractional part of of a non-negative fraction that is less than one.
+pub struct RationalBits<T> {
     denom: T,
     remdr: T,
-    ten: T,
+    two: T,
 }
 
-impl<T: PrimInt + Integer> DecimalDigits<T> {
+impl<T: PrimInt + Integer> RationalBits<T> {
     pub fn new(numer: T, denom: T) -> Self {
         assert!(numer >= T::zero());
         assert!(denom > T::zero());
@@ -19,16 +19,7 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
         Self {
             denom: denom / g,
             remdr: numer / g,
-            ten: T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one(),
+            two: T::one() + T::one(),
         }
     }
 
@@ -37,7 +28,7 @@ impl<T: PrimInt + Integer> DecimalDigits<T> {
     }
 }
 
-impl DecimalDigits<BigInt> {
+impl RationalBits<BigInt> {
     pub fn new_big<F>(numer: F, denom: F) -> Self
     where
         BigInt: From<F>,
@@ -51,16 +42,7 @@ impl DecimalDigits<BigInt> {
         Self {
             denom: den / &g,
             remdr: num / &g,
-            ten: BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one()
-                + BigInt::one(),
+            two: BigInt::one() + BigInt::one(),
         }
     }
 
@@ -73,7 +55,7 @@ impl DecimalDigits<BigInt> {
     }
 }
 
-impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for DecimalDigits<T> {
+impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for RationalBits<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -81,13 +63,12 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for DecimalDigits<T> {
         self.remdr = self
             .remdr
             .checked_sub(&self.denom.checked_mul(&out)?)?
-            .checked_mul(&self.ten)?;
+            .checked_mul(&self.two)?;
         Some(out)
     }
 }
 
 crate::print_values!(
     digits, formatter "{}", sep " ";
-    DecimalDigits::new(665857, 941664), 0, 20; // should be close to 0.70710678118
-    DecimalDigits::new(127, 11), 0, 20;
+    RationalBits::new(665857, 941664), 0, 20;
 );
