@@ -3,7 +3,7 @@ use num::{
     rational::Ratio,
 };
 
-/// Decimal digits for the fractional part of of a non-negative fraction, preceeded by the whole part.
+/// Decimal digits of a fraction between one and zero. The indefinite training zeroes are included.
 pub struct DecimalDigits<T> {
     denom: T,
     remdr: T,
@@ -86,8 +86,6 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for DecimalDigits<T> {
     }
 }
 
-crate::print_values!(
-    digits, formatter "{}", sep " ";
-    DecimalDigits::new(665857, 941664), 0, 20; // should be close to 0.70710678118
-    DecimalDigits::new(127, 11), 0, 20;
+crate::check_sequences!(
+    DecimalDigits::new(665857, 941664), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
 );

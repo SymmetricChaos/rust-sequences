@@ -3,7 +3,7 @@ use num::{
     rational::Ratio,
 };
 
-/// Bits of the fractional part of of a non-negative fraction that is less than one.
+/// Bits of a fraction between one and zero. The indefinite training zeroes are included.
 pub struct RationalBits<T> {
     denom: T,
     remdr: T,
@@ -69,6 +69,7 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for RationalBits<T> {
 }
 
 crate::print_values!(
-    digits, formatter "{}", sep " ";
+    digits, formatter "{}", sep "";
     RationalBits::new(665857, 941664), 0, 20;
+    RationalBits::new(1, 4), 0, 20;
 );
