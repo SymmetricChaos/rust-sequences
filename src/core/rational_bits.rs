@@ -3,7 +3,7 @@ use num::{
     rational::Ratio,
 };
 
-/// Bits of a fraction between one and zero. The indefinite training zeroes are included.
+/// Bits of a fraction between one and zero. The infinite trailing zeroes are included.
 pub struct RationalBits<T> {
     denom: T,
     remdr: T,

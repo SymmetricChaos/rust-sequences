@@ -30,7 +30,8 @@ where
 }
 
 // These primes are sufficient witnessses for all 64 bit values
-const WITNESSES_64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+const WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+// const WITNESSES_I64: [i64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
 // 64-bit primality test
 // First checks small prime factors then switches to deterministic Miller-Rabin
@@ -40,7 +41,7 @@ pub fn is_prime(n: u64) -> bool {
     }
 
     // Check by trial
-    for witness in WITNESSES_64 {
+    for witness in WITNESSES_U64 {
         if n == witness {
             return true;
         }
@@ -55,7 +56,7 @@ pub fn is_prime(n: u64) -> bool {
     let r = 1_u64 + d.trailing_zeros() as u64;
     d >>= d.trailing_zeros();
 
-    'outer: for w in WITNESSES_64.into_iter() {
+    'outer: for w in WITNESSES_U64.into_iter() {
         let mut x = modular_exponent(w, d, n);
 
         if x == 1 || x == n - 1 {
@@ -82,7 +83,7 @@ pub fn is_prime_partial(n: u64) -> bool {
     let r = 1_u64 + d.trailing_zeros() as u64;
     d >>= d.trailing_zeros();
 
-    'outer: for w in WITNESSES_64.into_iter() {
+    'outer: for w in WITNESSES_U64.into_iter() {
         let mut x = modular_exponent(w, d, n);
 
         if x == 1 || x == n - 1 {

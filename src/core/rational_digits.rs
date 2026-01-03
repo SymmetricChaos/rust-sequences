@@ -3,7 +3,7 @@ use num::{
     rational::Ratio,
 };
 
-/// Decimal digits of a fraction between one and zero. The indefinite training zeroes are included.
+/// Decimal digits of a fraction between one and zero. The infinite trailing zeroes are included.
 pub struct DecimalDigits<T> {
     denom: T,
     remdr: T,

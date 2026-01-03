@@ -29,7 +29,7 @@ impl<N> IndexMut<usize> for Polynomial<N> {
 
 impl<N> Polynomial<N> {
     /// A new polynomial with coefficients given in increasing order so that constant term is at index zero.
-    /// No trimming is performed. This potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial.
+    /// No trimming is performed so this potentially invalidates evaluation of any method that relies on knowing the degree of the polynomial and is not recommended.
     pub fn new_raw(coef: Vec<N>) -> Self {
         Self { coef }
     }
@@ -74,7 +74,7 @@ impl<N> Polynomial<N> {
     }
 }
 
-impl<N: Clone + Zero> Polynomial<N> {
+impl<N: Clone + Zero + One + PartialEq + Signed> Polynomial<N> {
     /// A new polynomial with coefficients given in increasing order so that constant term is at index zero. All trailing zero coefficients are removed.
     pub fn new(coef: Vec<N>) -> Self {
         let mut p = Self { coef };
@@ -108,6 +108,11 @@ impl<N: Clone + Zero> Polynomial<N> {
         for _ in 0..n {
             self.coef.insert(0, N::zero());
         }
+    }
+
+    /// Check if the highest coefficient is one.
+    pub fn is_monic(&self) -> bool {
+        self.coef.last().unwrap_or(&N::zero()).is_one()
     }
 }
 
