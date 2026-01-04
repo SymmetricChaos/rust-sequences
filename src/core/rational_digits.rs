@@ -1,72 +1,115 @@
+use std::fmt::Display;
+
 use num::{
-    BigInt, CheckedDiv, CheckedMul, CheckedSub, Integer, PrimInt, Signed, Zero, rational::Ratio,
+    BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, PrimInt, Zero, rational::Ratio,
 };
 
-/// Decimal digits of a fraction between one and zero. The infinite trailing zeroes are included.
-pub struct DecimalDigits<T> {
-    denom: T,
-    remdr: T,
-    base: T,
+pub fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
+    let mut out = Vec::new();
+    let mut n = n;
+    while n > T::zero() {
+        let (div, rem) = n.div_rem(&base);
+        out.push(rem);
+        n = div;
+    }
+    out
 }
 
-impl<T: PrimInt + Integer> DecimalDigits<T> {
+/// Decimal digits of a fraction.
+pub struct DecimalDigits<T> {
+    remdr: T,
+    denom: T,
+    base: T,
+    numer: Vec<T>,
+    leading_zero: bool,
+}
+
+impl<T: PrimInt + Integer + Display> DecimalDigits<T> {
     pub fn new(numer: T, denom: T, base: T) -> Self {
-        assert!(numer >= T::zero());
-        assert!(denom > T::zero());
-        assert!(denom > numer);
-        let g = numer.gcd(&denom);
-        Self {
-            denom: denom / g,
-            remdr: numer / g,
-            base,
-        }
+        Self::from_ratio(Ratio::new(numer, denom), base)
     }
 
     pub fn from_ratio(q: Ratio<T>, base: T) -> Self {
-        Self::new(q.numer().clone(), q.denom().clone(), base)
+        let f = q.into_raw();
+        let numer = integer_digits(f.0, base);
+        Self {
+            remdr: T::zero(),
+            denom: f.1,
+            base,
+            numer,
+            leading_zero: true,
+        }
     }
 }
 
 impl DecimalDigits<BigInt> {
-    pub fn new_big<F>(numer: F, denom: F, base: F) -> Self
+    pub fn new_big<F: Clone + Integer>(numer: F, denom: F, base: F) -> Self
     where
+        Ratio<BigInt>: From<Ratio<F>>,
         BigInt: From<F>,
     {
-        let num = BigInt::from(numer).abs();
-        let den = BigInt::from(denom).abs();
-        assert!(num >= BigInt::zero());
-        assert!(den > BigInt::zero());
-        assert!(den > num);
-        let g = num.gcd(&den);
-        Self {
-            denom: den / &g,
-            remdr: num / &g,
-            base: BigInt::from(base),
-        }
+        Self::from_ratio_big(Ratio::new(numer, denom), base)
     }
 
-    pub fn from_ratio_big<F>(q: Ratio<F>, base: F) -> Self
+    pub fn from_ratio_big<F: Clone + Integer>(q: Ratio<F>, base: F) -> Self
     where
+        Ratio<BigInt>: From<Ratio<F>>,
         BigInt: From<F>,
     {
-        let (num, den) = q.into_raw();
-        Self::new_big(num, den, base)
+        let q: Ratio<BigInt> = q.into();
+        let base = BigInt::from(base);
+        let f = q.into_raw();
+        let numer = integer_digits(f.0, base.clone());
+        Self {
+            remdr: BigInt::zero(),
+            denom: f.1,
+            base,
+            numer,
+            leading_zero: true,
+        }
     }
 }
 
-impl<T: CheckedDiv + CheckedSub + CheckedMul> Iterator for DecimalDigits<T> {
+impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for DecimalDigits<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.remdr.checked_div(&self.denom)?;
-        self.remdr = self
-            .remdr
-            .checked_sub(&self.denom.checked_mul(&out)?)?
-            .checked_mul(&self.base)?;
-        Some(out)
+        if self.leading_zero {
+            // Ugly loop to remove leading zeroes from the integer part of a value
+            loop {
+                self.remdr = self
+                    .remdr
+                    .checked_mul(&self.base)?
+                    .checked_add(&self.numer.pop().unwrap_or(T::zero()))?;
+                let out = self.remdr.checked_div(&self.denom)?;
+                self.remdr = self.remdr.checked_sub(&self.denom.checked_mul(&out)?)?;
+                if self.numer.is_empty() || !out.is_zero() {
+                    self.leading_zero = false;
+                    return Some(out);
+                }
+            }
+        } else {
+            self.remdr = self
+                .remdr
+                .checked_mul(&self.base)? // shift the digits of the remainder
+                .checked_add(&self.numer.pop().unwrap_or(T::zero()))?; // pull down the next digit or zero if digits are used up
+            let out = self.remdr.checked_div(&self.denom)?; // determine the next digit
+            self.remdr = self.remdr.checked_sub(&self.denom.checked_mul(&out)?)?; // subtract from the remainder
+            Some(out)
+        }
     }
 }
 
 crate::check_sequences!(
     DecimalDigits::new(665857, 941664, 10), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
+    DecimalDigits::new(10, 7, 10), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
+    DecimalDigits::new(46, 3, 10), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
+    DecimalDigits::new(1, 127, 10), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // correct leading zeroes this is 0.007874...
+);
+crate::print_values!(
+    digits, formatter "{}", sep " ";
+    DecimalDigits::new(665857, 941664, 2), 0, 20;
+    DecimalDigits::new(1, 4, 2), 0, 20;
+    DecimalDigits::new(10, 7, 10), 0, 20;
+    DecimalDigits::new(301, 3, 10), 0, 20;
 );
