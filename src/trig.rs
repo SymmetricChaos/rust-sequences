@@ -189,10 +189,10 @@ impl Iterator for Secant {
 use crate::core::rational_digits::DecimalDigits;
 
 crate::check_sequences!(
-    DecimalDigits::from_ratio_big(Sine::new_big(2,1).skip(10).next().unwrap()), 0, 10, [0, 9, 0, 9, 2, 9, 7, 4, 2, 6];
-    DecimalDigits::from_ratio_big(Sine::new_big(1,3).skip(10).next().unwrap()), 0, 10, [0, 3, 2, 7, 1, 9, 4, 6, 9, 6];
-    DecimalDigits::from_ratio_big(Cosine::new_big(1,3).skip(10).next().unwrap()), 0, 10, [0, 9, 4, 4, 9, 5, 6, 9, 4, 6];
-    DecimalDigits::from_ratio_big(Cosine::new_big(2,1).skip(10).next().unwrap()), 0, 10, [0, 4, 1, 6, 1, 4, 6, 8, 3, 6];
-    DecimalDigits::from_ratio_big(Secant::new_big(1,3).skip(10).next().unwrap()), 0, 10, [1, 0, 5, 8, 2, 4, 9, 2, 7, 1];
-    DecimalDigits::from_ratio_big(Cosecant::new_big(1,3).skip(10).next().unwrap()), 0, 10, [3, 0, 5, 6, 2, 8, 4, 2, 5, 4];
+    DecimalDigits::from_ratio_big(Sine::new_big(2,1).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [0, 9, 0, 9, 2, 9, 7, 4, 2, 6];
+    DecimalDigits::from_ratio_big(Sine::new_big(1,3).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [0, 3, 2, 7, 1, 9, 4, 6, 9, 6];
+    DecimalDigits::from_ratio_big(Cosine::new_big(1,3).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [0, 9, 4, 4, 9, 5, 6, 9, 4, 6];
+    DecimalDigits::from_ratio_big(Cosine::new_big(2,1).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [0, 4, 1, 6, 1, 4, 6, 8, 3, 6];
+    DecimalDigits::from_ratio_big(Secant::new_big(1,3).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [1, 0, 5, 8, 2, 4, 9, 2, 7, 1];
+    DecimalDigits::from_ratio_big(Cosecant::new_big(1,3).skip(10).next().unwrap(), BigInt::from(10)), 0, 10, [3, 0, 5, 6, 2, 8, 4, 2, 5, 4];
 );

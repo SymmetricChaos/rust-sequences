@@ -43,5 +43,5 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Integer> Iterator for Zeta<T> {
 
 // very slow to converge
 crate::check_sequences!(
-    crate::core::rational_digits::DecimalDigits::from_ratio_big(Zeta::new_big(2).skip(1500).next().unwrap()), 0, 4, [1, 6, 4, 4]; // pi squared over 6 (1.644...)
+    crate::core::rational_digits::DecimalDigits::from_ratio_big(Zeta::new_big(2).skip(1500).next().unwrap(), 10.into()), 0, 4, [1, 6, 4, 4]; // pi squared over 6 (1.644...)
 );
