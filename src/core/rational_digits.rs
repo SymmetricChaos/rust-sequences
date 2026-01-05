@@ -15,8 +15,8 @@ pub fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
     out
 }
 
-/// Decimal digits of a fraction.
-pub struct DecimalDigits<T> {
+/// Digits of a fraction in a chosen base. If the fraction is less than one a leading zero is included to represent the integer part. If the fraction terminates infinite trailing zeroes are produced.
+pub struct RationalDigits<T> {
     remdr: T,
     denom: T,
     base: T,
@@ -24,16 +24,34 @@ pub struct DecimalDigits<T> {
     leading_zero: bool,
 }
 
-impl<T: PrimInt + Integer + Display> DecimalDigits<T> {
+impl<T: PrimInt + Integer + Display> RationalDigits<T> {
     pub fn new(numer: T, denom: T, base: T) -> Self {
         Self::from_ratio(Ratio::new(numer, denom), base)
     }
 
+    pub fn new_decimal(numer: T, denom: T) -> Self {
+        Self::from_ratio(
+            Ratio::new(numer, denom),
+            T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one()
+                + T::one(),
+        )
+    }
+
     pub fn from_ratio(q: Ratio<T>, base: T) -> Self {
+        assert!(q > Ratio::<T>::zero());
         let f = q.into_raw();
         let numer = integer_digits(f.0, base);
+        let remdr = T::zero();
         Self {
-            remdr: T::zero(),
+            remdr,
             denom: f.1,
             base,
             numer,
@@ -42,7 +60,7 @@ impl<T: PrimInt + Integer + Display> DecimalDigits<T> {
     }
 }
 
-impl DecimalDigits<BigInt> {
+impl RationalDigits<BigInt> {
     pub fn new_big<F: Clone + Integer>(numer: F, denom: F, base: F) -> Self
     where
         Ratio<BigInt>: From<Ratio<F>>,
@@ -51,12 +69,33 @@ impl DecimalDigits<BigInt> {
         Self::from_ratio_big(Ratio::new(numer, denom), base)
     }
 
+    pub fn new_decimal_big<F: Clone + Integer>(numer: F, denom: F) -> Self
+    where
+        Ratio<BigInt>: From<Ratio<F>>,
+        BigInt: From<F>,
+    {
+        Self::from_ratio_big(
+            Ratio::new(numer, denom),
+            F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one()
+                + F::one(),
+        )
+    }
+
     pub fn from_ratio_big<F: Clone + Integer>(q: Ratio<F>, base: F) -> Self
     where
         Ratio<BigInt>: From<Ratio<F>>,
         BigInt: From<F>,
     {
         let q: Ratio<BigInt> = q.into();
+        assert!(q > Ratio::<BigInt>::zero());
         let base = BigInt::from(base);
         let f = q.into_raw();
         let numer = integer_digits(f.0, base.clone());
@@ -70,7 +109,7 @@ impl DecimalDigits<BigInt> {
     }
 }
 
-impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for DecimalDigits<T> {
+impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for RationalDigits<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -101,15 +140,17 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for D
 }
 
 crate::check_sequences!(
-    DecimalDigits::new(665857, 941664, 10), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
-    DecimalDigits::new(10, 7, 10), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
-    DecimalDigits::new(46, 3, 10), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
-    DecimalDigits::new(1, 127, 10), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // correct leading zeroes this is 0.007874...
+    RationalDigits::new_decimal(665857, 941664), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
+    RationalDigits::new_decimal(10, 7), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
+    RationalDigits::new_decimal(46, 3), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
+    RationalDigits::new_decimal(1, 127), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // check for correct leading zeroes, this is 0.007874...
 );
 crate::print_values!(
     digits, formatter "{}", sep " ";
-    DecimalDigits::new(665857, 941664, 2), 0, 20;
-    DecimalDigits::new(1, 4, 2), 0, 20;
-    DecimalDigits::new(10, 7, 10), 0, 20;
-    DecimalDigits::new(301, 3, 10), 0, 20;
+    RationalDigits::new(665857, 941664, 2), 0, 20;
+    RationalDigits::new(1, 4, 2), 0, 20;
+    RationalDigits::new(10, 7, 10), 0, 20;
+    RationalDigits::new(301, 3, 10), 0, 20;
+    RationalDigits::new(1, 127, 10), 0, 20;
+    RationalDigits::new(46, 3, 10), 0, 10;
 );
