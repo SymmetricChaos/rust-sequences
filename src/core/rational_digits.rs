@@ -29,6 +29,7 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
         Self::from_ratio(Ratio::new(numer, denom), base)
     }
 
+    /// Decimal digits.
     pub fn new_decimal(numer: T, denom: T) -> Self {
         Self::from_ratio(
             Ratio::new(numer, denom),
@@ -69,6 +70,7 @@ impl RationalDigits<BigInt> {
         Self::from_ratio_big(Ratio::new(numer, denom), base)
     }
 
+    /// Decimal digits.
     pub fn new_decimal_big<F: Clone + Integer>(numer: F, denom: F) -> Self
     where
         Ratio<BigInt>: From<Ratio<F>>,
