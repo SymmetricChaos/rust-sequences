@@ -22,6 +22,7 @@ fn c(starter: &Vec<usize>, group: usize) -> Vec<(Vec<usize>, usize)> {
     res
 }
 
+/// All combinations of a given length of the items in an array.
 pub struct Combinations<T> {
     arr: Vec<T>,
     combi_idxs: Box<dyn Iterator<Item = Vec<usize>>>,

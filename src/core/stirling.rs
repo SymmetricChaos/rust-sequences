@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
 
 use crate::check_sequences;
 
@@ -48,6 +48,55 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for UnsignedStirl
         for k in 1..self.row.len() {
             next_row.push(
                 self.n
+                    .checked_mul(&self.row[k])?
+                    .checked_add(&self.row[k - 1])?,
+            );
+        }
+        next_row.push(T::one()); // every row ends with one
+
+        self.n = self.n.checked_add(&T::one())?;
+        self.row = next_row;
+
+        out
+    }
+}
+
+/// Signed Stirling numbers of the first kind by rows.
+pub struct SignedStirlingFirst<T> {
+    n: T,
+    row: Vec<T>,
+}
+
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> SignedStirlingFirst<T> {
+    pub fn new() -> Self {
+        Self {
+            n: T::zero(),
+            row: vec![T::one()],
+        }
+    }
+}
+
+impl SignedStirlingFirst<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            n: BigInt::zero(),
+            row: vec![BigInt::one()],
+        }
+    }
+}
+
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> Iterator for SignedStirlingFirst<T> {
+    type Item = Vec<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = Some(self.row.clone());
+        let mut next_row = Vec::with_capacity(self.row.len() + 1);
+        next_row.push(T::zero()); // every row except the first starts with zero
+
+        for k in 1..self.row.len() {
+            next_row.push(
+                -self
+                    .n
                     .checked_mul(&self.row[k])?
                     .checked_add(&self.row[k - 1])?,
             );
