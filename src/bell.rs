@@ -28,11 +28,28 @@ impl Iterator for BellTriangle {
     }
 }
 
-crate::print_values!(
-    print_triangles, formatter "{:?}", sep "\n";
-    BellTriangle::new_big(), 0, 5;
-);
+/// The Bell numbers. The number of ways to define equivalence classes on a set with n elements.
+pub struct Bell {
+    tri: BellTriangle,
+}
 
-crate::print_values!(
-    BellTriangle::new_big().flatten(), 0, 15;
+impl Bell {
+    pub fn new_big() -> Self {
+        Self {
+            tri: BellTriangle::new_big(),
+        }
+    }
+}
+
+impl Iterator for Bell {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(self.tri.next().unwrap()[0].clone())
+    }
+}
+
+crate::check_sequences!(
+    Bell::new_big(), 0, 10, [1, 1, 2, 5, 15, 52, 203, 877, 4140, 21147];
+    BellTriangle::new_big().flatten(), 0, 10, [1, 1, 2, 2, 3, 5, 5, 7, 10, 15];
 );
