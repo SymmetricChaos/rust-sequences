@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
 
-use crate::{check_sequences, print_values};
+use crate::check_sequences;
 
 pub fn unsigned_stirling_first(n: &BigInt, k: &BigInt) -> BigInt {
     if n == k {
@@ -14,12 +14,12 @@ pub fn unsigned_stirling_first(n: &BigInt, k: &BigInt) -> BigInt {
 }
 
 /// Unsigned Stirling numbers of the first kind by rows.
-pub struct UnsignedStirlingFirst<T> {
+pub struct StirlingFirst<T> {
     n: T,
     row: Vec<T>,
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> UnsignedStirlingFirst<T> {
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> StirlingFirst<T> {
     pub fn new() -> Self {
         Self {
             n: T::zero(),
@@ -28,7 +28,7 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> UnsignedStirlingFirst<T> {
     }
 }
 
-impl UnsignedStirlingFirst<BigInt> {
+impl StirlingFirst<BigInt> {
     pub fn new_big() -> Self {
         Self {
             n: BigInt::zero(),
@@ -37,7 +37,7 @@ impl UnsignedStirlingFirst<BigInt> {
     }
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for UnsignedStirlingFirst<T> {
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for StirlingFirst<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -62,45 +62,59 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for UnsignedStirl
 }
 
 /// Signed Stirling numbers of the first kind by rows.
-pub struct SignedStirlingFirst<T> {
+pub struct StirlingFirstSigned<T> {
     n: T,
     row: Vec<T>,
+    pos: bool,
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> SignedStirlingFirst<T> {
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> StirlingFirstSigned<T> {
     pub fn new() -> Self {
         Self {
             n: T::zero(),
             row: vec![T::one()],
+            pos: true,
         }
     }
 }
 
-impl SignedStirlingFirst<BigInt> {
+impl StirlingFirstSigned<BigInt> {
     pub fn new_big() -> Self {
         Self {
             n: BigInt::zero(),
             row: vec![BigInt::one()],
+            pos: true,
         }
     }
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> Iterator for SignedStirlingFirst<T> {
+impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> Iterator for StirlingFirstSigned<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = Some(self.row.clone());
         let mut next_row = Vec::with_capacity(self.row.len() + 1);
-        next_row.push(T::zero()); // every row except the first starts with zero
+        next_row.push(T::zero()); // every row ends with one
 
+        let mut s = self.pos;
         for k in 1..self.row.len() {
-            next_row.push(
-                -self
-                    .n
-                    .checked_mul(&self.row[k])?
-                    .checked_add(&self.row[k - 1])?,
-            );
+            if s {
+                next_row.push(
+                    self.n
+                        .checked_mul(&self.row[k].abs())?
+                        .checked_add(&self.row[k - 1].abs())?,
+                )
+            } else {
+                next_row.push(
+                    -self
+                        .n
+                        .checked_mul(&self.row[k].abs())?
+                        .checked_add(&self.row[k - 1].abs())?,
+                )
+            }
+            s = !s;
         }
+        self.pos = !self.pos;
         next_row.push(T::one()); // every row ends with one
 
         self.n = self.n.checked_add(&T::one())?;
@@ -158,12 +172,8 @@ impl Iterator for StirlingSecond<BigInt> {
     }
 }
 
-print_values!(
-    SignedStirlingFirst::new_big().flatten(), 0, 20;
-    StirlingSecond::new_big().flatten(), 0, 20;
-);
-
 check_sequences!(
-    UnsignedStirlingFirst::new_big().flatten(), 0, 20, [1, 0, 1, 0, 1, 1, 0, 2, 3, 1, 0, 6, 11, 6, 1, 0, 24, 50, 35, 10];
+    StirlingFirst::new_big().flatten(), 0, 20, [1, 0, 1, 0, 1, 1, 0, 2, 3, 1, 0, 6, 11, 6, 1, 0, 24, 50, 35, 10];
+    StirlingFirstSigned::new_big().flatten(), 0, 20, [1, 0, 1, 0, -1, 1, 0, 2, -3, 1, 0, -6, 11, -6, 1, 0, 24, -50, 35, -10];
     StirlingSecond::new_big().flatten(), 0, 20, [1, 0, 1, 0, 1, 1, 0, 1, 3, 1, 0, 1, 7, 6, 1, 0, 1, 15, 25, 10];
 );
