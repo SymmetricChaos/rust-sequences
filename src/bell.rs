@@ -28,7 +28,7 @@ impl Iterator for BellTriangle {
     }
 }
 
-/// The Bell numbers. The number of ways to define equivalence classes on a set with n elements.
+/// The Bell numbers. The number of ways to partition a set with n elements.
 pub struct Bell {
     tri: BellTriangle,
 }
