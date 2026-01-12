@@ -1,101 +1,11 @@
-use std::{
-    collections::{HashMap, VecDeque},
-    fmt::Display,
-};
-
+use super::components::*;
 use itertools::Itertools;
-
-pub enum Move {
-    Left,
-    Right,
-    Stay,
-}
-
-pub struct TuringState {
-    func: Box<dyn Fn(char) -> (char, Move, &'static str)>,
-}
-
-impl TuringState {
-    pub fn transition(&self, symbol: char) -> (char, Move, &'static str) {
-        (self.func)(symbol)
-    }
-}
-
-/// A one dimensional Turing machine tape
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TuringTape {
-    tape: VecDeque<char>,
-    position: usize,
-    blank: char,
-}
-
-impl TuringTape {
-    pub fn new(tape: Vec<char>, position: usize, blank: char) -> Self {
-        if tape.is_empty() {
-            Self {
-                tape: VecDeque::from([blank]),
-                position,
-                blank,
-            }
-        } else {
-            Self {
-                tape: VecDeque::from(tape),
-                position,
-                blank,
-            }
-        }
-    }
-
-    pub fn read(&self) -> char {
-        self.tape[self.position]
-    }
-
-    pub fn write(&mut self, symbol: char) {
-        self.tape[self.position] = symbol;
-    }
-
-    pub fn shift(&mut self, direction: Move) {
-        match direction {
-            Move::Left => {
-                if self.position == 0 {
-                    self.tape.push_front(self.blank);
-                } else {
-                    self.position -= 1
-                }
-            }
-            Move::Right => {
-                if self.position == self.tape.len() - 1 {
-                    self.tape.push_back(self.blank);
-                    self.position += 1;
-                } else {
-                    self.position += 1;
-                }
-            }
-            Move::Stay => {
-                // do nothing
-            }
-        }
-    }
-
-    pub fn tape_symbols(&self) -> String {
-        self.tape.iter().join("")
-    }
-}
-
-impl Display for TuringTape {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut s = " ".repeat(self.position);
-        s.push('.');
-        s.push('\n');
-        s.push_str(&self.tape.iter().join(""));
-        write!(f, "{}", s)
-    }
-}
+use std::collections::HashMap;
 
 /// A one dimension Turing machine.
 pub struct TuringMachine {
-    tape: TuringTape,
-    states: HashMap<&'static str, TuringState>,
+    tape: Tape,
+    states: HashMap<&'static str, State>,
     current_state: &'static str,
 }
 
@@ -105,7 +15,7 @@ impl TuringMachine {
         initial_tape: Vec<char>,
         initial_position: usize,
         blank: char,
-        states: Vec<(&'static str, TuringState)>,
+        states: Vec<(&'static str, State)>,
     ) -> Self {
         if states.iter().map(|s| s.0).contains(&"HALT") {
             panic!("the HALT state is handled specially and must not be supplied")
@@ -114,7 +24,7 @@ impl TuringMachine {
             panic!("position must be within the starting values give")
         }
         Self {
-            tape: TuringTape::new(initial_tape, initial_position, blank),
+            tape: Tape::new(initial_tape, initial_position, blank),
             current_state: states[0].0,
             states: HashMap::from_iter(states),
         }
@@ -122,7 +32,7 @@ impl TuringMachine {
 }
 
 impl Iterator for TuringMachine {
-    type Item = TuringTape;
+    type Item = Tape;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.tape.clone();
@@ -145,7 +55,7 @@ impl Iterator for TuringMachine {
 #[macro_export]
 macro_rules! turing_state {
     ($name_symbol: literal; $($input:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
-        ($name_symbol, TuringState {
+        ($name_symbol, State {
             func: Box::new(|x: char| -> (char, Move, &'static str) {
                 match x {
                     $(
