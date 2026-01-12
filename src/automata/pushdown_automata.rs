@@ -1,23 +1,16 @@
-pub enum Move {
-    Left,
-    Right,
-    Stay,
-}
+use std::collections::HashMap;
 
-pub struct State {
-    func: Box<dyn Fn(char) -> (char, Move, &'static str)>,
-}
-
-impl State {
-    pub fn transition(&self, symbol: char) -> (char, Move, &'static str) {
-        (self.func)(symbol)
-    }
-}
+use crate::automata::components::{State, Tape};
 
 pub struct PushdownAutomata {
-    stack: Vec<T>,
+    stack: Vec<char>,
+    tape: Tape,
+    states: HashMap<&'static str, State>,
+    current_state: &'static str,
 }
 
 impl PushdownAutomata {
-    pub fn new() -> Self {}
+    pub fn new() -> Self {
+        todo!()
+    }
 }
