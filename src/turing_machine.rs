@@ -21,6 +21,7 @@ impl TuringState {
     }
 }
 
+/// A one dimensional Turing machine tape
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TuringTape {
     tape: VecDeque<char>,
@@ -91,6 +92,7 @@ impl Display for TuringTape {
     }
 }
 
+/// A one dimension Turing machine.
 pub struct TuringMachine {
     tape: TuringTape,
     states: HashMap<&'static str, TuringState>,
@@ -101,18 +103,18 @@ impl TuringMachine {
     /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape. The states and state_names
     pub fn new(
         initial_tape: Vec<char>,
-        position: usize,
+        initial_position: usize,
         blank: char,
         states: Vec<(&'static str, TuringState)>,
     ) -> Self {
         if states.iter().map(|s| s.0).contains(&"HALT") {
             panic!("the HALT state is handled specially and must not be supplied")
         }
-        if position >= initial_tape.len() {
+        if initial_position >= initial_tape.len() {
             panic!("position must be within the starting values give")
         }
         Self {
-            tape: TuringTape::new(initial_tape, position, blank),
+            tape: TuringTape::new(initial_tape, initial_position, blank),
             current_state: states[0].0,
             states: HashMap::from_iter(states),
         }
