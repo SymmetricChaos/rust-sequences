@@ -2,6 +2,16 @@ use super::components::*;
 use itertools::Itertools;
 use std::collections::HashMap;
 
+pub struct State {
+    pub func: Box<dyn Fn(char) -> (char, Move, &'static str)>,
+}
+
+impl State {
+    pub fn transition(&self, symbol: char) -> (char, Move, &'static str) {
+        (self.func)(symbol)
+    }
+}
+
 /// A one dimension Turing machine.
 pub struct TuringMachine {
     tape: Tape,
