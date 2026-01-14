@@ -19,7 +19,7 @@ pub struct PushdownAutomata {
 }
 
 impl PushdownAutomata {
-    pub fn new(initial_tape: Vec<char>) -> Self {
+    pub fn new(initial_tape: Vec<char>, states: Vec<(&'static str, State)>) -> Self {
         todo!()
     }
 }
@@ -30,4 +30,20 @@ impl Iterator for PushdownAutomata {
     fn next(&mut self) -> Option<Self::Item> {
         todo!()
     }
+}
+
+#[macro_export]
+macro_rules! pushdown_state {
+    ($name_symbol: literal; $($t_input:literal, $s_input:literal  => $state:literal);+ $(;)?) => {
+        ($name_symbol, State {
+            func: Box::new(|t: char, s:char| -> (&'static str) {
+                match (t,s) {
+                    $(
+                        ($t_input, $s_input) => $state,
+                    )+
+                    _ => panic!("symbol pair not handled"),
+                }
+            })
+        })
+    };
 }
