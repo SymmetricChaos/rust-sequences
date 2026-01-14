@@ -2,11 +2,11 @@ use crate::automata::components::*;
 use std::collections::HashMap;
 
 pub struct State {
-    pub func: Box<dyn Fn(char, char) -> (Move, &'static str)>,
+    pub func: Box<dyn Fn(char, char) -> &'static str>,
 }
 
 impl State {
-    pub fn transition(&self, tape_symbol: char, stack_symbol: char) -> (Move, &'static str) {
+    pub fn transition(&self, tape_symbol: char, stack_symbol: char) -> &'static str {
         (self.func)(tape_symbol, stack_symbol)
     }
 }
@@ -19,7 +19,7 @@ pub struct PushdownAutomata {
 }
 
 impl PushdownAutomata {
-    pub fn new(initial_tape: Vec<char>, initial_position: usize, blank: char) -> Self {
+    pub fn new(initial_tape: Vec<char>) -> Self {
         todo!()
     }
 }
