@@ -1,4 +1,3 @@
-use crate::automata::components::*;
 use std::collections::HashMap;
 
 pub struct State {
@@ -13,19 +12,19 @@ impl State {
 
 pub struct PushdownAutomata {
     stack: Vec<char>,
-    tape: Tape,
+    tape: Vec<char>,
     states: HashMap<&'static str, State>,
     current_state: &'static str,
 }
 
 impl PushdownAutomata {
-    pub fn new(initial_tape: Vec<char>, states: Vec<(&'static str, State)>) -> Self {
+    pub fn new(tape: Vec<char>, states: Vec<(&'static str, State)>) -> Self {
         todo!()
     }
 }
 
 impl Iterator for PushdownAutomata {
-    type Item = Tape;
+    type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
         todo!()
