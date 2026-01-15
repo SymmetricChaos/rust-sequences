@@ -99,7 +99,7 @@ pub struct TuringMachine {
 }
 
 impl TuringMachine {
-    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape. The states and state_names
+    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape. The initial state is the first state in the vector.
     pub fn new(
         initial_tape: Vec<char>,
         initial_position: usize,
