@@ -63,16 +63,33 @@ impl Iterator for PushdownAutomata {
 
 #[macro_export]
 macro_rules! pushdown_state {
-    ($name_symbol: literal; $($t_input:literal, $s_input:literal  => $state:literal);+ $(;)?) => {
+    ($name_symbol: literal; $($t_input:literal, $s_input:literal => $state:literal, $change:expr);+ $(;)?) => {
         ($name_symbol, State {
             func: Box::new(|t: char, s:char| -> (&'static str, StackChange) {
                 match (t,s) {
                     $(
-                        ($t_input, $s_input) => $state,
+                        ($t_input, $s_input) => ($state, $change),
                     )+
                     _ => panic!("symbol pair not handled"),
                 }
             })
         })
     };
+}
+
+#[cfg(test)]
+#[ignore = "visualization"]
+#[test]
+fn busy_beaver() {
+    let states = vec![
+        pushdown_state!(
+            "p";
+            '0', 'Z' => "p", StackChange::Push('A');
+            '0', 'A' => "p", StackChange::Push('A');
+        ),
+        pushdown_state!(
+            "q";
+            '1', 'A' => "q", StackChange::Pop;
+        ),
+    ];
 }
