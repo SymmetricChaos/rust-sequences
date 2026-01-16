@@ -4,6 +4,7 @@ use std::{
     fmt::Display,
 };
 
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Move {
     Left,
     Right,
@@ -27,6 +28,9 @@ impl Tape {
                 blank,
             }
         } else {
+            if position >= tape.len() {
+                panic!("position must be within the starting values given")
+            }
             Self {
                 tape: VecDeque::from(tape),
                 position,
@@ -35,14 +39,17 @@ impl Tape {
         }
     }
 
+    /// Read the current symbol
     pub fn read(&self) -> char {
         self.tape[self.position]
     }
 
+    /// Write a symbol at the current positions
     pub fn write(&mut self, symbol: char) {
         self.tape[self.position] = symbol;
     }
 
+    /// Shift left or right or remain in the same position. The tape is infinite so new blanks can be inserted when this occurs.
     pub fn shift(&mut self, direction: Move) {
         match direction {
             Move::Left => {
@@ -66,17 +73,53 @@ impl Tape {
         }
     }
 
+    /// Concatenate all the symbols on the tape into a String.
     pub fn tape_symbols(&self) -> String {
         self.tape.iter().join("")
     }
+
+    /// Remove any blanks trailing to the left or right of the tape.
+    pub fn shrink(&mut self) {
+        // If there is only one symbol then end immediately
+        if self.tape.len() == 1 {
+            return;
+        }
+
+        // Pop from the back until reaching a nonblank or the position
+        loop {
+            if self.position == self.tape.len() - 1 {
+                break;
+            }
+            let s = self.tape.pop_back().unwrap();
+            if s != self.blank {
+                self.tape.push_back(s);
+                break;
+            }
+        }
+
+        // Pop from the front until either the position is at zero or a nonblank is found
+        loop {
+            if self.position == 0 {
+                break;
+            }
+            let s = self.tape.pop_front().unwrap();
+            if s != self.blank {
+                self.tape.push_front(s);
+                break;
+            } else {
+                self.position -= 1;
+            }
+        }
+    }
 }
 
+/// Indicate the current position with a dot above the symbols.
 impl Display for Tape {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut s = " ".repeat(self.position);
         s.push('.');
         s.push('\n');
-        s.push_str(&self.tape.iter().join(""));
+        s.push_str(&self.tape_symbols());
         write!(f, "{}", s)
     }
 }
@@ -99,22 +142,20 @@ pub struct TuringMachine {
 }
 
 impl TuringMachine {
-    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape. The initial state is the first state in the vector.
+    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape.
     pub fn new(
-        initial_tape: Vec<char>,
-        initial_position: usize,
-        blank: char,
+        tape: Tape,
+        initial_state: &'static str,
+
         states: Vec<(&'static str, State)>,
     ) -> Self {
         if states.iter().map(|s| s.0).contains(&"HALT") {
-            panic!("the HALT state is handled specially and must not be supplied")
+            panic!("the HALT state should be given only as an output")
         }
-        if initial_position >= initial_tape.len() {
-            panic!("position must be within the starting values give")
-        }
+
         Self {
-            tape: Tape::new(initial_tape, initial_position, blank),
-            current_state: states[0].0,
+            tape,
+            current_state: initial_state,
             states: HashMap::from_iter(states),
         }
     }
@@ -158,7 +199,7 @@ macro_rules! turing_state {
 }
 
 #[cfg(test)]
-#[ignore = "visualization"]
+// #[ignore = "visualization"]
 #[test]
 fn busy_beaver() {
     let states = vec![
@@ -179,8 +220,16 @@ fn busy_beaver() {
         ),
     ];
 
-    let machine = TuringMachine::new(vec!['0'], 0, '0', states);
+    let machine = TuringMachine::new(
+        Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0'),
+        "A",
+        states,
+    );
     for (i, tape) in machine.enumerate() {
         println!("{i:<2}  {}", tape.tape_symbols());
     }
+    // for (i, mut tape) in machine.enumerate() {
+    //     tape.shrink();
+    //     println!("{}", tape);
+    // }
 }

@@ -6,7 +6,7 @@ pub enum StackChange {
     None,
 }
 
-// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
+/// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
 pub struct State {
     pub func: Box<dyn Fn(char, char) -> (&'static str, StackChange)>,
 }
@@ -26,12 +26,17 @@ pub struct PushdownAutomata {
 }
 
 impl PushdownAutomata {
-    pub fn new(tape: Vec<char>, states: Vec<(&'static str, State)>, initial_stack: char) -> Self {
+    pub fn new(
+        tape: Vec<char>,
+        states: Vec<(&'static str, State)>,
+        initial_state: &'static str,
+        initial_stack_symbol: char,
+    ) -> Self {
         Self {
-            stack: vec![initial_stack],
+            stack: vec![initial_stack_symbol],
             tape,
             position: 0,
-            current_state: states[0].0,
+            current_state: initial_state,
             states: HashMap::from_iter(states),
         }
     }
