@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+const BLANK: char = '\0';
+
 pub enum StackChange {
     Push(char),
     Pop,
@@ -46,14 +48,21 @@ impl Iterator for PushdownAutomata {
     type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let tape_symbol = self.tape.get(self.position)?.clone();
-        let stack_symbol = self.stack.last()?.clone();
+        if self.current_state == "HALT" {
+            return None;
+        }
+
+        let tape_symbol = *self.tape.get(self.position).unwrap_or(&BLANK);
+        let stack_symbol = *self.stack.last().unwrap_or(&BLANK);
         let state = self.states.get(self.current_state)?;
 
         let (next_state, stack_change) = state.transition(tape_symbol, stack_symbol);
 
         self.current_state = next_state;
-        self.position += 1;
+        if self.position < self.tape.len() {
+            self.position += 1;
+        }
+
         match stack_change {
             StackChange::Push(c) => self.stack.push(c),
             StackChange::Pop => {
@@ -97,4 +106,5 @@ fn busy_beaver() {
             '1', 'A' => "q", StackChange::Pop;
         ),
     ];
+    let mut machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
 }
