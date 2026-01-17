@@ -146,7 +146,6 @@ impl TuringMachine {
     pub fn new(
         tape: Tape,
         initial_state: &'static str,
-
         states: Vec<(&'static str, State)>,
     ) -> Self {
         if states.iter().map(|s| s.0).contains(&"HALT") {
@@ -199,7 +198,7 @@ macro_rules! turing_state {
 }
 
 #[cfg(test)]
-// #[ignore = "visualization"]
+#[ignore = "visualization"]
 #[test]
 fn busy_beaver() {
     let states = vec![
