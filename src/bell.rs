@@ -1,6 +1,6 @@
 use num::{BigInt, One};
 
-/// The rows of the Bell triangle.
+/// The rows of the Bell triangle. The leftmost values are the Bell numbers which count the number of ways to partition a set with n elements.
 pub struct BellTriangle {
     row: Vec<BigInt>,
 }

@@ -4,6 +4,7 @@ use std::{
     fmt::Display,
 };
 
+/// Movement on a one dimensional Turing machine tape
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Move {
     Left,

@@ -1,7 +1,12 @@
+use num::{BigInt, Num};
 use std::marker::PhantomData;
 
-use num::{BigInt, Num};
-
+/// The sequence of look-and-say strings. Each is determiend by how the runs of numbers in the previous string might be said alound.
+/// 1 (one one)
+/// 11 (two one)
+/// 21 (one two, one one)
+/// 1211 (one one, one two, two one)
+/// 111221 (three one, two two, one one)
 pub struct LookAndSayString {
     string: String,
 }
@@ -45,6 +50,7 @@ impl Iterator for LookAndSayString {
     }
 }
 
+/// The look-and-say sequence interpreted as numbers.
 pub struct LookAndSay<T> {
     string: String,
     _phantom: PhantomData<T>,

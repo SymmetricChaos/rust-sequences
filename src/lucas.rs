@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, One};
 
-/// The Lucas numbers.
+/// The Lucas numbers. Defined by the same recurrence as the Fibonacci numbers but starting with 2, 1 rather than 1, 1.
 /// 2, 1, 3, 4, 7, 11, 18, 29, 47, 76...
 pub struct Lucas<T> {
     a: T,

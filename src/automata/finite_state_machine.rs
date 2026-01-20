@@ -100,9 +100,9 @@ macro_rules! fsm_output{
 }
 
 #[cfg(test)]
-// #[ignore = "visualization"]
+#[ignore = "visualization"]
 #[test]
-fn busy_beaver() {
+fn turnstile() {
     let states = vec![
         fsm_state!(
             "Locked";
@@ -118,7 +118,7 @@ fn busy_beaver() {
     let output = fsm_output!(
         "Coin", "Locked" => "Coin Accepted, Unlocking";
         "Push", "Locked" => "No Entry Allowed, Insert Coin";
-        "Coin", "Unlocked" => "Coin Wasted";
+        "Coin", "Unlocked" => "Coin Wasted, Still Unlocked";
         "Push", "Unlocked" => "One Entry Allowed, Locking";
     );
 
