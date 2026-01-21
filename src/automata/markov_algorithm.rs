@@ -1,3 +1,4 @@
+/// Apply a Markov algorithm to a string.
 pub struct Markov {
     string: String,
     patterns: Vec<(&'static str, &'static str)>,

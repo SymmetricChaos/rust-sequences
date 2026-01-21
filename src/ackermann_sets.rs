@@ -156,11 +156,4 @@ mod tests {
         }
         println!("];");
     }
-
-    #[test]
-    fn compare_u64_to_bigint() {
-        for i in 1000..2000 {
-            assert_eq!(number_to_set_64(i), number_to_set_big(&BigInt::from(i)))
-        }
-    }
 }

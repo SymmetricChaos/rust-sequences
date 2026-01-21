@@ -91,20 +91,20 @@ macro_rules! pushdown_state {
     };
 }
 
-#[cfg(test)]
-#[ignore = "visualization"]
-#[test]
-fn busy_beaver() {
-    let states = vec![
-        pushdown_state!(
-            "p";
-            '0', 'Z' => "p", StackChange::Push('A');
-            '0', 'A' => "p", StackChange::Push('A');
-        ),
-        pushdown_state!(
-            "q";
-            '1', 'A' => "q", StackChange::Pop;
-        ),
-    ];
-    let mut machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
-}
+// #[cfg(test)]
+// #[ignore = "visualization"]
+// #[test]
+// fn bit_counter() {
+//     let states = vec![
+//         pushdown_state!(
+//             "p";
+//             '0', 'Z' => "p", StackChange::Push('A');
+//             '0', 'A' => "p", StackChange::Push('A');
+//         ),
+//         pushdown_state!(
+//             "q";
+//             '1', 'A' => "q", StackChange::Pop;
+//         ),
+//     ];
+//     let mut machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
+// }

@@ -38,6 +38,7 @@ pub mod phythagorean;
 pub mod pi;
 pub mod playground;
 pub mod rado_pairs;
+pub mod recaman;
 pub mod repint;
 pub mod rowland;
 pub mod smooth;

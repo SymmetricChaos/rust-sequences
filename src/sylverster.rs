@@ -1,5 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 
+/// Sylvester's sequence. Starting at 2 each term is the product of all previous terms plus one.
 pub struct Sylvester<T> {
     current: T,
 }

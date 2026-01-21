@@ -1,5 +1,6 @@
 use num::{BigInt, CheckedAdd, One, Zero};
 
+/// All paints of non-negative integers where the first is less than the second.
 pub struct SortedPairs<T> {
     row: T,
     col: T,
