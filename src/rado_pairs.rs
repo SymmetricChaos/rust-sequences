@@ -1,16 +1,16 @@
 use num::{BigInt, CheckedAdd, One, Zero};
 
-use crate::{sorted_pairs::SortedPairs, utils::bit_predicate::bit_predicate};
+use crate::{sorted_pairs::SortedPairsStrict, utils::bit_predicate::bit_predicate};
 
 /// The ordered pairs of numbers connected by an edge in the infinite Rado graph. Alternatively every pair of numbers (a,b) such that the ath digit of b is 1.
 pub struct RadoPairs<T> {
-    pairs: SortedPairs<T>,
+    pairs: SortedPairsStrict<T>,
 }
 
 impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> RadoPairs<T> {
     pub fn new() -> Self {
         Self {
-            pairs: SortedPairs::new(),
+            pairs: SortedPairsStrict::new(),
         }
     }
 }

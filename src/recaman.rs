@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedSub, One, Zero};
 
-/// Recamán's sequence
+/// Recamán's sequence. Decreases by n unless that number has already appeared (or is negative) in which case it increases by n.
 pub struct Recaman<T> {
     n: T,
     ctr: T,
