@@ -69,7 +69,7 @@ impl Iterator for StateMachine {
 
 #[macro_export]
 macro_rules! fsm_states {
-    ($(state $name_symbol: literal; $($input:literal => $state:literal);+ $(;)?)+) => {
+    ($(state $name_symbol: literal $($input:literal => $state:literal)+ )+) => {
         {
             let mut hmap = HashMap::new();
             $(
@@ -114,12 +114,12 @@ macro_rules! fsm_output{
 #[test]
 fn turnstile() {
     let states = fsm_states!(
-        state "Locked";
-            "Coin" => "Unlocked";
-            "Push" => "Locked";
-        state "Unlocked";
-            "Coin" => "Unlocked";
-            "Push" => "Locked";
+        state "Locked"
+            "Coin" => "Unlocked"
+            "Push" => "Locked"
+        state "Unlocked"
+            "Coin" => "Unlocked"
+            "Push" => "Locked"
     );
 
     let output = fsm_output!(

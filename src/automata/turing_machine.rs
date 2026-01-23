@@ -145,20 +145,16 @@ pub struct TuringMachine {
 }
 
 impl TuringMachine {
-    /// A new TuringMachine defined by a Tape, the name of the initial state, and a list of named States.
+    /// A new TuringMachine defined by a Tape, the name of the initial state, and a map of named States.
     pub fn new(
         tape: Tape,
         initial_state: &'static str,
-        states: Vec<(&'static str, State)>,
+        states: HashMap<&'static str, State>,
     ) -> Self {
-        if states.iter().map(|s| s.0).contains(&"HALT") {
-            panic!("the HALT state should be given only as an output")
-        }
-
         Self {
             tape,
             current_state: initial_state,
-            states: HashMap::from_iter(states),
+            states,
         }
     }
 }
@@ -167,17 +163,18 @@ impl Iterator for TuringMachine {
     type Item = Tape;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.tape.clone();
-
         if self.current_state == "HALT" {
             return None;
         }
+
+        let out = self.tape.clone();
 
         let cur_symbol = self.tape.read();
         let (symbol, direction, next_state) =
             self.states[self.current_state].transition(cur_symbol);
         self.tape.write(symbol);
         self.tape.shift(direction);
+
         self.current_state = next_state;
 
         Some(out)
@@ -185,18 +182,28 @@ impl Iterator for TuringMachine {
 }
 
 #[macro_export]
-macro_rules! turing_state {
-    ($name_symbol: literal; $($input:literal => $symbol:literal, $movement:expr, $state:literal);+ $(;)?) => {
-        ($name_symbol, State {
-            func: Box::new(|x: char| -> (char, Move, &'static str) {
-                match x {
-                    $(
-                        $input => ($symbol, $movement, $state),
-                    )+
-                    _ => panic!("symbol not handled"),
-                }
-            })
-        })
+macro_rules! turing_states {
+    ($(state $name_symbol: literal $($input:literal => $symbol:literal, $movement:expr, $state:literal)+ )+) => {
+        {
+            let mut hmap = HashMap::new();
+            $(
+                hmap.insert(
+                    $name_symbol,
+                    State {
+                        func: Box::new(|x: char| -> (char, Move, &'static str) {
+                            match x {
+                                $(
+                                    $input => ($symbol, $movement, $state),
+                                )+
+                                _ => panic!("symbol not handled"),
+                            }
+                        })
+                    }
+                );
+
+            )+
+            hmap
+        }
     };
 }
 
@@ -204,32 +211,28 @@ macro_rules! turing_state {
 #[ignore = "visualization"]
 #[test]
 fn busy_beaver() {
-    let states = vec![
-        turing_state!(
-            "A";
-            '0' => '1', Move::Right, "B";
-            '1' => '1', Move::Left, "C";
-        ),
-        turing_state!(
-            "B";
-            '0' => '1', Move::Left, "A";
-            '1' => '1', Move::Right, "B";
-        ),
-        turing_state!(
-            "C";
-            '0' => '1', Move::Left, "B";
-            '1' => '1', Move::Right, "HALT";
-        ),
-    ];
+    let states = turing_states!(
+        state "A"
+            '0' => '1', Move::Right, "B"
+            '1' => '1', Move::Left, "C"
+        state "B"
+            '0' => '1', Move::Left, "A"
+            '1' => '1', Move::Right, "B"
+        state "C"
+            '0' => '1', Move::Left, "B"
+            '1' => '1', Move::Right, "HALT"
+    );
 
     let machine = TuringMachine::new(
         Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0'),
         "A",
         states,
     );
+
     for (i, tape) in machine.enumerate() {
         println!("{i:<2}  {}", tape.tape_symbols());
     }
+
     // for (i, mut tape) in machine.enumerate() {
     //     tape.shrink();
     //     println!("{}", tape);
