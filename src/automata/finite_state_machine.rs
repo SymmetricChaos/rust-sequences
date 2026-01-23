@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-/// The state transition function takes in a tape symbol and return a State.
+/// The state transition function takes in a tape symbol then returns a state name.
 pub struct State {
     pub func: Box<dyn Fn(&'static str) -> &'static str>,
 }
@@ -11,7 +11,7 @@ impl State {
     }
 }
 
-/// The output function takes in a tape symbol and State
+/// The output function takes in a tape symbol and state name then returns a state name.
 pub struct Output {
     pub func: Box<dyn Fn(&'static str, &'static str) -> &'static str>,
 }
@@ -35,14 +35,14 @@ impl StateMachine {
     pub fn new(
         tape: Vec<&'static str>,
         initial_state: &'static str,
-        states: Vec<(&'static str, State)>,
+        states: HashMap<&'static str, State>,
         output: Output,
     ) -> Self {
         Self {
             tape,
             position: 0,
             current_state: initial_state,
-            states: HashMap::from_iter(states),
+            states,
             output,
         }
     }
@@ -68,18 +68,28 @@ impl Iterator for StateMachine {
 }
 
 #[macro_export]
-macro_rules! fsm_state {
-    ($name_symbol: literal; $($input:literal => $state:literal);+ $(;)?) => {
-        ($name_symbol, State {
-            func: Box::new(|x: &'static str| -> &'static str {
-                match x {
-                    $(
-                        $input => $state,
-                    )+
-                    _ => panic!("symbol not handled"),
-                }
-            })
-        })
+macro_rules! fsm_states {
+    ($(state $name_symbol: literal; $($input:literal => $state:literal);+ $(;)?)+) => {
+        {
+            let mut hmap = HashMap::new();
+            $(
+                hmap.insert(
+                    $name_symbol,
+                    State {
+                        func: Box::new(|x: &'static str| -> &'static str {
+                            match x {
+                                $(
+                                    $input => $state,
+                                )+
+                                _ => panic!("symbol not handled"),
+                            }
+                        })
+                    }
+                );
+
+            )+
+            hmap
+        }
     };
 }
 
@@ -103,18 +113,15 @@ macro_rules! fsm_output{
 #[ignore = "visualization"]
 #[test]
 fn turnstile() {
-    let states = vec![
-        fsm_state!(
-            "Locked";
+    let states = fsm_states!(
+        state "Locked";
             "Coin" => "Unlocked";
             "Push" => "Locked";
-        ),
-        fsm_state!(
-            "Unlocked";
+        state "Unlocked";
             "Coin" => "Unlocked";
             "Push" => "Locked";
-        ),
-    ];
+    );
+
     let output = fsm_output!(
         "Coin", "Locked" => "Coin Accepted, Unlocking";
         "Push", "Locked" => "No Entry Allowed, Insert Coin";
@@ -128,6 +135,7 @@ fn turnstile() {
         states,
         output,
     );
+
     for (i, out) in machine.enumerate() {
         println!("{i:<2}  {}", out);
     }

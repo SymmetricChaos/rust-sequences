@@ -79,7 +79,7 @@ impl Tape {
         self.tape.iter().join("")
     }
 
-    /// Remove any blanks trailing to the left or right of the tape.
+    /// Remove any blanks trailing to the left or right of the tape then shrink the capacity of the underlying VecDeque.
     pub fn shrink(&mut self) {
         // If there is only one symbol then end immediately
         if self.tape.len() == 1 {
@@ -111,6 +111,8 @@ impl Tape {
                 self.position -= 1;
             }
         }
+
+        self.tape.shrink_to_fit();
     }
 }
 
@@ -143,7 +145,7 @@ pub struct TuringMachine {
 }
 
 impl TuringMachine {
-    /// A new TuringMachine. The initial_tape, position, and blank define a TuringTape.
+    /// A new TuringMachine defined by a Tape, the name of the initial state, and a list of named States.
     pub fn new(
         tape: Tape,
         initial_state: &'static str,
