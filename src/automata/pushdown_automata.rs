@@ -30,7 +30,7 @@ pub struct PushdownAutomata {
 impl PushdownAutomata {
     pub fn new(
         tape: Vec<char>,
-        states: Vec<(&'static str, State)>,
+        states: HashMap<&'static str, State>,
         initial_state: &'static str,
         initial_stack_symbol: char,
     ) -> Self {
@@ -39,7 +39,7 @@ impl PushdownAutomata {
             tape,
             position: 0,
             current_state: initial_state,
-            states: HashMap::from_iter(states),
+            states,
         }
     }
 }
@@ -75,36 +75,43 @@ impl Iterator for PushdownAutomata {
     }
 }
 
+/// Create a HashMap relating the names of states to their transition functions.
 #[macro_export]
-macro_rules! pushdown_state {
-    ($name_symbol: literal; $($t_input:literal, $s_input:literal => $state:literal, $change:expr);+ $(;)?) => {
-        ($name_symbol, State {
-            func: Box::new(|t: char, s:char| -> (&'static str, StackChange) {
-                match (t,s) {
-                    $(
-                        ($t_input, $s_input) => ($state, $change),
-                    )+
-                    _ => panic!("symbol pair not handled"),
-                }
-            })
-        })
+macro_rules! pushdown_states {
+    ($(state $name_symbol: literal $($t_input:literal, $s_input:literal => $state:literal, $change:expr)+ )+) => {
+        {
+            let mut hmap = HashMap::new();
+            $(
+                hmap.insert(
+                    $name_symbol,
+                    State {
+                        func: Box::new(|t: char, s:char| -> (&'static str, StackChange) {
+                            match (t,s) {
+                                $(
+                                    ($t_input, $s_input) => ($state, $change),
+                                )+
+                                _ => panic!("symbol pair not handled"),
+                            }
+                        })
+                    }
+                );
+
+            )+
+            hmap
+        }
     };
 }
 
-// #[cfg(test)]
-// #[ignore = "visualization"]
-// #[test]
-// fn bit_counter() {
-//     let states = vec![
-//         pushdown_state!(
-//             "p";
-//             '0', 'Z' => "p", StackChange::Push('A');
-//             '0', 'A' => "p", StackChange::Push('A');
-//         ),
-//         pushdown_state!(
-//             "q";
-//             '1', 'A' => "q", StackChange::Pop;
-//         ),
-//     ];
-//     let mut machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
-// }
+#[cfg(test)]
+#[ignore = "visualization"]
+#[test]
+fn bit_counter() {
+    let states = pushdown_states![
+        state "p"
+            '0', 'Z' => "p", StackChange::Push('A')
+            '0', 'A' => "p", StackChange::Push('A')
+        state "q"
+            '1', 'A' => "q", StackChange::Pop
+    ];
+    let machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
+}

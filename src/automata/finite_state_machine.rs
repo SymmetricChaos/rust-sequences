@@ -67,6 +67,7 @@ impl Iterator for StateMachine {
     }
 }
 
+/// Create a HashMap relating the names of states to their transition functions.
 #[macro_export]
 macro_rules! fsm_states {
     ($(state $name_symbol: literal $($input:literal => $state:literal)+ )+) => {
@@ -95,7 +96,7 @@ macro_rules! fsm_states {
 
 #[macro_export]
 macro_rules! fsm_output{
-    ( $($tape:literal, $state:literal => $out:literal);+ $(;)?) => {
+    ( $($tape:literal, $state:literal => $out:literal)+ ) => {
         Output {
             func: Box::new(|x: &'static str, y: &'static str | -> &'static str {
                 match (x,y) {
@@ -123,10 +124,10 @@ fn turnstile() {
     );
 
     let output = fsm_output!(
-        "Coin", "Locked" => "Coin Accepted, Unlocking";
-        "Push", "Locked" => "No Entry Allowed, Insert Coin";
-        "Coin", "Unlocked" => "Coin Wasted, Still Unlocked";
-        "Push", "Unlocked" => "One Entry Allowed, Locking";
+        "Coin", "Locked" => "Coin Accepted, Unlocking"
+        "Push", "Locked" => "No Entry Allowed, Insert Coin"
+        "Coin", "Unlocked" => "Coin Wasted, Still Unlocked"
+        "Push", "Unlocked" => "One Entry Allowed, Locking"
     );
 
     let machine = StateMachine::new(

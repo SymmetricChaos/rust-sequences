@@ -37,7 +37,7 @@ impl Iterator for Lindenmayer {
 
 #[macro_export]
 macro_rules! l_system {
-    ($name:ident; $($a:literal => $b:literal),+ $(,)?) => {
+    ($name:ident; $($a:literal => $b:literal)+) => {
         fn $name(x: char) -> Option<&'static str> {
             match x {
                 $(
@@ -61,39 +61,39 @@ fn tree_system(x: char) -> Option<&'static str> {
 #[cfg(test)]
 l_system!(
     cantor_system;
-    'a' => "aba",
-    'b' => "bbb",
+    'a' => "aba"
+    'b' => "bbb"
 );
 
 #[cfg(test)]
 l_system!(
     algae_system;
-    'a' => "ab",
-    'b' => "a",
+    'a' => "ab"
+    'b' => "a"
 );
 
 #[cfg(test)]
 l_system!(
     peano_curve;
-    'X' => "XFYFX+F+YFXFY-F-XFYFX",
-    'Y' => "YFXFY-F-XFYFX+F+YFXFY",
+    'X' => "XFYFX+F+YFXFY-F-XFYFX"
+    'Y' => "YFXFY-F-XFYFX+F+YFXFY"
 );
 
 #[cfg(test)]
 l_system!(
     complex_bush;
-    'V' => "[+++W][---W]YV",
-    'W' => "+X[-W]Z",
-    'X' => "-W[+X]Z",
-    'Y' => "YZ",
-    'Z' => "[-FFF][+FFF]F",
+    'V' => "[+++W][---W]YV"
+    'W' => "+X[-W]Z"
+    'X' => "-W[+X]Z"
+    'Y' => "YZ"
+    'Z' => "[-FFF][+FFF]F"
 );
 
 #[cfg(test)]
 l_system!(
     thue_morse;
-    '0' => "01",
-    '1' => "10",
+    '0' => "01"
+    '1' => "10"
 );
 
 crate::print_values!(

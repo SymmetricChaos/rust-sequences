@@ -181,6 +181,7 @@ impl Iterator for TuringMachine {
     }
 }
 
+/// Create a HashMap relating the names of states to their transition functions.
 #[macro_export]
 macro_rules! turing_states {
     ($(state $name_symbol: literal $($input:literal => $symbol:literal, $movement:expr, $state:literal)+ )+) => {
