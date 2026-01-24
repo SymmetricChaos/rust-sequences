@@ -6,7 +6,7 @@ const BLANK: char = '\0';
 pub enum StackChange {
     Push(char),
     Pop,
-    None,
+    Stay,
 }
 
 /// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
@@ -14,7 +14,7 @@ pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
 
 pub struct PushdownAutomata {
     stack: Vec<char>,
-    tape: Vec<char>,
+    // tape: Vec<char>,
     position: usize,
     states: HashMap<&'static str, State>,
     current_state: &'static str,
@@ -23,16 +23,15 @@ pub struct PushdownAutomata {
 
 impl PushdownAutomata {
     pub fn new(
-        tape: Vec<char>,
         states: HashMap<&'static str, State>,
         initial_state: &'static str,
-        initial_stack_symbol: Option<char>,
+        initial_stack: Option<Vec<char>>,
         halting_states: Vec<&'static str>,
     ) -> Self {
-        if let Some(c) = initial_stack_symbol {
+        if let Some(cs) = initial_stack {
             Self {
-                stack: vec![c],
-                tape,
+                stack: cs,
+                // tape,
                 position: 0,
                 current_state: initial_state,
                 states,
@@ -41,7 +40,7 @@ impl PushdownAutomata {
         } else {
             Self {
                 stack: vec![],
-                tape,
+                // tape,
                 position: 0,
                 current_state: initial_state,
                 states,
@@ -49,9 +48,29 @@ impl PushdownAutomata {
             }
         }
     }
+
+    pub fn create_iter(&self, tape: Vec<char>) -> PushdownAutomataIter<'_> {
+        PushdownAutomataIter {
+            stack: self.stack.clone(),
+            tape,
+            position: self.position,
+            states: &self.states,
+            current_state: self.current_state,
+            halting_states: &self.halting_states,
+        }
+    }
 }
 
-impl Iterator for PushdownAutomata {
+pub struct PushdownAutomataIter<'a> {
+    stack: Vec<char>,
+    tape: Vec<char>,
+    position: usize,
+    states: &'a HashMap<&'static str, State>,
+    current_state: &'static str,
+    halting_states: &'a Vec<&'static str>,
+}
+
+impl<'a> Iterator for PushdownAutomataIter<'a> {
     type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -75,7 +94,7 @@ impl Iterator for PushdownAutomata {
             StackChange::Pop => {
                 self.stack.pop()?; // remove the top symbol
             }
-            StackChange::None => (), // do nothing,
+            StackChange::Stay => (), // do nothing,
         }
 
         Some(next_state)
@@ -87,6 +106,7 @@ impl Iterator for PushdownAutomata {
 macro_rules! pushdown_states {
     ($(state $name_symbol: literal $($t_input:literal, $s_input:literal => $state:literal, $change:expr)+ )+) => {
         {
+            use StackChange::*;
             let mut hmap = HashMap::new();
             $(
                 hmap.insert(
@@ -96,7 +116,7 @@ macro_rules! pushdown_states {
                                 $(
                                     ($t_input, $s_input) => ($state, $change),
                                 )+
-                                _ => panic!("symbol pair {}, {} not handled in state {}", t,s, $name_symbol),
+                                _ => panic!("symbol pair (`{}`, `{}`) not handled in state {}", t,s, $name_symbol),
                             }
                         })
                     )
@@ -109,43 +129,49 @@ macro_rules! pushdown_states {
 }
 
 #[cfg(test)]
-// #[ignore = "visualization"]
+#[ignore = "visualization"]
 #[test]
 fn bit_counter() {
-    // determine if the bitstring is a bitstring, then a 'c',, then the reverse of the bit string
+    // determine if the input consists of bitstring, then a 'c', then the reverse of the bitstring
+
+    use itertools::Itertools;
     let states = pushdown_states![
         state "ADD"
-            '1', '1' => "ADD", StackChange::Push('1')
-            '1', '0' => "ADD", StackChange::Push('1')
-            '0', '1' => "ADD", StackChange::Push('0')
-            '0', '0' => "ADD", StackChange::Push('0')
-            '1', '\0' => "ADD", StackChange::Push('1')
-            '0', '\0' => "ADD", StackChange::Push('0')
-            'c', '1' => "SUB", StackChange::None
-            'c', '0' => "SUB", StackChange::None
-            '\0', '1' => "NOT ACCEPT", StackChange::None
-            '\0', '0' => "NOT ACCEPT", StackChange::None
+            '1', '1' => "ADD", Push('1') // push a 1 or 0 whenever we find it
+            '1', '0' => "ADD", Push('1')
+            '1', '\0' => "ADD", Push('1')
+            '0', '1' => "ADD", Push('0')
+            '0', '0' => "ADD", Push('0')
+            '0', '\0' => "ADD", Push('0')
+            'c', '1' => "SUB", Stay // switch to SUB after finding a c
+            'c', '0' => "SUB", Stay
+            '\0', '1' => "NOT ACCEPT", Stay // do not accept if the tape runs out while in ADD
+            '\0', '0' => "NOT ACCEPT", Stay
         state "SUB"
-            '1', '1' => "SUB", StackChange::Pop
-            '0', '0' => "SUB", StackChange::Pop
-            '\0', '\0' => "ACCEPT", StackChange::None // if the stack and tape are both empty we accept the input
-            '1', '0' => "NOT ACCEPT", StackChange::None
-            '0', '1' => "NOT ACCEPT", StackChange::None
-            'c', '1' => "NOT ACCEPT", StackChange::None
-            'c', '0' => "NOT ACCEPT", StackChange::None
-            '\0', '1' => "NOT ACCEPT", StackChange::None
-            '\0', '0' => "NOT ACCEPT", StackChange::None
-            '1', '\0' => "NOT ACCEPT", StackChange::None
-            '0', '\0' => "NOT ACCEPT", StackChange::None
+            '1', '1' => "SUB", Pop // if we find a 1 or 0 when we expect we pop them
+            '0', '0' => "SUB", Pop
+            '\0', '\0' => "ACCEPT", Stay // if the stack and tape are both empty we accept the input
+            '1', '0' => "NOT ACCEPT", Stay // in all other cases we do not accept the string
+            '0', '1' => "NOT ACCEPT", Stay
+            'c', '1' => "NOT ACCEPT", Stay
+            'c', '0' => "NOT ACCEPT", Stay
+            '\0', '1' => "NOT ACCEPT", Stay
+            '\0', '0' => "NOT ACCEPT", Stay
+            '1', '\0' => "NOT ACCEPT", Stay
+            '0', '\0' => "NOT ACCEPT", Stay
     ];
-    let machine = PushdownAutomata::new(
+    let machine = PushdownAutomata::new(states, "ADD", None, vec!["ACCEPT", "NOT ACCEPT"]);
+
+    let tapes = vec![
         vec!['1', '1', '0', '0', '1', '1'],
-        states,
-        "ADD",
-        None,
-        vec!["ACCEPT", "NOT ACCEPT"],
-    );
-    for p in machine {
-        println!("{p}");
+        vec!['1', '1', '0', 'c', '0', '1', '1'],
+        vec!['1', '1', '0', 'c', '0', '0', '1'],
+        vec!['1', '1', '0', 'c', '0', '1'],
+    ];
+    for tape in tapes {
+        println!("\nCheck acceptance for the tape `{}`", tape.iter().join(""));
+        for p in machine.create_iter(tape) {
+            println!("{p}");
+        }
     }
 }
