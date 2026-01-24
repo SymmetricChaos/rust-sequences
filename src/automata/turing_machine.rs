@@ -4,6 +4,8 @@ use std::{
     fmt::Display,
 };
 
+pub struct State(Box<dyn Fn(char) -> (char, Move, &'static str)>);
+
 /// Movement on a one dimensional Turing machine tape
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Move {
@@ -127,16 +129,6 @@ impl Display for Tape {
     }
 }
 
-pub struct State {
-    pub func: Box<dyn Fn(char) -> (char, Move, &'static str)>,
-}
-
-impl State {
-    pub fn transition(&self, symbol: char) -> (char, Move, &'static str) {
-        (self.func)(symbol)
-    }
-}
-
 /// A one dimension Turing machine.
 pub struct TuringMachine {
     tape: Tape,
@@ -170,8 +162,7 @@ impl Iterator for TuringMachine {
         let out = self.tape.clone();
 
         let cur_symbol = self.tape.read();
-        let (symbol, direction, next_state) =
-            self.states[self.current_state].transition(cur_symbol);
+        let (symbol, direction, next_state) = self.states[self.current_state].0(cur_symbol);
         self.tape.write(symbol);
         self.tape.shift(direction);
 
@@ -190,8 +181,8 @@ macro_rules! turing_states {
             $(
                 hmap.insert(
                     $name_symbol,
-                    State {
-                        func: Box::new(|x: char| -> (char, Move, &'static str) {
+                    State (
+                        Box::new(|x: char| -> (char, Move, &'static str) {
                             match x {
                                 $(
                                     $input => ($symbol, $movement, $state),
@@ -199,7 +190,7 @@ macro_rules! turing_states {
                                 _ => panic!("symbol not handled"),
                             }
                         })
-                    }
+                    )
                 );
 
             )+

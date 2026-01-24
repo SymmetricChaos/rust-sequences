@@ -1,26 +1,10 @@
 use std::collections::HashMap;
 
 /// The state transition function takes in a tape symbol then returns a state name.
-pub struct State {
-    pub func: Box<dyn Fn(&'static str) -> &'static str>,
-}
-
-impl State {
-    pub fn transition(&self, tape_symbol: &'static str) -> &'static str {
-        (self.func)(tape_symbol)
-    }
-}
+pub struct State(Box<dyn Fn(&'static str) -> &'static str>);
 
 /// The output function takes in a tape symbol and state name then returns a state name.
-pub struct Output {
-    pub func: Box<dyn Fn(&'static str, &'static str) -> &'static str>,
-}
-
-impl Output {
-    pub fn determine(&self, tape_symbol: &'static str, state: &'static str) -> &'static str {
-        (self.func)(tape_symbol, state)
-    }
-}
+pub struct Output(Box<dyn Fn(&'static str, &'static str) -> &'static str>);
 
 /// A deterministic finite state machine.
 pub struct StateMachine {
@@ -59,8 +43,8 @@ impl Iterator for StateMachine {
             .get(self.current_state)
             .expect("invalid state encountered");
 
-        let out = Some(self.output.determine(tape_symbol, self.current_state));
-        self.current_state = state.transition(tape_symbol);
+        let out = Some(self.output.0(tape_symbol, self.current_state));
+        self.current_state = state.0(tape_symbol);
 
         self.position += 1;
         out
@@ -76,8 +60,7 @@ macro_rules! fsm_states {
             $(
                 hmap.insert(
                     $name_symbol,
-                    State {
-                        func: Box::new(|x: &'static str| -> &'static str {
+                    State ( Box::new(|x: &'static str| -> &'static str {
                             match x {
                                 $(
                                     $input => $state,
@@ -85,7 +68,7 @@ macro_rules! fsm_states {
                                 _ => panic!("symbol not handled"),
                             }
                         })
-                    }
+                    )
                 );
 
             )+
@@ -97,8 +80,7 @@ macro_rules! fsm_states {
 #[macro_export]
 macro_rules! fsm_output{
     ( $($tape:literal, $state:literal => $out:literal)+ ) => {
-        Output {
-            func: Box::new(|x: &'static str, y: &'static str | -> &'static str {
+        Output ( Box::new(|x: &'static str, y: &'static str | -> &'static str {
                 match (x,y) {
                     $(
                         ($tape, $state) => $out,
@@ -106,7 +88,7 @@ macro_rules! fsm_output{
                     _ => panic!("tape symbol and state pair not handled"),
                 }
             })
-        }
+        )
     };
 }
 

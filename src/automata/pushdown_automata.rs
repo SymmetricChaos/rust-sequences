@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 const BLANK: char = '\0';
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum StackChange {
     Push(char),
     Pop,
@@ -9,15 +10,7 @@ pub enum StackChange {
 }
 
 /// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
-pub struct State {
-    pub func: Box<dyn Fn(char, char) -> (&'static str, StackChange)>,
-}
-
-impl State {
-    pub fn transition(&self, tape_symbol: char, stack_symbol: char) -> (&'static str, StackChange) {
-        (self.func)(tape_symbol, stack_symbol)
-    }
-}
+pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
 
 pub struct PushdownAutomata {
     stack: Vec<char>,
@@ -25,6 +18,7 @@ pub struct PushdownAutomata {
     position: usize,
     states: HashMap<&'static str, State>,
     current_state: &'static str,
+    halting_states: Vec<&'static str>,
 }
 
 impl PushdownAutomata {
@@ -32,14 +26,27 @@ impl PushdownAutomata {
         tape: Vec<char>,
         states: HashMap<&'static str, State>,
         initial_state: &'static str,
-        initial_stack_symbol: char,
+        initial_stack_symbol: Option<char>,
+        halting_states: Vec<&'static str>,
     ) -> Self {
-        Self {
-            stack: vec![initial_stack_symbol],
-            tape,
-            position: 0,
-            current_state: initial_state,
-            states,
+        if let Some(c) = initial_stack_symbol {
+            Self {
+                stack: vec![c],
+                tape,
+                position: 0,
+                current_state: initial_state,
+                states,
+                halting_states,
+            }
+        } else {
+            Self {
+                stack: vec![],
+                tape,
+                position: 0,
+                current_state: initial_state,
+                states,
+                halting_states,
+            }
         }
     }
 }
@@ -48,7 +55,7 @@ impl Iterator for PushdownAutomata {
     type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current_state == "HALT" {
+        if self.halting_states.contains(&self.current_state) {
             return None;
         }
 
@@ -56,7 +63,7 @@ impl Iterator for PushdownAutomata {
         let stack_symbol = *self.stack.last().unwrap_or(&BLANK);
         let state = self.states.get(self.current_state)?;
 
-        let (next_state, stack_change) = state.transition(tape_symbol, stack_symbol);
+        let (next_state, stack_change) = state.0(tape_symbol, stack_symbol);
 
         self.current_state = next_state;
         if self.position < self.tape.len() {
@@ -84,16 +91,15 @@ macro_rules! pushdown_states {
             $(
                 hmap.insert(
                     $name_symbol,
-                    State {
-                        func: Box::new(|t: char, s:char| -> (&'static str, StackChange) {
+                    State (Box::new(|t: char, s:char| -> (&'static str, StackChange) {
                             match (t,s) {
                                 $(
                                     ($t_input, $s_input) => ($state, $change),
                                 )+
-                                _ => panic!("symbol pair not handled"),
+                                _ => panic!("symbol pair {}, {} not handled in state {}", t,s, $name_symbol),
                             }
                         })
-                    }
+                    )
                 );
 
             )+
@@ -103,15 +109,43 @@ macro_rules! pushdown_states {
 }
 
 #[cfg(test)]
-#[ignore = "visualization"]
+// #[ignore = "visualization"]
 #[test]
 fn bit_counter() {
+    // determine if the bitstring is a bitstring, then a 'c',, then the reverse of the bit string
     let states = pushdown_states![
-        state "p"
-            '0', 'Z' => "p", StackChange::Push('A')
-            '0', 'A' => "p", StackChange::Push('A')
-        state "q"
-            '1', 'A' => "q", StackChange::Pop
+        state "ADD"
+            '1', '1' => "ADD", StackChange::Push('1')
+            '1', '0' => "ADD", StackChange::Push('1')
+            '0', '1' => "ADD", StackChange::Push('0')
+            '0', '0' => "ADD", StackChange::Push('0')
+            '1', '\0' => "ADD", StackChange::Push('1')
+            '0', '\0' => "ADD", StackChange::Push('0')
+            'c', '1' => "SUB", StackChange::None
+            'c', '0' => "SUB", StackChange::None
+            '\0', '1' => "NOT ACCEPT", StackChange::None
+            '\0', '0' => "NOT ACCEPT", StackChange::None
+        state "SUB"
+            '1', '1' => "SUB", StackChange::Pop
+            '0', '0' => "SUB", StackChange::Pop
+            '\0', '\0' => "ACCEPT", StackChange::None // if the stack and tape are both empty we accept the input
+            '1', '0' => "NOT ACCEPT", StackChange::None
+            '0', '1' => "NOT ACCEPT", StackChange::None
+            'c', '1' => "NOT ACCEPT", StackChange::None
+            'c', '0' => "NOT ACCEPT", StackChange::None
+            '\0', '1' => "NOT ACCEPT", StackChange::None
+            '\0', '0' => "NOT ACCEPT", StackChange::None
+            '1', '\0' => "NOT ACCEPT", StackChange::None
+            '0', '\0' => "NOT ACCEPT", StackChange::None
     ];
-    let machine = PushdownAutomata::new(vec!['1', '1', '0', '1', '0', '1'], states, "p", 'z');
+    let machine = PushdownAutomata::new(
+        vec!['1', '1', '0', '0', '1', '1'],
+        states,
+        "ADD",
+        None,
+        vec!["ACCEPT", "NOT ACCEPT"],
+    );
+    for p in machine {
+        println!("{p}");
+    }
 }
