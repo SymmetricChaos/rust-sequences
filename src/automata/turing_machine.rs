@@ -167,8 +167,6 @@ impl<'a> Iterator for TuringMachineIter<'a> {
             return None;
         }
 
-        let t = self.tape.clone();
-
         let cur_symbol = self.tape.read();
         let (symbol, direction, next_state) = self.states[self.current_state].0(cur_symbol);
         self.tape.write(symbol);
@@ -176,7 +174,7 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 
         self.current_state = next_state;
 
-        Some((self.current_state, t))
+        Some((self.current_state, self.tape.clone()))
     }
 }
 
