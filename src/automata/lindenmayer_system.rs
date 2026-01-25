@@ -1,23 +1,33 @@
 /// An L-system defined by a function from char to Option<&'static str>
 /// Constant symbols should return None and variables Some.
 pub struct Lindenmayer {
-    string: String,
     transition: Box<dyn Fn(char) -> Option<&'static str>>,
 }
 
 impl Lindenmayer {
-    pub fn new<T>(init: &str, transition: T) -> Self
+    pub fn new<T>(transition: T) -> Self
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
         Self {
-            string: init.to_string(),
             transition: Box::new(transition),
+        }
+    }
+
+    pub fn create_iter(&self, initital_string: &str) -> LindenmayerIter<'_> {
+        LindenmayerIter {
+            string: initital_string.to_string(),
+            transition: &self.transition,
         }
     }
 }
 
-impl Iterator for Lindenmayer {
+pub struct LindenmayerIter<'a> {
+    string: String,
+    transition: &'a Box<dyn Fn(char) -> Option<&'static str>>,
+}
+
+impl<'a> Iterator for LindenmayerIter<'a> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -98,10 +108,10 @@ l_system!(
 
 crate::print_values!(
     print_lindenmayer, formatter "{}", sep "\n";
-    Lindenmayer::new("0", tree_system), 0, 4;
-    Lindenmayer::new("a", cantor_system), 0, 4;
-    Lindenmayer::new("a", algae_system), 0, 7;
-    Lindenmayer::new("X", peano_curve), 0, 3;
-    Lindenmayer::new("VZFFF", complex_bush), 0, 4;
-    Lindenmayer::new("0", thue_morse), 0, 6;
+    Lindenmayer::new(tree_system).create_iter("0"), 0, 4;
+    Lindenmayer::new(cantor_system).create_iter("a"), 0, 4;
+    Lindenmayer::new(algae_system).create_iter("a"), 0, 7;
+    Lindenmayer::new(peano_curve).create_iter("X"), 0, 3;
+    Lindenmayer::new(complex_bush).create_iter("VZFFF"), 0, 4;
+    Lindenmayer::new(thue_morse).create_iter("0"), 0, 6;
 );

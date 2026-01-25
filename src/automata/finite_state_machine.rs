@@ -8,31 +8,44 @@ pub struct Output(Box<dyn Fn(&'static str, &'static str) -> &'static str>);
 
 /// A deterministic finite state machine.
 pub struct StateMachine {
-    tape: Vec<&'static str>,
-    position: usize,
-    current_state: &'static str,
+    initial_state: &'static str,
     states: HashMap<&'static str, State>,
     output: Output,
 }
 
 impl StateMachine {
     pub fn new(
-        tape: Vec<&'static str>,
         initial_state: &'static str,
         states: HashMap<&'static str, State>,
         output: Output,
     ) -> Self {
         Self {
-            tape,
-            position: 0,
-            current_state: initial_state,
+            initial_state,
             states,
             output,
         }
     }
+
+    pub fn create_iter(&self, tape: Vec<&'static str>) -> StateMachineIter<'_> {
+        StateMachineIter {
+            tape,
+            position: 0,
+            current_state: self.initial_state,
+            states: &self.states,
+            output: &self.output,
+        }
+    }
 }
 
-impl Iterator for StateMachine {
+pub struct StateMachineIter<'a> {
+    tape: Vec<&'static str>,
+    position: usize,
+    current_state: &'static str,
+    states: &'a HashMap<&'static str, State>,
+    output: &'a Output,
+}
+
+impl<'a> Iterator for StateMachineIter<'a> {
     type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -112,14 +125,11 @@ fn turnstile() {
         "Push", "Unlocked" => "One Entry Allowed, Locking"
     );
 
-    let machine = StateMachine::new(
-        vec!["Push", "Push", "Coin", "Push", "Coin", "Coin"],
-        "Locked",
-        states,
-        output,
-    );
+    let machine = StateMachine::new("Locked", states, output);
 
-    for (i, out) in machine.enumerate() {
+    let tape = vec!["Push", "Push", "Coin", "Push", "Coin", "Coin"];
+
+    for (i, out) in machine.create_iter(tape).enumerate() {
         println!("{i:<2}  {}", out);
     }
 }

@@ -76,9 +76,13 @@ impl Tape {
         }
     }
 
-    /// Concatenate all the symbols on the tape into a String.
-    pub fn tape_symbols(&self) -> String {
-        self.tape.iter().join("")
+    /// Concatenate all the symbols on the tape into a String and place a dot to indicate the head position
+    pub fn indicate_tape(&self) -> String {
+        let mut s = " ".repeat(self.position);
+        s.push('.');
+        s.push('\n');
+        s.push_str(&self.tape.iter().join(""));
+        s
     }
 
     /// Remove any blanks trailing to the left or right of the tape then shrink the capacity of the underlying VecDeque.
@@ -121,45 +125,49 @@ impl Tape {
 /// Indicate the current position with a dot above the symbols.
 impl Display for Tape {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut s = " ".repeat(self.position);
-        s.push('.');
-        s.push('\n');
-        s.push_str(&self.tape_symbols());
-        write!(f, "{}", s)
+        write!(f, "{}", self.tape.iter().join(""))
     }
 }
 
 /// A one dimension Turing machine.
 pub struct TuringMachine {
-    tape: Tape,
     states: HashMap<&'static str, State>,
-    current_state: &'static str,
+    initial_state: &'static str,
 }
 
 impl TuringMachine {
     /// A new TuringMachine defined by a Tape, the name of the initial state, and a map of named States.
-    pub fn new(
-        tape: Tape,
-        initial_state: &'static str,
-        states: HashMap<&'static str, State>,
-    ) -> Self {
+    pub fn new(initial_state: &'static str, states: HashMap<&'static str, State>) -> Self {
         Self {
-            tape,
-            current_state: initial_state,
+            initial_state,
             states,
+        }
+    }
+
+    pub fn create_iter(&self, tape: Tape) -> TuringMachineIter<'_> {
+        TuringMachineIter {
+            tape,
+            states: &self.states,
+            current_state: self.initial_state,
         }
     }
 }
 
-impl Iterator for TuringMachine {
-    type Item = Tape;
+pub struct TuringMachineIter<'a> {
+    tape: Tape,
+    states: &'a HashMap<&'static str, State>,
+    current_state: &'static str,
+}
+
+impl<'a> Iterator for TuringMachineIter<'a> {
+    type Item = (&'static str, Tape);
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.current_state == "HALT" {
             return None;
         }
 
-        let out = self.tape.clone();
+        let t = self.tape.clone();
 
         let cur_symbol = self.tape.read();
         let (symbol, direction, next_state) = self.states[self.current_state].0(cur_symbol);
@@ -168,7 +176,7 @@ impl Iterator for TuringMachine {
 
         self.current_state = next_state;
 
-        Some(out)
+        Some((self.current_state, t))
     }
 }
 
@@ -215,18 +223,11 @@ fn busy_beaver() {
             '1' => '1', Move::Right, "HALT"
     );
 
-    let machine = TuringMachine::new(
-        Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0'),
-        "A",
-        states,
-    );
+    let machine = TuringMachine::new("A", states);
 
-    for (i, tape) in machine.enumerate() {
-        println!("{i:<2}  {}", tape.tape_symbols());
+    let tape = Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0');
+
+    for (i, state) in machine.create_iter(tape).enumerate() {
+        println!("{i:<2}  {:<5} {}", state.0, state.1);
     }
-
-    // for (i, mut tape) in machine.enumerate() {
-    //     tape.shrink();
-    //     println!("{}", tape);
-    // }
 }

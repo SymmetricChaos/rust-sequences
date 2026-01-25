@@ -14,8 +14,6 @@ pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
 
 pub struct PushdownAutomata {
     stack: Vec<char>,
-    // tape: Vec<char>,
-    position: usize,
     states: HashMap<&'static str, State>,
     current_state: &'static str,
     halting_states: Vec<&'static str>,
@@ -31,8 +29,6 @@ impl PushdownAutomata {
         if let Some(cs) = initial_stack {
             Self {
                 stack: cs,
-                // tape,
-                position: 0,
                 current_state: initial_state,
                 states,
                 halting_states,
@@ -40,8 +36,6 @@ impl PushdownAutomata {
         } else {
             Self {
                 stack: vec![],
-                // tape,
-                position: 0,
                 current_state: initial_state,
                 states,
                 halting_states,
@@ -53,7 +47,7 @@ impl PushdownAutomata {
         PushdownAutomataIter {
             stack: self.stack.clone(),
             tape,
-            position: self.position,
+            position: 0,
             states: &self.states,
             current_state: self.current_state,
             halting_states: &self.halting_states,
