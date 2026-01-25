@@ -39,7 +39,7 @@ impl Iterator for Markov {
 /// Nicer way to make the transformations
 #[macro_export]
 macro_rules! markov_pairs {
-    ($($a:literal => $b:literal),+ $(,)?) => {
+    ($($a:literal => $b:literal)+) => {
         &[
             $(
                 ($a, $b),
@@ -52,9 +52,9 @@ crate::print_values!(
     print_markov, formatter "{}", sep "\n";
     Markov::new("101",
         markov_pairs!( // Converts a number from binary to bijective-unary
-            "I0" => "0II",
-            "1" => "0I",
-            "0" => "",
+            "I0" => "0II"
+            "1" => "0I"
+            "0" => ""
         )
     ), 0, 12;
 );
