@@ -5,30 +5,44 @@
 /// A halting character
 pub struct TagSystem {
     deletion: usize,
-    string: String,
     transition: Box<dyn Fn(char) -> Option<&'static str>>,
-    halted: bool,
     halt: char,
 }
 
 impl TagSystem {
     /// Panics if deletion is less than two.
-    pub fn new<T>(initial: &str, deletion: usize, transition: T, halt: char) -> Self
+    pub fn new<T>(deletion: usize, transition: T, halt: char) -> Self
     where
         T: Fn(char) -> Option<&'static str> + 'static,
     {
         assert!(deletion > 1);
         Self {
             deletion,
-            string: initial.to_string(),
             transition: Box::new(transition),
-            halted: false,
             halt,
+        }
+    }
+
+    pub fn create_iter(&self, initial_string: &str) -> TagSystemIter<'_> {
+        TagSystemIter {
+            deletion: self.deletion,
+            string: initial_string.to_string(),
+            transition: &self.transition,
+            halted: false,
+            halt: self.halt,
         }
     }
 }
 
-impl Iterator for TagSystem {
+pub struct TagSystemIter<'a> {
+    deletion: usize,
+    string: String,
+    transition: &'a Box<dyn Fn(char) -> Option<&'static str>>,
+    halted: bool,
+    halt: char,
+}
+
+impl<'a> Iterator for TagSystemIter<'a> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -71,7 +85,7 @@ pub struct CyclicTagSystem {
 }
 
 impl CyclicTagSystem {
-    /// Pancis if the init or any of the productions contain letters other than '0' and '1'
+    /// Panics if any of the productions contain letters other than '0' and '1'
     pub fn new<S: ToString>(init: S, productions: &[S]) -> Self {
         let s = init.to_string();
 
@@ -79,7 +93,7 @@ impl CyclicTagSystem {
         for pro in productions.iter() {
             for c in pro.chars() {
                 if c != '0' && c != '1' {
-                    panic!("only 0 and 1 are allowed in the productions string")
+                    panic!("only 0 and 1 are allowed in the production strings")
                 }
             }
         }
@@ -147,7 +161,7 @@ tag_system!(
 );
 
 crate::print_values!(
-    TagSystem::new("baa", 2, illustration_system, 'H'), 0, 10;
-    TagSystem::new("aaa", 2, collatz_system, 'H'), 0, 30;
+    TagSystem::new(2, illustration_system, 'H').create_iter("baa"), 0, 10;
+    TagSystem::new(2, collatz_system, 'H').create_iter("aaa"), 0, 30;
     CyclicTagSystem::new("11001", &["010", "000", "1111"]), 0, 10;
 );
