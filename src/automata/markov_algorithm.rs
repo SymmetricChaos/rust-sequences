@@ -1,21 +1,31 @@
 /// Apply a Markov algorithm to a string.
 pub struct Markov {
-    string: String,
     patterns: Vec<(&'static str, &'static str)>,
-    halted: bool,
 }
 
 impl Markov {
-    pub fn new(initial: &str, patterns: &[(&'static str, &'static str)]) -> Self {
+    pub fn new(patterns: &[(&'static str, &'static str)]) -> Self {
         Self {
-            string: initial.to_string(),
             patterns: patterns.to_vec(),
+        }
+    }
+
+    pub fn create_iter(&self, initial_string: &str) -> MarkovIter<'_> {
+        MarkovIter {
+            string: initial_string.to_string(),
+            patterns: &self.patterns,
             halted: false,
         }
     }
 }
 
-impl Iterator for Markov {
+pub struct MarkovIter<'a> {
+    string: String,
+    patterns: &'a Vec<(&'static str, &'static str)>,
+    halted: bool,
+}
+
+impl<'a> Iterator for MarkovIter<'a> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -50,11 +60,11 @@ macro_rules! markov_pairs {
 
 crate::print_values!(
     print_markov, formatter "{}", sep "\n";
-    Markov::new("101",
+    Markov::new(
         markov_pairs!( // Converts a number from binary to bijective-unary
             "I0" => "0II"
             "1" => "0I"
             "0" => ""
         )
-    ), 0, 12;
+    ).create_iter("101"), 0, 12;
 );
