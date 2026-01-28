@@ -23,6 +23,7 @@ impl TagSystem {
         }
     }
 
+    /// Run the automata on an input.
     pub fn create_iter(&self, initial_string: &str) -> TagSystemIter<'_> {
         TagSystemIter {
             deletion: self.deletion,

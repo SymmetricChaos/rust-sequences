@@ -1,26 +1,37 @@
 /// Create an elementary cellular automaton from a rule number and an initial string.
 /// At each stage the string is assumed to be padded with zeroes on each size.
-pub struct ElementaryCellularAutomaton {
-    string: String,
+pub struct ElementaryAutomata {
     rule: [char; 8],
 }
 
-impl ElementaryCellularAutomaton {
-    pub fn new(rule: u8, initial: &str) -> Self {
-        assert!(
-            initial.chars().all(|c| c == '0' || c == '1'),
-            "initial string can only contain 0s and 1s"
-        );
+impl ElementaryAutomata {
+    pub fn new(rule: u8) -> Self {
         let mut arr: [char; 8] = ['0'; 8];
         for i in 0..8 {
             arr[i] = char::from(((rule >> (7 - i)) & 1) + 48); // bit twiddle to extract bits and get the '0' an '1' chars
         }
-        Self {
-            string: initial.to_string(),
-            rule: arr,
-        }
+        Self { rule: arr }
     }
 
+    /// Run the automata on an input.
+    pub fn create_iter(&self, input: &str) -> ElementaryAutomataIter<'_> {
+        assert!(
+            input.chars().all(|c| c == '0' || c == '1'),
+            "input string can only contain 0s and 1s"
+        );
+        ElementaryAutomataIter {
+            string: input.to_string(),
+            rule: &self.rule,
+        }
+    }
+}
+
+pub struct ElementaryAutomataIter<'a> {
+    string: String,
+    rule: &'a [char; 8],
+}
+
+impl<'a> ElementaryAutomataIter<'a> {
     fn apply_rule(&self, s: &str) -> char {
         match s {
             "111" => self.rule[0],
@@ -36,7 +47,7 @@ impl ElementaryCellularAutomaton {
     }
 }
 
-impl Iterator for ElementaryCellularAutomaton {
+impl<'a> Iterator for ElementaryAutomataIter<'a> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -53,5 +64,5 @@ impl Iterator for ElementaryCellularAutomaton {
 
 crate::print_values!(
     automata, formatter "{}", sep "\n";
-    ElementaryCellularAutomaton::new(30, "00000000000100000000000"), 0, 12;
+    ElementaryAutomata::new(30).create_iter( "00000000000100000000000"), 0, 12;
 );

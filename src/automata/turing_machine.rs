@@ -144,6 +144,7 @@ impl TuringMachine {
         }
     }
 
+    /// Run the automata on an input.
     pub fn create_iter(&self, tape: Tape) -> TuringMachineIter<'_> {
         TuringMachineIter {
             tape,

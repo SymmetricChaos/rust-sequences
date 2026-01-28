@@ -12,6 +12,7 @@ pub enum StackChange {
 /// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
 pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
 
+/// A pushdown automata is effectively a finite state machine equipped with a stack.
 pub struct PushdownAutomata {
     stack: Vec<char>,
     states: HashMap<&'static str, State>,
@@ -43,6 +44,7 @@ impl PushdownAutomata {
         }
     }
 
+    /// Take a tape of characters and run the automata on it.
     pub fn create_iter(&self, tape: Vec<char>) -> PushdownAutomataIter<'_> {
         PushdownAutomataIter {
             stack: self.stack.clone(),
@@ -126,9 +128,9 @@ macro_rules! pushdown_states {
 #[ignore = "visualization"]
 #[test]
 fn bit_counter() {
-    // determine if the input consists of bitstring, then a 'c', then the reverse of the bitstring
-
     use itertools::Itertools;
+
+    // determine if the input consists of bitstring, then a 'c', then the reverse of the bitstring
     let states = pushdown_states![
         state "ADD"
             '1', '1' => "ADD", Push('1') // push a 1 or 0 whenever we find it
