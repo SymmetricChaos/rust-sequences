@@ -13,7 +13,7 @@ impl ElementaryAutomata {
         Self { rule: arr }
     }
 
-    /// Run the automata on an input.
+    /// Run the automaton on an input.
     pub fn create_iter(&self, input: &str) -> ElementaryAutomataIter<'_> {
         assert!(
             input.chars().all(|c| c == '0' || c == '1'),

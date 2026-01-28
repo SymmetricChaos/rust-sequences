@@ -26,7 +26,7 @@ impl StateMachine {
         }
     }
 
-    /// Run the automata on an input.
+    /// Run the automaton on an input.
     pub fn create_iter(&self, tape: Vec<&'static str>) -> StateMachineIter<'_> {
         StateMachineIter {
             tape,

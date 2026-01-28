@@ -10,6 +10,7 @@ impl Markov {
         }
     }
 
+    /// Run the automaton on an input.
     pub fn create_iter(&self, initial_string: &str) -> MarkovIter<'_> {
         MarkovIter {
             string: initial_string.to_string(),

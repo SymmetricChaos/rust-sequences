@@ -44,7 +44,7 @@ impl PushdownAutomata {
         }
     }
 
-    /// Take a tape of characters and run the automata on it.
+    /// Run the automaton on an input.
     pub fn create_iter(&self, tape: Vec<char>) -> PushdownAutomataIter<'_> {
         PushdownAutomataIter {
             stack: self.stack.clone(),

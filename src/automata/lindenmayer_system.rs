@@ -14,6 +14,7 @@ impl Lindenmayer {
         }
     }
 
+    /// Run the automaton on an input.
     pub fn create_iter(&self, initital_string: &str) -> LindenmayerIter<'_> {
         LindenmayerIter {
             string: initital_string.to_string(),
