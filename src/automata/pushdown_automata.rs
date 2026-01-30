@@ -13,14 +13,14 @@ pub enum StackChange {
 pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
 
 /// A pushdown automata is effectively a finite state machine equipped with a stack.
-pub struct PushdownAutomata {
+pub struct PushdownAutomaton {
     stack: Vec<char>,
     states: HashMap<&'static str, State>,
     current_state: &'static str,
     halting_states: Vec<&'static str>,
 }
 
-impl PushdownAutomata {
+impl PushdownAutomaton {
     pub fn new(
         states: HashMap<&'static str, State>,
         initial_state: &'static str,
@@ -45,8 +45,8 @@ impl PushdownAutomata {
     }
 
     /// Run the automaton on an input.
-    pub fn create_iter(&self, tape: Vec<char>) -> PushdownAutomataIter<'_> {
-        PushdownAutomataIter {
+    pub fn create_iter(&self, tape: Vec<char>) -> PushdownAutomatonIter<'_> {
+        PushdownAutomatonIter {
             stack: self.stack.clone(),
             tape,
             position: 0,
@@ -57,7 +57,7 @@ impl PushdownAutomata {
     }
 }
 
-pub struct PushdownAutomataIter<'a> {
+pub struct PushdownAutomatonIter<'a> {
     stack: Vec<char>,
     tape: Vec<char>,
     position: usize,
@@ -66,7 +66,7 @@ pub struct PushdownAutomataIter<'a> {
     halting_states: &'a Vec<&'static str>,
 }
 
-impl<'a> Iterator for PushdownAutomataIter<'a> {
+impl<'a> Iterator for PushdownAutomatonIter<'a> {
     type Item = &'static str;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -156,7 +156,7 @@ fn bit_counter() {
             '1', '\0' => "NOT ACCEPT", Stay
             '0', '\0' => "NOT ACCEPT", Stay
     ];
-    let machine = PushdownAutomata::new(states, "ADD", None, vec!["ACCEPT", "NOT ACCEPT"]);
+    let machine = PushdownAutomaton::new(states, "ADD", None, vec!["ACCEPT", "NOT ACCEPT"]);
 
     let tapes = vec![
         vec!['1', '1', '0', '0', '1', '1'],
