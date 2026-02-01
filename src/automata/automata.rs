@@ -4,5 +4,5 @@ pub trait Automaton {
     /// Transition between states and produce an output
     fn transition(&mut self, input: Self::Input) -> Self::Output;
     /// Is the Automaton in an accepting state?
-    fn accept(&self) -> bool;
+    fn is_accepting(&self) -> bool;
 }

@@ -3,6 +3,8 @@ pub mod core;
 pub mod figurate;
 pub mod utils;
 
+pub mod abundance;
+pub mod abundant;
 pub mod ackermann_sets;
 pub mod algebraic;
 pub mod arithmetic_derivative;
@@ -12,6 +14,7 @@ pub mod catalan;
 pub mod collatz;
 pub mod compositions;
 pub mod compositions_weak;
+pub mod deficient;
 pub mod derangement;
 pub mod digital_product;
 pub mod digital_sum;
