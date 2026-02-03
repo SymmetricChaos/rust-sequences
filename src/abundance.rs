@@ -1,6 +1,6 @@
 use crate::utils::divisibility::aliquot_sum;
 
-/// The abundance of each positive integer.
+/// The abundance of each positive integer. Its aliquot sum minus itself.
 pub struct Abundance {
     n: i64,
 }
@@ -15,7 +15,7 @@ impl Iterator for Abundance {
     type Item = i64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.n += 1;
+        self.n = self.n.checked_add(1)?;
         let x: i64 = aliquot_sum(self.n.try_into().unwrap())?
             .try_into()
             .expect("fail to convert");

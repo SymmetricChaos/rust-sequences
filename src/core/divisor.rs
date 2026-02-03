@@ -44,7 +44,7 @@ impl Iterator for SumOfDivisors {
     }
 }
 
-/// The aliquot sum of each positive integer.
+/// The aliquot sum of each positive integer, the sum of all of its divisors except itself.
 /// 0, 1, 1, 3, 1, 6, 1, 7, 4, 8...
 pub struct AliquotSums {
     ctr: u64,
