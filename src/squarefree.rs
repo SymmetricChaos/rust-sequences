@@ -2,7 +2,7 @@ use crate::{
     core::prime::Primes,
     utils::divisibility::{prime_factorization, squarefree_kernel},
 };
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero, integer::gcd};
 use std::hash::Hash;
 
 /// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
@@ -167,9 +167,45 @@ impl Iterator for Powerful {
     }
 }
 
+/// Powerful numbers that are not perfect powers.
+/// 72, 108, 200, 288, 392, 432, 500, 648, 675, 800...
+pub struct Achilles {
+    ctr: u64,
+}
+
+impl Achilles {
+    pub fn new() -> Self {
+        Self { ctr: 71 }
+    }
+}
+
+impl Iterator for Achilles {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            self.ctr = self.ctr.checked_add(1)?;
+            let n = self.ctr;
+            let primes = prime_factorization(self.ctr);
+            if primes.iter().map(|p| p.1).all(|p| p >= 2) {
+                if primes
+                    .iter()
+                    .map(|p| p.1)
+                    .reduce(|acc, x| gcd(acc, x))
+                    .unwrap()
+                    == 1
+                {
+                    return Some(n);
+                }
+            }
+        }
+    }
+}
+
 crate::check_sequences!(
     Squarefree::new_big(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
     SquarefreeKernels::new(), 0, 20, [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19, 10];
     Squareful::new_big(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
     Powerful::new(), 0, 20, [1, 4, 8, 9, 16, 25, 27, 32, 36, 49, 64, 72, 81, 100, 108, 121, 125, 128, 144, 169];
+    Achilles::new(), 0, 10, [72, 108, 200, 288, 392, 432, 500, 648, 675, 800];
 );
