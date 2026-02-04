@@ -1,4 +1,7 @@
-use crate::{core::prime::Primes, utils::divisibility::squarefree_kernel};
+use crate::{
+    core::prime::Primes,
+    utils::divisibility::{prime_factorization, squarefree_kernel},
+};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 use std::hash::Hash;
 
@@ -55,7 +58,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squarefre
     }
 }
 
-/// Positive natural numbers that are divisible at least twice by at least one natural number other than one.
+/// Positive natural numbers that are divisible at least twice by at least one natural number other than one. The numbers that are not squarefree.
 /// 4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28...
 pub struct Squareful<T> {
     ctr: T,
@@ -132,8 +135,41 @@ impl Iterator for SquarefreeKernels {
     }
 }
 
+/// Positive natural numbers that are divisible by all the squares of their prime factors.
+/// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...
+pub struct Powerful {
+    ctr: u64,
+}
+
+impl Powerful {
+    pub fn new() -> Self {
+        Self { ctr: 1 }
+    }
+}
+
+impl Iterator for Powerful {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ctr == 1 {
+            self.ctr = 2;
+            return Some(1);
+        }
+        loop {
+            let n = self.ctr;
+            let primes = prime_factorization(self.ctr);
+            if primes.iter().map(|p| p.1).all(|p| p >= 2) {
+                self.ctr = self.ctr.checked_add(1)?;
+                return Some(n);
+            }
+            self.ctr = self.ctr.checked_add(1)?;
+        }
+    }
+}
+
 crate::check_sequences!(
     Squarefree::new_big(), 0, 20, [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
     SquarefreeKernels::new(), 0, 20, [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19, 10];
     Squareful::new_big(), 0, 20, [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
+    Powerful::new(), 0, 20, [1, 4, 8, 9, 16, 25, 27, 32, 36, 49, 64, 72, 81, 100, 108, 121, 125, 128, 144, 169];
 );
