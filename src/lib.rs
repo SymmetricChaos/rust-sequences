@@ -52,6 +52,7 @@ pub mod thue_morse;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;
+pub mod powerful;
 
 #[macro_export]
 macro_rules! big {
