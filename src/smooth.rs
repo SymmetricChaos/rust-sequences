@@ -1,7 +1,11 @@
 use crate::core::prime::Primes;
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One, Signed, Zero};
-use std::hash::Hash;
+use std::cmp::Reverse;
+use std::{
+    collections::{BinaryHeap, HashSet},
+    hash::Hash,
+};
 
 /// The smooth numbers, those natural numbers for which the only prime divisors are less than or equal to n.
 pub struct Smooth<T> {
@@ -56,23 +60,30 @@ impl<T: CheckedAdd + CheckedDiv + Clone + Integer> Iterator for Smooth<T> {
     }
 }
 
-/// The regular numbers, those which have only the prime divisors 2, 3, and 5. Significantly faster than Smooth::new(5) but uses more memory.
+/// The regular numbers, those which have only the prime divisors 2, 3, and 5. Hundreds of times faster than Smooth::new(5) but uses more memory.
 pub struct Regular<T> {
-    arr: Vec<T>,
+    heap: BinaryHeap<Reverse<T>>,
+    set: HashSet<T>,
 }
 
 impl<T: CheckedAdd + One + Ord> Regular<T> {
     pub fn new() -> Self {
+        let mut heap = BinaryHeap::new();
+        heap.push(Reverse(T::one()));
         Self {
-            arr: vec![T::one()],
+            heap,
+            set: HashSet::new(),
         }
     }
 }
 
 impl Regular<BigInt> {
     pub fn new_big() -> Self {
+        let mut heap = BinaryHeap::new();
+        heap.push(Reverse(BigInt::one()));
         Self {
-            arr: vec![BigInt::one()],
+            heap,
+            set: HashSet::new(),
         }
     }
 }
@@ -81,26 +92,41 @@ impl<T: CheckedAdd + Clone + Ord + Hash> Iterator for Regular<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.arr.pop()?;
+        let out = self.heap.pop()?.0;
 
-        self.arr.push(out.checked_add(&out)?);
-        self.arr.push(out.checked_add(&out)?.checked_add(&out)?);
-        self.arr.push(
-            out.checked_add(&out)?
-                .checked_add(&out)?
-                .checked_add(&out)?
-                .checked_add(&out)?,
-        );
-        self.arr.sort_by(|a, b| b.cmp(a));
-        self.arr = self.arr.clone().into_iter().unique().collect_vec();
+        self.set.remove(&out);
+
+        let a = out.checked_add(&out)?;
+        if !self.set.iter().contains(&a) {
+            self.set.insert(a.clone());
+            self.heap.push(Reverse(a));
+        }
+
+        let a = out.checked_add(&out)?.checked_add(&out)?;
+        if !self.set.iter().contains(&a) {
+            self.set.insert(a.clone());
+            self.heap.push(Reverse(a));
+        }
+
+        let a = out
+            .checked_add(&out)?
+            .checked_add(&out)?
+            .checked_add(&out)?
+            .checked_add(&out)?;
+        if !self.set.iter().contains(&a) {
+            self.set.insert(a.clone());
+            self.heap.push(Reverse(a));
+        }
+
         Some(out)
     }
 }
 
 crate::check_iteration_times!(
-    Smooth::new_big(5), 500;
-    Regular::<i32>::new(), 500;
-    Regular::new_big(), 500;
+    Smooth::<i32>::new(5), 1000;
+    Smooth::new_big(5), 1000;
+    Regular::<i32>::new(), 1000;
+    Regular::new_big(), 1000;
 );
 
 crate::check_sequences!(
