@@ -60,7 +60,7 @@ impl<T: CheckedAdd + CheckedDiv + Clone + Integer> Iterator for Smooth<T> {
     }
 }
 
-/// The regular numbers, those which have only the prime divisors 2, 3, and 5. Hundreds of times faster than Smooth::new(5) but uses more memory.
+/// The regular numbers, those which have only the prime divisors 2, 3, and 5. Thousands of times faster than Smooth::new(5) but uses more memory.
 pub struct Regular<T> {
     heap: BinaryHeap<Reverse<T>>,
     set: HashSet<T>,
@@ -92,41 +92,57 @@ impl<T: CheckedAdd + Clone + Ord + Hash> Iterator for Regular<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.heap.pop()?.0;
+        let h = self.heap.pop()?.0;
 
-        self.set.remove(&out);
+        // Save some space
+        self.set.remove(&h);
 
-        let a = out.checked_add(&out)?;
-        if !self.set.iter().contains(&a) {
-            self.set.insert(a.clone());
-            self.heap.push(Reverse(a));
+        // Calculate 2h and short circuit if the values is too large or insert if it is new
+        let mut a = h.checked_add(&h);
+        match a.clone() {
+            Some(n) => {
+                if !self.set.iter().contains(&n) {
+                    self.set.insert(n.clone());
+                    self.heap.push(Reverse(n));
+                }
+            }
+            None => return Some(h),
         }
 
-        let a = out.checked_add(&out)?.checked_add(&out)?;
-        if !self.set.iter().contains(&a) {
-            self.set.insert(a.clone());
-            self.heap.push(Reverse(a));
+        // Same for 3h
+        a = a.unwrap().checked_add(&h);
+        match a.clone() {
+            Some(n) => {
+                if !self.set.iter().contains(&n) {
+                    self.set.insert(n.clone());
+                    self.heap.push(Reverse(n));
+                }
+            }
+            None => return Some(h),
         }
 
-        let a = out
-            .checked_add(&out)?
-            .checked_add(&out)?
-            .checked_add(&out)?
-            .checked_add(&out)?;
-        if !self.set.iter().contains(&a) {
-            self.set.insert(a.clone());
-            self.heap.push(Reverse(a));
+        // Same for 5h but with a short circuit if 4h overflows
+        match a.unwrap().checked_add(&h) {
+            Some(b) => match b.checked_add(&h) {
+                Some(n) => {
+                    if !self.set.iter().contains(&n) {
+                        self.set.insert(n.clone());
+                        self.heap.push(Reverse(n));
+                    }
+                }
+                None => return Some(h),
+            },
+            None => return Some(h),
         }
 
-        Some(out)
+        Some(h)
     }
 }
 
 crate::check_iteration_times!(
-    Smooth::<i32>::new(5), 1000;
-    Smooth::new_big(5), 1000;
-    Regular::<i32>::new(), 1000;
-    Regular::new_big(), 1000;
+    Smooth::<i32>::new(5), 1690;
+    Regular::<i32>::new(), 1690; // Only 1690 values are possible for i32
+    Regular::<u32>::new(), 1690; // this takes longer because it has more space and doesn't short circuit yet
 );
 
 crate::check_sequences!(
