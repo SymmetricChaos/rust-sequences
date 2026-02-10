@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer, One};
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1))
+/// 7, 8, 9, 10, 15, 18, 19, 20, 21, 22...
 pub struct Rowland<T> {
     value: T,
     ctr: T,
@@ -39,6 +40,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Rowland<T> {
 }
 
 /// Rowland's prime generating sequence. The first differences of Rowland's sequence.
+/// 1, 1, 1, 5, 3, 1, 1, 1, 1, 11...
 pub struct RowlandPrime<T> {
     value: T,
     ctr: T,

@@ -41,8 +41,6 @@ impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> Iterator for Pyt
         let mut arr = [a, b, c];
         arr.sort();
 
-        // assert!(gcd(gcd(arr[0].clone(), arr[1].clone()), arr[2].clone()) == T::one());
-
         // Find the next pair
         // Requirements:
         // m > n > 0

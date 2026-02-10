@@ -61,6 +61,7 @@ impl<T: CheckedAdd + CheckedDiv + Clone + Integer> Iterator for Smooth<T> {
 }
 
 /// The regular numbers, those which have only the prime divisors 2, 3, and 5. Thousands of times faster than Smooth::new(5) but uses more memory.
+/// 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16...
 pub struct Regular<T> {
     heap: BinaryHeap<Reverse<T>>,
     set: HashSet<T>,
