@@ -3,6 +3,7 @@ use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 
 /// The Möbius function over the positive integers
+/// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
 pub struct Mobius<T> {
     n: u64,
     _phantom: PhantomData<T>,
@@ -50,6 +51,7 @@ impl<T: One + Zero + Signed> Iterator for Mobius<T> {
 }
 
 /// The values of the Merterns function over the positive integers. Partial sums of the Mobius function, without the leading zero.
+/// 1, 0, -1, -1, -2, -1, -2, -2, -2, -1
 pub struct Mertens<T> {
     n: u64,
     sum: T,

@@ -2,6 +2,7 @@ use itertools::Itertools;
 use num::{BigInt, One, Zero};
 
 /// The number of partitons for each integer.
+/// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30...
 pub struct Partition {
     values: Vec<BigInt>,
     ctr: usize,

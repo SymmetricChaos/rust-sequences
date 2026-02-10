@@ -45,5 +45,5 @@ use itertools::Itertools;
 
 crate::print_values!(
     WallisProduct::<u64>::new(), 0, 10;
-    WallisProduct::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(6).join("")), 0, 20; // notice slow convergence
+    WallisProduct::new_big().skip(1000).map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(10).join("")), 0, 5; // notice incredibly slow convergence
 );

@@ -39,7 +39,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Rowland<T> {
     }
 }
 
-/// Rowland's prime generating sequence. The first differences of Rowland's sequence.
+/// Rowland's prime generating sequence. The first differences of Rowland's sequence. All terms are either 1 or are prime.
 /// 1, 1, 1, 5, 3, 1, 1, 1, 1, 11...
 pub struct RowlandPrime<T> {
     value: T,
