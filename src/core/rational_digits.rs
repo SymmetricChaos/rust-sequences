@@ -1,8 +1,7 @@
-use std::fmt::Display;
-
 use num::{
     BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, PrimInt, Zero, rational::Ratio,
 };
+use std::fmt::Display;
 
 pub fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
     let mut out = Vec::new();
@@ -47,7 +46,7 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
     }
 
     pub fn from_ratio(q: Ratio<T>, base: T) -> Self {
-        assert!(q > Ratio::<T>::zero());
+        assert!(q >= Ratio::<T>::zero());
         let f = q.into_raw();
         let numer = integer_digits(f.0, base);
         let remdr = T::zero();
@@ -97,7 +96,7 @@ impl RationalDigits<BigInt> {
         BigInt: From<F>,
     {
         let q: Ratio<BigInt> = q.into();
-        assert!(q > Ratio::<BigInt>::zero());
+        assert!(q >= Ratio::<BigInt>::zero());
         let base = BigInt::from(base);
         let f = q.into_raw();
         let numer = integer_digits(f.0, base.clone());
