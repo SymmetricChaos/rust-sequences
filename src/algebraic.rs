@@ -47,6 +47,7 @@ impl Iterator for Algebraic {
                 self.weak_comps = WeakCompositionsNK::new(self.height, self.width);
             }
         }
+        todo!()
     }
 }
 

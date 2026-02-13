@@ -1,4 +1,6 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, rational::Ratio};
+use num::{
+    BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Zero, bigint::Sign, rational::Ratio,
+};
 
 /// The partial sums of the Wallis product, converging on pi.
 pub struct WallisProduct<T> {
@@ -38,12 +40,63 @@ impl<T: Clone + Integer + CheckedMul + CheckedAdd> Iterator for WallisProduct<T>
     }
 }
 
+/// The partial sums of the Madhava-Leibniz formula for pi. Four times the arctangent of one.
+pub struct Leibniz<T> {
+    k: T,
+    sign: Sign,
+    sum: Ratio<T>,
+}
+
+impl<T: Clone + CheckedAdd + Integer + CheckedMul + CheckedSub> Leibniz<T> {
+    pub fn new() -> Self {
+        Self {
+            k: T::one(),
+            sign: Sign::Plus,
+            sum: Ratio::new(T::zero(), T::one()),
+        }
+    }
+}
+
+impl Leibniz<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            k: BigInt::one(),
+            sign: Sign::Plus,
+            sum: Ratio::new(BigInt::zero(), BigInt::one()),
+        }
+    }
+}
+
+impl<T: Clone + CheckedAdd + Integer + CheckedMul + CheckedSub> Iterator for Leibniz<T> {
+    type Item = Ratio<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = Some(
+            self.sum
+                .clone()
+                .checked_add(&self.sum)?
+                .checked_add(&self.sum)?
+                .checked_add(&self.sum)?,
+        );
+        let term = Ratio::new_raw(T::one(), self.k.clone());
+        match self.sign {
+            Sign::Minus => self.sum = self.sum.checked_sub(&term)?,
+            Sign::Plus => self.sum = self.sum.checked_add(&term)?,
+            Sign::NoSign => unreachable!("never occurs"),
+        };
+        self.sign = -self.sign;
+        self.k = self.k.checked_add(&(T::one() + T::one()))?;
+        out
+    }
+}
+
 #[cfg(test)]
 use crate::core::rational_digits::RationalDigits;
 #[cfg(test)]
 use itertools::Itertools;
 
 crate::print_values!(
-    WallisProduct::<u64>::new(), 0, 10;
-    WallisProduct::new_big().skip(1000).map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(10).join("")), 0, 5; // notice incredibly slow convergence
+    Leibniz::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges slowly
+    WallisProduct::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges incredibly slowly
+
 );
