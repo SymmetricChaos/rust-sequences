@@ -91,11 +91,9 @@ impl<T: Clone + CheckedAdd + Integer + CheckedMul + CheckedSub> Iterator for Lei
 }
 
 #[cfg(test)]
-use crate::core::rational_digits::RationalDigits;
-#[cfg(test)]
-use itertools::Itertools;
+use crate::core::rational_digits::rational_decimal_string;
 
 crate::print_values!(
-    Leibniz::new_big().map(|x| RationalDigits::from_ratio_big(x, 10).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges slowly
-    WallisProduct::new_big().map(|x| RationalDigits::from_ratio_big(x, 10).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges incredibly slowly
+    Leibniz::new_big().map(|x| rational_decimal_string(x,3).unwrap()), 0, 15; // converges slowly from above and below
+    WallisProduct::new_big().map(|x| rational_decimal_string(x,3).unwrap()), 0, 15; // converges slowly from below
 );
