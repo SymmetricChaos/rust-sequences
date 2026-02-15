@@ -96,7 +96,6 @@ use crate::core::rational_digits::RationalDigits;
 use itertools::Itertools;
 
 crate::print_values!(
-    Leibniz::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges slowly
-    WallisProduct::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges incredibly slowly
-
+    Leibniz::new_big().map(|x| RationalDigits::from_ratio_big(x, 10).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges slowly
+    WallisProduct::new_big().map(|x| RationalDigits::from_ratio_big(x, 10).map(|d| d.to_string()).take(5).join("")), 0, 10; // converges incredibly slowly
 );

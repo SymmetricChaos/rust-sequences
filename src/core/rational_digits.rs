@@ -28,23 +28,6 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
         Self::from_ratio(Ratio::new(numer, denom), base)
     }
 
-    /// Decimal digits.
-    pub fn new_decimal(numer: T, denom: T) -> Self {
-        Self::from_ratio(
-            Ratio::new(numer, denom),
-            T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one()
-                + T::one(),
-        )
-    }
-
     pub fn from_ratio(q: Ratio<T>, base: T) -> Self {
         assert!(q >= Ratio::<T>::zero());
         let f = q.into_raw();
@@ -61,39 +44,21 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
 }
 
 impl RationalDigits<BigInt> {
-    pub fn new_big<F: Clone + Integer>(numer: F, denom: F, base: F) -> Self
+    pub fn new_big<F: Integer + Clone, G>(numer: F, denom: F, base: G) -> Self
     where
         Ratio<BigInt>: From<Ratio<F>>,
         BigInt: From<F>,
+        Ratio<BigInt>: From<Ratio<G>>,
+        BigInt: From<G>,
     {
         Self::from_ratio_big(Ratio::new(numer, denom), base)
     }
 
-    /// Decimal digits.
-    pub fn new_decimal_big<F: Clone + Integer>(numer: F, denom: F) -> Self
+    pub fn from_ratio_big<F: Clone + Integer, G>(q: Ratio<F>, base: G) -> Self
     where
         Ratio<BigInt>: From<Ratio<F>>,
         BigInt: From<F>,
-    {
-        Self::from_ratio_big(
-            Ratio::new(numer, denom),
-            F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one()
-                + F::one(),
-        )
-    }
-
-    pub fn from_ratio_big<F: Clone + Integer>(q: Ratio<F>, base: F) -> Self
-    where
-        Ratio<BigInt>: From<Ratio<F>>,
-        BigInt: From<F>,
+        BigInt: From<G>,
     {
         let q: Ratio<BigInt> = q.into();
         assert!(q >= Ratio::<BigInt>::zero());
@@ -141,11 +106,12 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for R
 }
 
 crate::check_sequences!(
-    RationalDigits::new_decimal(665857, 941664), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
-    RationalDigits::new_decimal(10, 7), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
-    RationalDigits::new_decimal(46, 3), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
-    RationalDigits::new_decimal(1, 127), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // check for correct leading zeroes, this is 0.007874...
+    RationalDigits::new(665857, 941664, 10), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
+    RationalDigits::new(10, 7, 10), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
+    RationalDigits::new(46, 3, 10), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
+    RationalDigits::new(1, 127, 10), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // check for correct leading zeroes, this is 0.007874...
 );
+
 crate::print_values!(
     digits, formatter "{}", sep " ";
     RationalDigits::new(665857, 941664, 2), 0, 20;
