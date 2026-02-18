@@ -73,6 +73,6 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> Iterator for Poly
 }
 
 crate::check_sequences!(
-    PolynomialNaturals::<i32>::new(vec![-6,1,2]), 0, 10, [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
-    PolynomialIntegers::<i32>::new(vec![1,-4,3]), 0, 10, [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
+    PolynomialNaturals::<i32>::new(vec![-6,1,2]), [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
+    PolynomialIntegers::<i32>::new(vec![1,-4,3]), [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
 );

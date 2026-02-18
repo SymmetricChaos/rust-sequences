@@ -129,10 +129,10 @@ impl Iterator for Cototients {
 }
 
 crate::check_sequences!(
-    NumberOfDivisors::new(), 0, 10, [1, 2, 2, 3, 2, 4, 2, 4, 3, 4];
-    SumOfDivisors::new(), 0, 10, [1, 3, 4, 7, 6, 12, 8, 15, 13, 18];
-    AliquotSums::new(), 0, 10, [0, 1, 1, 3, 1, 6, 1, 7, 4, 8];
-    AliquotSequence::new(10), 0, 10, [10, 8, 7, 1, 0, 0, 0, 0, 0, 0];
-    Totients::new(), 0, 10, [1, 1, 2, 2, 4, 2, 6, 4, 6, 4];
-    Cototients::new(), 0, 10, [0, 1, 1, 2, 1, 4, 1, 4, 3, 6];
+    NumberOfDivisors::new(), [1, 2, 2, 3, 2, 4, 2, 4, 3, 4];
+    SumOfDivisors::new(), [1, 3, 4, 7, 6, 12, 8, 15, 13, 18];
+    AliquotSums::new(), [0, 1, 1, 3, 1, 6, 1, 7, 4, 8];
+    AliquotSequence::new(10), [10, 8, 7, 1, 0, 0, 0, 0, 0, 0];
+    Totients::new(), [1, 1, 2, 2, 4, 2, 6, 4, 6, 4];
+    Cototients::new(), [0, 1, 1, 2, 1, 4, 1, 4, 3, 6];
 );

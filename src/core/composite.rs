@@ -53,5 +53,5 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Composites<T> 
 }
 
 crate::check_sequences!(
-    Composites::new_big(), 0, 10, [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
+    Composites::new_big(), [4, 6, 8, 9, 10, 12, 14, 15, 16, 18];
 );

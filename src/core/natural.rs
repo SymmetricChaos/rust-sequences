@@ -31,6 +31,6 @@ impl<T: CheckedAdd + Clone + One> Iterator for Naturals<T> {
 }
 
 crate::check_sequences!(
-    Naturals::new_big(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Naturals::<u8>::new(), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Naturals::new_big(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Naturals::<u8>::new(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 );

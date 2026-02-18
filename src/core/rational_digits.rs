@@ -105,11 +105,12 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for R
     }
 }
 
+/// Convert a rational number to a string representing it in decimal with excactly the specificer number of digits after the decimal.
 pub fn rational_decimal_string<
     T: Integer + CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero + Display + Clone,
 >(
     ratio: Ratio<T>,
-    total_digits: usize,
+    digits: usize,
 ) -> Option<String> {
     let ten = T::one()
         + T::one()
@@ -126,13 +127,12 @@ pub fn rational_decimal_string<
     let mut numer = integer_digits(i_part, ten.clone());
     let denom = f_part;
     let mut remdr = T::zero();
-    let mut ctr = 0;
 
     let mut dec_point_found = false;
 
     let mut output_string = String::new();
 
-    // Remove leading zeroes or find the decimal point
+    // Remove leading zeroes or find the end of the integer part
     loop {
         remdr = remdr
             .checked_mul(&ten)?
@@ -151,6 +151,7 @@ pub fn rational_decimal_string<
         }
     }
 
+    let mut ctr = 0;
     loop {
         let next = match numer.pop() {
             Some(n) => n,
@@ -170,8 +171,10 @@ pub fn rational_decimal_string<
         let digit = remdr.checked_div(&denom)?; // determine the next digit
         remdr = remdr.checked_sub(&denom.checked_mul(&digit)?)?; // subtract from the remainder
         output_string.push_str(&digit.to_string());
-        ctr += 1;
-        if ctr >= total_digits {
+        if dec_point_found {
+            ctr += 1;
+        }
+        if ctr >= digits {
             break;
         }
     }

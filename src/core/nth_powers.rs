@@ -35,8 +35,8 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for NthPowers<T> {
 }
 
 crate::check_sequences!(
-    NthPowers::new_big(1), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    NthPowers::new_big(2), 0, 10, [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
+    NthPowers::new_big(1), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    NthPowers::new_big(2), [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
 );
 
 crate::print_values!(

@@ -31,6 +31,6 @@ impl<T: Clone> Iterator for Constant<T> {
 }
 
 crate::check_sequences!(
-    Constant::new_big(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
-    Constant::new(3), 0, 10, [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
+    Constant::new_big(3), [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
+    Constant::new(3), [3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
 );

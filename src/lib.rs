@@ -40,6 +40,7 @@ pub mod pell;
 pub mod phythagorean;
 pub mod pi;
 pub mod playground;
+pub mod powerful;
 pub mod rado_pairs;
 pub mod recaman;
 pub mod repint;
@@ -52,7 +53,6 @@ pub mod thue_morse;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;
-pub mod powerful;
 
 #[macro_export]
 macro_rules! big {
@@ -151,6 +151,19 @@ macro_rules! check_sequences {
             $(
                 let expected = $data.map(|x| x.to_string()).to_vec();
                 let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| x.to_string()));
+                if expected != calculated {
+                    panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
+                }
+            )+
+        }
+    };
+    ($($seq: expr, $data: expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[test]
+        fn check_sequences() {
+            $(
+                let expected = $data.map(|x| x.to_string()).to_vec();
+                let calculated = itertools::Itertools::collect_vec($seq.take(expected.len()).map(|x| x.to_string()));
                 if expected != calculated {
                     panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
                 }

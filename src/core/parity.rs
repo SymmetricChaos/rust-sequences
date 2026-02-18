@@ -177,8 +177,8 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Evens::<i32>::new(), 0, 10, [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
-    EvenIntegers::new_big(), 0, 10, [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
-    Odds::new_big(), 0, 10, [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
-    OddIntegers::new_big(), 0, 10, [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
+    Evens::<i32>::new(), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    EvenIntegers::new_big(), [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
+    Odds::new_big(), [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    OddIntegers::new_big(), [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
 );

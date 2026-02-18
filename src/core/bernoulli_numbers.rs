@@ -82,8 +82,6 @@ where
     }
 }
 
-crate::print_values!(
-    Bernoulli::new_plus_big(), 0, 20;
-    Bernoulli::new_minus_big(), 0, 20;
-    Bernoulli::<i32>::new_minus(), 0, 20;
+crate::check_sequences!(
+    Bernoulli::new_plus_big(), [Ratio::new(1,1), Ratio::new(1,2),Ratio::new(1,6),Ratio::new(0,1),Ratio::new(-1,30),Ratio::new(0,1),Ratio::new(1,42),Ratio::new(0,1),Ratio::new(-1,30)];
 );

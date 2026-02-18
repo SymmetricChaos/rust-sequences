@@ -40,6 +40,6 @@ impl<T: One + Zero> Iterator for UnitSequence<T> {
 }
 
 crate::check_sequences!(
-    UnitSequence::<i32>::new(), 0, 5, [1, 0, 0, 0, 0];
-    UnitSequence::new_big(), 0, 5, [1, 0, 0, 0, 0];
+    UnitSequence::<i32>::new(), [1, 0, 0, 0, 0];
+    UnitSequence::new_big(), [1, 0, 0, 0, 0];
 );
