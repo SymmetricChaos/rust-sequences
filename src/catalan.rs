@@ -48,5 +48,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Catalan::new_big(), 0, 10, [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
+    Catalan::new_big(), [1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862];
 );

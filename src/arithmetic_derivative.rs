@@ -97,5 +97,5 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    ArithmeticDerivative::new(), 0, 14, [0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9];
+    ArithmeticDerivative::new(), [0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9];
 );

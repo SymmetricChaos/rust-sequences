@@ -50,6 +50,6 @@ impl Iterator for Bell {
 }
 
 crate::check_sequences!(
-    Bell::new_big(), 0, 10, [1, 1, 2, 5, 15, 52, 203, 877, 4140, 21147];
-    BellTriangle::new_big().flatten(), 0, 10, [1, 1, 2, 2, 3, 5, 5, 7, 10, 15];
+    Bell::new_big(), [1, 1, 2, 5, 15, 52, 203, 877, 4140, 21147];
+    BellTriangle::new_big().flatten(), [1, 1, 2, 2, 3, 5, 5, 7, 10, 15];
 );

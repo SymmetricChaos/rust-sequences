@@ -42,5 +42,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Evil::new_big(), 0, 10, [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
+    Evil::new_big(), [0, 3, 5, 6, 9, 10, 12, 15, 17, 18];
 );

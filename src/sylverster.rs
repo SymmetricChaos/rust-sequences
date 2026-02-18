@@ -38,5 +38,5 @@ impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Iterator for Sylvest
 }
 
 crate::check_sequences!(
-    Sylvester::new_big(), 0, 6, [2, 3, 7, 43, 1807, 3263443];
+    Sylvester::new_big(), [2, 3, 7, 43, 1807, 3263443];
 );

@@ -68,5 +68,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    ThueMorse::<BigInt>::new(), 0, 10, [0, 1, 1, 0, 1, 0, 0, 1, 1, 0];
+    ThueMorse::<BigInt>::new(), [0, 1, 1, 0, 1, 0, 0, 1, 1, 0];
 );

@@ -43,5 +43,5 @@ impl Iterator for JordanPolya {
 }
 
 crate::check_sequences!(
-    JordanPolya::new(), 0, 20, [1, 2, 4, 6, 8, 12, 16, 24, 32, 36, 48, 64, 72, 96, 120, 128, 144, 192, 216, 240];
+    JordanPolya::new(), [1, 2, 4, 6, 8, 12, 16, 24, 32, 36, 48, 64, 72, 96, 120, 128, 144, 192, 216, 240];
 );

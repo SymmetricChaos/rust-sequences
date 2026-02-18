@@ -107,9 +107,9 @@ impl Iterator for AutomorphicDigits {
 }
 
 crate::check_sequences!(
-    Automorphic::new_big(5, 10), 0, 8, [5, 25, 625, 90625, 890625, 2890625, 12890625, 212890625];
-    Automorphic::new_big(6, 10), 0, 8, [6, 76, 376, 9376, 109376, 7109376, 87109376, 787109376];
-    AutomorphicDigits::new_big(5, 10), 0, 10, [5, 2, 6, 0, 9, 8, 2, 1, 2, 8];
-    AutomorphicDigits::new_big(6, 10), 0, 10, [6, 7, 3, 9, 0, 1, 7, 8, 7, 1];
-    AutomorphicDigits::new_big(3, 6), 0, 10, [3, 1, 2, 0, 5, 3, 1, 2, 2, 2];
+    Automorphic::new_big(5, 10), [5, 25, 625, 90625, 890625, 2890625, 12890625, 212890625];
+    Automorphic::new_big(6, 10), [6, 76, 376, 9376, 109376, 7109376, 87109376, 787109376];
+    AutomorphicDigits::new_big(5, 10), [5, 2, 6, 0, 9, 8, 2, 1, 2, 8];
+    AutomorphicDigits::new_big(6, 10), [6, 7, 3, 9, 0, 1, 7, 8, 7, 1];
+    AutomorphicDigits::new_big(3, 6), [3, 1, 2, 0, 5, 3, 1, 2, 2, 2];
 );

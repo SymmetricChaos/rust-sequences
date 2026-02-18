@@ -51,8 +51,8 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    CenteredPolygonal::new_big(3), 0, 10, [1, 4, 10, 19, 31, 46, 64, 85, 109, 136];
-    CenteredPolygonal::new_big(4), 0, 10, [1, 5, 13, 25, 41, 61, 85, 113, 145, 181];
-    CenteredPolygonal::new_big(5), 0, 10, [1, 6, 16, 31, 51, 76, 106, 141, 181, 226];
-    CenteredPolygonal::new_big(6), 0, 10, [1, 7, 19, 37, 61, 91, 127, 169, 217, 271];
+    CenteredPolygonal::new_big(3), [1, 4, 10, 19, 31, 46, 64, 85, 109, 136];
+    CenteredPolygonal::new_big(4), [1, 5, 13, 25, 41, 61, 85, 113, 145, 181];
+    CenteredPolygonal::new_big(5), [1, 6, 16, 31, 51, 76, 106, 141, 181, 226];
+    CenteredPolygonal::new_big(6), [1, 7, 19, 37, 61, 91, 127, 169, 217, 271];
 );

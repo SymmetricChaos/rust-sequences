@@ -42,5 +42,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Leonardo::new_big(), 0, 10, [1, 1, 3, 5, 9, 15, 25, 41, 67, 109];
+    Leonardo::new_big(), [1, 1, 3, 5, 9, 15, 25, 41, 67, 109];
 );

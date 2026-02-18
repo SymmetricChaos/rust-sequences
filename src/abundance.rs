@@ -24,5 +24,5 @@ impl Iterator for Abundance {
 }
 
 crate::check_sequences!(
-    Abundance::new(), 0, 15, [-1, -1, -2, -1, -4, 0, -6, -1, -5, -2, -10, 4, -12, -4, -6];
+    Abundance::new(), [-1, -1, -2, -1, -4, 0, -6, -1, -5, -2, -10, 4, -12, -4, -6];
 );

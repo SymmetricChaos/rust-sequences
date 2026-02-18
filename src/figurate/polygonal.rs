@@ -90,8 +90,8 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    Polygonal::new_big(2), 0, 10, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Polygonal::new_big(3), 0, 10, [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
+    Polygonal::new_big(2), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Polygonal::new_big(3), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
 );
 
 #[test]

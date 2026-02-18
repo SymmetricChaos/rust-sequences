@@ -79,6 +79,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for RowlandPrime<T> {
 }
 
 crate::check_sequences!(
-    Rowland::new(7), 0, 10, [7, 8, 9, 10, 15, 18, 19, 20, 21, 22];
-    RowlandPrime::new(7), 0, 10, [1, 1, 1, 5, 3, 1, 1, 1, 1, 11];
+    Rowland::new(7), [7, 8, 9, 10, 15, 18, 19, 20, 21, 22];
+    RowlandPrime::new(7), [1, 1, 1, 5, 3, 1, 1, 1, 1, 11];
+    RowlandPrime::new(7).filter(|x| !x.is_one()), [5, 3, 11, 3, 23, 3, 47];
 );

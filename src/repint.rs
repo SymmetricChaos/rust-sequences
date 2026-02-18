@@ -63,8 +63,8 @@ impl<T: CheckedAdd + CheckedMul + Clone> Iterator for Repint<T> {
 }
 
 crate::check_sequences!(
-    Repint::new_big(5,10), 0, 5, [5, 55, 555, 5555, 55555];
-    Repint::new_big(12,10), 0, 5, [12, 1212, 121212, 12121212, 1212121212];
-    Repint::new(7,10), 0, 5, [7, 77, 777, 7777, 77777];
-    Repint::new(35,10), 0, 5, [35, 3535, 353535, 35353535]; // notice only four values returned because i32 overflowss
+    Repint::new_big(5,10), [5, 55, 555, 5555, 55555];
+    Repint::new_big(12,10), [12, 1212, 121212, 12121212, 1212121212];
+    Repint::new(7,10), [7, 77, 777, 7777, 77777];
+    Repint::new(35,10), [35, 3535, 353535, 35353535]; // notice only four values returned because i32 overflowss
 );

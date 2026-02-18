@@ -100,7 +100,7 @@ impl<T: CheckedMul + CheckedSub + Clone> Iterator for LucasV<T> {
 }
 
 crate::check_sequences!(
-    LucasU::new_big(1, -1), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]; // Fibonacci
-    LucasV::new_big(1, -1), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]; // Lucas
-    LucasU::new_big(1, -2), 0, 10, [0, 1, 2, 5, 12, 29, 70, 169, 408, 985]; // Pell
+    LucasU::new_big(1, -1), [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]; // Fibonacci
+    LucasV::new_big(1, -1), [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]; // Lucas
+    LucasU::new_big(1, -2), [0, 1, 2, 5, 12, 29, 70, 169, 408, 985]; // Pell
 );

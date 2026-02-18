@@ -44,5 +44,5 @@ impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Derangements<T> {
 }
 
 crate::check_sequences!(
-    Derangements::<i32>::new(), 0, 10, [1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496];
+    Derangements::<i32>::new(), [1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496];
 );

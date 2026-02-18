@@ -160,8 +160,8 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Fibonacci::new_big(), 0, 10, [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
-    FibonacciWord::new_big(), 0, 10, [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
+    Fibonacci::new_big(), [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+    FibonacciWord::new_big(), [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
 );
 
 crate::print_values!(

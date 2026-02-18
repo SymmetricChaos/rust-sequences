@@ -30,4 +30,4 @@ impl Iterator for Gray {
     }
 }
 
-crate::check_sequences!(Gray::new_big(), 0, 10, [0, 1, 3, 2, 6, 7, 5, 4, 12, 13]);
+crate::check_sequences!(Gray::new_big(), [0, 1, 3, 2, 6, 7, 5, 4, 12, 13]);

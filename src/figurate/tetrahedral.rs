@@ -46,5 +46,5 @@ impl<T: Clone + CheckedAdd + CheckedSub + One> Iterator for Tetrahedral<T> {
 }
 
 crate::check_sequences!(
-    Tetrahedral::new_big(), 0, 10, [0, 1, 4, 10, 20, 35, 56, 84, 120, 165];
+    Tetrahedral::new_big(), [0, 1, 4, 10, 20, 35, 56, 84, 120, 165];
 );

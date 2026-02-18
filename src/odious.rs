@@ -38,5 +38,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Odious::new_big(), 0, 10, [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
+    Odious::new_big(), [1, 2, 4, 7, 8, 11, 13, 14, 16, 19];
 );

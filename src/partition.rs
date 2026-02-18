@@ -161,7 +161,7 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Partition::new_big(), 0, 10, [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+    Partition::new_big(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );
 
 crate::print_values!(

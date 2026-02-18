@@ -29,5 +29,5 @@ impl Iterator for SquareTriangular {
 }
 
 crate::check_sequences!(
-    SquareTriangular::new_big(), 0, 10, [0_i64, 1, 36, 1225, 41616, 1413721, 48024900, 1631432881, 55420693056, 1882672131025];
+    SquareTriangular::new_big(), [0_i64, 1, 36, 1225, 41616, 1413721, 48024900, 1631432881, 55420693056, 1882672131025];
 );

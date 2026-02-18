@@ -53,5 +53,5 @@ impl<T: Clone + CheckedAdd + CheckedSub + PartialOrd + One> Iterator for Recaman
 }
 
 crate::check_sequences!(
-    Recaman::new_big(), 0, 20, [0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, 10, 23, 9, 24, 8, 25, 43, 62];
+    Recaman::new_big(), [0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22, 10, 23, 9, 24, 8, 25, 43, 62];
 );

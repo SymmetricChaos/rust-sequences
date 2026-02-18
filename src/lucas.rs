@@ -42,5 +42,5 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Lucas::new_big(), 0, 10, [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
+    Lucas::new_big(), [2, 1, 3, 4, 7, 11, 18, 29, 47, 76];
 );

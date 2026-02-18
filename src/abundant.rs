@@ -24,5 +24,5 @@ impl Iterator for Abundant {
 }
 
 crate::check_sequences!(
-    Abundant::new(), 0, 10, [12, 18, 20, 24, 30, 36, 40, 42, 48, 54];
+    Abundant::new(), [12, 18, 20, 24, 30, 36, 40, 42, 48, 54];
 );

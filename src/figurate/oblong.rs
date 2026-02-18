@@ -49,6 +49,6 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Oblong::new_big(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
-    Oblong::<i8>::new(), 0, 10, [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
+    Oblong::new_big(), [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
+    Oblong::<i8>::new(), [0, 2, 6, 12, 20, 30, 42, 56, 72, 90];
 );

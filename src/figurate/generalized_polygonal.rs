@@ -136,6 +136,6 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    GeneralizedPolygonal::new_big(5), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35]; // Generalized pentagonal numbers are particularly important
-    GeneralizedPentagonal::new_big(), 0, 10, [0, 1, 2, 5, 7, 12, 15, 22, 26, 35];
+    GeneralizedPolygonal::new_big(5), [0, 1, 2, 5, 7, 12, 15, 22, 26, 35]; // Generalized pentagonal numbers are particularly important
+    GeneralizedPentagonal::new_big(), [0, 1, 2, 5, 7, 12, 15, 22, 26, 35];
 );

@@ -246,5 +246,5 @@ crate::print_values!(
 );
 
 crate::check_sequences!(
-    PadicValuation::new(2), 0, 20, [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2];
+    PadicValuation::new(2), [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2];
 );
