@@ -138,7 +138,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
     }
 }
 
-crate::print_values!(
-    Rationals::<u32>::new(), 0, 20;
-    SignedRationals::<i32>::new(), 0, 20;
+crate::check_sequences!(
+    Rationals::<u32>::new(), ["0", "1", "2", "1/2", "3", "1/3", "4", "3/2", "2/3", "1/4", "5", "1/5", "6", "5/2", "4/3", "3/4", "2/5", "1/6", "7", "5/3"];
+    SignedRationals::<i32>::new(), ["0", "1", "-1", "2", "-2", "1/2", "-1/2", "3", "-3", "1/3", "-1/3", "4", "-4", "3/2", "-3/2", "2/3", "-2/3", "1/4", "-1/4", "5"];
 );

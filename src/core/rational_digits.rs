@@ -183,20 +183,10 @@ pub fn rational_decimal_string<
 }
 
 crate::check_sequences!(
-    RationalDigits::new(665857, 941664, 10), 0, 20, [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
-    RationalDigits::new(10, 7, 10), 0, 10, [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
-    RationalDigits::new(46, 3, 10), 0, 10, [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
-    RationalDigits::new(1, 127, 10), 0, 20, [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // check for correct leading zeroes, this is 0.007874...
-);
-
-crate::print_values!(
-    digits, formatter "{}", sep " ";
-    RationalDigits::new(665857, 941664, 2), 0, 20;
-    RationalDigits::new(1, 4, 2), 0, 20;
-    RationalDigits::new(10, 7, 10), 0, 20;
-    RationalDigits::new(301, 3, 10), 0, 20;
-    RationalDigits::new(1, 127, 10), 0, 20;
-    RationalDigits::new(46, 3, 10), 0, 10;
+    RationalDigits::new(665857, 941664, 10), [0,7,0,7,1,0,6,7,8,1,1,8,7,3,4,4,9,5,5,3];
+    RationalDigits::new(10, 7, 10), [1, 4, 2, 8, 5, 7, 1, 4, 2, 8];
+    RationalDigits::new(46, 3, 10), [1, 5, 3, 3, 3, 3, 3, 3, 3, 3];
+    RationalDigits::new(1, 127, 10), [0, 0, 0, 7, 8, 7, 4, 0, 1, 5, 7, 4, 8, 0, 3, 1, 4, 9, 6, 0]; // check for correct leading zeroes, this is 0.007874...
 );
 
 #[cfg(test)]
