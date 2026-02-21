@@ -164,6 +164,6 @@ crate::check_sequences!(
     FibonacciWord::new_big(), [0, 1, 0, 0, 1, 0, 1, 0, 0, 1];
 );
 
-crate::print_values!(
+crate::print_sequences!(
     FibonacciStrings::new(), 0, 7;
 );

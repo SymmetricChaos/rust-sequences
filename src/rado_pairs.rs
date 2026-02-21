@@ -53,7 +53,7 @@ impl Iterator for RadoPairs<BigInt> {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     pairs, formatter "{:?}", sep ", ";
     RadoPairs::<u8>::new(), 0, 20;
 );

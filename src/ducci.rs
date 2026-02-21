@@ -40,7 +40,7 @@ impl<T: Clone + Ord + Sub<Output = T>> Iterator for Ducci<T> {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     ducci, formatter "{:?}", sep "\n";
     Ducci::new(vec![3,7,28,1]), 0, 7;
     Ducci::new(vec![2,5,2,5,2]), 0, 10;

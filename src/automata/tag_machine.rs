@@ -161,7 +161,7 @@ tag_system!(
     'c' => "aaa"
 );
 
-crate::print_values!(
+crate::print_sequences!(
     TagSystem::new(2, illustration_system, 'H').create_iter("baa"), 0, 10;
     TagSystem::new(2, collatz_system, 'H').create_iter("aaa"), 0, 30;
     CyclicTagSystem::new("11001", &["010", "000", "1111"]), 0, 10;

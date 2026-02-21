@@ -91,7 +91,7 @@ impl Iterator for WeakCompositionsN {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     print_arrays, formatter "{:?}", sep "\n";
     WeakCompositionsNK::new(2,2), 0, 10;
     WeakCompositionsNK::new(5,3), 0, 10;

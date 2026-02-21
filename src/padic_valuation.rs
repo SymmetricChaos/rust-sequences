@@ -240,7 +240,7 @@ impl<T: CheckedMul + CheckedAdd + Clone + Integer + CheckedSub + Signed> Iterato
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     PadicValuationRational::new_big(2), 0, 30;
     PadicAbs::new(2), 0, 30;
 );

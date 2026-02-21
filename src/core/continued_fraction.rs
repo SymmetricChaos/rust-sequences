@@ -1,5 +1,7 @@
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 
+use crate::print_sequences;
+
 /// Produce the convergents of a continued fraction given integer sequences representing the partial numerators and partial denominators.
 pub struct ContinuedFraction<T> {
     a0: T,
@@ -136,3 +138,10 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedF
         Some(out)
     }
 }
+
+#[cfg(test)]
+use crate::core::{constant::Constant, rational_digits::rational_decimal_string};
+print_sequences!(
+    SimpleContinuedFraction::new(Constant::new(1)).map(|q| rational_decimal_string(q, 5).unwrap()), 0, 15; // Converges on phi
+    ContinuedFraction::new_periodic(vec![1],vec![1],vec![2],vec![2]), 0, 15; //
+);

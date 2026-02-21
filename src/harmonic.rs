@@ -65,7 +65,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for HarmonicSums<T> 
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     Harmonic::new_big(), 0, 10;
     HarmonicSums::new_big(), 0, 10;
     Harmonic::<i32>::new(), 0, 10;

@@ -78,7 +78,7 @@ macro_rules! one_row {
 }
 
 #[macro_export]
-macro_rules! print_values {
+macro_rules! print_sequences {
     // Assume a finite sequence that needs simple formatting.
     ($($sequence: expr);+;) => {
         #[cfg(test)]

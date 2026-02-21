@@ -105,7 +105,7 @@ impl<T: Num> Iterator for LookAndSay<T> {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     print_las, formatter "{}", sep ", ";
     LookAndSayString::new(), 0, 10;
     LookAndSay::new_big(), 0, 10;

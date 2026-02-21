@@ -320,7 +320,7 @@ impl Iterator for NDistinctPrimeFactors {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     lists, formatter "{:?}", sep ", ";
     PrimeSignatures::new(), 0, 30;
     PrimeFactorizations::new(), 0, 15;

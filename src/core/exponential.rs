@@ -263,7 +263,7 @@ impl<T: Clone + Integer + One + CheckedAdd + CheckedSub + CheckedMul> Iterator f
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     Exponential::new_big(1,1), 0, 15; // converges on e
     Exponential::new(1,1), 0, 15; // converges on e
     NaturalLog::new(3,2), 0, 10; // note that overflow end the sequence

@@ -164,7 +164,7 @@ crate::check_sequences!(
     Partition::new_big(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );
 
-crate::print_values!(
+crate::print_sequences!(
     print_arrays, formatter "{:?}", sep "\n";
     PartitionsN::new(5), 0, 10;
     Partitions::new(), 0, 5;

@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer, One, rational::Ratio};
 
+use crate::print_sequences;
+
 /// Convergents of the principal square root of a rational number by Newton's Method.
 pub struct SquareRoot<T> {
     convergent: Ratio<T>,
@@ -94,3 +96,10 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> Iterator f
         Some(out)
     }
 }
+
+print_sequences!(
+    SquareRoot::new_big(2, 1), 0, 5;
+    SquareRoot::new_big(3, 1), 0, 5;
+    CubeRoot::new_big(2, 1), 0, 5;
+    CubeRoot::new_big(3, 1), 0, 5;
+);

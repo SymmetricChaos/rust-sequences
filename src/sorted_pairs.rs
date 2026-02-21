@@ -80,7 +80,7 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Iterator for SortedPairsSt
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     pairs, formatter "{:?}", sep ", ";
     SortedPairsStrict::<i32>::new(), 0, 10;
     SortedPairs::<i32>::new(), 0, 10;

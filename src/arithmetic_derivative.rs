@@ -92,7 +92,7 @@ impl Iterator for ArithmeticDerivativeRational {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     ArithmeticDerivativeRational::new(), 0, 10;
 );
 

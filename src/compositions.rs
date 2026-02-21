@@ -94,7 +94,7 @@ impl Iterator for CompositionsN {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     print_arrays, formatter "{:?}", sep "\n";
     CompositionsNK::new(5,1), 0, 10;
     CompositionsNK::new(5,2), 0, 10;

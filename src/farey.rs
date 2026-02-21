@@ -82,7 +82,7 @@ impl Iterator for Farey {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     Farey::new_big(3), 0, 10;
     Farey::new_big(4), 0, 19;
     Farey::new_big_descending(3), 0, 10;

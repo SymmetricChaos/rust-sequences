@@ -45,7 +45,7 @@ impl Iterator for CenteredPolygonal {
 }
 
 // These low order values are the same as two versions of Hogben's central polygonal numbers
-crate::print_values!(
+crate::print_sequences!(
     CenteredPolygonal::new_big(1), 0, 10;
     CenteredPolygonal::new_big(2), 0, 10;
 );

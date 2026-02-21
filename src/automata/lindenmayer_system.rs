@@ -107,7 +107,7 @@ l_system!(
     '1' => "10"
 );
 
-crate::print_values!(
+crate::print_sequences!(
     print_lindenmayer, formatter "{}", sep "\n";
     Lindenmayer::new(tree_system).create_iter("0"), 0, 4;
     Lindenmayer::new(cantor_system).create_iter("a"), 0, 4;

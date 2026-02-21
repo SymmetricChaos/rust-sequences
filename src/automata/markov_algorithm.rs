@@ -59,7 +59,7 @@ macro_rules! markov_pairs {
     };
 }
 
-crate::print_values!(
+crate::print_sequences!(
     print_markov, formatter "{}", sep "\n";
     Markov::new(
         markov_pairs!( // Converts a number from binary to bijective-unary

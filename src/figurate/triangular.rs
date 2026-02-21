@@ -36,7 +36,7 @@ impl<T: Clone + CheckedAdd + One> Iterator for Triangular<T> {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     Triangular::new_big(), 0, 10;
     Triangular::new_big(), 1, 10;
     Triangular::new_big(), 2, 10;

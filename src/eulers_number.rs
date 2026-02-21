@@ -43,7 +43,7 @@ use crate::core::rational_digits::RationalDigits;
 #[cfg(test)]
 use itertools::Itertools;
 
-crate::print_values!(
+crate::print_sequences!(
     Euler::<u64>::new(), 0, 10;
     Euler::new_big().map(|x| RationalDigits::from_ratio_big(x, BigInt::from(10)).map(|d| d.to_string()).take(6).join("")), 0, 10;
 );

@@ -126,7 +126,7 @@ crate::check_iteration_times!(
     GeneralizedPentagonalGeneric::<i64>::new(), 35_000_000;
 );
 
-crate::print_values!(
+crate::print_sequences!(
     GeneralizedPolygonal::new_big(1), 0, 10;
     GeneralizedPolygonal::new_big(2), 0, 10;
     GeneralizedPolygonal::new_big(3), 0, 10;

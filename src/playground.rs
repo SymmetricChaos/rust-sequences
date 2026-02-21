@@ -20,7 +20,7 @@ use crate::{
 #[cfg(test)]
 use num::BigInt;
 
-crate::print_values!(
+crate::print_sequences!(
     print_integers, formatter "{}", sep ", ";
     PartialSums::new(Harmonic::new_big()), 0, 10;
     HarmonicSums::new_big(), 0, 10;
@@ -39,7 +39,7 @@ crate::print_values!(
     DirichletConvolution::new_big(one,one), 0, 10; // identical to number of divisors function
 );
 
-crate::print_values!(
+crate::print_sequences!(
     print_triangles, formatter "{:?}", sep "\n";
     BoustrophedonTriangle::new(Primes::new_big()), 0, 5;
 );

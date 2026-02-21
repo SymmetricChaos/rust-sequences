@@ -39,6 +39,6 @@ crate::check_sequences!(
     NthPowers::new_big(2), [0, 1, 4, 9, 16, 25, 36, 49, 64, 81];
 );
 
-crate::print_values!(
+crate::print_sequences!(
     NthPowers::<u32>::new(12), 0, 10;
 );

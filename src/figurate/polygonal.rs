@@ -73,7 +73,7 @@ impl Iterator for Polygonal {
     }
 }
 
-crate::print_values!(
+crate::print_sequences!(
     // For testing that .nth() words
     Polygonal::new_big(3), 0, 10;
     Polygonal::new_big(3), 1, 10;
