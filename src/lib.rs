@@ -56,24 +56,28 @@ pub mod zeta;
 
 #[macro_export]
 macro_rules! one_row {
+    // Take and use default formatting
     ($seq:expr, $take:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
         crate::one_row!($($args)*)
     };
+    // Skip, then take and use default formatting
     ($seq:expr, $skip:literal, $take:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
         crate::one_row!($($args)*)
     };
+    // Take and use custom formatting
     ($seq:expr, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
         println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
         crate::one_row!($($args)*)
     };
+    // Skip, then take and use custom formatting
     ($seq:expr, $skip:literal, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
@@ -124,7 +128,7 @@ macro_rules! check_iteration_times {
 
 #[macro_export]
 macro_rules! check_sequences {
-    // Start from the beginning of the sequence and take as many terms as needed to match the test length.
+    // Take as many terms as needed to match the test length.
     ($($seq:expr, $data:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
@@ -138,6 +142,7 @@ macro_rules! check_sequences {
             )+
         }
     };
+    // Skip some items then take as many terms as needed to match the test length.
     ($($seq:expr, $skip:expr, $data:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
