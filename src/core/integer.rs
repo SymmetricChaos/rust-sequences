@@ -40,10 +40,6 @@ crate::check_iteration_times!(
     Integers::<i32>::new(), 4_000_000;
 );
 
-crate::print_sequences!(
-    Integers::new_big(), 5, 10;
-);
-
 crate::check_sequences!(
     Integers::new_big(), [0, 1, -1, 2, -2, 3, -3, 4, -4, 5];
 );
