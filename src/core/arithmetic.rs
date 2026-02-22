@@ -78,9 +78,9 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Arithmetic::new_big(0, 0), 0, 10, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    Arithmetic::new_big(1, 1), 0, 10, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    Arithmetic::new_big(3, 2), 0, 10, [3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
-    Arithmetic::new_big(4, 3), 0, 10, [4, 7, 10, 13, 16, 19, 22, 25, 28, 31];
-    Multiples::new(num::rational::Ratio::new(1,3)), 0, 8, ["0", "1/3", "2/3", "1", "4/3", "5/3", "2", "7/3"];
+    Arithmetic::new_big(0, 0), [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    Arithmetic::new_big(1, 1), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    Arithmetic::new_big(3, 2), [3, 5, 7, 9, 11, 13, 15, 17, 19, 21];
+    Arithmetic::new_big(4, 3), [4, 7, 10, 13, 16, 19, 22, 25, 28, 31];
+    Multiples::new(num::rational::Ratio::new(1,3)), ["0", "1/3", "2/3", "1", "4/3", "5/3", "2", "7/3"];
 );

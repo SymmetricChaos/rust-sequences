@@ -140,7 +140,7 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativePersistence<N> 
 }
 
 crate::check_sequences!(
-    DigitalProds::new(10), 25, 10,               [10, 12, 14, 16, 18, 0, 3, 6, 9, 12];
-    MultiplicativeDigitalRoots::new(10), 25, 10, [0,   2,  4,  6,  8, 0, 3, 6, 9,  2];
-    MultiplicativePersistence::new(10), 25, 10,  [2,   2,  2,  2,  2, 1, 1, 1, 1,  2];
+    DigitalProds::new(10), 25,               [10, 12, 14, 16, 18, 0, 3, 6, 9, 12];
+    MultiplicativeDigitalRoots::new(10), 25, [0,   2,  4,  6,  8, 0, 3, 6, 9,  2];
+    MultiplicativePersistence::new(10), 25,  [2,   2,  2,  2,  2, 1, 1, 1, 1,  2];
 );

@@ -152,7 +152,7 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for AdditivePersistence<N> {
 }
 
 crate::check_sequences!(
-    DigitalSums::new(10), 1234, 20,         [10, 11, 12, 13, 14, 15, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 8, 9, 10, 11];
-    DigitalRoots::new(10), 1234, 20,        [1,  2,  3,  4,   5,  6, 7, 8, 9,  1,  2,  3,  4,  5,  6,  7, 8, 9,  1,  2];
-    AdditivePersistence::new(10), 1234, 20, [2,  2,  2,  2,   2,  2, 1, 1, 1,  2,  2,  2,  2,  2,  2,  2, 1, 1,  2,  2];
+    DigitalSums::new(10), 1234,         [10, 11, 12, 13, 14, 15, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 8, 9, 10, 11];
+    DigitalRoots::new(10), 1234,        [1,  2,  3,  4,   5,  6, 7, 8, 9,  1,  2,  3,  4,  5,  6,  7, 8, 9,  1,  2];
+    AdditivePersistence::new(10), 1234, [2,  2,  2,  2,   2,  2, 1, 1, 1,  2,  2,  2,  2,  2,  2,  2, 1, 1,  2,  2];
 );
