@@ -93,7 +93,7 @@ macro_rules! print_sequences {
     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr);+;) => {
         #[cfg(test)]
         #[test]
-        fn print_values() {
+        fn $name() {
             $(
                 crate::one_row!($sequence, $formatter, $sep);
             )+
@@ -144,19 +144,7 @@ macro_rules! check_iteration_times {
 
 #[macro_export]
 macro_rules! check_sequences {
-    ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
-        #[cfg(test)]
-        #[test]
-        fn check_sequences() {
-            $(
-                let expected = $data.map(|x| x.to_string()).to_vec();
-                let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| x.to_string()));
-                if expected != calculated {
-                    panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
-                }
-            )+
-        }
-    };
+    // Start from the beginning of the sequence and take as many terms as needed to match the test length.
     ($($seq: expr, $data: expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
@@ -170,4 +158,18 @@ macro_rules! check_sequences {
             )+
         }
     };
+    ($($seq: expr, $skip: expr, $take: expr, $data: expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[test]
+        fn check_sequences() {
+            $(
+                let expected = $data.map(|x| x.to_string()).to_vec();
+                let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take($take).map(|x| x.to_string()));
+                if expected != calculated {
+                    panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
+                }
+            )+
+        }
+    };
+
 }
