@@ -105,8 +105,7 @@ impl<T: Num> Iterator for LookAndSay<T> {
     }
 }
 
-crate::print_sequences!(
-    LookAndSayString::new(), 10;
-    LookAndSay::new_big(), 10;
-    LookAndSay::<u32>::new(), 10;
+crate::check_sequences!(
+    LookAndSayString::new(), ["1", "11", "21", "1211", "111221", "312211", "13112221", "1113213211", "31131211131221", "13211311123113112211"];
+    LookAndSay::<u32>::new(), [1, 11, 21, 1211, 111221, 312211, 13112221, 1113213211];
 );
