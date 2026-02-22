@@ -60,12 +60,11 @@ macro_rules! markov_pairs {
 }
 
 crate::print_sequences!(
-    print_markov, formatter "{}", sep "\n";
     Markov::new(
         markov_pairs!( // Converts a number from binary to bijective-unary
             "I0" => "0II"
             "1" => "0I"
             "0" => ""
         )
-    ).create_iter("101"), 0, 12;
+    ).create_iter("101"), 0, 12, "{}", "\n";
 );

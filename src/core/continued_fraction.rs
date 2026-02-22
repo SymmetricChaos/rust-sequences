@@ -137,6 +137,6 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedF
 #[cfg(test)]
 use crate::core::rational_digits::rational_decimal_string;
 print_sequences!(
-    SimpleContinuedFraction::new_periodic(1, &[1]).map(|q| rational_decimal_string(q, 5).unwrap()), 0, 10; // Converges on phi
-    SimpleContinuedFraction::new_periodic(1, &[2]).map(|q| rational_decimal_string(q, 5).unwrap()), 0, 10; // Cnverges on sqrt(2)
+    SimpleContinuedFraction::new_periodic(1, &[1]).map(|q| rational_decimal_string(q, 5).unwrap()), 10; // Converges on phi
+    SimpleContinuedFraction::new_periodic(1, &[2]).map(|q| rational_decimal_string(q, 5).unwrap()), 10; // Cnverges on sqrt(2)
 );

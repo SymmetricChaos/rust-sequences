@@ -40,5 +40,5 @@ crate::check_sequences!(
 );
 
 crate::print_sequences!(
-    NthPowers::<u32>::new(12), 0, 10;
+    NthPowers::<u32>::new(12), 10;
 );

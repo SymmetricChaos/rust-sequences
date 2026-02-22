@@ -38,7 +38,7 @@ impl<T: CheckedMul + Clone> Iterator for Geometric<T> {
 }
 
 crate::print_sequences!(
-    Geometric::<i32>::new(3, -4), 0, 10;
+    Geometric::<i32>::new(3, -4), 10;
 );
 
 crate::check_sequences!(

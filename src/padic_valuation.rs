@@ -241,8 +241,8 @@ impl<T: CheckedMul + CheckedAdd + Clone + Integer + CheckedSub + Signed> Iterato
 }
 
 crate::print_sequences!(
-    PadicValuationRational::new_big(2), 0, 30;
-    PadicAbs::new(2), 0, 30;
+    PadicValuationRational::new_big(2), 30;
+    PadicAbs::new(2), 30;
 );
 
 crate::check_sequences!(

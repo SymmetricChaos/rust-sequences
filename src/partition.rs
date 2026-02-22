@@ -165,7 +165,7 @@ crate::check_sequences!(
 );
 
 crate::print_sequences!(
-    print_arrays, formatter "{:?}", sep "\n";
-    PartitionsN::new(5), 0, 10;
-    Partitions::new(), 0, 5;
+    print_arrays;
+    PartitionsN::new(5), 0, 10, "{:?}", "\n";
+    Partitions::new(), 0, 5, "{:?}", "\n";
 );

@@ -20,7 +20,7 @@ use crate::{
 };
 
 crate::print_sequences!(
-    print_integers, formatter "{}", sep ", ";
+    print_integers;
     PartialSums::new(Harmonic::new_big()), 0, 10;
     HarmonicSums::new_big(), 0, 10;
     Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 0, 10;
@@ -37,9 +37,5 @@ crate::print_sequences!(
     CubeRoot::<u64>::new(2,1), 0, 5; // converges on cbrt(2) 1.25992104989...
     CesaroPartialSums::new([1,0].into_iter().cycle()), 0, 10;
     DirichletConvolution::new_big(one,one), 0, 10; // identical to number of divisors function
-);
-
-crate::print_sequences!(
-    print_triangles, formatter "{:?}", sep "\n";
-    BoustrophedonTriangle::new(Primes::new_big()), 0, 5;
+    BoustrophedonTriangle::new(Primes::new_big()), 0, 5, "{:?}", "\n";
 );

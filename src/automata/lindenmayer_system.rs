@@ -108,11 +108,10 @@ l_system!(
 );
 
 crate::print_sequences!(
-    print_lindenmayer, formatter "{}", sep "\n";
-    Lindenmayer::new(tree_system).create_iter("0"), 0, 4;
-    Lindenmayer::new(cantor_system).create_iter("a"), 0, 4;
-    Lindenmayer::new(algae_system).create_iter("a"), 0, 7;
-    Lindenmayer::new(peano_curve).create_iter("X"), 0, 3;
-    Lindenmayer::new(complex_bush).create_iter("VZFFF"), 0, 4;
-    Lindenmayer::new(thue_morse).create_iter("0"), 0, 6;
+    Lindenmayer::new(tree_system).create_iter("0"), 0, 4, "{}", "\n";
+    Lindenmayer::new(cantor_system).create_iter("a"), 0, 4, "{}", "\n";
+    Lindenmayer::new(algae_system).create_iter("a"), 0, 7, "{}", "\n";
+    Lindenmayer::new(peano_curve).create_iter("X"), 0, 3, "{}", "\n";
+    Lindenmayer::new(complex_bush).create_iter("VZFFF"), 0, 4, "{}", "\n";
+    Lindenmayer::new(thue_morse).create_iter("0"), 0, 6, "{}", "\n";
 );

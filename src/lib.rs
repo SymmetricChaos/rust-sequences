@@ -55,87 +55,146 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
-macro_rules! big {
-    ($seq: expr) => {
-        $seq.into_iter().map(|x| BigInt::from(x)).collect()
-    };
-}
-
-#[macro_export]
 macro_rules! one_row {
-    // Assume the iterator is finite and take all elements.
-    ($seq: expr, $formatter:literal, $sep:literal) => {
-        let ns = itertools::Itertools::collect_vec($seq); // better to use fully qualified forms in macros
-        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
-        println!("{}\n{}\n", stringify!($seq), s);
+    ($seq:expr, $take:literal; $($args:tt)*) => {
+        let ns = itertools::Itertools::collect_vec($seq.take($take));
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
+        println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
+        crate::one_row!($($args)*)
     };
-    // Assume the iterator is infinite. Skip zero or more elements then take a specified number.
-    ($seq: expr, $skip: expr, $take: expr, $formatter:literal, $sep:literal) => {
-        let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
-        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
+    ($seq:expr, $skip:literal, $take:literal; $($args:tt)*) => {
+        let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+        crate::one_row!($($args)*)
     };
+    ($seq:expr, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
+        let ns = itertools::Itertools::collect_vec($seq.take($take));
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
+        println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
+        crate::one_row!($($args)*)
+    };
+    ($seq:expr, $skip:literal, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
+        let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
+        let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
+        println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+        crate::one_row!($($args)*)
+    };
+    () => {}
 }
 
 #[macro_export]
 macro_rules! print_sequences {
-    // Assume a finite sequence that needs simple formatting.
-    ($($sequence: expr);+;) => {
-        #[cfg(test)]
-        #[test]
-        fn print_values() {
-            $(
-                crate::one_row!($sequence, "{}", ", ");
-            )+
-        }
-    };
-    // Assume a finite sequence that needs special formatting.
-    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr);+;) => {
+    ($name:ident; $($args:tt)*) => {
         #[cfg(test)]
         #[test]
         fn $name() {
-            $(
-                crate::one_row!($sequence, $formatter, $sep);
-            )+
+            crate::one_row!($($args)*);
         }
     };
-    // Assume an infinite sequence that needs simple formatting.
-    ($($sequence: expr, $skip: expr, $take: expr);+;) => {
+    ($($args:tt)*) => {
         #[cfg(test)]
         #[test]
-        fn print_values() {
-            $(
-                crate::one_row!($sequence, $skip, $take, "{}", ", ");
-            )+
-        }
-    };
-    // Assume an infinite sequence that needs special formatting.
-    ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence: expr, $skip: expr, $take: expr);+;) => {
-        #[cfg(test)]
-        #[test]
-        fn $name() {
-            $(
-                crate::one_row!($sequence, $skip, $take, $formatter, $sep);
-            )+
+        fn print_sequences() {
+            crate::one_row!($($args)*);
         }
     };
 }
 
 #[macro_export]
+macro_rules! big {
+    ($seq:expr) => {
+        $seq.into_iter().map(|x| BigInt::from(x)).collect()
+    };
+}
+
+// #[macro_export]
+// macro_rules! one_row {
+//     ($seq:expr, $skip:literal, $take:literal, $formatter:literal, $sep:literal) => {
+//         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take)); // better to use fully qualified forms in macros
+//         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($formatter, x)), $sep);
+//         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
+//     };
+// }
+
+// #[macro_export]
+// macro_rules! print_sequences {
+//     // Just take
+//     ($($sequence:expr, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn print_sequences() {
+//             $(
+//                 crate::one_row!($sequence, 0, $take, "{}", ", ");
+//             )+
+//         }
+//     };
+//     ($name:ident; $($sequence:expr, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn $name() {
+//             $(
+//                 crate::one_row!($sequence, 0, $take, "{}", ", ");
+//             )+
+//         }
+//     };
+
+//     // Skip and take
+//     ($($sequence:expr, $skip:literal, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn print_sequences() {
+//             $(
+//                 crate::one_row!($sequence, $skip, $take, "{}", ", ");
+//             )+
+//         }
+//     };
+//     ($name:ident; $($sequence:expr, $skip:literal, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn $name() {
+//             $(
+//                 crate::one_row!($sequence, $skip, $take, "{}", ", ");
+//             )+
+//         }
+//     };
+
+//     // Special formatting
+//     (formatter $formatter:literal, sep $sep:literal; $($sequence:expr, $skip:literal, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn print_sequences() {
+//             $(
+//                 crate::one_row!($sequence, $skip, $take, $formatter, $sep);
+//             )+
+//         }
+//     };
+//     ($name:ident, formatter $formatter:literal, sep $sep:literal; $($sequence:expr, $skip:literal, $take:literal);+;) => {
+//         #[cfg(test)]
+//         #[test]
+//         fn $name() {
+//             $(
+//                 crate::one_row!($sequence, $skip, $take, $formatter, $sep);
+//             )+
+//         }
+//     };
+// }
+
+#[macro_export]
 macro_rules! check_iteration_times {
-    ($($seq: expr, $skip: expr);+ $(;)?) => {
+    ($($seq:expr, $take:literal);+ $(;)?) => {
         #[cfg(test)]
         #[test]
         fn check_times() {
             $(
                 let t = std::time::Instant::now();
                 let mut s = $seq;
-                for _ in 0..($skip) {
+                for _ in 0..($take) {
                     s.next();
                 };
                 let n = s.next().unwrap();
                 let elapsed = t.elapsed();
-                println!("{} {} -> {:?}\nduration: {:?}\n", stringify!($seq), $skip, n, elapsed);
+                println!("{} {} -> {:?}\nduration: {:?}\n", stringify!($seq), $take, n, elapsed);
             )+
         }
     };
@@ -145,7 +204,7 @@ macro_rules! check_iteration_times {
 #[macro_export]
 macro_rules! check_sequences {
     // Start from the beginning of the sequence and take as many terms as needed to match the test length.
-    ($($seq: expr, $data: expr);+ $(;)?) => {
+    ($($seq:expr, $data:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
         fn check_sequences() {
@@ -158,7 +217,7 @@ macro_rules! check_sequences {
             )+
         }
     };
-    ($($seq: expr, $skip: expr, $data: expr);+ $(;)?) => {
+    ($($seq:expr, $skip:expr, $data:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
         fn check_sequences() {
@@ -171,5 +230,19 @@ macro_rules! check_sequences {
             )+
         }
     };
-
+    ($use:item $($seq:expr, $data:expr);+ $(;)?) => {
+        #[cfg(test)]
+        $use
+        #[cfg(test)]
+        #[test]
+        fn check_sequences() {
+            $(
+                let expected = $data.map(|x| x.to_string()).to_vec();
+                let calculated = itertools::Itertools::collect_vec($seq.take(expected.len()).map(|x| x.to_string()));
+                if expected != calculated {
+                    panic!("failure to agree for {}\nexpected:   {:?}\ncalculated: {:?}", stringify!($seq), expected, calculated);
+                }
+            )+
+        }
+    };
 }

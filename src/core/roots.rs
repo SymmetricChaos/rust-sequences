@@ -98,8 +98,8 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> Iterator f
 }
 
 print_sequences!(
-    SquareRoot::new_big(2, 1), 0, 5;
-    SquareRoot::new_big(3, 1), 0, 5;
-    CubeRoot::new_big(2, 1), 0, 5;
-    CubeRoot::new_big(3, 1), 0, 5;
+    SquareRoot::new_big(2, 1), 5;
+    SquareRoot::new_big(3, 1), 5;
+    CubeRoot::new_big(2, 1), 5;
+    CubeRoot::new_big(3, 1), 5;
 );

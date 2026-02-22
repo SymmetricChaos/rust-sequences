@@ -51,7 +51,7 @@ impl Iterator for Algebraic {
     }
 }
 
-crate::print_sequences!(
-    print_arrays, formatter "{}", sep "\n";
-    Algebraic::new().map(|x| x.to_string_descending()), 0, 30;
-);
+// crate::print_sequences!(
+//     print_arrays, formatter "{}", sep "\n";
+//     Algebraic::new().map(|x| x.to_string_descending()), 0, 30;
+// );

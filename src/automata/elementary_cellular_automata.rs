@@ -63,6 +63,5 @@ impl<'a> Iterator for ElementaryAutomataIter<'a> {
 }
 
 crate::print_sequences!(
-    automata, formatter "{}", sep "\n";
-    ElementaryAutomaton::new(30).create_iter( "00000000000100000000000"), 0, 12;
+    ElementaryAutomaton::new(30).create_iter( "00000000000100000000000"), 0, 12, "{}", "\n";
 );
