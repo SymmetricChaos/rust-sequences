@@ -55,7 +55,7 @@ use crate::print_sequences;
 //     }
 // }
 
-// impl<T: Clone + Integer + CheckedAdd + CheckedMul + Display> Iterator for ContinuedFraction<T> {
+// impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ContinuedFraction<T> {
 //     type Item = Ratio<T>;
 
 //     fn next(&mut self) -> Option<Self::Item> {
@@ -112,6 +112,18 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
             dens: Box::new(periodic.to_vec().into_iter().cycle()),
         }
     }
+
+    pub fn new_finite(fixed: T, periodic: &[T]) -> Self {
+        let mut p = periodic.to_vec();
+        p.push(T::one());
+        Self {
+            a0: T::one(),
+            b0: T::zero(),
+            a1: fixed,
+            b1: T::one(),
+            dens: Box::new(p.into_iter()),
+        }
+    }
 }
 
 impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedFraction<T> {
@@ -127,16 +139,18 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedF
 
         self.a0 = self.a1.clone();
         self.b0 = self.b1.clone();
-        self.a1 = a2;
-        self.b1 = b2;
+        self.a1 = a2.clone();
+        self.b1 = b2.clone();
 
         Some(out)
     }
 }
 
 #[cfg(test)]
-use crate::core::rational_digits::rational_decimal_string;
+use crate::core::rational_digits::rational_decimal_string as rds;
 print_sequences!(
-    SimpleContinuedFraction::new_periodic(1, &[1]).map(|q| rational_decimal_string(q, 5).unwrap()), 10; // Converges on phi
-    SimpleContinuedFraction::new_periodic(1, &[2]).map(|q| rational_decimal_string(q, 5).unwrap()), 10; // Cnverges on sqrt(2)
+    SimpleContinuedFraction::new_periodic(1, &[1]).map(|q| rds(q, 5).unwrap()), 10; // Converges on phi
+    SimpleContinuedFraction::new_periodic(1, &[2]).map(|q| rds(q, 5).unwrap()), 10; // Cnverges on sqrt(2)
+    SimpleContinuedFraction::new_finite(3, &[7, 15, 1, 292, 1]).map(|q| rds(q, 7).unwrap()), 10; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
+    SimpleContinuedFraction::new_finite(3, &[7, 15, 1, 292, 1]), 10;
 );
