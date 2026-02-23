@@ -104,7 +104,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
         }
     }
 
-    /// A simple continued fraction with some fixed starting denominators and then a periodic part
+    /// A simple continued fraction with some fixed starting denominators and then a periodic part.
     pub fn new_periodic(fixed: &[T], periodic: &[T]) -> Self {
         assert!(fixed.len() > 0);
         assert!(periodic.len() > 0);
@@ -123,6 +123,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
         }
     }
 
+    /// A simple continued fraction with a finite number of terms.
     pub fn new_finite(dens: &[T]) -> Self {
         assert!(dens.len() > 0);
         let mut p = dens.to_vec();
