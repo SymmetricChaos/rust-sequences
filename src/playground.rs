@@ -15,14 +15,14 @@ use crate::{
     },
     fibonacci::Fibonacci,
     figurate::Triangular,
-    harmonic::{Harmonic, HarmonicSums},
+    harmonic::{Harmonic, HarmonicNumbers},
     zeta::Zeta,
 };
 
 crate::print_sequences!(
     print_integers;
     PartialSums::new(Harmonic::new_big()), 10;
-    HarmonicSums::<i64>::new(), 10;
+    HarmonicNumbers::<i64>::new(), 10;
     Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 10;
     AbsDiffs::new(Primes::new_big()), 10;
     Triangular::new_big(), 1234567, 5; // show fast skip ahead

@@ -1,4 +1,4 @@
-use num::{CheckedAdd, CheckedSub, Integer, Zero, rational::Ratio};
+use num::{CheckedAdd, Integer, Zero, rational::Ratio};
 
 /// Sequence of partial sums. Returns None if overflow occurs or sequence ends.
 pub struct PartialSums<T> {
@@ -24,41 +24,6 @@ impl<T: CheckedAdd + Clone> Iterator for PartialSums<T> {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.sum.clone();
         self.sum = self.sum.checked_add(&self.iter.next()?)?;
-        Some(out)
-    }
-}
-
-/// Sequence of alternating partial sums. Returns None if overflow occurs or sequence ends.
-pub struct PartialSumsAlternating<T> {
-    sum: T,
-    iter: Box<dyn Iterator<Item = T>>,
-    subtract: bool,
-}
-
-impl<T: CheckedAdd + CheckedSub + Clone + Zero> PartialSumsAlternating<T> {
-    pub fn new<I>(iter: I) -> Self
-    where
-        I: Iterator<Item = T> + 'static,
-    {
-        Self {
-            sum: T::zero(),
-            iter: Box::new(iter),
-            subtract: false,
-        }
-    }
-}
-
-impl<T: CheckedAdd + CheckedSub + Clone> Iterator for PartialSumsAlternating<T> {
-    type Item = T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.sum.clone();
-        if self.subtract {
-            self.sum = self.sum.checked_add(&self.iter.next()?)?;
-        } else {
-            self.sum = self.sum.checked_sub(&self.iter.next()?)?;
-        }
-        self.subtract = !self.subtract;
         Some(out)
     }
 }
