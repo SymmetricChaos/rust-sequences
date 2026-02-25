@@ -72,7 +72,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + Signed> Iterator for Harmoni
     }
 }
 
-/// The partial sums of the harmonic series.
+/// The partial sums of the harmonic series. This sequence diverges.
 /// 0, 1, 3/2, 11/6, 25/12, 137/60, 49/20, 363/140...
 pub struct HarmonicNumbers<T> {
     series: PartialSums<Ratio<T>>,
@@ -102,7 +102,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for HarmonicNumbers<
     }
 }
 
-/// The partial sums of the harmonic series.
+/// The partial sums of the alternating harmonic series. They converge on the natural logarithm of 2.
 /// 0, 1, 1/2, 5/6, 7/12, 47/60, 37/60...
 pub struct AlternatingHarmonicNumbers<T> {
     series: PartialSums<Ratio<T>>,
