@@ -255,9 +255,9 @@ pub fn aliquot_sum(n: u64) -> Option<u64> {
     }
 }
 
-/// Squarefree kernel (radical) of a number, product of unique prime factors. The largest squarefree factor.
+/// Radical (aka squarefree kernel) of a number, product of unique prime factors. The largest squarefree factor.
 /// Defined as 1 for n == 0
-pub fn squarefree_kernel(n: u64) -> u64 {
+pub fn radical(n: u64) -> u64 {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
 

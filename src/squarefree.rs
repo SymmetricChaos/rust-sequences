@@ -1,4 +1,4 @@
-use crate::{core::prime::Primes, utils::divisibility::squarefree_kernel};
+use crate::{core::prime::Primes, utils::divisibility::radical};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 use std::hash::Hash;
 
@@ -110,30 +110,30 @@ where
     }
 }
 
-/// The squarefree kernels of the positive integers. The product of their unique prime divisors.
+/// The radical of each positive integer, the product of their unique prime divisors. Also known as the squarefree kernel.
 /// 1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19...
-pub struct SquarefreeKernels {
+pub struct Radicals {
     ctr: u64,
 }
 
-impl SquarefreeKernels {
+impl Radicals {
     /// Only u64 currently supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
-impl Iterator for SquarefreeKernels {
+impl Iterator for Radicals {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr += 1;
-        Some(squarefree_kernel(self.ctr))
+        Some(radical(self.ctr))
     }
 }
 
 crate::check_sequences!(
     Squarefree::new_big(), [1, 2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23, 26, 29, 30, 31];
-    SquarefreeKernels::new(), [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19, 10];
+    Radicals::new(), [1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19, 10];
     Squareful::new_big(), [4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32, 36, 40, 44, 45, 48, 49, 50, 52];
 );
