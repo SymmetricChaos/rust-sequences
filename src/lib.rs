@@ -28,6 +28,7 @@ pub mod gray;
 pub mod harmonic;
 pub mod hypotenuse;
 pub mod jordan_polya;
+pub mod juggler;
 pub mod leonardo;
 pub mod look_and_say;
 pub mod lucas;
