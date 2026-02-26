@@ -83,6 +83,49 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Iterator for Col
     }
 }
 
+/// The values of the generalized Collatz (aka hailstone) sequences. The term after x is ax+b if odd of x/2 if even.
+pub struct CollatzGeneral<T> {
+    n: T,
+    a: T,
+    b: T,
+}
+
+impl<T> CollatzGeneral<T> {
+    /// Start a generalized Collatz sequence from n. The term after x is ax+b if odd of x/2 if even.
+    pub fn new(n: T, a: T, b: T) -> Self {
+        Self { n, a, b }
+    }
+}
+
+impl CollatzGeneral<BigInt> {
+    /// Start a generalized Collatz sequence from n. The term after x is ax+b if odd of x/2 if even.
+    pub fn new_big<T>(n: T, a: T, b: T) -> Self
+    where
+        BigInt: From<T>,
+    {
+        Self {
+            n: BigInt::from(n),
+            a: BigInt::from(a),
+            b: BigInt::from(b),
+        }
+    }
+}
+
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Iterator for CollatzGeneral<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.n.clone();
+        if out.is_even() {
+            self.n = self.n.checked_div(&(T::one() + T::one()))?;
+        } else {
+            self.n = self.n.checked_mul(&self.a)?;
+            self.n = self.n.checked_add(&self.b)?;
+        }
+        Some(out)
+    }
+}
+
 crate::check_sequences!(
     Collatz::new(19), [19, 58, 29, 88, 44, 22, 11, 34, 17, 52];
     Collatz::new_big(19), [19, 58, 29, 88, 44, 22, 11, 34, 17, 52];
