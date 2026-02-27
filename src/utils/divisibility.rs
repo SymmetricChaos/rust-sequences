@@ -191,6 +191,16 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     map.into_iter().collect_vec()
 }
 
+/// The number of prime factors of n counted with multiplicity.
+pub fn big_omega(n: u64) -> u64 {
+    prime_factorization(n).into_iter().map(|(_, m)| m).sum()
+}
+
+/// The number of distinct prime factors of n.
+pub fn small_omega(n: u64) -> u64 {
+    prime_factorization(n).into_iter().map(|_| 1).sum()
+}
+
 /// Powers of the prime factors of n in descending order
 /// returns [] for both 0 and 1
 pub fn prime_signature(n: u64) -> Vec<u64> {
