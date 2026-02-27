@@ -58,7 +58,7 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Primes<T> {
 }
 
 /// The prime counting function evaluated at each positive integer.
-/// 0, 1, 2, 2, 3, ...
+/// 0, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5...
 pub struct PrimeCounting<T> {
     prime: Primes<T>,
     next_prime: T,
@@ -109,7 +109,7 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for PrimeCounting<
 }
 
 /// The the prime factorization of each positive integer.
-/// For instance 20 = 2^2 + 5 ^1 and is written here as [(2,2), (5,1)]
+/// For instance 20 = 2^2 + 5^1 and is written here as [(2,2), (5,1)]
 /// [], [(2, 1)], [(3, 1)], [(2, 2)], [(5, 1)], [(2, 1), (3, 1)], [(7, 1)], [(2, 3)], [(3, 2)], [(2, 1), (5, 1)]
 pub struct PrimeFactorizations {
     ctr: u64,
@@ -129,6 +129,60 @@ impl Iterator for PrimeFactorizations {
         self.ctr = self.ctr.checked_add(1)?;
 
         Some(prime_factorization(self.ctr))
+    }
+}
+
+/// The greatest prime factor of each positive integer. Defined as 1 for 1.
+/// 1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7
+pub struct GreatestPrimeFactor {
+    ctr: u64,
+}
+
+impl GreatestPrimeFactor {
+    /// Only u64 output is supported
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for GreatestPrimeFactor {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(1)?;
+
+        if self.ctr.is_one() {
+            return Some(1);
+        }
+
+        Some(prime_factorization(self.ctr).last()?.0)
+    }
+}
+
+/// The least prime factor of each positive integer. Defined as 1 for 1.
+/// 1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2
+pub struct LeastPrimeFactor {
+    ctr: u64,
+}
+
+impl LeastPrimeFactor {
+    /// Only u64 output is supported
+    pub fn new() -> Self {
+        Self { ctr: 0 }
+    }
+}
+
+impl Iterator for LeastPrimeFactor {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr = self.ctr.checked_add(1)?;
+
+        if self.ctr.is_one() {
+            return Some(1);
+        }
+
+        Some(prime_factorization(self.ctr)[0].0)
     }
 }
 
@@ -336,4 +390,6 @@ crate::check_sequences!(
     PrimePowers::<u32>::new(), 0, [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
     Primorial::<u32>::new(), 0, [1, 2, 6, 30, 210];
     PrimeCounting::<i16>::new(), 0, [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
+    GreatestPrimeFactor::new(), 0, [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
+    LeastPrimeFactor::new(), 0, [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
 );
