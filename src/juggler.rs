@@ -39,5 +39,5 @@ impl<T: Integer + Roots + Clone + CheckedMul> Iterator for Juggler<T> {
 
 crate::check_sequences!(
     Juggler::<u32>::new(3), [3, 5, 11, 36, 6, 2, 1];
-    Juggler::<i16>::new(9), [9, 27, 140, 11, 36, 6, 2, 1]
+    Juggler::<i16>::new(9), [9, 27, 140, 11, 36, 6, 2, 1];
 );

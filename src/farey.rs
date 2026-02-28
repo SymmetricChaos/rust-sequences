@@ -83,8 +83,8 @@ impl Iterator for Farey {
 }
 
 crate::print_sequences!(
-    Farey::new_big(3), 0, 10;
-    Farey::new_big(4), 0, 19;
-    Farey::new_big_descending(3), 0, 10;
-    Farey::new_big_descending(7), 0, 19;
+    Farey::new_big(3), 10;
+    Farey::new_big(4), 19;
+    Farey::new_big_descending(3), 10;
+    Farey::new_big_descending(7), 19;
 );

@@ -95,10 +95,10 @@ impl Iterator for CompositionsN {
 }
 
 crate::print_sequences!(
-    CompositionsNK::new(5,1), 0, 10, "{:?}", "\n";
-    CompositionsNK::new(5,2), 0, 10, "{:?}", "\n";
-    CompositionsNK::new(5,3), 0, 10, "{:?}", "\n";
-    CompositionsNK::new(5,4), 0, 10, "{:?}", "\n";
-    CompositionsNK::new(5,5), 0, 10, "{:?}", "\n";
-    CompositionsN::new(5), 0, 20, "{:?}", "\n";
+    CompositionsNK::new(5,1), 10, "{:?}", "\n";
+    CompositionsNK::new(5,2), 10, "{:?}", "\n";
+    CompositionsNK::new(5,3), 10, "{:?}", "\n";
+    CompositionsNK::new(5,4), 10, "{:?}", "\n";
+    CompositionsNK::new(5,5), 10, "{:?}", "\n";
+    CompositionsN::new(5), 20, "{:?}", "\n";
 );

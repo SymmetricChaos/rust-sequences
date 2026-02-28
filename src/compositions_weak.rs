@@ -92,7 +92,7 @@ impl Iterator for WeakCompositionsN {
 }
 
 crate::print_sequences!(
-    WeakCompositionsNK::new(2,2), 0, 10, "{:?}", "\n";
-    WeakCompositionsNK::new(5,3), 0, 10, "{:?}", "\n";
-    WeakCompositionsN::new(5), 0, 20, "{:?}", "\n";
+    WeakCompositionsNK::new(2,2), 10, "{:?}", "\n";
+    WeakCompositionsNK::new(5,3), 10, "{:?}", "\n";
+    WeakCompositionsN::new(5), 20, "{:?}", "\n";
 );

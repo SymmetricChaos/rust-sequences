@@ -66,5 +66,5 @@ crate::print_sequences!(
             "1" => "0I"
             "0" => ""
         )
-    ).create_iter("101"), 0, 12, "{}", "\n";
+    ).create_iter("101"), 12, "{}", "\n";
 );
