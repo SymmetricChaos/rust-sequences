@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, Zero};
 use std::{
     collections::{BinaryHeap, HashMap},
     hash::Hash, // Found to be much faster than BTreeMap
@@ -13,7 +13,7 @@ pub struct Primes<T> {
     n: T,
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Primes<T> {
+impl<T: CheckedAdd + Integer + Hash + Clone> Primes<T> {
     pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
@@ -24,14 +24,11 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Primes<T> {
 
 impl Primes<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
-            n: BigInt::one(),
-        }
+        Self::new()
     }
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Primes<T> {
+impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for Primes<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -57,6 +54,41 @@ impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Primes<T> {
     }
 }
 
+/// The gaps between the prime natural numbers.
+/// 1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4...
+pub struct PrimeGaps<T> {
+    primes: Primes<T>,
+    prev: T,
+}
+
+impl<T: CheckedAdd + Eq + Hash + Integer + Clone> PrimeGaps<T> {
+    pub fn new() -> Self {
+        let mut primes = Primes::new();
+        primes.next();
+        Self {
+            primes,
+            prev: T::one() + T::one(),
+        }
+    }
+}
+
+impl PrimeGaps<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for PrimeGaps<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let p = self.primes.next()?;
+        let dif = p.clone() - self.prev.clone();
+        self.prev = p.clone();
+        Some(dif)
+    }
+}
+
 /// The prime counting function evaluated at each positive integer.
 /// 0, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5...
 pub struct PrimeCounting<T> {
@@ -66,7 +98,7 @@ pub struct PrimeCounting<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> PrimeCounting<T> {
+impl<T: CheckedAdd + Clone + Hash + Integer> PrimeCounting<T> {
     pub fn new() -> Self {
         let mut prime = Primes::<T>::new();
         let next_prime = prime.next().unwrap();
@@ -92,7 +124,7 @@ impl PrimeCounting<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for PrimeCounting<T> {
+impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for PrimeCounting<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -256,7 +288,7 @@ pub struct PrimePowers<T: Eq> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Ord + Zero> PrimePowers<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
     pub fn new() -> Self {
         Self {
             queue: BinaryHeap::new(),
@@ -274,9 +306,7 @@ impl PrimePowers<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Ord + Zero> Iterator
-    for PrimePowers<T>
-{
+impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for PrimePowers<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -302,7 +332,7 @@ pub struct Primorial<T> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Zero> Primorial<T> {
+impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Primorial<T> {
     pub fn new() -> Self {
         Self {
             prod: T::one(),
@@ -313,14 +343,11 @@ impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Zero> Primorial<T> {
 
 impl Primorial<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            prod: BigInt::one(),
-            primes: Primes::new_big(),
-        }
+        Self::new()
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Eq + Hash + One + Zero> Iterator for Primorial<T> {
+impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for Primorial<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -392,4 +419,5 @@ crate::check_sequences!(
     PrimeCounting::<i16>::new(), [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
     GreatestPrimeFactor::new(), [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
     LeastPrimeFactor::new(), [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
+    PrimeGaps::<i32>::new(), [1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4];
 );
