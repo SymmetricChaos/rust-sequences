@@ -1,6 +1,7 @@
 use crate::core::factorial::Factorials;
 
-/// The Jordan–Pólya numbers, those that can be completely factored into factorial numbers
+/// The Jordan–Pólya numbers, those that can be completely factored into factorial numbers.
+/// 1, 2, 4, 6, 8, 12, 16, 24, 32...
 pub struct JordanPolya {
     ctr: u64,
     factorials_vec: Vec<u64>,

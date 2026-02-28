@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedMul, Integer, integer::Roots};
 
-/// A juggler sequence.
+/// A juggler sequence. If a term is even the next is the floor of its square root. If a term is odd the next term is floor of the square root of its cube.
 pub struct Juggler<T> {
     n: T,
 }
