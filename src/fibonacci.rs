@@ -165,5 +165,5 @@ crate::check_sequences!(
 );
 
 crate::print_sequences!(
-    FibonacciStrings::new(), 0, 7;
+    FibonacciStrings::new(), 7;
 );

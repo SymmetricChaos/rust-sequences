@@ -85,8 +85,8 @@ impl<T: CheckedAdd + Clone + One> Iterator for BernoullisTriangle<T> {
 }
 
 crate::print_sequences!(
-    PascalsTriangle::new_big(), 0, 5, "{:?}", "\n";
-    BernoullisTriangle::new_big(), 0, 5, "{:?}", "\n";
+    PascalsTriangle::new_big(), 5, "{:?}", "\n";
+    BernoullisTriangle::new_big(), 5, "{:?}", "\n";
 );
 
 crate::check_sequences!(

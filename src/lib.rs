@@ -66,7 +66,7 @@ macro_rules! print_row {
         crate::print_row!($($args)*)
     };
     // Skip, then take and use default formatting
-    ($seq:expr, $skip:literal, $take:literal; $($args:tt)*) => {
+    ($seq:expr, skip $skip:literal, $take:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
@@ -80,7 +80,7 @@ macro_rules! print_row {
         crate::print_row!($($args)*)
     };
     // Skip, then take and use custom formatting
-    ($seq:expr, $skip:literal, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
+    ($seq:expr, skip $skip:literal, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
@@ -117,7 +117,7 @@ macro_rules! check_row {
         }
         crate::check_row!($($args)*)
     };
-    ($seq:expr, $skip:literal, $data:expr; $($args:tt)*) => {
+    ($seq:expr, skip $skip:literal, $data:expr; $($args:tt)*) => {
         let expected = $data.map(|x| x.to_string()).to_vec();
         let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take(expected.len()).map(|x| x.to_string()));
         if expected != calculated {

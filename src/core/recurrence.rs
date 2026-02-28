@@ -119,8 +119,8 @@ impl Iterator for AdditiveRecurrence {
 }
 
 crate::print_sequences!(
-    AdditiveLinearRecurrence::new(0, 1, 2, 3), 0, 10;
-    AdditiveLinearRecurrence::new_big_from_slices(&[3, 0, 2], &[1, 1, 0]), 0, 10;
+    AdditiveLinearRecurrence::new(0, 1, 2, 3), 10;
+    AdditiveLinearRecurrence::new_big_from_slices(&[3, 0, 2], &[1, 1, 0]), 10;
     // AdditiveRecurrence::new_big(0, 1, Box::new(|x| x + 1), Box::new(|x| x * -2)), 0, 10;
     // AdditiveRecurrence::new_big_from_slices(&[0, 1, 2], vec![Box::new(|x| x + 1), Box::new(|x| x * -2), Box::new(|x| x + x/2 + 4)]), 0, 10;
 );

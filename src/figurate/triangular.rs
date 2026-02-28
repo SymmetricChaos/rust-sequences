@@ -37,12 +37,12 @@ impl<T: Clone + CheckedAdd + One> Iterator for Triangular<T> {
 }
 
 crate::print_sequences!(
-    Triangular::new_big(), 0, 10;
-    Triangular::new_big(), 1, 10;
-    Triangular::new_big(), 2, 10;
-    Triangular::<i32>::new(), 0, 10;
-    Triangular::<i32>::new(), 1, 10;
-    Triangular::<i32>::new(), 2, 10;
+    Triangular::new_big(), skip 0, 10;
+    Triangular::new_big(), skip 1, 10;
+    Triangular::new_big(), skip 2, 10;
+    Triangular::<i32>::new(), skip 0, 10;
+    Triangular::<i32>::new(), skip 1, 10;
+    Triangular::<i32>::new(), skip 2, 10;
 );
 
 crate::check_sequences!(

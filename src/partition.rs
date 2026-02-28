@@ -166,6 +166,6 @@ crate::check_sequences!(
 
 crate::print_sequences!(
     print_arrays;
-    PartitionsN::new(5), 0, 10, "{:?}", "\n";
-    Partitions::new(), 0, 5, "{:?}", "\n";
+    PartitionsN::new(5), 10, "{:?}", "\n";
+    Partitions::new(), 5, "{:?}", "\n";
 );

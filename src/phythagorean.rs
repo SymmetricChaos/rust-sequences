@@ -66,5 +66,5 @@ impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> Iterator for Pyt
 }
 
 crate::print_sequences!(
-    PythagoreanTriples::<i32>::new(), 0, 100, "{:?}", "\n";
+    PythagoreanTriples::<i32>::new(), 100, "{:?}", "\n";
 );

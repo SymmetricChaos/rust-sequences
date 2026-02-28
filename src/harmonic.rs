@@ -137,7 +137,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for AlternatingHarmo
 #[cfg(test)]
 use crate::core::rational_digits::rational_decimal_string;
 crate::print_sequences!(
-    AlternatingHarmonicNumbers::new_big().map(|q| rational_decimal_string(q, 5).unwrap()), 50, 10; // Converges on ln(2)
+    AlternatingHarmonicNumbers::new_big().map(|q| rational_decimal_string(q, 5).unwrap()), skip 50, 10; // Converges on ln(2)
 );
 
 crate::check_sequences!(

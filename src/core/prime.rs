@@ -375,8 +375,8 @@ impl Iterator for NDistinctPrimeFactors {
 }
 
 crate::print_sequences!(
-    PrimeSignatures::new(), 0, 30, "{:?}", ", ";
-    PrimeFactorizations::new(), 0, 15, "{:?}", ", ";
+    PrimeSignatures::new(), 30, "{:?}", ", ";
+    PrimeFactorizations::new(), 15, "{:?}", ", ";
 );
 
 crate::check_iteration_times!(
@@ -385,11 +385,11 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Primes::new_big(), 0, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
-    Primes::new_big(), 1000, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
-    PrimePowers::<u32>::new(), 0, [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
-    Primorial::<u32>::new(), 0, [1, 2, 6, 30, 210];
-    PrimeCounting::<i16>::new(), 0, [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
-    GreatestPrimeFactor::new(), 0, [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
-    LeastPrimeFactor::new(), 0, [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
+    Primes::new_big(), skip 0, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+    Primes::new_big(), skip 1000, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
+    PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
+    Primorial::<u32>::new(), [1, 2, 6, 30, 210];
+    PrimeCounting::<i16>::new(), [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
+    GreatestPrimeFactor::new(), [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
+    LeastPrimeFactor::new(), [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
 );

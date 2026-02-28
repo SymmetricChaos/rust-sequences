@@ -75,17 +75,17 @@ impl Iterator for Polygonal {
 
 crate::print_sequences!(
     // For testing that .nth() words
-    Polygonal::new_big(3), 0, 10;
-    Polygonal::new_big(3), 1, 10;
-    Polygonal::new_big(3), 2, 10;
-    Polygonal::new_big(3), 3, 10;
-    Polygonal::new_big(3), 4, 10;
+    Polygonal::new_big(3), skip 0, 10;
+    Polygonal::new_big(3), skip 1, 10;
+    Polygonal::new_big(3), skip 2, 10;
+    Polygonal::new_big(3), skip 3, 10;
+    Polygonal::new_big(3), skip 4, 10;
 
-    Polygonal::new_big(4), 0, 10;
-    Polygonal::new_big(4), 1, 10;
-    Polygonal::new_big(4), 2, 10;
-    Polygonal::new_big(4), 3, 10;
-    Polygonal::new_big(4), 4, 10;
+    Polygonal::new_big(4), skip 0, 10;
+    Polygonal::new_big(4), skip 1, 10;
+    Polygonal::new_big(4), skip 2, 10;
+    Polygonal::new_big(4), skip 3, 10;
+    Polygonal::new_big(4), skip 4, 10;
 
 );
 

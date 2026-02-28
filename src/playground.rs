@@ -25,7 +25,7 @@ crate::print_sequences!(
     HarmonicNumbers::<i64>::new(), 10;
     Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 10;
     AbsDiffs::new(Primes::new_big()), 10;
-    Triangular::new_big(), 1234567, 5; // show fast skip ahead
+    Triangular::new_big(), skip  1234567, 5; // show fast skip ahead
     Boustrophedon::new(Constant::new(1)), 10;
     Exponential::new_big(1,1), 8; // converges on e
     Zeta::new_big(3), 9; // converges on Apery's constant 1.202569...

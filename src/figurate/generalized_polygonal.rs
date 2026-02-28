@@ -127,12 +127,12 @@ crate::check_iteration_times!(
 );
 
 crate::print_sequences!(
-    GeneralizedPolygonal::new_big(1), 0, 10;
-    GeneralizedPolygonal::new_big(2), 0, 10;
-    GeneralizedPolygonal::new_big(3), 0, 10;
-    GeneralizedPolygonal::new_big(4), 0, 10;
-    GeneralizedPolygonal::new_big(5), 0, 10;
-    GeneralizedPolygonal::new_big(6), 0, 10;
+    GeneralizedPolygonal::new_big(1), 10;
+    GeneralizedPolygonal::new_big(2), 10;
+    GeneralizedPolygonal::new_big(3), 10;
+    GeneralizedPolygonal::new_big(4), 10;
+    GeneralizedPolygonal::new_big(5), 10;
+    GeneralizedPolygonal::new_big(6), 10;
 );
 
 crate::check_sequences!(

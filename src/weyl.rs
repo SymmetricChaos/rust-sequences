@@ -47,5 +47,5 @@ impl<T: CheckedAdd + CheckedRem + Clone> Iterator for WeylMarsaglia<T> {
 }
 
 crate::print_sequences!(
-    WeylMarsaglia::new(5, 16), 0, 17;
+    WeylMarsaglia::new(5, 16), 17;
 );
