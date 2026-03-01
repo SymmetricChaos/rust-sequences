@@ -23,6 +23,7 @@ pub mod eulers_number;
 pub mod evil;
 pub mod factoradic;
 pub mod farey;
+pub mod fermat;
 pub mod fibonacci;
 pub mod gray;
 pub mod harmonic;

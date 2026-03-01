@@ -1,11 +1,12 @@
 use crate::core::prime::PrimeGaps;
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
-use std::{fmt::Display, hash::Hash};
+use std::hash::Hash;
 
 /// The Mersenne numbers. 2^p-1 for all primes p.
 pub struct Mersenne<T> {
-    gaps: PrimeGaps<T>,
+    gaps: PrimeGaps<usize>,
     ctr: T,
+    overflowed: bool,
 }
 
 impl<T: CheckedAdd + Clone + Integer + Hash> Mersenne<T> {
@@ -13,6 +14,7 @@ impl<T: CheckedAdd + Clone + Integer + Hash> Mersenne<T> {
         Self {
             gaps: PrimeGaps::new(),
             ctr: T::one() + T::one() + T::one() + T::one(),
+            overflowed: false,
         }
     }
 }
@@ -27,14 +29,23 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + Hash> Iterator for Mersenne<
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut p = self.gaps.next()?;
+        if self.overflowed {
+            return None;
+        }
+
+        let p = self.gaps.next()?;
         let two = T::one() + T::one();
 
         let out = self.ctr.clone() - T::one();
 
-        while !p.is_zero() {
-            self.ctr = self.ctr.checked_mul(&two)?;
-            p = p - T::one();
+        for _ in 0..p {
+            match self.ctr.checked_mul(&two) {
+                Some(n) => self.ctr = n,
+                None => {
+                    self.overflowed = true;
+                    return Some(out);
+                }
+            };
         }
 
         Some(out)
