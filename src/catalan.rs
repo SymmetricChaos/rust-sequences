@@ -18,10 +18,7 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + CheckedDiv + One> Catalan
 
 impl Catalan<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::one(),
-            ctr: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

@@ -18,10 +18,7 @@ impl<T: CheckedAdd + Clone + One> Lucas<T> {
 
 impl Lucas<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::from(2),
-            b: BigInt::from(1),
-        }
+        Self::new()
     }
 }
 

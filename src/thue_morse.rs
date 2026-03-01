@@ -22,12 +22,7 @@ impl<T: One + Zero> ThueMorse<T> {
 
 impl ThueMorse<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            value: BigInt::one() + BigInt::one(),
-            ctr: 0,
-            zero: BigInt::zero(),
-            one: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

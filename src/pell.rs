@@ -18,10 +18,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Pell<T> {
 
 impl Pell<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::zero(),
-            b: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

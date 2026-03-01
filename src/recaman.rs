@@ -19,11 +19,7 @@ impl<T: Clone + CheckedAdd + CheckedSub + PartialOrd + One + Zero> Recaman<T> {
 
 impl Recaman<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            n: BigInt::zero(),
-            ctr: BigInt::one(),
-            prev: Vec::new(),
-        }
+        Self::new()
     }
 }
 

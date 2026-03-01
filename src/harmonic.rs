@@ -18,9 +18,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Harmonic<T> {
 
 impl Harmonic<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            ctr: BigRational::zero(),
-        }
+        Self::new()
     }
 }
 

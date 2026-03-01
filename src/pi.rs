@@ -19,10 +19,7 @@ impl<T: Clone + Integer + One> WallisProduct<T> {
 
 impl WallisProduct<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            ctr: BigInt::one(),
-            product: Ratio::one(),
-        }
+        Self::new()
     }
 }
 

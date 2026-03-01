@@ -20,11 +20,7 @@ impl<T: One + Zero> Derangements<T> {
 
 impl Derangements<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::one(),
-            b: BigInt::zero(),
-            ctr: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

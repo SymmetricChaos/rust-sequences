@@ -18,10 +18,7 @@ impl<T: CheckedAdd + Clone + One> Leonardo<T> {
 
 impl Leonardo<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::one(),
-            b: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

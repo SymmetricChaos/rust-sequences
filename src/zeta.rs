@@ -21,10 +21,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Integer> Zeta<T> {
 impl Zeta<BigInt> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new_big(p: u32) -> Self {
-        Self {
-            sum: Ratio::zero(),
-            powers: NthPowers::new_big(p).skip(1),
-        }
+        Self::new(p)
     }
 }
 

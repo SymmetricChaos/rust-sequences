@@ -6,6 +6,7 @@ pub struct Abundance {
 }
 
 impl Abundance {
+    /// Only i64 outupt is supported.
     pub fn new() -> Self {
         Self { n: 0 }
     }

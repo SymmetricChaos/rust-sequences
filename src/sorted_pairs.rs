@@ -17,10 +17,7 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> SortedPairs<T> {
 
 impl SortedPairs<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            row: BigInt::zero(),
-            col: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 

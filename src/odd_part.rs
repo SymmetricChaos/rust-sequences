@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.
 pub struct OddPart<T> {
@@ -17,10 +17,7 @@ impl<T: Clone + Integer> OddPart<T> {
 
 impl OddPart<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            ctr: BigInt::zero(),
-            two: BigInt::one() + BigInt::one(),
-        }
+        Self::new()
     }
 }
 

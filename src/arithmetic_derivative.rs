@@ -26,7 +26,7 @@ pub struct ArithmeticDerivative {
 }
 
 impl ArithmeticDerivative {
-    /// Values are alwaus returned as u64 due to reliance on the prime_factorization function.
+    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -51,6 +51,7 @@ pub struct ArithmeticDerivativeRational {
 }
 
 impl ArithmeticDerivativeRational {
+    /// Only u64 output supported.
     pub fn new() -> Self {
         Self {
             numer: 1,

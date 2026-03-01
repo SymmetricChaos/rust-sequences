@@ -41,10 +41,7 @@ impl<T: CheckedAdd + Clone + Integer + Zero> Factoradic<T> {
 
 impl Factoradic<BigInt> {
     pub fn new_big(size: usize) -> Self {
-        Self {
-            ctr: BigInt::zero(),
-            size,
-        }
+        Self::new(size)
     }
 }
 

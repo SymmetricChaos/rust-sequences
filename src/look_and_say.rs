@@ -67,10 +67,7 @@ impl<T> LookAndSay<T> {
 
 impl LookAndSay<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            string: String::from("1"),
-            _phantom: PhantomData,
-        }
+        Self::new()
     }
 }
 

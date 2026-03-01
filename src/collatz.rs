@@ -5,7 +5,7 @@ pub struct Collatz<T> {
     value: T,
 }
 
-impl<T> Collatz<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Collatz<T> {
     /// Start a Collatz sequence from n.
     pub fn new(n: T) -> Self {
         Self { value: n }
@@ -90,7 +90,7 @@ pub struct CollatzGeneral<T> {
     b: T,
 }
 
-impl<T> CollatzGeneral<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> CollatzGeneral<T> {
     /// Start a generalized Collatz sequence from n. The term after x is ax+b if odd of x/2 if even.
     pub fn new(n: T, a: T, b: T) -> Self {
         Self { n, a, b }

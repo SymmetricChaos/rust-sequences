@@ -80,12 +80,7 @@ impl<T: CheckedAdd + One + Ord> Regular<T> {
 
 impl Regular<BigInt> {
     pub fn new_big() -> Self {
-        let mut heap = BinaryHeap::new();
-        heap.push(Reverse(BigInt::one()));
-        Self {
-            heap,
-            set: HashSet::new(),
-        }
+        Self::new()
     }
 }
 

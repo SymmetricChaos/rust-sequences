@@ -16,9 +16,7 @@ impl<T: Clone + One + CheckedMul + CheckedAdd> Sylvester<T> {
 
 impl Sylvester<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            current: BigInt::one() + BigInt::one(),
-        }
+        Self::new()
     }
 }
 

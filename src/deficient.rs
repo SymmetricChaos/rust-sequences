@@ -6,6 +6,7 @@ pub struct Deficient {
 }
 
 impl Deficient {
+    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { n: 0 }
     }

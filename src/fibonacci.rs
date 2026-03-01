@@ -19,10 +19,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Fibonacci<T> {
 
 impl Fibonacci<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::zero(),
-            b: BigInt::one(),
-        }
+        Self::new()
     }
 }
 
@@ -82,11 +79,7 @@ impl FibonacciWord<BigInt> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.
     pub fn new_big() -> Self {
-        Self {
-            word: VecDeque::from(vec![false]),
-            zero: BigInt::zero(),
-            one: BigInt::one(),
-        }
+        Self::new()
     }
 
     /// First n bits of the infinite Fibonacci word.

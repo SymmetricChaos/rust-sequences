@@ -20,10 +20,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Euler<T> {
 
 impl Euler<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            factorials: Factorials::new_big(),
-            sum: Ratio::zero(),
-        }
+        Self::new()
     }
 }
 

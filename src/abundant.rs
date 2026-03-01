@@ -6,6 +6,7 @@ pub struct Abundant {
 }
 
 impl Abundant {
+    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { n: 11 }
     }

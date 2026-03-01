@@ -77,13 +77,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squareful<T> {
 
 impl Squareful<BigInt> {
     pub fn new_big() -> Self {
-        let mut primes = Primes::new_big();
-        primes.next();
-        Self {
-            ctr: BigInt::zero(),
-            squares: vec![BigInt::from(4)],
-            primes,
-        }
+        Self::new()
     }
 }
 
