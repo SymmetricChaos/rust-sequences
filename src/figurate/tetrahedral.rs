@@ -20,11 +20,7 @@ impl<T: Clone + CheckedAdd + CheckedSub + One + Zero> Tetrahedral<T> {
 
 impl Tetrahedral<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            a: BigInt::zero(),
-            b: BigInt::one(),
-            ctr: BigInt::from(2),
-        }
+        Self::new()
     }
 }
 

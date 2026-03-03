@@ -13,9 +13,7 @@ impl<T: Clone + CheckedAdd + CheckedMul + One + Zero> Square<T> {
 
 impl Square<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 

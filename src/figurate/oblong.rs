@@ -18,10 +18,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Oblong<T> {
 
 impl Oblong<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::from(0),
-            ctr: BigInt::from(2),
-        }
+        Self::new()
     }
 
     pub fn nth<T>(n: T) -> BigInt

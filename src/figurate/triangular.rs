@@ -18,10 +18,7 @@ impl<T: Clone + CheckedAdd + One + Zero> Triangular<T> {
 
 impl Triangular<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::zero(),
-            ctr: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

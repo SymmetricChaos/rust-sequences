@@ -1,7 +1,5 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
 
-use crate::check_sequences;
-
 pub fn unsigned_stirling_first(n: &BigInt, k: &BigInt) -> BigInt {
     if n == k {
         return BigInt::one();
@@ -172,7 +170,7 @@ impl Iterator for StirlingSecond<BigInt> {
     }
 }
 
-check_sequences!(
+crate::check_sequences!(
     StirlingFirst::new_big().flatten(), [1, 0, 1, 0, 1, 1, 0, 2, 3, 1, 0, 6, 11, 6, 1, 0, 24, 50, 35, 10];
     StirlingFirstSigned::new_big().flatten(), [1, 0, 1, 0, -1, 1, 0, 2, -3, 1, 0, -6, 11, -6, 1, 0, 24, -50, 35, -10];
     StirlingSecond::new_big().flatten(), [1, 0, 1, 0, 1, 1, 0, 1, 3, 1, 0, 1, 7, 6, 1, 0, 1, 15, 25, 10];
