@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer};
 
-/// The values of the Collatz (aka hailstone) sequences.
+/// The values of the Collatz (aka hailstone) sequences. If a term n the next is 3n+1 if n is odd and n/2 if n is even.
 pub struct Collatz<T> {
     value: T,
 }
@@ -39,7 +39,7 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Iterator for Col
     }
 }
 
-/// The odd values of the Collatz (aka hailstone) sequences. In the usual Collatz sequences powers of two are divided out one step at a time. In these they are all divided out in one step.
+/// The odd values of the Collatz (aka hailstone) sequences. This is also called the shortcut version of the sequence.
 pub struct CollatzOdd<T> {
     value: T,
 }
@@ -83,7 +83,7 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Iterator for Col
     }
 }
 
-/// The values of the generalized Collatz (aka hailstone) sequences. The term after x is ax+b if odd of x/2 if even.
+/// The values of the generalized Collatz (aka hailstone) sequences. The term after n is an+b if n is odd or n/2 if n is even.
 pub struct CollatzGeneral<T> {
     n: T,
     a: T,
@@ -91,23 +91,19 @@ pub struct CollatzGeneral<T> {
 }
 
 impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> CollatzGeneral<T> {
-    /// Start a generalized Collatz sequence from n. The term after x is ax+b if odd of x/2 if even.
+    /// Start a generalized Collatz sequence from n. The term after n is an+b if n is odd or n/2 if n is even.
     pub fn new(n: T, a: T, b: T) -> Self {
         Self { n, a, b }
     }
 }
 
 impl CollatzGeneral<BigInt> {
-    /// Start a generalized Collatz sequence from n. The term after x is ax+b if odd of x/2 if even.
+    /// Start a generalized Collatz sequence from n. The term after n is an+b if n is odd or n/2 if n is even.
     pub fn new_big<T>(n: T, a: T, b: T) -> Self
     where
         BigInt: From<T>,
     {
-        Self {
-            n: BigInt::from(n),
-            a: BigInt::from(a),
-            b: BigInt::from(b),
-        }
+        Self::new(BigInt::from(n), BigInt::from(a), BigInt::from(b))
     }
 }
 

@@ -1,27 +1,33 @@
-use num::{BigInt, One};
+use num::{BigInt, CheckedAdd, Integer};
 
-/// The rows of the Bell triangle. The leftmost values are the Bell numbers which count the number of ways to partition a set with n elements.
-pub struct BellTriangle {
-    row: Vec<BigInt>,
+/// The rows of the Bell triangle. The leftmost values are the Bell numbers, which count the number of ways to partition a set with n elements.
+pub struct BellTriangle<T> {
+    row: Vec<T>,
 }
 
-impl BellTriangle {
-    pub fn new_big() -> Self {
+impl<T: Integer + Clone + CheckedAdd> BellTriangle<T> {
+    pub fn new() -> Self {
         Self {
-            row: vec![BigInt::one()],
+            row: vec![T::one()],
         }
     }
 }
 
-impl Iterator for BellTriangle {
-    type Item = Vec<BigInt>;
+impl BellTriangle<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: Integer + Clone + CheckedAdd> Iterator for BellTriangle<T> {
+    type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.row.clone();
         let mut next_row = Vec::with_capacity(self.row.len() + 1);
         next_row.push(self.row.last().unwrap().clone());
         for i in 0..self.row.len() {
-            next_row.push(&next_row[i] + &self.row[i]);
+            next_row.push(next_row[i].checked_add(&self.row[i])?);
         }
         self.row = next_row;
         Some(out)
@@ -29,20 +35,26 @@ impl Iterator for BellTriangle {
 }
 
 /// The Bell numbers. The number of ways to partition a set with n elements.
-pub struct Bell {
-    tri: BellTriangle,
+pub struct Bell<T> {
+    tri: BellTriangle<T>,
 }
 
-impl Bell {
-    pub fn new_big() -> Self {
+impl<T: Integer + Clone + CheckedAdd> Bell<T> {
+    pub fn new() -> Self {
         Self {
-            tri: BellTriangle::new_big(),
+            tri: BellTriangle::new(),
         }
     }
 }
 
-impl Iterator for Bell {
-    type Item = BigInt;
+impl Bell<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: Integer + Clone + CheckedAdd> Iterator for Bell<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.tri.next().unwrap()[0].clone())

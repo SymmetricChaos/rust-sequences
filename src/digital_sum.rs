@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, One, Zero};
+use num::{BigInt, CheckedAdd, Integer};
 
 // Doesn't check for sign so only use internally
 fn digital_sum<N: Integer>(mut n: N, base: &N) -> N {
@@ -52,12 +52,7 @@ impl DigitalSums<BigInt> {
     where
         BigInt: From<G>,
     {
-        let base = BigInt::from(base);
-        assert!(base >= BigInt::one() + BigInt::one());
-        Self {
-            ctr: BigInt::zero(),
-            base,
-        }
+        Self::new(BigInt::from(base))
     }
 }
 
@@ -92,12 +87,7 @@ impl DigitalRoots<BigInt> {
     where
         BigInt: From<G>,
     {
-        let base = BigInt::from(base);
-        assert!(base >= BigInt::one() + BigInt::one());
-        Self {
-            ctr: BigInt::zero(),
-            base,
-        }
+        Self::new(BigInt::from(base))
     }
 }
 
@@ -132,12 +122,7 @@ impl AdditivePersistence<BigInt> {
     where
         BigInt: From<G>,
     {
-        let base = BigInt::from(base);
-        assert!(base >= BigInt::one() + BigInt::one());
-        Self {
-            ctr: BigInt::zero(),
-            base,
-        }
+        Self::new(BigInt::from(base))
     }
 }
 

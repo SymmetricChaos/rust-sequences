@@ -17,8 +17,12 @@ impl<T: Clone + Ord + Sub<Output = T>> Ducci<T> {
 }
 
 impl Ducci<BigInt> {
-    pub fn new_big(tup: Vec<BigInt>) -> Self {
-        Self { tup }
+    pub fn new_big<G>(tup: Vec<G>) -> Self
+    where
+        BigInt: From<G>,
+    {
+        let v = tup.into_iter().map(|g| BigInt::from(g)).collect();
+        Self { tup: v }
     }
 }
 

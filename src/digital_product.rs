@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, One, Zero};
+use num::{BigInt, CheckedAdd, Integer};
 
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {
@@ -55,12 +55,7 @@ impl DigitalProds<BigInt> {
     where
         BigInt: From<G>,
     {
-        let base = BigInt::from(base);
-        assert!(base >= BigInt::one() + BigInt::one());
-        Self {
-            ctr: BigInt::zero(),
-            base,
-        }
+        Self::new(BigInt::from(base))
     }
 }
 
@@ -94,12 +89,7 @@ impl MultiplicativeDigitalRoots<BigInt> {
     where
         BigInt: From<G>,
     {
-        let b = BigInt::from(base);
-        assert!(b >= BigInt::one() + BigInt::one());
-        Self {
-            ctr: BigInt::zero(),
-            base: b,
-        }
+        Self::new(BigInt::from(base))
     }
 }
 
@@ -126,6 +116,15 @@ impl<N: CheckedAdd + Clone + Integer> MultiplicativePersistence<N> {
             ctr: N::zero(),
             base: base,
         }
+    }
+}
+
+impl MultiplicativePersistence<BigInt> {
+    pub fn new_big<G>(base: G) -> Self
+    where
+        BigInt: From<G>,
+    {
+        Self::new(BigInt::from(base))
     }
 }
 
