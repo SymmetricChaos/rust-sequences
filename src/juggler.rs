@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedMul, Integer, integer::Roots};
 
-/// A juggler sequence. If a term is even the next is the floor of its square root. If a term is odd the next term is floor of the square root of its cube.
+/// A juggler sequence. If a term is even the next is the floor of its square root. If a term is odd the next term is the floor of the square root of its cube.
 pub struct Juggler<T> {
     n: T,
 }
@@ -16,7 +16,7 @@ impl Juggler<BigInt> {
     where
         BigInt: From<T>,
     {
-        Self { n: BigInt::from(n) }
+        Self::new(BigInt::from(n))
     }
 }
 
@@ -30,6 +30,7 @@ impl<T: Integer + Roots + Clone + CheckedMul> Iterator for Juggler<T> {
             self.n = self.n.sqrt();
         } else {
             // This will end due to overflow much earlier than strictly necessary
+            // Newton's method may avoid this issue
             self.n = self.n.checked_mul(&self.n)?.checked_mul(&self.n)?.sqrt();
         }
 

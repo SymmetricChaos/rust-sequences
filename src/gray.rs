@@ -18,13 +18,14 @@ impl Gray<BigInt> {
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + BitXor<Output = T> + Shr<usize, Output = T>> Iterator
-    for Gray<T>
+impl<T: Clone + Integer + CheckedAdd + BitXor<Output = T>> Iterator for Gray<T>
+where
+    for<'a> &'a T: Shr<i32, Output = T>,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.clone() ^ (self.ctr.clone() >> 1);
+        let out = self.ctr.clone() ^ (&self.ctr >> 1);
         self.ctr = self.ctr.checked_add(&T::one())?;
         Some(out)
     }
