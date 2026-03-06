@@ -36,6 +36,7 @@ pub mod lucas;
 pub mod lucas_sequence;
 pub mod mersenne;
 pub mod mobius;
+pub mod naranya;
 pub mod odd_part;
 pub mod odious;
 pub mod padic_valuation;
