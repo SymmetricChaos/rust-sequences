@@ -42,7 +42,7 @@ pub mod odious;
 pub mod padic_valuation;
 pub mod partition;
 pub mod pell;
-pub mod perrin;
+pub mod perrin_padovan;
 pub mod phythagorean;
 pub mod pi;
 pub mod playground;
