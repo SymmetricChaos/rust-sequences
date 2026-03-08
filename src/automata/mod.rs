@@ -5,3 +5,4 @@ pub mod markov_algorithm;
 pub mod pushdown_automata;
 pub mod tag_machine;
 pub mod turing_machine;
+pub mod playground;

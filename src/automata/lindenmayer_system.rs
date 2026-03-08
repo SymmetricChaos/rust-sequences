@@ -46,6 +46,7 @@ impl<'a> Iterator for LindenmayerIter<'a> {
     }
 }
 
+/// Create a function that defines an L-system which can be used in the Lindenmayer struct.
 #[macro_export]
 macro_rules! l_system {
     ($name:ident; $($a:literal => $b:literal)+) => {
