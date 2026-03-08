@@ -153,16 +153,8 @@ tag_system!(
     'c' => "cc"
 );
 
-#[cfg(test)]
-tag_system!(
-    collatz_system;
-    'a' => "bc"
-    'b' => "a"
-    'c' => "aaa"
-);
 
 crate::print_sequences!(
     TagSystem::new(2, illustration_system, 'H').create_iter("baa"), 10;
-    TagSystem::new(2, collatz_system, 'H').create_iter("aaa"), 30;
     CyclicTagSystem::new("11001", &["010", "000", "1111"]), 10;
 );
