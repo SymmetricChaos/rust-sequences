@@ -180,6 +180,20 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 }
 
 /// Create a HashMap relating the names of states to their transition functions.
+///
+/// ```
+/// let states = turing_states!(
+///     state "A"
+///        '0' => '1', Move::Right, "B"
+///        '1' => '1', Move::Left, "C"
+///     state "B"
+///        '0' => '1', Move::Left, "A"
+///        '1' => '1', Move::Right, "B"
+///     state "C"
+///        '0' => '1', Move::Left, "B"
+///        '1' => '1', Move::Right, "HALT"
+///    );
+///```
 #[macro_export]
 macro_rules! turing_states {
     ($(state $name_symbol: literal $($input:literal => $symbol:literal, $movement:expr, $state:literal)+ )+) => {
