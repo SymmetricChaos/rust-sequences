@@ -131,6 +131,15 @@ impl Iterator for CyclicTagSystem {
     }
 }
 
+/// Create a replacement function for a TagSystem. All characters not specified are treated as constant symbols.
+/// ```
+/// tag_system!(
+///    name;
+///    'a' => "ccbaH"
+///    'b' => "cca"
+///    'c' => "cc"
+/// );
+/// ```
 #[macro_export]
 macro_rules! tag_system {
     ($name:ident; $($a:literal => $b:literal)+) => {
@@ -152,7 +161,6 @@ tag_system!(
     'b' => "cca"
     'c' => "cc"
 );
-
 
 crate::print_sequences!(
     TagSystem::new(2, illustration_system, 'H').create_iter("baa"), 10;

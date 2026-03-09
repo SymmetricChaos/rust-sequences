@@ -25,5 +25,5 @@ tag_system!(
 
 crate::print_sequences!(
     Lindenmayer::new(padovan).create_iter("a"), 10, "{}", "\n";
-    TagSystem::new(2, collatz, 'H').create_iter("aaa"), 30;
+    TagSystem::new(2, collatz, 'H').create_iter("aaa"), 30, "{}", "\n";
 );

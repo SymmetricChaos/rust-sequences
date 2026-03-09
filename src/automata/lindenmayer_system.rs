@@ -46,7 +46,15 @@ impl<'a> Iterator for LindenmayerIter<'a> {
     }
 }
 
-/// Create a function that defines an L-system which can be used in the Lindenmayer struct.
+/// Create a function that defines an L-system which can be used in the Lindenmayer struct. All characters not given a transition are treated as constant symbols.
+///
+///```
+/// l_system!(
+///    name;
+///    '0' => "1[0]0"
+///    '1' => "11"
+/// );
+/// ```
 #[macro_export]
 macro_rules! l_system {
     ($name:ident; $($a:literal => $b:literal)+) => {
