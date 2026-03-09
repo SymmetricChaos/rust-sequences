@@ -79,6 +79,17 @@ impl<'a> Iterator for StateMachineIter<'a> {
 }
 
 /// Create a HashMap relating the names of states to their transition functions.
+///
+/// ```
+/// let states = fsm_states!(
+///     state "Locked"
+///         "Coin" => "Unlocked"
+///         "Push" => "Locked"
+///     state "Unlocked"
+///         "Coin" => "Unlocked"
+///         "Push" => "Locked"
+/// );
+/// ```
 #[macro_export]
 macro_rules! fsm_states {
     ($(state $name_symbol: literal $($input:literal => $state:literal)+ )+) => {
@@ -104,6 +115,16 @@ macro_rules! fsm_states {
     };
 }
 
+/// Create a functon relating an input and state to an output.
+///
+/// ```
+/// let output = fsm_output!(
+///     "Coin", "Locked" => "Coin Accepted, Unlocking"
+///     "Push", "Locked" => "No Entry Allowed, Insert Coin"
+///     "Coin", "Unlocked" => "Coin Wasted, Still Unlocked"
+///     "Push", "Unlocked" => "One Entry Allowed, Locking"
+/// );
+/// ```
 #[macro_export]
 macro_rules! fsm_output{
     ( $($tape:literal, $state:literal => $out:literal)+ ) => {

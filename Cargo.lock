@@ -119,7 +119,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-sequences"
+name = "rust_sequences"
 version = "0.1.0"
 dependencies = [
  "itertools",
