@@ -80,8 +80,9 @@ impl<'a> Iterator for StateMachineIter<'a> {
 
 /// Create a HashMap relating the names of states to their transition functions.
 ///
+/// Example:
 /// ```
-/// let states = fsm_states!(
+/// let turnstile_funcs = fsm_states!(
 ///     state "Locked"
 ///         "Coin" => "Unlocked"
 ///         "Push" => "Locked"
@@ -118,7 +119,7 @@ macro_rules! fsm_states {
 /// Create a functon relating an input and state to an output.
 ///
 /// ```
-/// let output = fsm_output!(
+/// let turnstile_outputs = fsm_output!(
 ///     "Coin", "Locked" => "Coin Accepted, Unlocking"
 ///     "Push", "Locked" => "No Entry Allowed, Insert Coin"
 ///     "Coin", "Unlocked" => "Coin Wasted, Still Unlocked"

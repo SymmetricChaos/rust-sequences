@@ -181,6 +181,7 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 
 /// Create a HashMap relating the names of states to their transition functions.
 ///
+/// Example:
 /// ```
 /// let states = turing_states!(
 ///     state "A"

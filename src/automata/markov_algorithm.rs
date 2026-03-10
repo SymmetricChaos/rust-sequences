@@ -34,9 +34,9 @@ impl<'a> Iterator for MarkovIter<'a> {
             return None;
         }
         let out = self.string.clone();
-        for (pat, rep) in self.patterns.iter() {
-            if self.string.contains(pat) {
-                self.string = self.string.replacen(pat, rep, 1);
+        for (pattern, replacement) in self.patterns.iter() {
+            if self.string.contains(pattern) {
+                self.string = self.string.replacen(pattern, replacement, 1);
                 break;
             }
         }
@@ -60,8 +60,9 @@ macro_rules! markov_pairs {
 }
 
 crate::print_sequences!(
+    // Converts a number from binary to bijective-unary
     Markov::new(
-        markov_pairs!( // Converts a number from binary to bijective-unary
+        markov_pairs!(
             "I0" => "0II"
             "1" => "0I"
             "0" => ""

@@ -133,6 +133,7 @@ impl Iterator for CyclicTagSystem {
 
 /// Create a replacement function for a TagSystem. All characters not specified are treated as constant symbols.
 ///
+/// Example:
 /// ```
 /// tag_system!(
 ///    name;

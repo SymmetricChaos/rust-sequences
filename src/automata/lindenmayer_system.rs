@@ -48,9 +48,10 @@ impl<'a> Iterator for LindenmayerIter<'a> {
 
 /// Create a function that defines an L-system which can be used in the Lindenmayer struct. All characters not given a transition are treated as constant symbols.
 ///
-///```
+/// Example:
+/// ```
 /// l_system!(
-///    name;
+///    tree;
 ///    '0' => "1[0]0"
 ///    '1' => "11"
 /// );
