@@ -27,6 +27,7 @@ pub mod fermat;
 pub mod fibonacci;
 pub mod gray;
 pub mod harmonic;
+pub mod highly_composite;
 pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod juggler;
