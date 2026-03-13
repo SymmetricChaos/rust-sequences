@@ -59,6 +59,7 @@ pub mod sorted_pairs;
 pub mod squarefree;
 pub mod sylverster;
 pub mod thue_morse;
+pub mod totient;
 pub mod trig;
 pub mod weyl;
 pub mod zeta;
