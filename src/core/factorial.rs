@@ -2,7 +2,7 @@ use std::iter::Skip;
 
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 
-/// The factorial numbers.
+/// The factorial numbers. Each term is the previous term multiplied by the next positive integer. Equivalently f(n) = f(n-1) * n.
 /// 1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800...
 pub struct Factorials<T> {
     val: T,
@@ -38,7 +38,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> Iterator for Factorials<T> {
     }
 }
 
-/// The alternating factorial numbers.
+/// The alternating factorial numbers. The partial sums of the alternating sum of the factorials. Equivalently f(n) = n! - f(n-1).
 /// 1, 1, 5, 19, 101, 619, 4421, 35899, 326981...
 pub struct AlternatingFactorials<T> {
     val: T,

@@ -8,7 +8,7 @@ pub fn unit(n: BigInt) -> BigInt {
     }
 }
 
-pub fn one(_n: BigInt) -> BigInt {
+pub fn one(_: BigInt) -> BigInt {
     BigInt::one()
 }
 
