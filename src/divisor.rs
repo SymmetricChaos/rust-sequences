@@ -1,6 +1,4 @@
-use crate::utils::divisibility::{
-    aliquot_sum, cototient, number_of_divisors, sum_of_divisors, totient,
-};
+use crate::utils::divisibility::{aliquot_sum, number_of_divisors, sum_of_divisors};
 
 /// Number of divisors for each positive integer.
 /// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
@@ -9,6 +7,7 @@ pub struct NumberOfDivisors {
 }
 
 impl NumberOfDivisors {
+    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -30,6 +29,7 @@ pub struct SumOfDivisors {
 }
 
 impl SumOfDivisors {
+    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -51,6 +51,7 @@ pub struct AliquotSums {
 }
 
 impl AliquotSums {
+    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -65,12 +66,13 @@ impl Iterator for AliquotSums {
     }
 }
 
-/// The aliquot sequence starting from n.
+/// The aliquot sequence starting from n. Each term is the aliquot sum of the previous.
 pub struct AliquotSequence {
     n: u64,
 }
 
 impl AliquotSequence {
+    /// Only u64 output is supported.
     pub fn new(n: u64) -> Self {
         Self { n }
     }
@@ -86,53 +88,9 @@ impl Iterator for AliquotSequence {
     }
 }
 
-/// The totient of each positive integer.
-/// 1, 1, 2, 2, 4, 2, 6, 4, 6, 4...
-pub struct Totients {
-    ctr: u64,
-}
-
-impl Totients {
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for Totients {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-        Some(totient(self.ctr))
-    }
-}
-
-/// The cototient of each positive integer.
-/// 0, 1, 1, 2, 1, 4, 1, 4, 3, 6...
-pub struct Cototients {
-    ctr: u64,
-}
-
-impl Cototients {
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for Cototients {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-        Some(cototient(self.ctr))
-    }
-}
-
 crate::check_sequences!(
     NumberOfDivisors::new(), [1, 2, 2, 3, 2, 4, 2, 4, 3, 4];
     SumOfDivisors::new(), [1, 3, 4, 7, 6, 12, 8, 15, 13, 18];
     AliquotSums::new(), [0, 1, 1, 3, 1, 6, 1, 7, 4, 8];
     AliquotSequence::new(10), [10, 8, 7, 1, 0, 0, 0, 0, 0, 0];
-    Totients::new(), [1, 1, 2, 2, 4, 2, 6, 4, 6, 4];
-    Cototients::new(), [0, 1, 1, 2, 1, 4, 1, 4, 3, 6];
 );
