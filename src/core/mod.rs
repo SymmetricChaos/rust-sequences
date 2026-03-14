@@ -20,6 +20,7 @@ pub mod recurrence;
 pub mod roots;
 pub mod unit;
 
+pub mod binomial_transform;
 pub mod boustrophedon;
 pub mod characteristic;
 pub mod combinations;
