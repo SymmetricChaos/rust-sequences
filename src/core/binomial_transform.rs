@@ -1,5 +1,7 @@
 use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, Signed, integer::binomial};
 
+use crate::core::alternating::Alternating;
+
 pub struct BinomialTransform<T> {
     iter: Box<dyn Iterator<Item = T>>,
     saved: Vec<T>,
@@ -29,7 +31,7 @@ impl<T: Clone + Integer + Signed + CheckedAdd + CheckedSub + CheckedMul> Iterato
         let mut k = T::zero();
         let mut out = T::zero();
 
-        for (term, add) in self.saved.iter().zip([true, false].into_iter().cycle()) {
+        for (term, add) in self.saved.iter().zip(Alternating::true_false()) {
             let b = binomial(self.n.clone(), k.clone());
             let pr = term.checked_mul(&b)?;
             if add {

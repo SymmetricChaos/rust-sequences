@@ -4,6 +4,8 @@ use num::{
     BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, PrimInt, Signed, Zero, rational::Ratio,
 };
 
+use crate::core::alternating::Alternating;
+
 /// The Bernoulli numbers.
 /// Either the plus or minus version of the sequence may be chosen.
 /// 1, ±1/2, 1/6, 0, -1/30, 0, 1/42, 0, -1/30, 0, 5/66...
@@ -63,14 +65,12 @@ where
             let kb = BigInt::from_usize(k)?;
             let frac = Ratio::new(BigInt::one(), kb.clone() + BigInt::one());
             let mut j_sum = Ratio::zero();
-            let mut sign = BigInt::one();
-            for j in 0..=k {
+            for (j, s) in (0..=k).zip(Alternating::<BigInt>::pos_neg()) {
                 let jb = BigInt::from_usize(j)?;
                 j_sum = j_sum
                     + num::integer::binomial(kb.clone(), jb.clone())
-                        * sign.clone()
+                        * s
                         * (jb + &self.n).pow(self.m as u32);
-                sign = -sign;
             }
             sum = sum.checked_add(&(frac.checked_mul(&j_sum)?))?;
         }
@@ -83,5 +83,5 @@ where
 }
 
 crate::check_sequences!(
-    Bernoulli::new_plus_big(), [Ratio::new(1,1), Ratio::new(1,2),Ratio::new(1,6),Ratio::new(0,1),Ratio::new(-1,30),Ratio::new(0,1),Ratio::new(1,42),Ratio::new(0,1),Ratio::new(-1,30)];
+    Bernoulli::new_plus_big(), ["1", "1/2", "1/6", "0", "-1/30", "0", "1/42", "0", "-1/30"];
 );

@@ -65,6 +65,7 @@ pub mod sylverster;
 pub mod thue_morse;
 pub mod totient;
 pub mod trig;
+pub mod unit;
 pub mod weyl;
 pub mod zeta;
 

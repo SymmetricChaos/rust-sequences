@@ -17,8 +17,8 @@ pub mod rational_digits;
 pub mod rationals;
 pub mod recurrence;
 pub mod roots;
-pub mod unit;
 
+pub mod alternating;
 pub mod binomial_transform;
 pub mod boustrophedon;
 pub mod characteristic;
