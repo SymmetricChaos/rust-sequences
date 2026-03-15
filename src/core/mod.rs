@@ -10,7 +10,6 @@ pub mod integer;
 pub mod natural;
 pub mod nth_powers;
 pub mod parity;
-pub mod pascal;
 pub mod polynomial;
 pub mod powers;
 pub mod prime;

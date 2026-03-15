@@ -48,11 +48,6 @@ impl<T: CheckedAdd + Clone + One> BernoullisTriangle<T> {
             row: vec![T::one()],
         }
     }
-
-    /// Return an iterator over the elements in each row.
-    pub fn as_ints() -> impl Iterator<Item = T> {
-        Self::new().flatten()
-    }
 }
 
 impl BernoullisTriangle<BigInt> {
@@ -60,11 +55,6 @@ impl BernoullisTriangle<BigInt> {
         Self {
             row: vec![BigInt::one()],
         }
-    }
-
-    /// Return an iterator over the elements in each row.
-    pub fn as_ints_big() -> impl Iterator<Item = BigInt> {
-        Self::new_big().flatten()
     }
 }
 

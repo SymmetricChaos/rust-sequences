@@ -45,6 +45,7 @@ pub mod odd_part;
 pub mod odious;
 pub mod padic_valuation;
 pub mod partition;
+pub mod pascal;
 pub mod pell;
 pub mod perrin_padovan;
 pub mod phythagorean;
