@@ -1,17 +1,17 @@
 use num::{BigInt, CheckedAdd, One, Zero};
 
-/// The oblong numbers.
+/// The oblong or pronic numbers. For each non-negatie integer n the term is n * (n+1).
 /// 0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
 pub struct Oblong<T> {
-    val: T,
-    ctr: T,
+    a: T,
+    b: T,
 }
 
 impl<T: CheckedAdd + Clone + One + Zero> Oblong<T> {
     pub fn new() -> Self {
         Self {
-            val: T::zero(),
-            ctr: T::one() + T::one(),
+            a: T::zero(),
+            b: T::one() + T::one(),
         }
     }
 }
@@ -34,9 +34,9 @@ impl<T: CheckedAdd + Clone + One> Iterator for Oblong<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.clone();
-        self.val = self.val.checked_add(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&(T::one() + T::one()))?;
+        let out = self.a.clone();
+        self.a = self.a.checked_add(&self.b)?;
+        self.b = self.b.checked_add(&(T::one() + T::one()))?;
         Some(out)
     }
 }

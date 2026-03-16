@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
-/// The cube numbers.
+/// The cube numbers. f(n) = n*n*n for each non-negative integet n.
 /// 0, 1, 8, 27, 64, 125, 216, 343, 512, 729...
 pub struct Cube<T> {
     val: T,
