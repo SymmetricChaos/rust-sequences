@@ -5,6 +5,7 @@ use crate::core::integer::Integers;
 /// The generalized pentagonal numbers. Extends the pentagonal numbers to range of all integers.
 pub struct GeneralizedPentagonal<T> {
     integers: Integers<T>,
+    three: T,
 }
 
 impl<T: Signed + CheckedAdd + Clone + CheckedMul + CheckedSub + std::ops::Shr<i32, Output = T>>
@@ -12,6 +13,7 @@ impl<T: Signed + CheckedAdd + Clone + CheckedMul + CheckedSub + std::ops::Shr<i3
 {
     pub fn new() -> Self {
         Self {
+            three: T::one() + T::one() + T::one(),
             integers: Integers::new(),
         }
     }
@@ -19,9 +21,7 @@ impl<T: Signed + CheckedAdd + Clone + CheckedMul + CheckedSub + std::ops::Shr<i3
 
 impl GeneralizedPentagonal<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            integers: Integers::new_big(),
-        }
+        Self::new()
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -39,9 +39,13 @@ impl<T: Signed + CheckedAdd + Clone + CheckedMul + CheckedSub + std::ops::Shr<i3
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let three = T::one() + T::one() + T::one();
         let n = self.integers.next()?;
-        let out = three.checked_mul(&n)?.checked_mul(&n)?.checked_sub(&n)? >> 1;
+        let out = self
+            .three
+            .checked_mul(&n)?
+            .checked_mul(&n)?
+            .checked_sub(&n)?
+            >> 1;
         Some(out)
     }
 }

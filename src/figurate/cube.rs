@@ -14,9 +14,7 @@ impl<T: CheckedMul + CheckedAdd + One + Zero> Cube<T> {
 
 impl Cube<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 
