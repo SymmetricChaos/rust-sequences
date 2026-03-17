@@ -1,5 +1,6 @@
 pub mod centered_polygonal;
 pub mod cube;
+pub mod generalized_pentagonal;
 pub mod generalized_polygonal;
 pub mod oblong;
 pub mod polygonal;
@@ -11,6 +12,7 @@ pub mod triangular;
 // Easy imports from other places
 pub use centered_polygonal::*;
 pub use cube::*;
+pub use generalized_pentagonal::*;
 pub use generalized_polygonal::*;
 pub use oblong::*;
 pub use polygonal::*;

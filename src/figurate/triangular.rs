@@ -46,9 +46,9 @@ crate::print_sequences!(
     Triangular::<i32>::new(), skip 0, 10;
     Triangular::<i32>::new(), skip 1, 10;
     Triangular::<i32>::new(), skip 2, 10;
-    [0,1,2,3,10,25,100].into_iter().map(|x| Triangular::nth(x)), 10;
+    [0,1,2,3,10,25,100,1234].into_iter().map(|x| Triangular::nth(x)), 8;
 );
 
 crate::check_sequences!(
-    Triangular::new_big(), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
+    Triangular::new_big(), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55];
 );

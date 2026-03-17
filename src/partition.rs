@@ -27,7 +27,7 @@ impl Iterator for Partition {
         let mut parts = BigInt::zero();
         let mut sign = 0;
 
-        for p in crate::figurate::GeneralizedPentagonalGeneric::<i64>::new().skip(1) {
+        for p in crate::figurate::GeneralizedPentagonal::<i64>::new().skip(1) {
             let p = TryInto::<usize>::try_into(p).ok()?;
             if let Some(idx) = self.ctr.checked_sub(p) {
                 if sign < 2 {
