@@ -10,6 +10,7 @@ pub mod algebraic;
 pub mod arithmetic_derivative;
 pub mod automorphic;
 pub mod bell;
+pub mod binomial_distribution;
 pub mod catalan;
 pub mod collatz;
 pub mod compositions;

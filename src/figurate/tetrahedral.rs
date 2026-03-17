@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedSub, One, Zero};
 
-/// The tetrahedral numbers.
+/// The tetrahedral numbers. The partial sums of the triangular numbers.
 /// 0, 1, 4, 10, 20, 35, 56, 84, 120, 165...
 pub struct Tetrahedral<T> {
     a: T,
