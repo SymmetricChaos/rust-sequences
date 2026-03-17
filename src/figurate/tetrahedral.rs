@@ -22,6 +22,14 @@ impl Tetrahedral<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
     }
+
+    pub fn nth<T>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = &BigInt::from(n);
+        ((n + 1) * (n + 2) * (n + 3)) / 6
+    }
 }
 
 impl<T: Clone + CheckedAdd + CheckedSub + One> Iterator for Tetrahedral<T> {

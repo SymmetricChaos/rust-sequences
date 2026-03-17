@@ -25,8 +25,8 @@ impl Oblong<BigInt> {
     where
         BigInt: From<T>,
     {
-        let n = BigInt::from(n);
-        &n * (&n + 1)
+        let n = &BigInt::from(n);
+        n * (n + 1)
     }
 }
 

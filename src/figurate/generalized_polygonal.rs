@@ -2,7 +2,7 @@ use num::BigInt;
 
 use crate::core::integer::Integers;
 
-/// The generalized polygonal numbers with selectable order.
+/// The generalized polygonal numbers with selectable order. Extends the domain of the polygonal numbers to all integers.
 pub struct GeneralizedPolygonal {
     integers: Integers<BigInt>,
     k: BigInt,

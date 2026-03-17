@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
-/// The cube numbers. f(n) = n*n*n for each non-negative integet n.
+/// The cube numbers. f(n) = n*n*n for each non-negative integer n.
 /// 0, 1, 8, 27, 64, 125, 216, 343, 512, 729...
 pub struct Cube<T> {
     val: T,
@@ -15,6 +15,14 @@ impl<T: CheckedMul + CheckedAdd + One + Zero> Cube<T> {
 impl Cube<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
+    }
+
+    pub fn nth<T>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = &BigInt::from(n);
+        n * n * n
     }
 }
 

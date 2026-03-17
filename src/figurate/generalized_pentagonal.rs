@@ -2,7 +2,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Signed};
 
 use crate::core::integer::Integers;
 
-/// The generalized pentagonal numbers. Extends the pentagonal numbers to range of all integers.
+/// The generalized pentagonal numbers. Extends the domain of the pentagonal numbers to all integers.
 pub struct GeneralizedPentagonal<T> {
     integers: Integers<T>,
     three: T,

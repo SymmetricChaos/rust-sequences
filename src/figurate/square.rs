@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
-/// The square numbers. f(n) = n*n for each non-negative integet n.
+/// The square numbers. f(n) = n*n for each non-negative integer n.
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
 pub struct Square<T> {
     val: T,
@@ -14,6 +14,14 @@ impl<T: Clone + CheckedAdd + CheckedMul + One + Zero> Square<T> {
 impl Square<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
+    }
+
+    pub fn nth<T>(n: T) -> BigInt
+    where
+        BigInt: From<T>,
+    {
+        let n = &BigInt::from(n);
+        n * n
     }
 }
 
