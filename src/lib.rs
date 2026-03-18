@@ -69,6 +69,7 @@ pub mod trig;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
+pub mod psuedoprime;
 
 #[macro_export]
 macro_rules! print_row {
