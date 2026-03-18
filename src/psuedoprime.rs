@@ -1,13 +1,16 @@
 use crate::utils::{divisibility::is_prime, exp_by_squaring::pow_mod};
 
+/// The Fermat pseudoprimes to a given base.
+/// For a base, b, the non-prime numbers, n, for which the following holds (b^(n-1)) % n = 1
 pub struct FermatPseudoprimes {
     ctr: u64,
     base: u64,
 }
 
 impl FermatPseudoprimes {
+    /// Omly u64 output is supported.
     pub fn new(base: u64) -> Self {
-        Self { ctr: 3, base }
+        Self { ctr: 2, base }
     }
 }
 
