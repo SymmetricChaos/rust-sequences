@@ -1,43 +1,40 @@
 use crate::utils::{divisibility::is_prime, exp_by_squaring::pow_mod};
 
-pub struct Fermat2 {
+pub struct FermatPseudoprimes {
     ctr: u64,
+    base: u64,
 }
 
-impl Fermat2 {
-    pub fn new() -> Self {
-        Self { ctr: 341 }
+impl FermatPseudoprimes {
+    pub fn new(base: u64) -> Self {
+        Self { ctr: 3, base }
     }
 }
 
-impl Iterator for Fermat2 {
+impl Iterator for FermatPseudoprimes {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr;
-
         loop {
-            // Skip odds
-            self.ctr += 2;
+            // If the base == 2 this can be 2 in order to skip evens
+            // A number divisible by the base is never a pseudoprime to that base
+            self.ctr += 1;
 
             // Exclude primes
             if is_prime(self.ctr) {
                 continue;
             }
 
-            if pow_mod(2, self.ctr - 1, self.ctr) == 1 {
+            if pow_mod(self.base, self.ctr - 1, self.ctr) == 1 {
                 break;
             }
         }
 
-        Some(out)
+        Some(self.ctr)
     }
 }
 
-crate::print_sequences!(
-    Fermat2::new(), 5;
-);
-
 crate::check_sequences!(
-    Fermat2::new(), [341, 561, 645, 1105, 1387];
+    FermatPseudoprimes::new(2), [341, 561, 645, 1105, 1387];
+    FermatPseudoprimes::new(3), [91, 121, 286, 671, 703];
 );
