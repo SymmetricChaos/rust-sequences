@@ -28,6 +28,7 @@ pub mod factoradic;
 pub mod farey;
 pub mod fermat;
 pub mod fibonacci;
+pub mod golomb;
 pub mod gray;
 pub mod harmonic;
 pub mod highly_composite;
@@ -53,6 +54,7 @@ pub mod phythagorean;
 pub mod pi;
 pub mod playground;
 pub mod powerful;
+pub mod psuedoprime;
 pub mod rado_pairs;
 pub mod recaman;
 pub mod repint;
@@ -69,7 +71,6 @@ pub mod trig;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
-pub mod psuedoprime;
 
 #[macro_export]
 macro_rules! print_row {
