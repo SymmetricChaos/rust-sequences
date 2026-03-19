@@ -38,7 +38,8 @@ impl Iterator for FermatPseudoprimes {
 }
 
 /// The Euler pseudoprimes to a given base.
-/// For a base, b, the non-prime numbers, n, for which the following holds (b^((n-1)/2)) % n = 1 or -1
+/// For a base, b, the odd non-prime numbers, n, for which the following holds (b^((n-1)/2)) % n = (1 or n-1)
+/// This condition is twice as strong as for a Fermat pseudoprime.
 pub struct EulerPseudoprimes {
     ctr: u64,
     base: u64,
