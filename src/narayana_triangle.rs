@@ -1,11 +1,11 @@
 use num::{BigInt, Integer, integer::binomial};
 
-pub struct NaranyaTriangle<T> {
+pub struct NarayanaTriangle<T> {
     row: T,
     idx: T,
 }
 
-impl<T: Integer + Clone> NaranyaTriangle<T> {
+impl<T: Integer + Clone> NarayanaTriangle<T> {
     pub fn new() -> Self {
         Self {
             row: T::one(),
@@ -14,13 +14,13 @@ impl<T: Integer + Clone> NaranyaTriangle<T> {
     }
 }
 
-impl NaranyaTriangle<BigInt> {
+impl NarayanaTriangle<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
     }
 }
 
-impl<T: Integer + Clone> Iterator for NaranyaTriangle<T> {
+impl<T: Integer + Clone> Iterator for NarayanaTriangle<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -41,5 +41,5 @@ impl<T: Integer + Clone> Iterator for NaranyaTriangle<T> {
 }
 
 crate::print_sequences!(
-    NaranyaTriangle::new_big(), 5, "{:?}", "\n";
+    NarayanaTriangle::new_big(), 5, "{:?}", "\n";
 );
