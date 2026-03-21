@@ -43,6 +43,7 @@ pub mod lucas_sequence;
 pub mod mersenne;
 pub mod mobius;
 pub mod narayana;
+pub mod narayana_general;
 pub mod narayana_triangle;
 pub mod odd_part;
 pub mod odious;

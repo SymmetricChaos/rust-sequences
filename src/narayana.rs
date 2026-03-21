@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, One};
 
-/// The values of Narayana's cow sequence
+/// The values of Narayana's cow sequence. From a word problem in which a mature cow produces one cow per year and a cow takes four years to mature.
+/// 1, 1, 1, 2, 3, 4, 6, 9, 13, 19
 pub struct Narayana<T> {
     a: T,
     b: T,

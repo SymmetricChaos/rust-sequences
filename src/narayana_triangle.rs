@@ -1,5 +1,6 @@
 use num::{BigInt, Integer, integer::binomial};
 
+/// The Narayana triangle.
 pub struct NarayanaTriangle<T> {
     row: T,
     idx: T,
