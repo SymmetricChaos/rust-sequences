@@ -59,6 +59,7 @@ pub mod powerful;
 pub mod psuedoprime;
 pub mod rado_pairs;
 pub mod recaman;
+pub mod regular_paperfolding;
 pub mod repint;
 pub mod rowland;
 pub mod ruler;
