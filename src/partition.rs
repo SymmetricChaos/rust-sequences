@@ -1,39 +1,45 @@
 use itertools::Itertools;
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedSub, Integer, One};
 
 /// The number of partitons for each integer.
 /// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30...
-pub struct Partition {
-    values: Vec<BigInt>,
+pub struct Partition<T> {
+    values: Vec<T>,
     ctr: usize,
 }
 
-impl Partition {
-    pub fn new_big() -> Self {
+impl<T: One> Partition<T> {
+    pub fn new() -> Self {
         Self {
-            values: vec![BigInt::one()],
+            values: vec![T::one()],
             ctr: 0,
         }
     }
 }
 
-impl Iterator for Partition {
-    type Item = BigInt;
+impl Partition<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: Clone + Integer + CheckedAdd + CheckedSub> Iterator for Partition<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.values[self.ctr].clone();
 
         self.ctr += 1;
-        let mut parts = BigInt::zero();
+        let mut parts = T::zero();
         let mut sign = 0;
 
         for p in crate::figurate::GeneralizedPentagonal::<i64>::new().skip(1) {
             let p = TryInto::<usize>::try_into(p).ok()?;
             if let Some(idx) = self.ctr.checked_sub(p) {
                 if sign < 2 {
-                    parts += &self.values[idx];
+                    parts = parts.checked_add(&self.values[idx])?;
                 } else {
-                    parts -= &self.values[idx];
+                    parts = parts.checked_sub(&self.values[idx])?;
                 }
                 sign = (sign + 1) % 4;
             } else {
@@ -157,11 +163,13 @@ impl Iterator for Partitions {
 }
 
 crate::check_iteration_times!(
-    Partition::new_big(), 27_000;
+    Partition::new_big(), 405;
+    Partition::<u64>::new(), 405;
 );
 
 crate::check_sequences!(
     Partition::new_big(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+    Partition::<u64>::new(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );
 
 crate::print_sequences!(
