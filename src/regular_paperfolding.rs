@@ -1,7 +1,5 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
-use crate::check_sequences;
-
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.
 pub struct RegularPaperfolding<T> {
     ctr: T,
@@ -43,6 +41,6 @@ impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Iterator for RegularPaperfold
     }
 }
 
-check_sequences!(
+crate::check_sequences!(
     RegularPaperfolding::<u32>::new(), [1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0];
 );
