@@ -23,6 +23,7 @@ pub mod digital_sum;
 pub mod dirichlet_convolution;
 pub mod divisor;
 pub mod ducci;
+pub mod ecg;
 pub mod eulers_number;
 pub mod evil;
 pub mod factoradic;
