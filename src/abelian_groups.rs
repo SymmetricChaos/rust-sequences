@@ -1,5 +1,6 @@
 use crate::{partition::Partition, utils::divisibility::prime_factorization};
 use itertools::Itertools;
+use num::CheckedMul;
 
 /// The number of abelian groups of order n for each positive integer n.
 pub struct AbelianGroups {
@@ -9,6 +10,7 @@ pub struct AbelianGroups {
 }
 
 impl AbelianGroups {
+    /// Only u64 outupt is supported.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -39,7 +41,7 @@ impl Iterator for AbelianGroups {
                 self.partition_number
                     .push(self.partition_number_generator.next()?);
             }
-            out *= self.partition_number[power];
+            out = out.checked_mul(&self.partition_number[power])?;
         }
 
         Some(out)
