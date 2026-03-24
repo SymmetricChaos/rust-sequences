@@ -1,10 +1,9 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, Zero};
+use crate::utils::divisibility::{prime_factorization, prime_signature};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, One};
 use std::{
     collections::{BinaryHeap, HashMap},
     hash::Hash, // Found to be much faster than BTreeMap
 };
-
-use crate::utils::divisibility::{prime_factorization, prime_signature};
 
 /// The prime natural numbers.
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
@@ -113,14 +112,7 @@ impl<T: CheckedAdd + Clone + Hash + Integer> PrimeCounting<T> {
 
 impl PrimeCounting<BigInt> {
     pub fn new_big() -> Self {
-        let mut prime = Primes::new_big();
-        let next_prime = prime.next().unwrap();
-        Self {
-            prime,
-            next_prime,
-            n: BigInt::one(),
-            ctr: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 
@@ -284,14 +276,14 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
 /// The perfect powers of primes.
 /// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
 pub struct PrimePowers<T: Eq> {
-    queue: BinaryHeap<PrimePower<T>>,
+    priority_queue: BinaryHeap<PrimePower<T>>,
     primes: Primes<T>,
 }
 
 impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
     pub fn new() -> Self {
         Self {
-            queue: BinaryHeap::new(),
+            priority_queue: BinaryHeap::new(),
             primes: Primes::new(),
         }
     }
@@ -300,7 +292,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
 impl PrimePowers<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            queue: BinaryHeap::new(),
+            priority_queue: BinaryHeap::new(),
             primes: Primes::new_big(),
         }
     }
@@ -310,16 +302,18 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for PrimePowe
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.queue.is_empty() {
-            self.queue.push(PrimePower::new(self.primes.next()?));
+        if self.priority_queue.is_empty() {
+            self.priority_queue
+                .push(PrimePower::new(self.primes.next()?));
             return Some(T::one());
         } else {
-            let smallest = self.queue.pop()?;
+            let smallest = self.priority_queue.pop()?;
             let out = smallest.value.clone();
             if smallest.is_prime() {
-                self.queue.push(PrimePower::new(self.primes.next()?));
+                self.priority_queue
+                    .push(PrimePower::new(self.primes.next()?));
             }
-            self.queue.push(smallest.next()?);
+            self.priority_queue.push(smallest.next()?);
             return Some(out);
         }
     }
