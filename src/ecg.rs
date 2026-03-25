@@ -2,7 +2,8 @@ use std::collections::BTreeSet;
 
 use num::integer::gcd;
 
-/// The ECG sequence.
+/// The ECG sequence. Starting with 1 and 2 each term is the smallest positive integer not yet used which shares a factor with the previous term.
+/// 1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24
 pub struct Ecg {
     used: BTreeSet<u64>, // Checking this becomes much faster than checking a Vec after a few hundred terms
     last: u64,
@@ -10,6 +11,7 @@ pub struct Ecg {
 }
 
 impl Ecg {
+    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             used: BTreeSet::from([1, 2]),
@@ -33,7 +35,7 @@ impl Iterator for Ecg {
         }
 
         let mut ctr = self.initial_ctr;
-        // Must be a way to remove the sequence of numbers that have all been used
+        // Must be a way to remove the sequential run of numbers that have all been used
         loop {
             if !self.used.contains(&ctr) {
                 if gcd(ctr, self.last) != 1 {
