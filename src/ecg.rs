@@ -16,7 +16,7 @@ impl Ecg {
         Self {
             used: BTreeSet::from([1, 2]),
             last: 0,
-            initial_ctr: 3,
+            initial_ctr: 1,
         }
     }
 }
@@ -34,8 +34,21 @@ impl Iterator for Ecg {
             return Some(2);
         }
 
+        // Trim the btree and advance the initial counter to repeating unnecessary work
+        // This slightly slows down the iterator for the first few hundred values but hugely speeds it up after the first 1000
+        if self.used.contains(&self.initial_ctr) {
+            loop {
+                if self.used.contains(&(self.initial_ctr + 1)) {
+                    self.used.remove(&self.initial_ctr);
+                    self.initial_ctr += 1;
+                } else {
+                    break;
+                }
+            }
+        }
+
         let mut ctr = self.initial_ctr;
-        // Must be a way to remove the sequential run of numbers that have all been used
+
         loop {
             if !self.used.contains(&ctr) {
                 if gcd(ctr, self.last) != 1 {
