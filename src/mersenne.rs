@@ -3,6 +3,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::hash::Hash;
 
 /// The Mersenne numbers. 2^p-1 for all primes p.
+/// 3, 7, 31, 127, 2047, 8191, 131071...
 pub struct Mersenne<T> {
     gaps: PrimeGaps<usize>,
     ctr: T,

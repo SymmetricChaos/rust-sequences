@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.
+/// 1, 1, 3, 1, 5, 3, 7, 1, 9, 5...
 pub struct OddPart<T> {
     ctr: T,
     two: T,
