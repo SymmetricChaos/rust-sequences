@@ -1,6 +1,7 @@
 use crate::utils::divisibility::aliquot_sum;
 
 /// The abundant numbers, those which have an aliquot sum greater than themselves.
+/// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54...
 pub struct Abundant {
     n: u64,
 }

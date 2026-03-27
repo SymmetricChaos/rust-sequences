@@ -21,6 +21,7 @@ fn arith_deriv(n: u64) -> u64 {
 /// The so-called arithmetic derivative of each natural number defined as follows
 /// d(p) = 1 (for all primes p)
 /// d(mn) = d(m)n + d(n)m (for all naturals m, n)
+/// 0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9...
 pub struct ArithmeticDerivative {
     ctr: u64,
 }
@@ -43,7 +44,6 @@ impl Iterator for ArithmeticDerivative {
 }
 
 /// The arithmetic derivatives of the positive rational numbers ordered by antidiagonals.
-/// Values are given as i64 because these values may be negative
 pub struct ArithmeticDerivativeRational {
     numer: u64,
     denom: u64,
@@ -51,7 +51,7 @@ pub struct ArithmeticDerivativeRational {
 }
 
 impl ArithmeticDerivativeRational {
-    /// Only u64 output supported.
+    /// Only i64 output supported.
     pub fn new() -> Self {
         Self {
             numer: 1,

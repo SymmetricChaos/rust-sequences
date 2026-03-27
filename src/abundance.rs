@@ -1,6 +1,7 @@
 use crate::utils::divisibility::aliquot_sum;
 
 /// The abundance of each positive integer. Its aliquot sum minus itself.
+/// -1, -1, -2, -1, -4, 0, -6, -1, -5, -2, -10, 4, -12, -4, -6...
 pub struct Abundance {
     n: i64,
 }
