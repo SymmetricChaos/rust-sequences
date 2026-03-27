@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, One};
 
 /// The Catalan numbers.
+///
 /// 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862...
 pub struct Catalan<T> {
     val: T,

@@ -1,24 +1,25 @@
-use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, FromPrimitive, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer};
 
 /// The integers created by repeating the digits of a positive integer.
-/// The repints of 12
-/// 12, 1212, 121212, 12121212...
 pub struct Repint<T> {
-    digit: T,
+    number: T,
     val: T,
     m: T,
 }
 
-impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + One + Ord + Zero> Repint<T> {
-    /// Panics if digit is less than one or if base is greater than T::max()
-    pub fn new(digit: T, base: usize) -> Self {
-        assert!(digit > T::zero());
+impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer> Repint<T> {
+    /// Panics if number is less than one or if base is greater than T::max()
+    pub fn new(number: T, base: usize) -> Self {
+        assert!(number > T::zero());
+
+        // Just a way to convert the base from usize
         let mut b = T::zero();
         for _ in 0..base {
             b = b.checked_add(&T::one()).unwrap();
         }
+
         let mut m = T::one();
-        let mut d = digit.clone();
+        let mut d = number.clone();
 
         while !d.is_zero() {
             m = m.checked_mul(&b).unwrap();
@@ -26,7 +27,7 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + One + Ord + Zero> Repint<
         }
 
         Self {
-            digit,
+            number,
             val: T::zero(),
             m,
         }
@@ -34,21 +35,12 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + One + Ord + Zero> Repint<
 }
 
 impl Repint<BigInt> {
-    /// Panics if digit is less than one.
-    pub fn new_big<N>(digit: N, base: usize) -> Self
+    /// Panics if number is less than one.
+    pub fn new_big<N>(number: N, base: usize) -> Self
     where
         BigInt: From<N>,
     {
-        let d = BigInt::from(digit);
-        assert!(d > BigInt::zero());
-        let m = BigInt::from_usize(base)
-            .unwrap()
-            .pow(d.to_string().len() as u32);
-        Self {
-            digit: d.clone(),
-            val: BigInt::zero(),
-            m,
-        }
+        Self::new(BigInt::from(number), base)
     }
 }
 
@@ -57,7 +49,7 @@ impl<T: CheckedAdd + CheckedMul + Clone> Iterator for Repint<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         self.val = self.val.checked_mul(&self.m)?;
-        self.val = self.val.checked_add(&self.digit)?;
+        self.val = self.val.checked_add(&self.number)?;
         Some(self.val.clone())
     }
 }

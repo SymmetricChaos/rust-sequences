@@ -3,6 +3,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 use std::hash::Hash;
 
 /// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
+///
 /// 1, 2, 3, 5, 6, 7, 10, 11, 13, 14...
 pub struct Squarefree<T> {
     ctr: T,

@@ -1,6 +1,7 @@
 use crate::{check_sequences, utils::divisibility::number_of_divisors};
 
 /// The highly composite numbers, those which have mroe factors than any smaller number.
+///
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
 pub struct HighlyComposite {
     ctr: u64,

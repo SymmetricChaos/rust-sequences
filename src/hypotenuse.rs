@@ -1,6 +1,7 @@
 use crate::utils::divisibility::prime_factorization;
 
 /// Integers that can be the length of the hypotenuse of a primitive Pythagorean triple.
+///
 /// 5, 13, 17, 25, 29, 37, 41, 53, 61, 65...
 pub struct Hypotenuse {
     ctr: u64,

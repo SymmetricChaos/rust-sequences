@@ -2,6 +2,7 @@ use crate::utils::divisibility::prime_factorization;
 use num::integer::gcd;
 
 /// Positive natural numbers that are divisible by all the squares of their prime factors.
+///
 /// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...
 pub struct Powerful {
     ctr: u64,
@@ -28,7 +29,8 @@ impl Iterator for Powerful {
     }
 }
 
-/// Powerful numbers that are not perfect powers.
+/// The Achilles numbers, powerful numbers that are not perfect powers.
+///
 /// 72, 108, 200, 288, 392, 432, 500, 648, 675, 800...
 pub struct Achilles {
     ctr: u64,

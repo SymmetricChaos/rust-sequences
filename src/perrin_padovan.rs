@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer};
 
 /// The Perrin sequence. Defined by the recurrence P(n) = P(n-2) + P(n-3) with starting terms 3, 0, 2. Same recurrence as the Padovan sequence.
+///
 /// 3, 0, 2, 3, 2, 5, 5, 7, 10, 12, 17, 22...
 pub struct Perrin<T> {
     n0: T,

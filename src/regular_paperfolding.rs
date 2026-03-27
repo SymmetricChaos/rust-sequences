@@ -1,16 +1,20 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
-/// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.
+use crate::odd_part::OddPart;
+
+/// The regular paperfolding sequence. Each term is 1 if the odd part of n is equal to 1 modulo 4 and otherwise is 0.
+///
+/// 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0...
 pub struct RegularPaperfolding<T> {
-    ctr: T,
-    two: T,
+    odd_part: OddPart<T>,
+    four: T,
 }
 
 impl<T: Clone + Integer> RegularPaperfolding<T> {
     pub fn new() -> Self {
         Self {
-            ctr: T::zero(),
-            two: T::one() + T::one(),
+            odd_part: OddPart::new(),
+            four: T::one() + T::one() + T::one() + T::one(),
         }
     }
 }
@@ -25,15 +29,9 @@ impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Iterator for RegularPaperfold
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        let n = self.odd_part.next()?;
 
-        let mut n = self.ctr.clone();
-
-        while n.is_even() {
-            n = n.checked_div(&self.two).unwrap(); // Can't fail but allows using a reference to divide
-        }
-
-        if (n % (T::one() + T::one() + T::one() + T::one())).is_one() {
+        if (n % self.four.clone()).is_one() {
             Some(T::one())
         } else {
             Some(T::zero())

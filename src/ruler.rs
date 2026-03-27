@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer, One, Zero};
 
 /// The ruler function. Equivalent to the 2-adic valuation, the exponent of the greatest power of two that divides each positive integer.
+///
 /// 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4...
 pub struct Ruler<T> {
     p: T,
@@ -18,6 +19,7 @@ impl<T: CheckedAdd + Clone + Integer> Ruler<T> {
     }
 
     /// The alternative ruler sequence which removes the zeroes.
+    ///
     /// 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5...
     pub fn new_plus() -> Self {
         Self {

@@ -1,6 +1,7 @@
 use crate::utils::divisibility::cototient;
 
 /// The totient of each positive integer. For each positive integer n, the number of positive integers less than n which are coprime to n.
+///
 /// 1, 1, 2, 2, 4, 2, 6, 4, 6, 4...
 pub struct Totients {
     ctr: u64,
@@ -23,6 +24,7 @@ impl Iterator for Totients {
 }
 
 /// The cototient of each positive integer. Each positive integer n, minus the number of positive integers less than n which are coprime to n.
+///
 /// 0, 1, 1, 2, 1, 4, 1, 4, 3, 6...
 pub struct Cototients {
     ctr: u64,

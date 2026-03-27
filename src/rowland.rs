@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer, One};
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1))
+///
 /// 7, 8, 9, 10, 15, 18, 19, 20, 21, 22...
 pub struct Rowland<T> {
     value: T,

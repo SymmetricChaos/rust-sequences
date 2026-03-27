@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
-/// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly u64 can only produce 6 terms and u128 can only produce 7.
+/// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly, u64 can only produce 6 terms and u128 can only produce 7.
+///
 /// 3, 5, 17, 257, 65537, 4294967297...
 pub struct Fermat<T> {
     prev: T,

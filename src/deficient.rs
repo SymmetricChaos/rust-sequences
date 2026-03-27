@@ -1,6 +1,8 @@
 use crate::utils::divisibility::aliquot_sum;
 
 /// The deficient numbers, those which have an aliquot sum less than themselves.
+///
+/// 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14...
 pub struct Deficient {
     n: u64,
 }

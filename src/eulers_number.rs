@@ -3,6 +3,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero, rational::Ratio};
 use crate::core::factorial::Factorials;
 
 /// Convergents of e as the series of partial sums of the reciprocals of factorials.
+///
 /// 0, 1, 2, 5/2, 8/3, 65/24, 163/60...
 pub struct Euler<T> {
     factorials: Factorials<T>,

@@ -1,6 +1,7 @@
 use crate::utils::divisibility::{aliquot_sum, number_of_divisors, sum_of_divisors};
 
 /// Number of divisors for each positive integer.
+///
 /// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
 pub struct NumberOfDivisors {
     ctr: u64,
@@ -23,6 +24,7 @@ impl Iterator for NumberOfDivisors {
 }
 
 /// Sum of divisors of each positive integer.
+///
 /// 1, 3, 4, 7, 6, 12, 8, 15, 13, 18...
 pub struct SumOfDivisors {
     ctr: u64,
@@ -45,6 +47,7 @@ impl Iterator for SumOfDivisors {
 }
 
 /// The aliquot sum of each positive integer, the sum of all of its divisors except itself.
+///
 /// 0, 1, 1, 3, 1, 6, 1, 7, 4, 8...
 pub struct AliquotSums {
     ctr: u64,

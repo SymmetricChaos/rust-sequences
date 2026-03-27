@@ -19,8 +19,11 @@ fn arith_deriv(n: u64) -> u64 {
 }
 
 /// The so-called arithmetic derivative of each natural number defined as follows
+///
 /// d(p) = 1 (for all primes p)
+///
 /// d(mn) = d(m)n + d(n)m (for all naturals m, n)
+///
 /// 0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9...
 pub struct ArithmeticDerivative {
     ctr: u64,

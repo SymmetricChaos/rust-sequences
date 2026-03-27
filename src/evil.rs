@@ -3,6 +3,7 @@ use num::{BigInt, Zero};
 //TODO: Is there a reasonable way to make this generic?
 
 /// The evil numbers, those having an even number of bits set in their binary representation.
+///
 /// 0, 3, 5, 6, 9, 10, 12, 15, 17, 18...
 pub struct Evil {
     ctr: BigInt,

@@ -1,6 +1,7 @@
 use num::{BigInt, One};
 
 /// The odious numbers, those having an odd number of bits set in their binary representation.
+///
 /// 1, 2, 4, 7, 8, 11, 13, 14, 16, 19...
 pub struct Odious {
     ctr: BigInt,

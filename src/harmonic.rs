@@ -5,6 +5,7 @@ use num::{
 };
 
 /// The terms of the harmonic series.
+///
 /// 1, 1/2, 1/3, 1/4, 1/5...
 pub struct Harmonic<T> {
     ctr: Ratio<T>,
@@ -32,6 +33,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for Harmonic<T> {
 }
 
 /// The terms of the alternating harmonic series.
+///
 /// 1, -1/2, 1/3, -1/4, 1/5...
 pub struct HarmonicAlternating<T> {
     ctr: Ratio<T>,

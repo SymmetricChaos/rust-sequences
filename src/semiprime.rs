@@ -1,6 +1,8 @@
 use crate::utils::divisibility::prime_factorization;
 
 /// The positive integers which are the product of exactly two prime numbers.
+///
+/// 4, 6, 9, 10, 14, 15, 21, 22, 25, 26, 33, 34, 35...
 pub struct Semiprime {
     ctr: u64,
 }
