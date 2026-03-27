@@ -1,5 +1,6 @@
 use num::{BigInt, One, Signed, integer::binomial, rational::Ratio};
 
+/// The probability mass function for the binomial distribution given a positive integer number of trials and a positive rational probability of success.
 pub struct BinomialDistribution {
     p: Ratio<BigInt>,
     q: Ratio<BigInt>,
@@ -8,14 +9,15 @@ pub struct BinomialDistribution {
 }
 
 impl BinomialDistribution {
-    pub fn new<T: Clone>(n: i32, ratio: Ratio<T>) -> Self
+    /// Panics if n or probability is not positive.
+    pub fn new_big<T: Clone>(n: i32, probability: Ratio<T>) -> Self
     where
         BigInt: From<T>,
     {
         assert!(n.is_positive());
         let r = Ratio::new(
-            BigInt::from(ratio.numer().clone()),
-            BigInt::from(ratio.denom().clone()),
+            BigInt::from(probability.numer().clone()),
+            BigInt::from(probability.denom().clone()),
         );
         assert!(r.is_positive());
         assert!(r < Ratio::<BigInt>::one());
@@ -47,5 +49,5 @@ impl Iterator for BinomialDistribution {
 }
 
 crate::print_sequences!(
-    BinomialDistribution::new(15, Ratio::new(2, 3)).map(|x| crate::core::rational_digits::rational_decimal_string(x, 5).unwrap()), 15;
+    BinomialDistribution::new_big(15, Ratio::new(2, 3)).map(|x| crate::core::rational_digits::rational_decimal_string(x, 5).unwrap()), 15;
 );
