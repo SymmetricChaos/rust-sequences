@@ -10,9 +10,13 @@ pub struct GeneralizedPolygonal {
 
 impl GeneralizedPolygonal {
     /// The order, k, may be any integer but some have well known names.
+    ///
     /// k = 2 produces the natural numbers
+    ///
     /// k = 3 produces the triangular numbers
+    ///
     /// k = 4 produces the square numbers
+    ///
     /// and so on for higher orders
     pub fn new_big<T>(k: T) -> Self
     where
@@ -25,9 +29,13 @@ impl GeneralizedPolygonal {
     }
 
     /// The order, k, may be any integer but some have well known names.
+    ///
     /// k = 2 produces the natural numbers
+    ///
     /// k = 3 produces the triangular numbers
+    ///
     /// k = 4 produces the square numbers
+    ///
     /// and so on for higher orders
     pub fn nth<T>(n: T, k: T) -> BigInt
     where

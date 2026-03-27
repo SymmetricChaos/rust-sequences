@@ -10,7 +10,9 @@ pub struct CenteredPolygonal {
 
 impl CenteredPolygonal {
     /// k = 3 produces the centered triangular numbers
+    ///
     /// k = 4 produces the centered square numbers
+    ///
     /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
     pub fn new_big<T: One>(k: T) -> Self
     where
@@ -23,7 +25,9 @@ impl CenteredPolygonal {
     }
 
     /// k = 3 produces the centered triangular numbers
+    ///
     /// k = 4 produces the centered square numbers
+    ///
     /// Lower values of k are related to Hogben's central polygonal numbers but do not have standard names.
     pub fn nth<T>(n: T, k: T) -> BigInt
     where

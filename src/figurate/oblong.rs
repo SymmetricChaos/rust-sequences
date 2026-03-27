@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The oblong or pronic numbers. For each non-negatie integer n the term is n * (n+1).
+///
 /// 0, 2, 6, 12, 20, 30, 42, 56, 72, 90...
 pub struct Oblong<T> {
     a: T,

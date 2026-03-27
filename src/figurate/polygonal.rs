@@ -9,10 +9,15 @@ pub struct Polygonal {
 
 impl Polygonal {
     /// The order, k, is the number of sides of the polygon.
+    ///
     /// k = 2 produces the natural numbers
+    ///
     /// k = 3 produces the triangular numbers
+    ///
     /// k = 4 produces the square numbers
+    ///
     /// and so on for higher orders
+    ///
     /// Lower values of k are allowed but do not have standard names.
     pub fn new_big<T>(k: T) -> Self
     where
@@ -26,10 +31,15 @@ impl Polygonal {
     }
 
     /// The order, k, is the number of sides of the polygon.
+    ///
     /// k = 2 produces the natural numbers
+    ///
     /// k = 3 produces the triangular numbers
+    ///
     /// k = 4 produces the square numbers
+    ///
     /// and so on for higher orders
+    ///
     /// Lower values of k are allowed but do not have standard names.
     pub fn nth<T>(n: T, k: T) -> BigInt
     where

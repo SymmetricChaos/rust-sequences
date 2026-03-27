@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 /// The square numbers. f(n) = n*n for each non-negative integer n.
+///
 /// 0, 1, 4, 9, 16, 25, 36, 49, 64, 81...
 pub struct Square<T> {
     val: T,

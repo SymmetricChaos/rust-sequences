@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, FromPrimitive, One, Signed, Zero};
 
 /// The triangular numbers.
+///
 /// 0, 1, 3, 6, 10, 15, 21, 28, 36, 45...
 pub struct Triangular<T> {
     val: T,
