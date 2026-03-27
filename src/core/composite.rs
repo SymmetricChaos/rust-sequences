@@ -2,6 +2,7 @@ use num::{BigInt, CheckedAdd, One, Zero};
 use std::{collections::HashMap, hash::Hash}; // Found to be much faster than BTreeMap
 
 /// The composite numbers. A002808
+///
 /// 4, 6, 8, 9, 10, 12, 14, 15, 16...
 pub struct Composites<T> {
     sieve: HashMap<T, Vec<T>>,

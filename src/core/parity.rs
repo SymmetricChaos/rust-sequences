@@ -3,6 +3,7 @@ use std::marker::PhantomData;
 use num::{BigInt, CheckedAdd, One, Signed, Zero};
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
+///
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
 pub struct Parity<T> {
     value: bool,
@@ -41,6 +42,7 @@ impl<T: One + Zero> Iterator for Parity<T> {
 }
 
 /// The even natural numbers.
+///
 /// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...
 pub struct Evens<T> {
     val: T,
@@ -71,6 +73,7 @@ impl<T: CheckedAdd + Clone + One> Iterator for Evens<T> {
 }
 
 /// The odd natural numbers.
+///
 /// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19...
 pub struct Odds<T> {
     val: T,
@@ -99,6 +102,7 @@ impl<T: CheckedAdd + Clone + One> Iterator for Odds<T> {
 }
 
 /// The even integers.
+///
 /// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10...
 pub struct EvenIntegers<T> {
     val: T,
@@ -135,6 +139,7 @@ impl<T: CheckedAdd + Clone + Signed + One> Iterator for EvenIntegers<T> {
 }
 
 /// The odd integers.
+///
 /// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9...
 pub struct OddIntegers<T> {
     val: T,

@@ -1,6 +1,7 @@
 use num::{BigInt, CheckedAdd, Signed};
 
 /// The integers in the canonical ordering.
+///
 /// 0, 1, -1, 2, -2, 3, -3, 4, -4, 5...
 pub struct Integers<T> {
     val: T,
