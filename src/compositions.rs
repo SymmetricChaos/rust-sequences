@@ -1,4 +1,4 @@
-/// Compositions of n that have k parts.
+/// All compositions (ordered partitions) of n that have exactly k parts.
 pub struct CompositionsNK {
     k: usize,
     comp: Vec<usize>,
@@ -57,6 +57,7 @@ impl Iterator for CompositionsNK {
     }
 }
 
+/// All compositions (ordered partitions) of n.
 pub struct CompositionsN {
     n: usize,
     k: usize,
