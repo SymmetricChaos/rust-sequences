@@ -20,10 +20,7 @@ impl<T: One + Zero> UnitSequence<T> {
 
 impl UnitSequence<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            n: true,
-            _phantom: PhantomData,
-        }
+        Self::new()
     }
 }
 

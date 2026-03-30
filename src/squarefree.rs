@@ -1,5 +1,5 @@
 use crate::{core::prime::Primes, utils::divisibility::radical};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::hash::Hash;
 
 /// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
@@ -25,13 +25,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squarefree<T> {
 
 impl Squarefree<BigInt> {
     pub fn new_big() -> Self {
-        let mut primes = Primes::new_big();
-        primes.next();
-        Self {
-            ctr: BigInt::zero(),
-            squares: vec![BigInt::from(4)],
-            primes,
-        }
+        Self::new()
     }
 }
 
@@ -57,6 +51,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squarefre
 }
 
 /// Positive natural numbers that are divisible at least twice by at least one natural number other than one. The numbers that are not squarefree.
+///
 /// 4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28...
 pub struct Squareful<T> {
     ctr: T,
@@ -82,10 +77,7 @@ impl Squareful<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Squareful<T>
-where
-    T: Hash,
-{
+impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squareful<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

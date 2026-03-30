@@ -28,10 +28,7 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> StirlingFirst<T> {
 
 impl StirlingFirst<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            n: BigInt::zero(),
-            row: vec![BigInt::one()],
-        }
+        Self::new()
     }
 }
 
@@ -78,11 +75,7 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> StirlingFirstSign
 
 impl StirlingFirstSigned<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            n: BigInt::zero(),
-            row: vec![BigInt::one()],
-            pos: true,
-        }
+        Self::new()
     }
 }
 

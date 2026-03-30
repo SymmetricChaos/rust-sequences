@@ -1,6 +1,6 @@
 use crate::core::prime::Primes;
 use itertools::Itertools;
-use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One, Signed, Zero};
+use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One};
 use std::cmp::Reverse;
 use std::{
     collections::{BinaryHeap, HashSet},
@@ -32,12 +32,7 @@ impl Smooth<BigInt> {
     where
         BigInt: From<N>,
     {
-        let n = BigInt::from(n);
-        assert!(n.is_positive());
-        Self {
-            ctr: BigInt::zero(),
-            primes: Primes::new_big().take_while(|x| *x <= n).collect_vec(),
-        }
+        Self::new(BigInt::from(n))
     }
 }
 

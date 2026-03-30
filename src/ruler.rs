@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, One, Zero};
+use num::{BigInt, CheckedAdd, Integer};
 
 /// The ruler function. Equivalent to the 2-adic valuation, the exponent of the greatest power of two that divides each positive integer.
 ///
@@ -32,21 +32,13 @@ impl<T: CheckedAdd + Clone + Integer> Ruler<T> {
 
 impl Ruler<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            p: BigInt::one() + BigInt::one(),
-            ctr: BigInt::one(),
-            offset: BigInt::zero(),
-        }
+        Self::new()
     }
 
     /// The alternative ruler sequence which removes the zeroes.
     /// 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5...
     pub fn new_big_plus() -> Self {
-        Self {
-            p: BigInt::one() + BigInt::one(),
-            ctr: BigInt::one(),
-            offset: BigInt::one(),
-        }
+        Self::new_plus()
     }
 }
 
