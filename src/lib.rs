@@ -30,6 +30,7 @@ pub mod factoradic;
 pub mod farey;
 pub mod fermat;
 pub mod fibonacci;
+pub mod fly_straight;
 pub mod forest_fire;
 pub mod golomb;
 pub mod gray;
