@@ -1,4 +1,4 @@
-use num::{CheckedAdd, Integer};
+use num::{BigInt, CheckedAdd, Integer};
 
 /// A Weyl-Marsaglia sequence starting at zero. A permutation of all integers 0..n that repeats every n values.
 pub struct WeylMarsaglia<T> {
@@ -24,16 +24,16 @@ impl<T: CheckedAdd + Clone + Integer> WeylMarsaglia<T> {
     }
 }
 
-// impl WeylMarsaglia<BigInt> {
-//     /// Create a new sequence with the given step and modulus.
-//     /// Panics if step is not coprime to modulus.
-//     pub fn new_big<N>(step: N, modulus: N) -> Self
-//     where
-//         BigInt: From<N>,
-//     {
-//         Self::new(BigInt::from(step), BigInt::from(modulus))
-//     }
-// }
+impl WeylMarsaglia<BigInt> {
+    /// Create a new sequence with the given step and modulus.
+    /// Panics if step is not coprime to modulus.
+    pub fn new_big<N>(step: N, modulus: N) -> Self
+    where
+        BigInt: From<N>,
+    {
+        Self::new(BigInt::from(step), BigInt::from(modulus))
+    }
+}
 
 impl<T: CheckedAdd + Clone + Integer> Iterator for WeylMarsaglia<T> {
     type Item = T;
@@ -48,5 +48,5 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for WeylMarsaglia<T> {
 
 crate::print_sequences!(
     WeylMarsaglia::new(5, 16), 17;
-    // WeylMarsaglia::new_big(5, 16), 17;
+    WeylMarsaglia::new_big(5, 16), 17;
 );
