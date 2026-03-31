@@ -30,6 +30,7 @@ pub mod factoradic;
 pub mod farey;
 pub mod fermat;
 pub mod fibonacci;
+pub mod forest_fire;
 pub mod golomb;
 pub mod gray;
 pub mod harmonic;
@@ -183,6 +184,33 @@ macro_rules! check_iteration_times {
                 let n = s.next().unwrap();
                 let elapsed = t.elapsed();
                 println!("{} {} -> {:?}\nduration: {:?}\n", stringify!($seq), $take, n, elapsed);
+            )+
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! check_iteration_times_prog {
+    ($($seq:expr, $take:expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[test]
+        fn check_times_prog() {
+            $(
+                println!("{}\n", stringify!($seq));
+
+                let mut total_elapsed = std::time::Duration::new(0,0);
+                let mut ctr = 0;
+                let mut s = $seq;
+                for r in $take {
+                    let time = std::time::Instant::now();
+                    while ctr < r {
+                        s.next();
+                        ctr += 1;
+                    }
+                    let n = s.next().unwrap();
+                    total_elapsed += time.elapsed();
+                    println!("{} terms\nn = {}\nduration: {:?}\n", r, n, total_elapsed);
+                }
             )+
         }
     };
