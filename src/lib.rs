@@ -37,6 +37,7 @@ pub mod gray;
 pub mod harmonic;
 pub mod highly_composite;
 pub mod highly_totient;
+pub mod hofstadter_q;
 pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod juggler;
