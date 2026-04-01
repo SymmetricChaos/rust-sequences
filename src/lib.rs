@@ -47,6 +47,7 @@ pub mod lucas;
 pub mod lucas_sequence;
 pub mod mersenne;
 pub mod mobius;
+pub mod mountain;
 pub mod narayana_general;
 pub mod narayana_triangle;
 pub mod narayanas_cows;
