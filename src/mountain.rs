@@ -41,7 +41,7 @@ impl<T: Clone + Integer> Iterator for SingleMountain<T> {
     }
 }
 
-/// The mountain sequence.
+/// The mountain sequence. Consists of non-overlapping "mountains" that start at n, increase to 2n, then decrease back to n. The height of each moutnain is determined by the corresponding term of the sequence.
 ///
 /// 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2...
 pub struct Mountain<T> {
@@ -57,13 +57,6 @@ impl<T: Clone + Integer> Mountain<T> {
             terms: Vec::new(),
             idx: 0,
         }
-    }
-
-    pub fn mountain(n: T) -> Vec<T> {
-        let mut m = Vec::new();
-        m.push(n);
-
-        m
     }
 }
 
