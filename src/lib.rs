@@ -82,6 +82,7 @@ pub mod unit;
 pub mod weyl;
 pub mod zeta;
 pub mod hofstadter_g;
+pub mod hofstadter_h;
 
 #[macro_export]
 macro_rules! print_row {
