@@ -1,6 +1,5 @@
-use std::marker::PhantomData;
-
 use num::BigInt;
+use std::marker::PhantomData;
 
 /// Hofstadter's Q-sequence. A doubly recursive sequence in which the two previous terms determine the terms added together to determine the next.
 ///
