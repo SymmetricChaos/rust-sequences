@@ -30,6 +30,7 @@ pub mod factoradic;
 pub mod farey;
 pub mod fermat;
 pub mod fibonacci;
+pub mod figure_figure;
 pub mod fly_straight;
 pub mod forest_fire;
 pub mod golomb;
@@ -37,6 +38,8 @@ pub mod gray;
 pub mod harmonic;
 pub mod highly_composite;
 pub mod highly_totient;
+pub mod hofstadter_g;
+pub mod hofstadter_h;
 pub mod hofstadter_q;
 pub mod hypotenuse;
 pub mod jordan_polya;
@@ -81,8 +84,6 @@ pub mod trig;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
-pub mod hofstadter_g;
-pub mod hofstadter_h;
 
 #[macro_export]
 macro_rules! print_row {
