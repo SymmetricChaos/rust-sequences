@@ -3,6 +3,7 @@ pub mod core;
 pub mod figurate;
 pub mod utils;
 
+pub mod a005243;
 pub mod abelian_groups;
 pub mod abundance;
 pub mod abundant;
