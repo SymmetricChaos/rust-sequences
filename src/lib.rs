@@ -62,6 +62,7 @@ pub mod padic_valuation;
 pub mod partition;
 pub mod pascal;
 pub mod pell;
+pub mod period_doubling;
 pub mod perrin_padovan;
 pub mod phythagorean;
 pub mod pi;
