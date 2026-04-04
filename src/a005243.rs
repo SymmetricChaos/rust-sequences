@@ -37,6 +37,10 @@ impl<T: CheckedAdd + Clone + Integer + Display + Debug> Iterator for A005243<T> 
             return Some(T::one());
         }
 
+        // It is not necessary to caclulate every sequnce every time
+        // When a new value is determined each earlier seuence containing it can be checked
+        // A BTreeSet is used as a priority queue to always extract rhw smallest
+        // value and ignore duplications
         let out = self.heap.pop_first().unwrap();
         let mut s = out.clone();
         for value in self.terms.iter().rev() {
@@ -50,5 +54,9 @@ impl<T: CheckedAdd + Clone + Integer + Display + Debug> Iterator for A005243<T> 
 }
 
 crate::check_sequences!(
-    A005243::<i32>::new(), [1, 2, 3, 5, 6, 8, 10, 11, 14, 16, 17, 18, 19, 21, 22, 24, 25, 29, 30, 32, 33, 34, 35, 37, 40, 41, 43, 45, 46, 47, 49, 51, 54, 57, 58, 59, 60, 62, 65, 67, 68, 69];
+    A005243::<i32>::new(), [
+        1, 2, 3, 5, 6, 8, 10, 11, 14, 16, 17, 18, 19, 21, 22, 24, 25, 29, 30,
+        32, 33, 34, 35, 37, 40, 41, 43, 45, 46, 47, 49, 51, 54, 57, 58, 59, 
+        60, 62, 65, 67, 68, 69, 70, 71, 72, 73, 75, 76, 77, 78, 80, 81, 82, 
+        84, 86, 87, 88, 90, 91, 92, 93, 94, 95, 96, 97, 99, 100];
 );

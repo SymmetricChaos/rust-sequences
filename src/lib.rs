@@ -9,6 +9,7 @@ pub mod abundance;
 pub mod abundant;
 pub mod ackermann_sets;
 pub mod algebraic;
+pub mod antifibonacci;
 pub mod arithmetic_derivative;
 pub mod automorphic;
 pub mod bell;
