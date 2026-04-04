@@ -68,7 +68,7 @@ pub mod phythagorean;
 pub mod pi;
 pub mod playground;
 pub mod powerful;
-pub mod psuedoprime;
+pub mod pseudoprime;
 pub mod rado_pairs;
 pub mod recaman;
 pub mod regular_paperfolding;
