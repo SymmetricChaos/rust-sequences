@@ -192,14 +192,10 @@ macro_rules! check_iteration_times {
                 };
                 let n = s.next().unwrap();
                 let elapsed = t.elapsed();
-                println!("{} {} -> {:?}\nduration: {:?}\n", stringify!($seq), $take, n, elapsed);
+                println!("{} generated {} terms\nnth term = {:?})\nduration: {:?}\n", stringify!($seq), $take, n, elapsed);
             )+
         }
     };
-}
-
-#[macro_export]
-macro_rules! check_iteration_times_prog {
     ($($seq:expr, $take:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
@@ -218,7 +214,7 @@ macro_rules! check_iteration_times_prog {
                     }
                     let n = s.next().unwrap();
                     total_elapsed += time.elapsed();
-                    println!("{} terms\nn = {}\nduration: {:?}\n", r, n, total_elapsed);
+                    println!("{} terms\nnth term = {}\nduration: {:?}\n", r, n, total_elapsed);
                 }
             )+
         }

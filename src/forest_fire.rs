@@ -48,7 +48,7 @@ impl Iterator for ForestFire {
     }
 }
 
-crate::check_iteration_times_prog!(
+crate::check_iteration_times!(
     ForestFire::new(), [100, 1000, 10_000, 100_000];
 );
 

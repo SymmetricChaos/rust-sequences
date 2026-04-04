@@ -1,5 +1,8 @@
 use std::marker::PhantomData;
 
+/// The period double sequence.
+///
+/// 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0...
 pub struct PeriodDoubling<T> {
     _phantom: PhantomData<T>,
 }

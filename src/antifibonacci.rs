@@ -48,6 +48,11 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for AntiFibonacci<T> {
     }
 }
 
+crate::check_iteration_times!(
+    AntiFibonacci::<i32>::new(), [100, 1_000, 10_000, 100_000, 1_000_000];
+    AntiFibonacci::new_big(), [100, 1_000, 10_000, 100_000, 1_000_000];
+);
+
 crate::check_sequences!(
     AntiFibonacci::new_big(), [
         0, 3, 9, 13, 18, 23, 29, 33, 39, 43, 49, 53, 58, 63, 69,

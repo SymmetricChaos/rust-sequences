@@ -10,7 +10,7 @@ pub struct ThueMorse<T> {
     one: T,
 }
 
-impl<T: One + Zero> ThueMorse<T> {
+impl<T: Clone + One + Zero> ThueMorse<T> {
     pub fn new() -> Self {
         Self {
             value: BigInt::one() + BigInt::one(),
@@ -27,24 +27,13 @@ impl ThueMorse<BigInt> {
     }
 }
 
-impl ThueMorse<bool> {
-    pub fn new_bool() -> Self {
-        Self {
-            value: BigInt::one() + BigInt::one(),
-            ctr: 0,
-            zero: false,
-            one: true,
-        }
-    }
-}
-
 impl<T: Clone> Iterator for ThueMorse<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = match self.value.bit(self.ctr) {
-            true => Some(self.one.clone()),
-            false => Some(self.zero.clone()),
+            true => self.one.clone(),
+            false => self.zero.clone(),
         };
         if self.ctr == self.value.bits() - 1 {
             let n_bits = self.value.bits().next_power_of_two();
@@ -53,16 +42,20 @@ impl<T: Clone> Iterator for ThueMorse<T> {
             }
         };
         self.ctr += 1;
-        out
+        Some(out)
     }
 }
 
 crate::check_iteration_times!(
-    ThueMorse::<BigInt>::new(), 6_000_000;
-    ThueMorse::<i32>::new(), 9_000_000;
-    ThueMorse::new_bool(), 9_000_000;
+    ThueMorse::<BigInt>::new(), 20_000_000;
+    ThueMorse::<u32>::new(), 20_000_000;
+    ThueMorse::<i32>::new(), 20_000_000;
 );
 
 crate::check_sequences!(
-    ThueMorse::<BigInt>::new(), [0, 1, 1, 0, 1, 0, 0, 1, 1, 0];
+    ThueMorse::<BigInt>::new(), [
+        0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0,
+        1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1,
+        1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1,
+        0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0];
 );

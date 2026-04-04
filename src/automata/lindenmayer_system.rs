@@ -119,6 +119,14 @@ l_system!(
 
 #[cfg(test)]
 l_system!(
+    ternary_thue_morse;
+    '0' => "1"
+    '1' => "20"
+    '2' => "210"
+);
+
+#[cfg(test)]
+l_system!(
     period_doubling;
     '0' => "01"
     '1' => "00"
@@ -131,5 +139,6 @@ crate::print_sequences!(
     Lindenmayer::new(peano_curve).create_iter("X"), 3, "{}", "\n";
     Lindenmayer::new(complex_bush).create_iter("VZFFF"), 4, "{}", "\n";
     Lindenmayer::new(thue_morse).create_iter("0"), 6, "{}", "\n";
+    Lindenmayer::new(ternary_thue_morse).create_iter("0"), 6, "{}", "\n";
     Lindenmayer::new(period_doubling).create_iter("0"), 6, "{}", "\n";
 );
