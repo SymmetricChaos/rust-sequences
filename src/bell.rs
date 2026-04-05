@@ -35,6 +35,8 @@ impl<T: Integer + Clone + CheckedAdd> Iterator for BellTriangle<T> {
 }
 
 /// The Bell numbers. The number of ways to partition a set with n elements.
+///
+/// 1, 1, 2, 5, 15, 52, 203, 877...
 pub struct Bell<T> {
     tri: BellTriangle<T>,
 }

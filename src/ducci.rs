@@ -1,6 +1,5 @@
-use std::ops::Sub;
-
 use num::BigInt;
+use std::ops::Sub;
 
 /// A Ducci sequence.
 /// Each term a tuple containing the absolute difference of each adjacent pair of the previous tuple (with the last adjacent to the first).

@@ -196,7 +196,7 @@ macro_rules! check_iteration_times {
             )+
         }
     };
-    ($($seq:expr, $take:expr);+ $(;)?) => {
+    ($($seq:expr, $takes:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
         fn check_times_prog() {
@@ -206,16 +206,18 @@ macro_rules! check_iteration_times {
                 let mut total_elapsed = std::time::Duration::new(0,0);
                 let mut ctr = 0;
                 let mut s = $seq;
-                for r in $take {
+
+                for r in $takes {
                     let time = std::time::Instant::now();
                     while ctr < r {
                         s.next();
                         ctr += 1;
                     }
-                    let n = s.next().unwrap();
                     total_elapsed += time.elapsed();
-                    println!("{} terms (nth term = {:?})\nduration: {:?}\n", r, n, total_elapsed);
+                    let n = s.next().unwrap();
+                    println!("{} terms (nth term = {:?})\nduration: {:?}", r, n, total_elapsed);
                 }
+
             )+
         }
     };

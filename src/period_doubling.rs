@@ -35,8 +35,8 @@ impl<T: Clone + CheckedAdd + Integer + Rem> Iterator for PeriodDoubling<T> {
 }
 
 crate::check_iteration_times!(
-    PeriodDoubling::<u32>::new(), 100_000;
-    PeriodDoubling::new_big(), 100_000;
+    PeriodDoubling::<u32>::new(), 1_000_000;
+    PeriodDoubling::new_big(), 1_000_000;
 );
 
 crate::check_sequences!(
