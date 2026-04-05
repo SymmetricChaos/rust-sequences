@@ -1,6 +1,6 @@
 use num::{BigInt, One, Zero};
 
-/// The bits of the Thue-Morse sequence.
+/// The Thue-Morse sequence, the unique fixed point of the mapping 0 -> 01 and 1 -> 10.
 ///
 /// 0, 1, 1, 0, 1, 0, 0, 1, 1, 0...
 pub struct ThueMorse<T> {
