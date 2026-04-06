@@ -58,14 +58,3 @@ macro_rules! markov_pairs {
         ]
     };
 }
-
-crate::print_sequences!(
-    // Converts a number from binary to bijective-unary
-    Markov::new(
-        markov_pairs!(
-            "I0" => "0II"
-            "1" => "0I"
-            "0" => ""
-        )
-    ).create_iter("101"), 12, "{}", "\n";
-);

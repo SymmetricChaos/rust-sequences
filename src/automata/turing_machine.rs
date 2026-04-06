@@ -4,7 +4,7 @@ use std::{
     fmt::Display,
 };
 
-pub struct State(Box<dyn Fn(char) -> (char, Move, &'static str)>);
+pub struct State(pub Box<dyn Fn(char) -> (char, Move, &'static str)>);
 
 /// Movement on a one dimensional Turing machine tape
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -183,7 +183,7 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 ///
 /// Example:
 /// ```
-/// let states = turing_states!(
+/// let bb_states = turing_states!(
 ///     state "A"
 ///        '0' => '1', Move::Right, "B"
 ///        '1' => '1', Move::Left, "C"
@@ -199,11 +199,11 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 macro_rules! turing_states {
     ($(state $name_symbol: literal $($input:literal => $symbol:literal, $movement:expr, $state:literal)+ )+) => {
         {
-            let mut hmap = HashMap::new();
+            let mut hmap = std::collections::HashMap::new();
             $(
                 hmap.insert(
                     $name_symbol,
-                    State (
+                    crate::automata::turing_machine::State (
                         Box::new(|x: char| -> (char, Move, &'static str) {
                             match x {
                                 $(
@@ -219,29 +219,4 @@ macro_rules! turing_states {
             hmap
         }
     };
-}
-
-#[cfg(test)]
-#[ignore = "visualization"]
-#[test]
-fn busy_beaver() {
-    let states = turing_states!(
-        state "A"
-            '0' => '1', Move::Right, "B"
-            '1' => '1', Move::Left, "C"
-        state "B"
-            '0' => '1', Move::Left, "A"
-            '1' => '1', Move::Right, "B"
-        state "C"
-            '0' => '1', Move::Left, "B"
-            '1' => '1', Move::Right, "HALT"
-    );
-
-    let machine = TuringMachine::new("A", states);
-
-    let tape = Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0');
-
-    for (i, state) in machine.create_iter(tape).enumerate() {
-        println!("{i:<2}  {:<5} {}", state.0, state.1);
-    }
 }
