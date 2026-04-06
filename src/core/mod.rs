@@ -25,6 +25,7 @@ pub mod characteristic;
 pub mod combinations;
 pub mod continued_fraction;
 pub mod differences;
+pub mod ordinal;
 pub mod products;
 pub mod rational_transforms;
 pub mod summation;
