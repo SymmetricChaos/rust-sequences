@@ -1,6 +1,5 @@
-use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, Signed, integer::binomial};
-
 use crate::core::alternating::Alternating;
+use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, Signed, integer::binomial};
 
 pub struct BinomialTransform<T> {
     iter: Box<dyn Iterator<Item = T>>,

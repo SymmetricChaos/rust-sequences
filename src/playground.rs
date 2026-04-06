@@ -1,23 +1,25 @@
 #[cfg(test)]
 use crate::{
     core::{
-        boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
-        differences::AbsDiffs,
         exponential::Exponential,
-        ordinal::OrdinalTransform,
         prime::Primes,
         rational_digits::rational_decimal_string as dec,
-        rational_transforms::Ratios,
         roots::{CubeRoot, SquareRoot},
-        summation::{CesaroPartialSums, PartialSums},
     },
     dirichlet_convolution::{DirichletConvolution, one},
     fibonacci::Fibonacci,
     figurate::Triangular,
     harmonic::{Harmonic, HarmonicNumbers},
     ruler::Ruler,
+    sequence_transforms::{
+        boustrophedon::{Boustrophedon, BoustrophedonTriangle},
+        differences::AbsDiffs,
+        ordinal::OrdinalTransform,
+        rational_transforms::Ratios,
+        summation::{CesaroPartialSums, PartialSums},
+    },
     zeta::Zeta,
 };
 

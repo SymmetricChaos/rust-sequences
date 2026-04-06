@@ -19,13 +19,6 @@ pub mod recurrence;
 pub mod roots;
 
 pub mod alternating;
-pub mod binomial_transform;
-pub mod boustrophedon;
-pub mod characteristic;
 pub mod combinations;
 pub mod continued_fraction;
-pub mod differences;
-pub mod ordinal;
 pub mod products;
-pub mod rational_transforms;
-pub mod summation;

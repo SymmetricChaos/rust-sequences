@@ -77,6 +77,7 @@ pub mod repint;
 pub mod rowland;
 pub mod ruler;
 pub mod semiprime;
+pub mod sequence_transforms;
 pub mod smooth;
 pub mod sorted_pairs;
 pub mod squarefree;
