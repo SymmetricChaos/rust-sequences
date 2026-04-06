@@ -46,7 +46,7 @@ impl<'a> Iterator for LindenmayerIter<'a> {
     }
 }
 
-/// Create a function that defines an L-system which can be used in the Lindenmayer struct. All characters not given a transition are treated as constant symbols.
+/// Create a transition function that defines an L-system on strings. The transition for each variable symbol must be given. All other symbols are treated as constant symbols.
 ///
 /// Example:
 /// ```
@@ -71,74 +71,86 @@ macro_rules! l_system {
 }
 
 #[cfg(test)]
-fn tree_system(x: char) -> Option<&'static str> {
-    match x {
-        '0' => Some("1[0]0"),
-        '1' => Some("11"),
-        _ => None,
-    }
+mod tests {
+    use super::*;
+
+    // Lindenmayer's original algae system
+    l_system!(
+        algae;
+        'a' => "ab"
+        'b' => "a"
+    );
+
+    // Simple system featuring constant symbols
+    l_system!(
+        tree;
+        '0' => "1[0]0"
+        '1' => "11"
+    );
+
+    l_system!(
+        cantor;
+        'a' => "aba"
+        'b' => "bbb"
+    );
+
+    l_system!(
+        peano_curve;
+        'X' => "XFYFX+F+YFXFY-F-XFYFX"
+        'Y' => "YFXFY-F-XFYFX+F+YFXFY"
+    );
+
+    l_system!(
+        complex_bush;
+        'V' => "[+++W][---W]YV"
+        'W' => "+X[-W]Z"
+        'X' => "-W[+X]Z"
+        'Y' => "YZ"
+        'Z' => "[-FFF][+FFF]F"
+    );
+
+    l_system!(
+        thue_morse;
+        '0' => "01"
+        '1' => "10"
+    );
+
+    l_system!(
+        ternary_thue_morse;
+        '0' => "1"
+        '1' => "20"
+        '2' => "210"
+    );
+
+    l_system!(
+        period_doubling;
+        '0' => "01"
+        '1' => "00"
+    );
+
+    l_system!(
+        fibonacci;
+        '_' => "_|"
+        '|' => "_"
+    );
+
+    l_system!(
+        tribonacci;
+        'a' => "ab"
+        'b' => "ac"
+        'c' => "a"
+    );
+
+    crate::print_sequences!(
+        Lindenmayer::new(algae).create_iter("a"), 7, "{}", "\n";
+        Lindenmayer::new(tree).create_iter("0"), 5, "{}", "\n";
+        Lindenmayer::new(cantor).create_iter("a"), 5, "{}", "\n";
+        Lindenmayer::new(peano_curve).create_iter("X"), 3, "{}", "\n";
+        Lindenmayer::new(complex_bush).create_iter("VZFFF"), 4, "{}", "\n";
+        Lindenmayer::new(thue_morse).create_iter("0"), 7, "{}", "\n";
+        Lindenmayer::new(ternary_thue_morse).create_iter("0"), 7, "{}", "\n";
+        Lindenmayer::new(period_doubling).create_iter("0"), 7, "{}", "\n";
+        Lindenmayer::new(fibonacci).create_iter("_"), 7, "{}", "\n";
+        Lindenmayer::new(tribonacci).create_iter("a"), 7, "{}", "\n";
+    );
 }
-
-#[cfg(test)]
-l_system!(
-    cantor_system;
-    'a' => "aba"
-    'b' => "bbb"
-);
-
-#[cfg(test)]
-l_system!(
-    algae_system;
-    'a' => "ab"
-    'b' => "a"
-);
-
-#[cfg(test)]
-l_system!(
-    peano_curve;
-    'X' => "XFYFX+F+YFXFY-F-XFYFX"
-    'Y' => "YFXFY-F-XFYFX+F+YFXFY"
-);
-
-#[cfg(test)]
-l_system!(
-    complex_bush;
-    'V' => "[+++W][---W]YV"
-    'W' => "+X[-W]Z"
-    'X' => "-W[+X]Z"
-    'Y' => "YZ"
-    'Z' => "[-FFF][+FFF]F"
-);
-
-#[cfg(test)]
-l_system!(
-    thue_morse;
-    '0' => "01"
-    '1' => "10"
-);
-
-#[cfg(test)]
-l_system!(
-    ternary_thue_morse;
-    '0' => "1"
-    '1' => "20"
-    '2' => "210"
-);
-
-#[cfg(test)]
-l_system!(
-    period_doubling;
-    '0' => "01"
-    '1' => "00"
-);
-
-crate::print_sequences!(
-    Lindenmayer::new(tree_system).create_iter("0"), 4, "{}", "\n";
-    Lindenmayer::new(cantor_system).create_iter("a"), 4, "{}", "\n";
-    Lindenmayer::new(algae_system).create_iter("a"), 7, "{}", "\n";
-    Lindenmayer::new(peano_curve).create_iter("X"), 3, "{}", "\n";
-    Lindenmayer::new(complex_bush).create_iter("VZFFF"), 4, "{}", "\n";
-    Lindenmayer::new(thue_morse).create_iter("0"), 6, "{}", "\n";
-    Lindenmayer::new(ternary_thue_morse).create_iter("0"), 6, "{}", "\n";
-    Lindenmayer::new(period_doubling).create_iter("0"), 6, "{}", "\n";
-);
