@@ -7,7 +7,7 @@ use std::marker::PhantomData;
 pub struct HofstadterH<T> {
     terms: Vec<usize>,
     ctr: usize,
-    phantom: PhantomData<T>,
+    _phantom: PhantomData<T>,
 }
 
 impl<T> HofstadterH<T>
@@ -19,7 +19,7 @@ where
         Self {
             terms: vec![0],
             ctr: 0,
-            phantom: PhantomData,
+            _phantom: PhantomData,
         }
     }
 }

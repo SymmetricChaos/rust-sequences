@@ -50,6 +50,7 @@ pub mod leonardo;
 pub mod look_and_say;
 pub mod lucas;
 pub mod lucas_sequence;
+pub mod married;
 pub mod mersenne;
 pub mod mobius;
 pub mod mountain;
