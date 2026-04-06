@@ -1,7 +1,15 @@
 use num::BigInt;
 use std::marker::PhantomData;
 
-/// Hofstader's married sequences.
+/// Hofstadter's married sequences aka the male-female sequences. Defined by two entanged recurrences:
+///
+/// a(n) = n - b(a(n-1)), a(0) = 1
+///
+/// b(n) = n - a(b(n-1)), b(0) = 0
+///
+/// a sequence (female): 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6...
+///
+/// b sequence (male):   0, 0, 1, 2, 2, 3, 4, 4, 5, 6, 6...
 pub struct Married<T> {
     ctr: usize,
     a: Vec<usize>,
@@ -13,6 +21,7 @@ impl<T> Married<T>
 where
     T: TryFrom<usize>,
 {
+    /// Returns both sequences simultaneously.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -22,26 +31,31 @@ where
         }
     }
 
+    /// Returns only the female (a) sequence.
     pub fn female() -> impl Iterator<Item = T> {
         Self::new().map(|x| x.0)
     }
 
+    /// Returns only the male (b) sequence.
     pub fn male() -> impl Iterator<Item = T> {
         Self::new().map(|x| x.1)
     }
 }
 
 impl Married<BigInt> {
+    /// Returns both sequences simultaneously.
     pub fn new_big() -> Self {
         Self::new()
     }
 
+    /// Returns only the female (a) sequence.
     pub fn female_big() -> impl Iterator<Item = BigInt> {
-        Self::new().map(|x| x.0)
+        Self::female()
     }
 
+    /// Returns only the male (b) sequence.
     pub fn male_big() -> impl Iterator<Item = BigInt> {
-        Self::new().map(|x| x.1)
+        Self::male()
     }
 }
 
