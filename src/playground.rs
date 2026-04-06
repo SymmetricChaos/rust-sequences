@@ -6,6 +6,7 @@ use crate::{
         continued_fraction::SimpleContinuedFraction,
         differences::AbsDiffs,
         exponential::Exponential,
+        ordinal::OrdinalTransform,
         prime::Primes,
         rational_digits::rational_decimal_string as dec,
         rational_transforms::Ratios,
@@ -16,6 +17,7 @@ use crate::{
     fibonacci::Fibonacci,
     figurate::Triangular,
     harmonic::{Harmonic, HarmonicNumbers},
+    ruler::Ruler,
     zeta::Zeta,
 };
 
@@ -38,4 +40,5 @@ crate::print_sequences!(
     CesaroPartialSums::new([1,0].into_iter().cycle()), 10;
     DirichletConvolution::new_big(one,one), 10; // identical to number of divisors function
     BoustrophedonTriangle::new(Primes::new_big()), 5, "{:?}", "\n";
+    OrdinalTransform::new(Ruler::<u32>::new()), 20;
 );
