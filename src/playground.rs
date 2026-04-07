@@ -17,7 +17,7 @@ use crate::{
         boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         differences::AbsDiffs,
         ordinal::OrdinalTransform,
-        rational_transforms::Ratios,
+        rational::Ratios,
         summation::{CesaroPartialSums, PartialSums},
     },
     zeta::Zeta,
