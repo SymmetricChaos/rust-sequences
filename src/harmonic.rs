@@ -1,4 +1,4 @@
-use crate::sequence_transforms::summation::PartialSums;
+use crate::sequence_transforms::sums::PartialSums;
 use num::{
     BigInt, BigRational, CheckedAdd, CheckedMul, Integer, One, Signed, Zero, bigint::Sign,
     rational::Ratio,

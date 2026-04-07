@@ -18,7 +18,7 @@ use crate::{
         differences::AbsDiffs,
         ordinal::OrdinalTransform,
         rational::Ratios,
-        summation::{CesaroPartialSums, PartialSums},
+        sums::{CesaroPartialSums, PartialSums},
     },
     zeta::Zeta,
 };

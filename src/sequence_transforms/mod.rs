@@ -5,4 +5,4 @@ pub mod differences;
 pub mod ordinal;
 pub mod products;
 pub mod rational;
-pub mod summation;
+pub mod sums;
