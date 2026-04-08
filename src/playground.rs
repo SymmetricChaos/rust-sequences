@@ -16,6 +16,7 @@ use crate::{
     sequence_transforms::{
         boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         differences::AbsDiffs,
+        lodumo::Lodumo,
         ordinal::OrdinalTransform,
         rational::Ratios,
         sums::{AlternatingPartialSums, CesaroPartialSums, PartialSums},
@@ -44,4 +45,5 @@ crate::print_sequences!(
     BoustrophedonTriangle::new(Primes::new_big()), 5, "{:?}", "\n";
     Ruler::<u32>::new(), 20;
     OrdinalTransform::new(Ruler::<u32>::new()), 20;
+    Lodumo::new(Fibonacci::<u32>::new(),5), 20; // A160081
 );

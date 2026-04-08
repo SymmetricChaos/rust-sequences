@@ -1,6 +1,4 @@
-use std::ops::Neg;
-
-use num::{CheckedMul, One, Signed};
+use num::{CheckedMul, One};
 
 /// Sequence of partial products. Returns None if overflow occurs or sequence ends.
 pub struct PartialProds<T> {
