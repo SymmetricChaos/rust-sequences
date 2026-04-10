@@ -19,6 +19,7 @@ pub mod catalan;
 pub mod collatz;
 pub mod compositions;
 pub mod compositions_weak;
+pub mod de_brujin;
 pub mod deficient;
 pub mod derangement;
 pub mod digital_product;

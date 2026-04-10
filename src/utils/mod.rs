@@ -1,6 +1,7 @@
 pub mod bit_predicate;
 pub mod divisibility;
 pub mod exp_by_squaring;
+pub mod factorial;
 pub mod modular_int;
 pub mod padic;
 pub mod polynomial;
