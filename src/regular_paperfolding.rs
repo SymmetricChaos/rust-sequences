@@ -10,7 +10,7 @@ pub struct RegularPaperfolding<T> {
     four: T,
 }
 
-impl<T: Clone + Integer> RegularPaperfolding<T> {
+impl<T: Clone + Integer + CheckedDiv + CheckedAdd> RegularPaperfolding<T> {
     pub fn new() -> Self {
         Self {
             odd_part: OddPart::new(),
