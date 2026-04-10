@@ -1,4 +1,4 @@
-use crate::core::factorial::Factorials;
+use crate::factorial::Factorials;
 
 /// The Jordan–Pólya numbers, those that can be completely factored into factorial numbers.
 ///

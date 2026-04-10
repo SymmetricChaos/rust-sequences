@@ -3,12 +3,12 @@ use crate::{
     core::{
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
-        exponential::Exponential,
         primes::Primes,
         rational_digits::rational_decimal_string as to_dec,
         roots::{CubeRoot, SquareRoot},
     },
     dirichlet_convolution::{DirichletConvolution, one},
+    exponential::Exponential,
     fibonacci::Fibonacci,
     figurate::Triangular,
     harmonic::{Harmonic, HarmonicNumbers},

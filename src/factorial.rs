@@ -1,6 +1,5 @@
-use std::iter::Skip;
-
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
+use std::iter::Skip;
 
 /// The factorial numbers. Each term is the previous term multiplied by the next positive integer. Equivalently f(n) = f(n-1) * n.
 ///

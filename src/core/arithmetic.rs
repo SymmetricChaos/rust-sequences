@@ -34,7 +34,7 @@ impl<T: Clone + CheckedAdd> Iterator for Arithmetic<T> {
     }
 }
 
-/// The multiples of a value. The simplest arithmetic sequence.
+/// The non-negative multiples of a value. The simplest arithmetic sequence.
 pub struct Multiples<T> {
     val: T,
     inc: T,

@@ -3,8 +3,6 @@ pub mod arithmetic;
 pub mod bernoulli_numbers;
 pub mod composite;
 pub mod constant;
-pub mod exponential;
-pub mod factorial;
 pub mod geometric;
 pub mod integer;
 pub mod natural;
