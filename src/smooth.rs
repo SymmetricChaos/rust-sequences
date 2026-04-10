@@ -1,4 +1,4 @@
-use crate::core::prime::Primes;
+use crate::core::primes::Primes;
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One};
 use std::cmp::Reverse;

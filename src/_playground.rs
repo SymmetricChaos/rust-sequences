@@ -4,7 +4,7 @@ use crate::{
         constant::Constant,
         continued_fraction::SimpleContinuedFraction,
         exponential::Exponential,
-        prime::Primes,
+        primes::Primes,
         rational_digits::rational_decimal_string as to_dec,
         roots::{CubeRoot, SquareRoot},
     },

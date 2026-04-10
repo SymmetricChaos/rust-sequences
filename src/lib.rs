@@ -69,6 +69,9 @@ pub mod perrin_padovan;
 pub mod phythagorean;
 pub mod pi;
 pub mod powerful;
+pub mod prime_counting;
+pub mod prime_gaps;
+pub mod prime_line_cover;
 pub mod pseudoprime;
 pub mod rado_pairs;
 pub mod recaman;
@@ -124,7 +127,7 @@ macro_rules! print_row {
 }
 
 #[macro_export]
-/// Print terms from an iterator with the option to skip or use custom formatting. Example and output:
+/// Create a test that print terms from an iterator with the option to skip or use custom formatting. The test is automatically ignore so it will not run with other tests. Example and output:
 ///
 /// ```ignore
 /// crate::print_sequences!(

@@ -5,7 +5,7 @@ use std::{
     hash::Hash, // Found to be much faster than BTreeMap
 };
 
-/// The prime natural numbers.
+/// The prime natural numbers, those having exactly two distinct factors.
 ///
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
 pub struct Primes<T> {
@@ -51,85 +51,6 @@ impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for Primes<T> {
                 self.sieve.remove(&self.n);
             }
         }
-    }
-}
-
-/// The gaps between the prime natural numbers.
-/// 1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4...
-pub struct PrimeGaps<T> {
-    primes: Primes<T>,
-    prev: T,
-}
-
-impl<T: CheckedAdd + Eq + Hash + Integer + Clone> PrimeGaps<T> {
-    pub fn new() -> Self {
-        let mut primes = Primes::new();
-        primes.next();
-        Self {
-            primes,
-            prev: T::one() + T::one(),
-        }
-    }
-}
-
-impl PrimeGaps<BigInt> {
-    pub fn new_big() -> Self {
-        Self::new()
-    }
-}
-
-impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for PrimeGaps<T> {
-    type Item = T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let p = self.primes.next()?;
-        let dif = p.clone() - self.prev.clone();
-        self.prev = p.clone();
-        Some(dif)
-    }
-}
-
-/// The prime counting function evaluated at each positive integer.
-/// 0, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5...
-pub struct PrimeCounting<T> {
-    prime: Primes<T>,
-    next_prime: T,
-    n: T,
-    ctr: T,
-}
-
-impl<T: CheckedAdd + Clone + Hash + Integer> PrimeCounting<T> {
-    pub fn new() -> Self {
-        let mut prime = Primes::<T>::new();
-        let next_prime = prime.next().unwrap();
-        Self {
-            prime,
-            next_prime,
-            n: T::one(),
-            ctr: T::zero(),
-        }
-    }
-}
-
-impl PrimeCounting<BigInt> {
-    pub fn new_big() -> Self {
-        Self::new()
-    }
-}
-
-impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for PrimeCounting<T> {
-    type Item = T;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.clone();
-
-        self.n = self.n.checked_add(&T::one())?;
-        if self.n == self.next_prime {
-            self.ctr = self.ctr.checked_add(&T::one())?;
-            self.next_prime = self.prime.next()?;
-        }
-
-        Some(out)
     }
 }
 
@@ -411,8 +332,6 @@ crate::check_sequences!(
     Primes::new_big(), skip 1000, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
     PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
     Primorial::<u32>::new(), [1, 2, 6, 30, 210];
-    PrimeCounting::<i16>::new(), [0, 1, 2, 2, 3, 3, 4, 4, 4, 4];
     GreatestPrimeFactor::new(), [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
     LeastPrimeFactor::new(), [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
-    PrimeGaps::<i32>::new(), [1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4];
 );

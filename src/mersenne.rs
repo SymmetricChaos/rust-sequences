@@ -1,6 +1,7 @@
-use crate::core::prime::PrimeGaps;
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::hash::Hash;
+
+use crate::prime_gaps::PrimeGaps;
 
 /// The Mersenne numbers. 2^p-1 for all primes p.
 ///
