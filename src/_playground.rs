@@ -26,6 +26,10 @@ use crate::{
 
 crate::print_sequences!(
     print_integers;
+    Primes::new_big(), 10;
+    Primes::new_big(), skip 5, 10;
+    Primes::new_big(), 10, "{:>3}", "|";
+    Primes::new_big(), skip 5, 10, "{:>3}", "|";
     PartialSums::new(Harmonic::new_big()), 10;
     AlternatingPartialSums::new(Harmonic::new_big()), 10;
     HarmonicNumbers::<i64>::new(), 10;

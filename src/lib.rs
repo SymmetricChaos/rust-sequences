@@ -3,6 +3,7 @@ pub mod core;
 pub mod figurate;
 pub mod utils;
 
+pub mod _playground;
 pub mod a005243;
 pub mod abelian_groups;
 pub mod abundance;
@@ -67,7 +68,6 @@ pub mod period_doubling;
 pub mod perrin_padovan;
 pub mod phythagorean;
 pub mod pi;
-pub mod playground;
 pub mod powerful;
 pub mod pseudoprime;
 pub mod rado_pairs;
@@ -124,10 +124,35 @@ macro_rules! print_row {
 }
 
 #[macro_export]
+/// Print terms from an iterator with the option to skip or use custom formatting. Example and output:
+///
+/// ```ignore
+/// crate::print_sequences!(
+///    Primes::new_big(), 10;
+///    Primes::new_big(), skip 5, 10;
+///    Primes::new_big(), 10, "{:>3}", "|";
+///    Primes::new_big(), skip 5, 10, "{:>3}", "|";
+/// );
+/// ```
+/// ```text
+/// Primes::new_big() 0..10
+/// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+///
+/// Primes::new_big() 5..15
+/// 13, 17, 19, 23, 29, 31, 37, 41, 43, 47
+///
+/// Primes::new_big() 0..10
+///   2|  3|  5|  7| 11| 13| 17| 19| 23| 29
+///
+/// Primes::new_big() 5..15
+///  13| 17| 19| 23| 29| 31| 37| 41| 43| 47
+/// ```
+///
 macro_rules! print_sequences {
     ($name:ident; $($args:tt)*) => {
         #[cfg(test)]
         #[test]
+        #[ignore="visualization"]
         fn $name() {
             crate::print_row!($($args)*);
         }
@@ -135,6 +160,7 @@ macro_rules! print_sequences {
     ($($args:tt)*) => {
         #[cfg(test)]
         #[test]
+        #[ignore="visualization"]
         fn print_sequences() {
             crate::print_row!($($args)*);
         }
@@ -185,6 +211,7 @@ macro_rules! check_iteration_times {
     ($($seq:expr, $take:literal);+ $(;)?) => {
         #[cfg(test)]
         #[test]
+        #[ignore="timing test"]
         fn check_times() {
             $(
                 let t = std::time::Instant::now();
@@ -201,6 +228,7 @@ macro_rules! check_iteration_times {
     ($($seq:expr, $takes:expr);+ $(;)?) => {
         #[cfg(test)]
         #[test]
+        #[ignore="timing test"]
         fn check_times_prog() {
             $(
                 println!("{}\n", stringify!($seq));

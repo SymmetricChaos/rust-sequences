@@ -1,6 +1,6 @@
-use num::{BigInt, CheckedAdd, CheckedSub, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedSub, Integer};
 
-/// Recamán's sequence. Decreases by n unless that number has already appeared (or is negative) in which case it increases by n.
+/// Recamán's sequence. Decreases by n unless that number has already appeared (or would be negative) in which case it increases by n.
 ///
 /// 0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22...
 pub struct Recaman<T> {
@@ -9,7 +9,7 @@ pub struct Recaman<T> {
     prev: Vec<T>,
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + PartialOrd + One + Zero> Recaman<T> {
+impl<T: Clone + CheckedAdd + CheckedSub + Integer> Recaman<T> {
     pub fn new() -> Self {
         Self {
             n: T::zero(),
@@ -25,7 +25,7 @@ impl Recaman<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + PartialOrd + One> Iterator for Recaman<T> {
+impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for Recaman<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
