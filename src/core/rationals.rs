@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
 
-/// The rational numbers in anti-diagonal order
+/// The non-negative rational numbers in anti-diagonal order
 pub struct Rationals<N> {
     numer: N,
     denom: N,

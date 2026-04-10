@@ -7,14 +7,14 @@ use num::{BigInt, CheckedAdd, One, Signed, Zero};
 /// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
 pub struct Parity<T> {
     value: bool,
-    _type: PhantomData<T>,
+    _phantom: PhantomData<T>,
 }
 
 impl<T: One + Zero> Parity<T> {
     pub fn new() -> Self {
         Self {
             value: false,
-            _type: PhantomData,
+            _phantom: PhantomData,
         }
     }
 }
@@ -23,7 +23,7 @@ impl Parity<BigInt> {
     pub fn new_big() -> Self {
         Self {
             value: false,
-            _type: PhantomData,
+            _phantom: PhantomData,
         }
     }
 }
