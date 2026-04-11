@@ -18,7 +18,7 @@ impl<T: CheckedAdd + Clone + Integer> RunLengthEncoding<T> {
         }
     }
 
-    /// Return a falttened version of the run length encoding.
+    /// A flattened version of the run length encoding.
     pub fn new_flat<I>(iter: I) -> impl Iterator<Item = T>
     where
         I: Iterator<Item = T> + 'static,
