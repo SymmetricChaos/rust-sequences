@@ -7,6 +7,7 @@ pub struct DeBrujin<T> {
     f: T,
     dividend: T,
     divisior: T,
+    overflowed: bool,
 }
 
 impl<T: CheckedMul + Clone + Integer> DeBrujin<T> {
@@ -18,6 +19,7 @@ impl<T: CheckedMul + Clone + Integer> DeBrujin<T> {
             f,
             dividend: T::one(),
             divisior: T::one(),
+            overflowed: false,
         }
     }
 }
@@ -35,12 +37,21 @@ impl<T: CheckedMul + Clone + Integer> Iterator for DeBrujin<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if self.overflowed {
+            return None;
+        }
         let out = self.dividend.clone() / self.divisior.clone();
 
         // Advance dividend
         let mut ex = self.divisior.clone();
         while !ex.is_zero() {
-            self.dividend = self.dividend.checked_mul(&self.f)?;
+            self.dividend = match self.dividend.checked_mul(&self.f) {
+                Some(n) => n,
+                None => {
+                    self.overflowed = true;
+                    return Some(out);
+                }
+            };
             ex = ex - T::one();
         }
 
@@ -52,4 +63,5 @@ impl<T: CheckedMul + Clone + Integer> Iterator for DeBrujin<T> {
 
 crate::check_sequences!(
     DeBrujin::new_big(2), ["1", "1", "2", "16", "2048", "67108864", "144115188075855872", "1329227995784915872903807060280344576"];
+    DeBrujin::<u32>::new(2), [1, 1, 2, 16, 2048, 67108864];
 );
