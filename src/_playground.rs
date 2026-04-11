@@ -13,7 +13,7 @@ use crate::{
     figurate::Triangular,
     harmonic::{Harmonic, HarmonicNumbers},
     ruler::Ruler,
-    sequence_transforms::{
+    transforms::{
         boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         differences::AbsDiffs,
         lodumo::Lodumo,
