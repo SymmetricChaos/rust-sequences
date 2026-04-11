@@ -61,7 +61,12 @@ impl<T: CheckedMul + Clone + Integer> Iterator for DeBrujin<T> {
     }
 }
 
+crate::print_sequences!(
+    DeBrujin::new_big(3), 5;
+    DeBrujin::new_big(4), 5;
+);
+
 crate::check_sequences!(
     DeBrujin::new_big(2), ["1", "1", "2", "16", "2048", "67108864", "144115188075855872", "1329227995784915872903807060280344576"];
-    DeBrujin::<u32>::new(2), [1, 1, 2, 16, 2048, 67108864];
+    DeBrujin::<u32>::new(2), [1, 1, 2, 16, 2048, 67108864]; // check that we return the largest term we can
 );
