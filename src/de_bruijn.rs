@@ -61,6 +61,7 @@ impl<T: CheckedMul + Clone + Integer> Iterator for DeBruijn<T> {
     }
 }
 
+// TODO: how to iterate with this?
 fn debruijn(t: usize, p: usize, n: usize, k: usize, a: &mut Vec<usize>, s: &mut Vec<usize>) {
     if t > n {
         if n % p == 0 {
@@ -83,7 +84,7 @@ pub struct DeBruijnWord {
 }
 
 impl DeBruijnWord {
-    /// Each char in alphabet is assumed to be unique.
+    /// Each char in alphabet is assumed to be unique and in increasing order.
     pub fn new(alphabet: &str, substring_length: usize) -> Self {
         let n = substring_length;
         let k = alphabet.chars().count();

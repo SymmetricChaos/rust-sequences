@@ -13,6 +13,7 @@ pub mod algebraic;
 pub mod antifibonacci;
 pub mod arithmetic_derivative;
 pub mod automorphic;
+pub mod baum_sweet;
 pub mod bell;
 pub mod binomial_distribution;
 pub mod catalan;
