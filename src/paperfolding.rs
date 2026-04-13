@@ -48,7 +48,7 @@ pub struct Paperfolding<T> {
 }
 
 impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Paperfolding<T> {
-    /// The iterator should output only
+    /// The iterator should output only 0s and 1s representing the directions of the folding.
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -61,6 +61,7 @@ impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Paperfolding<T> {
 }
 
 impl Paperfolding<BigInt> {
+    /// The iterator should output only 0s and 1s, representing the directions of the folding.
     pub fn new_big<I>(iter: I) -> Self
     where
         I: Iterator<Item = BigInt> + 'static,
@@ -90,4 +91,5 @@ crate::check_sequences!(
     RegularPaperfolding::<u32>::new(), [1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0];
     Paperfolding::<u32>::new([1, 1, 1, 1, 1, 1, 1].into_iter()), [1, 1, 0, 1, 1, 0, 0];
     Paperfolding::<u32>::new([0, 0, 0, 0, 0, 0, 0].into_iter()), [0, 0, 1, 0, 0, 1, 1];
+    Paperfolding::<u32>::new([0, 1, 0, 1, 0, 1, 0].into_iter()), [0, 1, 1, 1, 0, 0, 1];
 );
