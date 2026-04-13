@@ -1,4 +1,7 @@
-use crate::utils::divisibility::{prime_factorization, prime_signature};
+use crate::{
+    Increment,
+    utils::divisibility::{prime_factorization, prime_signature},
+};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, One};
 use std::{
     collections::{BinaryHeap, HashMap},
@@ -33,7 +36,7 @@ impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for Primes<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.n = self.n.checked_add(&T::one())?;
+            self.n.incr()?;
             if !self.sieve.contains_key(&self.n) {
                 let v = self.n.checked_add(&self.n)?;
                 self.sieve.insert(v, vec![self.n.clone()]);

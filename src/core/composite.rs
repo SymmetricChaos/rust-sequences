@@ -1,5 +1,7 @@
-use num::{BigInt, CheckedAdd, One, Zero};
-use std::{collections::HashMap, hash::Hash}; // Found to be much faster than BTreeMap
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
+use std::{collections::HashMap, hash::Hash};
+
+use crate::Increment; // Found to be much faster than BTreeMap
 
 /// The composite numbers. A002808
 ///
@@ -9,7 +11,7 @@ pub struct Composites<T> {
     n: T,
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Composites<T> {
+impl<T: CheckedAdd + Clone + Hash + Integer> Composites<T> {
     pub fn new() -> Self {
         Self {
             sieve: HashMap::<T, Vec<T>>::new(),
@@ -27,12 +29,12 @@ impl Composites<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Eq + Hash + One + Zero> Iterator for Composites<T> {
+impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for Composites<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.n = self.n.checked_add(&T::one())?;
+            self.n.incr()?;
             if !self.sieve.contains_key(&self.n) {
                 let v = self.n.checked_add(&self.n)?;
                 self.sieve.insert(v, vec![self.n.clone()]);

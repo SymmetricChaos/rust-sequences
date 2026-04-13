@@ -1,4 +1,4 @@
-use crate::utils::divisibility::prime_factorization;
+use crate::{Increment, utils::divisibility::prime_factorization};
 use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 
@@ -32,7 +32,7 @@ impl<T: One + Zero + Signed> Iterator for Mobius<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.n = self.n.checked_add(1)?;
+        self.n.incr()?;
 
         if self.n == 1 {
             return Some(T::one());
@@ -81,7 +81,7 @@ impl<T: CheckedAdd + Clone + One + Signed + Zero> Iterator for Mertens<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.n = self.n.checked_add(1)?;
+        self.n.incr()?;
 
         if self.n == 1 {
             self.sum = self.sum.checked_add(&T::one())?;

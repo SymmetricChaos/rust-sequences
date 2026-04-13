@@ -1,3 +1,4 @@
+use crate::Increment;
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.
@@ -27,7 +28,7 @@ impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Iterator for OddPart<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.incr()?;
 
         let mut n = self.ctr.clone();
 

@@ -1,3 +1,5 @@
+use num::{CheckedAdd, Integer};
+
 pub mod automata;
 pub mod core;
 pub mod figurate;
@@ -55,6 +57,7 @@ pub mod leonardo;
 pub mod look_and_say;
 pub mod lucas;
 pub mod lucas_sequence;
+pub mod lucky;
 pub mod married;
 pub mod mersenne;
 pub mod mobius;
@@ -96,6 +99,26 @@ pub mod trig;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
+
+/// Failable increment
+pub trait Increment {
+    fn incr(&mut self) -> Option<()>
+    where
+        Self: Sized;
+}
+
+impl<T> Increment for T
+where
+    T: Integer + CheckedAdd,
+{
+    fn incr(&mut self) -> Option<()>
+    where
+        Self: Sized,
+    {
+        *self = self.checked_add(&T::one())?;
+        Some(())
+    }
+}
 
 #[macro_export]
 macro_rules! print_row {
