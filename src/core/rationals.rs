@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
 
+use crate::Increment;
+
 /// The non-negative rational numbers in anti-diagonal order
 pub struct Rationals<N> {
     numer: N,
@@ -63,7 +65,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
             self.numer = self.numer.checked_sub(&N::one())?;
             self.denom = self.denom.checked_add(&N::one())?;
             if self.numer.is_zero() {
-                self.row = self.row.checked_add(&N::one())?;
+                self.row.incr()?;
                 self.numer = self.row.clone();
                 self.denom = N::one();
             }
@@ -111,7 +113,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.row.is_zero() {
-            self.row = self.row.checked_add(&N::one())?;
+            self.row.incr()?;
             return Some(Ratio::zero());
         }
 
@@ -123,7 +125,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
                 self.numer = self.numer.checked_sub(&N::one())?;
                 self.denom = self.denom.checked_add(&N::one())?;
                 if self.numer.is_zero() {
-                    self.row = self.row.checked_add(&N::one())?;
+                    self.row.incr()?;
                     self.numer = self.row.clone();
                     self.denom = N::one();
                 }

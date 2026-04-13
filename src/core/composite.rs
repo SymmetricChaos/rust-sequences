@@ -1,4 +1,4 @@
-use num::{BigInt, CheckedAdd, Integer, One, Zero};
+use num::{BigInt, CheckedAdd, Integer, One};
 use std::{collections::HashMap, hash::Hash};
 
 use crate::Increment; // Found to be much faster than BTreeMap
