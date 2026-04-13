@@ -61,7 +61,7 @@ impl<T: Clone + Integer + CheckedDiv + CheckedAdd> Paperfolding<T> {
 }
 
 impl Paperfolding<BigInt> {
-    /// The iterator should output only 0s and 1s, representing the directions of the folding.
+    /// The iterator should output only 0s and 1s, representing the directions of the folding. A iterator that gives all 1s produces the regular paperfolding sequence.
     pub fn new_big<I>(iter: I) -> Self
     where
         I: Iterator<Item = BigInt> + 'static,

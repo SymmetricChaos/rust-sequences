@@ -48,7 +48,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
             let n = self.odds.next()?;
 
             // In order (important!) step the counters for the known terms and stop if any of the counters reach a multiple of the term
-            // Doing it this way ensures we do not double count anything
+            // Doing it this way ensures we do not double count anything and that we eliminate terms with the lower sequences first
             for (term, count) in self.terms.iter().zip(self.counts.iter_mut()) {
                 count.incr()?;
                 if (count.clone() % term.clone()).is_zero() {
