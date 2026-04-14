@@ -40,6 +40,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
             self.ctr.incr()?;
             return out;
         }
+
         // Most recently added number will be output
         let out = self.terms.last().cloned();
 

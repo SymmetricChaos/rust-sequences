@@ -42,6 +42,7 @@ pub mod fibonacci;
 pub mod figure_figure;
 pub mod fly_straight;
 pub mod forest_fire;
+pub mod fortunate;
 pub mod golomb;
 pub mod gray;
 pub mod harmonic;
