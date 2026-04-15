@@ -1,5 +1,7 @@
 use num::{CheckedAdd, Integer};
 
+use crate::Increment;
+
 /// The run length encoding of an integer sequence. A sequence of pairs of numbers where the first is an integer from the original sequence and the second is the number of times it is repeated.
 pub struct RunLengthEncoding<T> {
     iter: Box<dyn Iterator<Item = T>>,
@@ -36,7 +38,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for RunLengthEncoding<T> {
         loop {
             let n = self.iter.next();
             if n == val {
-                ctr = ctr.checked_add(&T::one())?;
+                ctr.incr()?;
             } else {
                 self.val = n;
                 break;
