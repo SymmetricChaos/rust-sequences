@@ -1,4 +1,4 @@
-use num::{CheckedAdd, Integer};
+use num::{CheckedAdd, CheckedSub, Integer};
 
 pub mod automata;
 pub mod core;
@@ -117,6 +117,26 @@ where
         Self: Sized,
     {
         *self = self.checked_add(&T::one())?;
+        Some(())
+    }
+}
+
+/// Failable decrement
+pub trait Decrement {
+    fn decr(&mut self) -> Option<()>
+    where
+        Self: Sized;
+}
+
+impl<T> Decrement for T
+where
+    T: Integer + CheckedSub,
+{
+    fn decr(&mut self) -> Option<()>
+    where
+        Self: Sized,
+    {
+        *self = self.checked_sub(&T::one())?;
         Some(())
     }
 }
