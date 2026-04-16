@@ -1,6 +1,6 @@
 use num::{CheckedAdd, Integer};
 
-/// The boustrophedon transform of a sequence
+/// The boustrophedon transform of a sequence.
 pub struct Boustrophedon<T> {
     iter: Box<dyn Iterator<Item = T>>,
     row: Vec<T>,
@@ -34,7 +34,7 @@ impl<T: CheckedAdd + Clone> Iterator for Boustrophedon<T> {
     }
 }
 
-/// The entire triangle produced to generated the boustrophedon transform of a sequence
+/// The entire triangle produced to generated the boustrophedon transform of a sequence.
 pub struct BoustrophedonTriangle<T> {
     iter: Box<dyn Iterator<Item = T>>,
     row: Vec<T>,

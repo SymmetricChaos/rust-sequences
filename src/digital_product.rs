@@ -2,6 +2,10 @@ use num::{BigInt, CheckedAdd, Integer};
 
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {
+    if n.is_zero() {
+        return N::zero();
+    }
+
     let mut total = N::one();
 
     while n > N::zero() {
@@ -34,7 +38,9 @@ fn multiplicative_persistence<N: Integer>(mut n: N, base: &N) -> N {
     ctr
 }
 
-/// The product of the digits of each natural number.
+/// The product of the digits of each natural number to a given base.
+///
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4...
 pub struct DigitalProds<N> {
     ctr: N,
     base: N,
@@ -139,7 +145,7 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativePersistence<N> 
 }
 
 crate::check_sequences!(
-    DigitalProds::new(10), skip 25,               [10, 12, 14, 16, 18, 0, 3, 6, 9, 12];
+    DigitalProds::new(10), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 0, 6, 12, 18, 24, 30, 36, 42];
     MultiplicativeDigitalRoots::new(10), skip 25, [0,   2,  4,  6,  8, 0, 3, 6, 9,  2];
     MultiplicativePersistence::new(10), skip 25,  [2,   2,  2,  2,  2, 1, 1, 1, 1,  2];
 );
