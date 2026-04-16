@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::{Increment, core::parity::Odds};
 use num::{BigInt, CheckedAdd, Integer};
 
@@ -68,6 +70,50 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
     }
 }
 
+/// The unlucky numbers.
+pub struct Unlucky<T> {
+    lucky: Lucky<T>,
+    ctr: T,
+    record: T,
+}
+
+impl<T: CheckedAdd + Clone + Integer> Unlucky<T> {
+    pub fn new() -> Self {
+        let mut lucky = Lucky::new();
+        lucky.next();
+        let record = lucky.next().unwrap();
+        Self {
+            lucky,
+            ctr: T::one() + T::one(),
+            record,
+        }
+    }
+}
+
+impl Unlucky<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: CheckedAdd + Clone + Integer> Iterator for Unlucky<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.ctr.clone();
+        loop {
+            self.ctr.incr()?;
+            if self.ctr == self.record {
+                self.record = self.lucky.next()?;
+            } else {
+                break;
+            }
+        }
+        Some(out)
+    }
+}
+
 crate::check_sequences!(
     Lucky::<i32>::new(), [1, 3, 7, 9, 13, 15, 21, 25, 31, 33, 37, 43, 49, 51, 63, 67, 69, 73, 75, 79, 87, 93, 99, 105, 111, 115, 127, 129, 133, 135, 141, 151, 159, 163, 169, 171, 189, 193, 195, 201, 205, 211, 219, 223, 231, 235, 237, 241, 259];
+    Unlucky::<i32>::new(), [2, 4, 5, 6, 8, 10, 11, 12, 14, 16, 17, 18, 19, 20, 22, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35, 36, 38, 39, 40, 41, 42, 44, 45, 46, 47, 48, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 64, 65, 66, 68, 70, 71, 72, 74, 76, 77, 78, 80, 81, 82, 83, 84, 85, 86, 88, 89, 90, 91, 92];
 );
