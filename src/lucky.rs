@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use crate::{Increment, core::parity::Odds};
 use num::{BigInt, CheckedAdd, Integer};
 

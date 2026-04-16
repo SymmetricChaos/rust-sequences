@@ -1,3 +1,4 @@
+/// The characteristic sequence of a given sequence and boolean function.
 pub struct CharacteristicSequence<T> {
     iter: Box<dyn Iterator<Item = T>>,
     phi: Box<dyn Fn(T) -> bool>,

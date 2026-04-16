@@ -1,6 +1,7 @@
 use crate::core::alternating::Alternating;
 use num::{CheckedAdd, CheckedMul, CheckedSub, Integer, Signed, integer::binomial};
 
+/// The binomial transform of a sequence.
 pub struct BinomialTransform<T> {
     iter: Box<dyn Iterator<Item = T>>,
     saved: Vec<T>,
