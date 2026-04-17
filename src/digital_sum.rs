@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer};
 
+use crate::Increment;
+
 // Doesn't check for sign so only use internally
 fn digital_sum<N: Integer>(mut n: N, base: &N) -> N {
     let mut total = N::zero();
@@ -31,7 +33,7 @@ fn additive_persistence<N: Integer>(mut n: N, base: &N) -> N {
     ctr
 }
 
-/// The sums of the digits of each natural number.
+/// The sums of the digits of each natural number in a given base.
 pub struct DigitalSums<N> {
     ctr: N,
     base: N,
@@ -61,12 +63,12 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalSums<N> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_sum(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
-/// The digital root of each natural number. The fixed point when repeatedly applying the digital sum.
+/// The digital root of each natural number in a given base. The fixed point when repeatedly applying the digital sum.
 pub struct DigitalRoots<N> {
     ctr: N,
     base: N,
@@ -96,12 +98,12 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalRoots<N> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_root(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
-/// The additive persistence of each natural number. The number of times the digital sum function must be applied before it reaches a fixed point.
+/// The additive persistence of each natural number in a given base. The number of times the digital sum function must be applied before it reaches a fixed point.
 pub struct AdditivePersistence<N> {
     ctr: N,
     base: N,
@@ -131,13 +133,13 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for AdditivePersistence<N> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = additive_persistence(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
 crate::check_sequences!(
-    DigitalSums::new(10),         skip 1234, [10, 11, 12, 13, 14, 15, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 8, 9, 10, 11];
+    DigitalSums::new(10), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 8, 9, 10, 11, 12, 13, 14, 15];
     DigitalRoots::new(10),        skip 1234, [1,  2,  3,  4,   5,  6, 7, 8, 9,  1,  2,  3,  4,  5,  6,  7, 8, 9,  1,  2];
     AdditivePersistence::new(10), skip 1234, [2,  2,  2,  2,   2,  2, 1, 1, 1,  2,  2,  2,  2,  2,  2,  2, 1, 1,  2,  2];
 );

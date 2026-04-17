@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer};
 
+use crate::Increment;
+
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {
     if n.is_zero() {
@@ -70,12 +72,12 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalProds<N> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_prod(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
-/// The multiplicative digital root of each natural number. The fixed point when repeatedly applying the digital product.
+/// The multiplicative digital root of each natural number to a given base. The fixed point when repeatedly applying the digital product.
 pub struct MultiplicativeDigitalRoots<N> {
     ctr: N,
     base: N,
@@ -104,12 +106,12 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativeDigitalRoots<N>
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_digital_root(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
-/// The multiplicative persistence of each natural number. The number of times the digital sum function must be applied before it reaches a fixed point.
+/// The multiplicative persistence of each natural number to a given base. The number of times the digital product function must be applied before it reaches a fixed point.
 pub struct MultiplicativePersistence<N> {
     ctr: N,
     base: N,
@@ -139,7 +141,7 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativePersistence<N> 
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_persistence(self.ctr.clone(), &self.base);
-        self.ctr = self.ctr.checked_add(&N::one())?;
+        self.ctr.incr()?;
         Some(out)
     }
 }
