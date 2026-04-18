@@ -65,6 +65,8 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
 }
 
 /// The unlucky numbers.
+///
+/// 2, 4, 5, 6, 8, 10, 11, 12, 14, 16, 17, 18, 19, 20, 22...
 pub struct Unlucky<T> {
     lucky: Lucky<T>,
     ctr: T,
