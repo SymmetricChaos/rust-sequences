@@ -94,6 +94,7 @@ pub mod sorted_pairs;
 pub mod squarefree;
 pub mod stirling;
 pub mod sylverster;
+pub mod taxicab;
 pub mod thue_morse;
 pub mod totient;
 pub mod transforms;
