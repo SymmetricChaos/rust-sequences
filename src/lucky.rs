@@ -6,16 +6,14 @@ use num::{BigInt, CheckedAdd, Integer};
 /// 1, 3, 7, 9, 13, 15, 21, 25, 31, 33...
 pub struct Lucky<T> {
     ctr: T,
-    counts: Vec<T>,
     odds: Odds<T>,
-    terms: Vec<T>,
+    terms: Vec<[T; 2]>,
 }
 
 impl<T: CheckedAdd + Clone + Integer> Lucky<T> {
     pub fn new() -> Self {
         Self {
             ctr: T::one(),
-            counts: Vec::new(),
             odds: Odds::new(),
             terms: Vec::new(),
         }
@@ -33,16 +31,15 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         // Handle first output
-        if self.counts.is_empty() {
+        if self.terms.is_empty() {
             let out = self.odds.next();
-            self.terms.push(self.odds.next()?);
-            self.counts.push(T::one() + T::one());
+            self.terms.push([self.odds.next()?, T::one() + T::one()]);
             self.ctr.incr()?;
             return out;
         }
 
         // Most recently added number will be output
-        let out = self.terms.last().cloned();
+        let out = self.terms.last().unwrap()[0].clone();
 
         'outer: loop {
             // Look at the next odd number.
@@ -50,7 +47,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
 
             // In order (important!) step the counters for the known terms and stop if any of the counters reach a multiple of the term
             // Doing it this way ensures we do not double count anything and that we eliminate terms with the lower sequences first
-            for (term, count) in self.terms.iter().zip(self.counts.iter_mut()) {
+            for [term, count] in self.terms.iter_mut() {
                 count.incr()?;
                 if (count.clone() % term.clone()).is_zero() {
                     continue 'outer;
@@ -60,10 +57,9 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
             // Now that a new term has been determined step the overall counter
             // That gives us the value to start the new counter paired with the new term
             self.ctr.incr()?;
-            self.counts.push(self.ctr.clone());
-            self.terms.push(n);
+            self.terms.push([n, self.ctr.clone()]);
 
-            return out;
+            return Some(out);
         }
     }
 }
