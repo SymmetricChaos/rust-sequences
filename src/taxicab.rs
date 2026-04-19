@@ -2,6 +2,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer};
 
 use crate::{Increment, figurate::Cube};
 
+/// The taxicab numbers. Those that are the sub of two cubes in more than one way. Named for an ancedote by G. H. Hardy about Srinivasa Ramanujan.
+///
+/// 1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683...
 pub struct Taxicab<T> {
     ctr: T,
     cubes: Vec<T>,
@@ -44,7 +47,7 @@ impl<T: CheckedAdd + CheckedMul + CheckedSub + Integer + Clone> Iterator for Tax
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.ctr.incr()?;
-            while &self.ctr >= self.cubes.last().unwrap() {
+            if &self.ctr >= self.cubes.last().unwrap() {
                 self.cubes.push(self.cube.next()?);
             }
             let mut found_sum = false;

@@ -286,7 +286,7 @@ macro_rules! check_iteration_times {
         fn check_times_prog() {
             println!("Timings");
             $(
-                println!("\n\n{}\n", stringify!($seq));
+                println!("\n{}\n", stringify!($seq));
 
                 let mut total_elapsed = std::time::Duration::new(0,0);
                 let mut ctr = 0;
