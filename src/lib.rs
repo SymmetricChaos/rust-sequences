@@ -266,6 +266,7 @@ macro_rules! check_iteration_times {
         #[test]
         #[ignore="timing test"]
         fn check_times() {
+            println!("Timings");
             $(
                 let t = std::time::Instant::now();
                 let mut s = $seq;
@@ -283,8 +284,9 @@ macro_rules! check_iteration_times {
         #[test]
         #[ignore="timing test"]
         fn check_times_prog() {
+            println!("Timings");
             $(
-                println!("{}\n", stringify!($seq));
+                println!("\n\n{}\n", stringify!($seq));
 
                 let mut total_elapsed = std::time::Duration::new(0,0);
                 let mut ctr = 0;
