@@ -1,7 +1,7 @@
 use crate::{Increment, core::parity::Odds};
 use num::{BigInt, CheckedAdd, Integer};
 
-/// Ludic numbers. Similar to the lucky numbers but terms are eliminated relative to the position of the number that eliminates them.
+/// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.
 ///
 /// 1, 2, 3, 5, 7, 11, 13, 17, 23, 25, 29, 37, 41, 43, 47, 53, 61, 67...
 pub struct Ludic<T> {
@@ -54,7 +54,8 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
             // Doing it this way ensures we do not double count anything and that we eliminate terms with the lower sequences first
             for [term, count] in self.terms.iter_mut() {
                 count.incr()?;
-                if (count.clone() % term.clone()).is_zero() {
+                *count = count.clone() % term.clone();
+                if count.is_zero() {
                     continue 'outer;
                 }
             }

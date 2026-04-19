@@ -1,7 +1,7 @@
 use crate::{Increment, core::parity::Odds};
 use num::{BigInt, CheckedAdd, Integer};
 
-/// The lucky numbers of number theory. They are produced using an algorithm similar to how the Sieve of Eratosthenes produces the primes. They are often compared to the primes.
+/// The lucky numbers of number theory. They are produced using an algorithm similar to the Sieve of Eratosthenes, which produces the primes.
 ///
 /// 1, 3, 7, 9, 13, 15, 21, 25, 31, 33...
 pub struct Lucky<T> {
