@@ -87,6 +87,7 @@ pub mod rado_pairs;
 pub mod recaman;
 pub mod repint;
 pub mod rowland;
+pub mod rueppel;
 pub mod ruler;
 pub mod semiprime;
 pub mod smooth;
