@@ -86,6 +86,7 @@ pub mod pseudoprime;
 pub mod rado_pairs;
 pub mod recaman;
 pub mod repint;
+pub mod reverse_and_increment;
 pub mod rowland;
 pub mod rueppel;
 pub mod ruler;
