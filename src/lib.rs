@@ -1,5 +1,3 @@
-use num::{CheckedAdd, CheckedSub, Integer};
-
 pub mod automata;
 pub mod core;
 pub mod figurate;
@@ -17,6 +15,7 @@ pub mod arithmetic_derivative;
 pub mod automorphic;
 pub mod baum_sweet;
 pub mod bell;
+pub mod binary_runs;
 pub mod binary_weight;
 pub mod binomial_distribution;
 pub mod catalan;
@@ -105,46 +104,6 @@ pub mod trig;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
-
-/// Failable increment
-pub trait Increment {
-    fn incr(&mut self) -> Option<()>
-    where
-        Self: Sized;
-}
-
-impl<T> Increment for T
-where
-    T: Integer + CheckedAdd,
-{
-    fn incr(&mut self) -> Option<()>
-    where
-        Self: Sized,
-    {
-        *self = self.checked_add(&T::one())?;
-        Some(())
-    }
-}
-
-/// Failable decrement
-pub trait Decrement {
-    fn decr(&mut self) -> Option<()>
-    where
-        Self: Sized;
-}
-
-impl<T> Decrement for T
-where
-    T: Integer + CheckedSub,
-{
-    fn decr(&mut self) -> Option<()>
-    where
-        Self: Sized,
-    {
-        *self = self.checked_sub(&T::one())?;
-        Some(())
-    }
-}
 
 #[macro_export]
 macro_rules! print_row {

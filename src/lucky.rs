@@ -1,4 +1,4 @@
-use crate::{Increment, core::parity::Odds};
+use crate::core::{parity::Odds, traits::Increment};
 use num::{BigInt, CheckedAdd, Integer};
 
 /// The lucky numbers of number theory. They are produced using an algorithm similar to the Sieve of Eratosthenes, which produces the primes.

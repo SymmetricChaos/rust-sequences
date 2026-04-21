@@ -1,6 +1,5 @@
+use crate::core::traits::Increment;
 use num::{CheckedAdd, Integer};
-
-use crate::Increment;
 
 /// The run length encoding of an integer sequence. A sequence of pairs of numbers where the first is an integer from the original sequence and the second is the number of times it is repeated.
 pub struct RunLengthEncoding<T> {

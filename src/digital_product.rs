@@ -1,6 +1,5 @@
+use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, Integer};
-
-use crate::Increment;
 
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {

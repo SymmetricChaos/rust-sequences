@@ -1,6 +1,5 @@
+use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
-
-use crate::Increment;
 
 /// The non-negative rational numbers in anti-diagonal order
 pub struct Rationals<N> {

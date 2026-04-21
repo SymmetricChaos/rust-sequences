@@ -1,7 +1,6 @@
-use num::{BigInt, CheckedAdd, Integer, One};
+use crate::core::traits::Increment;
+use num::{BigInt, CheckedAdd, Integer};
 use std::{collections::HashMap, hash::Hash};
-
-use crate::Increment; // Found to be much faster than BTreeMap
 
 /// The composite numbers. A002808
 ///
@@ -22,10 +21,7 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Composites<T> {
 
 impl Composites<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
-            n: BigInt::one(),
-        }
+        Self::new()
     }
 }
 

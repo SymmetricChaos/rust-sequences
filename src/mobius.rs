@@ -1,4 +1,5 @@
-use crate::{Increment, utils::divisibility::prime_factorization};
+use crate::core::traits::Increment;
+use crate::utils::divisibility::prime_factorization;
 use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 

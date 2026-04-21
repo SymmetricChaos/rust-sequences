@@ -1,4 +1,4 @@
-use crate::Increment;
+use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
 
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a factor.

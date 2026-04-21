@@ -1,4 +1,4 @@
-use crate::{Increment, core::parity::Odds};
+use crate::core::{parity::Odds, traits::Increment};
 use num::{BigInt, CheckedAdd, Integer};
 
 /// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.

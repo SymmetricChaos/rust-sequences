@@ -1,6 +1,5 @@
+use crate::core::traits::Increment;
 use num::{CheckedAdd, CheckedSub, Integer, Signed, Zero, rational::Ratio};
-
-use crate::Increment;
 
 /// Sequence of partial sums if an iterator. Returns None if overflow occurs during addition or if the sequence ends.
 pub struct PartialSums<T> {

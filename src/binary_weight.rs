@@ -1,4 +1,4 @@
-use crate::Increment;
+use crate::core::traits::Increment;
 use num::{Integer, PrimInt};
 
 /// The binary weight of each natural number, starting from zero.

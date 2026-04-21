@@ -1,5 +1,6 @@
-use crate::{Increment, figurate::Cube};
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, Signed};
+use crate::core::traits::Increment;
+use crate::figurate::Cube;
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer};
 
 /// The taxicab numbers. The natural numbers that are the sum of two positive cubes in more than one way. Named for an ancedote by G. H. Hardy about Srinivasa Ramanujan.
 ///

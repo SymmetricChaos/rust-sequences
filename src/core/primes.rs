@@ -1,7 +1,5 @@
-use crate::{
-    Increment,
-    utils::divisibility::{prime_factorization, prime_signature},
-};
+use crate::core::traits::Increment;
+use crate::utils::divisibility::{prime_factorization, prime_signature};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, One};
 use std::{
     collections::{BinaryHeap, HashMap},
