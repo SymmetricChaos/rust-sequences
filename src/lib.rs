@@ -17,6 +17,7 @@ pub mod arithmetic_derivative;
 pub mod automorphic;
 pub mod baum_sweet;
 pub mod bell;
+pub mod binary_weight;
 pub mod binomial_distribution;
 pub mod catalan;
 pub mod collatz;
