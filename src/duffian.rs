@@ -9,6 +9,7 @@ pub struct Duffian {
 }
 
 impl Duffian {
+    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             c: Composites::new(),
@@ -29,6 +30,41 @@ impl Iterator for Duffian {
         }
     }
 }
+
+pub struct DuffianTwins {
+    duff: Duffian,
+    prev: u64,
+}
+
+impl DuffianTwins {
+    /// Only u64 output is supported.
+    pub fn new() -> Self {
+        Self {
+            duff: Duffian::new(),
+            prev: 0,
+        }
+    }
+}
+
+impl Iterator for DuffianTwins {
+    type Item = (u64, u64);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let n = self.duff.next()?;
+            if (n - 1) == self.prev {
+                let out = (self.prev, n);
+                self.prev = n;
+                return Some(out);
+            }
+            self.prev = n;
+        }
+    }
+}
+
+crate::print_sequences!(
+    DuffianTwins::new(), 10, "{:?}", ", ";
+);
 
 crate::check_sequences!(
     Duffian::new(), [4, 8, 9, 16, 21, 25, 27, 32, 35, 36, 39, 49, 50, 55, 57, 63, 64, 65, 75, 77, 81, 85, 93, 98, 100, 111, 115, 119, 121, 125, 128, 129, 133, 143, 144, 155, 161, 169, 171, 175, 183, 185, 187, 189, 201, 203, 205, 209, 215, 217, 219, 221, 225, 235, 237, 242, 243, 245, 247];
