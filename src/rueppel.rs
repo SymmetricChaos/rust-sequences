@@ -1,5 +1,6 @@
-use crate::catalan::Catalan;
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer};
+
+use crate::core::catalan::Catalan;
 
 /// The Rueppel sequence. The parity of the Catalan numbers.
 ///

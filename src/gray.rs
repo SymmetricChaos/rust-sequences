@@ -1,6 +1,5 @@
-use num::PrimInt;
-
 use crate::core::traits::Increment;
+use num::PrimInt;
 
 /// The Gray codes, bit sequence where each term differs from the previous by a single bit. A permutation of the integers.
 ///
