@@ -1,3 +1,5 @@
+use num::{CheckedMul, Integer};
+
 pub fn pow_mod(n: u64, p: u64, m: u64) -> u64 {
     if p == 0 {
         return 1;
@@ -9,6 +11,32 @@ pub fn pow_mod(n: u64, p: u64, m: u64) -> u64 {
         return pow_mod((n * n) % m, p / 2, m) % m;
     } else {
         return (n * pow_mod((n * n) % m, (p - 1) / 2, m)) % m;
+    }
+}
+
+pub fn checked_pow_mod<T: Integer + Clone + CheckedMul>(n: T, p: T, m: T) -> Option<T> {
+    if p == T::zero() {
+        return Some(T::one());
+    }
+    if p == T::one() {
+        return Some(n % m);
+    }
+    let two = T::one() + T::one();
+    if p.clone() % two.clone() == T::zero() {
+        return Some(
+            checked_pow_mod(n.checked_mul(&n)? % m.clone(), p / two.clone(), m.clone())?
+                % m.clone(),
+        );
+    } else {
+        return Some(
+            (n.clone()
+                * checked_pow_mod(
+                    n.checked_mul(&n)? % m.clone(),
+                    (p - T::one()) / two,
+                    m.clone(),
+                )?)
+                % m,
+        );
     }
 }
 

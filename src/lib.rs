@@ -21,6 +21,7 @@ pub mod binomial_distribution;
 pub mod collatz;
 pub mod compositions;
 pub mod compositions_weak;
+pub mod curzon;
 pub mod de_bruijn;
 pub mod deficient;
 pub mod derangement;
