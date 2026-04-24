@@ -20,4 +20,5 @@ pub mod alternating;
 pub mod catalan;
 pub mod combinations;
 pub mod continued_fraction;
+pub mod power_series;
 pub mod traits;

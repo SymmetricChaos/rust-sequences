@@ -2,7 +2,7 @@ use num::{CheckedAdd, CheckedMul, Integer};
 
 use crate::{core::traits::Increment, utils::exp_by_squaring::checked_pow_mod};
 
-/// The Curzon numbers. Those for which k^n+1 is a multiple of k*n+1.
+/// The Curzon numbers. Those for which k^n+1 is a multiple of k*n+1 for positive integers n. Only even values of k have solutions.
 ///
 /// For k = 2
 ///
