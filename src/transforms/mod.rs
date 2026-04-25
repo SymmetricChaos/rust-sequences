@@ -1,3 +1,4 @@
+pub mod antisequence;
 pub mod binomial;
 pub mod boustrophedon;
 pub mod characteristic;
