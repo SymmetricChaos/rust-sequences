@@ -91,6 +91,7 @@ pub mod repint;
 pub mod rowland;
 pub mod rueppel;
 pub mod ruler;
+pub mod safe_primes;
 pub mod semiprime;
 pub mod sieve_array;
 pub mod smooth;
