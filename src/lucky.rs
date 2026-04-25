@@ -1,4 +1,7 @@
-use crate::core::{parity::Odds, traits::Increment};
+use crate::{
+    core::{parity::Odds, traits::Increment},
+    transforms::antisequence::AntiSequence,
+};
 use num::{BigInt, CheckedAdd, Integer};
 
 /// The lucky numbers of number theory. They are produced using an algorithm similar to the Sieve of Eratosthenes, which produces the primes.
@@ -67,22 +70,11 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
 /// The unlucky numbers.
 ///
 /// 2, 4, 5, 6, 8, 10, 11, 12, 14, 16, 17, 18, 19, 20, 22...
-pub struct Unlucky<T> {
-    lucky: Lucky<T>,
-    ctr: T,
-    record: T,
-}
+pub struct Unlucky<T>(AntiSequence<T>);
 
-impl<T: CheckedAdd + Clone + Integer> Unlucky<T> {
+impl<T: CheckedAdd + Clone + Integer + 'static> Unlucky<T> {
     pub fn new() -> Self {
-        let mut lucky = Lucky::new();
-        lucky.next();
-        let record = lucky.next().unwrap();
-        Self {
-            lucky,
-            ctr: T::one() + T::one(),
-            record,
-        }
+        Self(AntiSequence::new(Lucky::new(), T::one()))
     }
 }
 
@@ -96,16 +88,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Unlucky<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.clone();
-        loop {
-            self.ctr.incr()?;
-            if self.ctr == self.record {
-                self.record = self.lucky.next()?;
-            } else {
-                break;
-            }
-        }
-        Some(out)
+        self.0.next()
     }
 }
 

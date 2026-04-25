@@ -1,4 +1,7 @@
-use crate::core::{parity::Odds, traits::Increment};
+use crate::{
+    core::{parity::Odds, traits::Increment},
+    transforms::antisequence::AntiSequence,
+};
 use num::{BigInt, CheckedAdd, Integer};
 
 /// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.
@@ -68,22 +71,14 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
     }
 }
 
-pub struct NonLudic<T> {
-    ludic: Ludic<T>,
-    ctr: T,
-    record: T,
-}
+/// The non-Ludic numbers.
+///
+/// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21...
+pub struct NonLudic<T>(AntiSequence<T>);
 
-impl<T: CheckedAdd + Clone + Integer> NonLudic<T> {
+impl<T: CheckedAdd + Clone + Integer + 'static> NonLudic<T> {
     pub fn new() -> Self {
-        let mut ludic = Ludic::new();
-        ludic.next();
-        let record = ludic.next().unwrap();
-        Self {
-            ludic,
-            ctr: T::one(),
-            record,
-        }
+        Self(AntiSequence::new(Ludic::new(), T::one()))
     }
 }
 
@@ -97,16 +92,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for NonLudic<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            self.ctr.incr()?;
-            if self.ctr == self.record {
-                self.record = self.ludic.next()?;
-            } else {
-                break;
-            }
-        }
-        let out = self.ctr.clone();
-        Some(out)
+        self.0.next()
     }
 }
 

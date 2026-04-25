@@ -2,7 +2,7 @@ use num::{CheckedAdd, One};
 
 use crate::core::traits::Increment;
 
-/// For a sequence of strictly inreasing natural numbers the anti-sequence is all the numbers that do not appear in it.
+/// For a strictly inreasing sequence the anti-sequence is all the numbers that do not appear in it after some starting point, usually 0 or 1.
 pub struct AntiSequence<T> {
     iter: Box<dyn Iterator<Item = T>>,
     record: T,
