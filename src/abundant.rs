@@ -1,4 +1,4 @@
-use crate::utils::divisibility::{aliquot_sum, factors, proper_factors};
+use crate::utils::divisibility::{aliquot_sum, proper_factors};
 
 /// The abundant numbers, those which have an aliquot sum greater than themselves.
 ///
