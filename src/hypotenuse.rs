@@ -1,6 +1,6 @@
 use crate::utils::divisibility::prime_factorization;
 
-/// Integers that can be the length of the hypotenuse of a primitive Pythagorean triple.
+/// Hypotenuse Numbers. Integers that can be the length of the hypotenuse of a primitive right triangle with integer sides.
 ///
 /// 5, 13, 17, 25, 29, 37, 41, 53, 61, 65...
 pub struct Hypotenuse {
@@ -33,7 +33,8 @@ impl Iterator for Hypotenuse {
     }
 }
 
-/// Integers that cannot be the length of the hypotenuse of a primitive Pythagorean triple.
+/// Non-Hypotenuse Numbers. Integers that cannot be the length of the hypotenuse of any right triangle with integer sides. Not the complement of the hypotenuse numbers.
+///
 /// 1, 2, 3, 4, 6, 7, 8, 9, 11, 12...
 pub struct Nonhypotenuse {
     ctr: u64,
