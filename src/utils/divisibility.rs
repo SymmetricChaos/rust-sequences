@@ -301,7 +301,7 @@ pub fn factors(n: u64) -> Vec<u64> {
         return out;
     }
 
-    for f in 2..n.isqrt() {
+    for f in 2..=n.isqrt() {
         let (d, r) = n.div_rem(&f);
         if r == 0 {
             out.push(f);
@@ -327,7 +327,7 @@ pub fn proper_factors(n: u64) -> Vec<u64> {
         return out;
     }
 
-    for f in 2..n.isqrt() {
+    for f in 2..=n.isqrt() {
         let (d, r) = n.div_rem(&f);
         if r == 0 {
             out.push(f);

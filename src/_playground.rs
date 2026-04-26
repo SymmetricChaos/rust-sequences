@@ -7,6 +7,7 @@ use crate::{
         rational_digits::rational_decimal_string as to_dec,
         roots::{CubeRoot, SquareRoot},
     },
+    deficient::Deficient,
     dirichlet_convolution::{DirichletConvolution, one},
     divisor::NumberOfDivisors,
     exponential::Exponential,
@@ -15,6 +16,7 @@ use crate::{
     harmonic::{Harmonic, HarmonicNumbers},
     ruler::Ruler,
     transforms::{
+        antisequence::AntiSequence,
         boustrophedon::{Boustrophedon, BoustrophedonTriangle},
         differences::AbsDiffs,
         lodumo::Lodumo,
@@ -48,4 +50,5 @@ crate::print_sequences!(
     Ruler::<u32>::new(), 20;
     OrdinalTransform::new(Ruler::<u32>::new()), 20;
     Lodumo::new(Fibonacci::<u32>::new(),5), 20; // A160081
+    AntiSequence::new(Deficient::new(), 1), 20; // The non-deficient numbers (abundant and perfect numbers)
 );
