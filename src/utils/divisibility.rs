@@ -233,7 +233,7 @@ pub fn number_of_divisors(n: u64) -> u64 {
     out
 }
 
-/// Sum of divisors of n.
+/// Sum of all divisors of n.
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
 pub fn sum_of_divisors(n: u64) -> Option<u64> {
@@ -255,7 +255,7 @@ pub fn sum_of_divisors(n: u64) -> Option<u64> {
     }
 }
 
-/// Aliquot sum of n. The sum of proper divisors.
+/// Aliquot sum of n. The sum of all divisors except n itself.
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
 pub fn aliquot_sum(n: u64) -> Option<u64> {
@@ -314,14 +314,14 @@ pub fn factors(n: u64) -> Vec<u64> {
     out
 }
 
-/// All of the proper factors of n (excluding itself and 1).
+/// All of the factors of n except itself.
 /// Defined as [] for n = 0
 pub fn proper_factors(n: u64) -> Vec<u64> {
     if n == 0 {
         return vec![];
     }
 
-    let mut out = Vec::new();
+    let mut out = vec![1];
 
     if is_prime(n) {
         return out;
