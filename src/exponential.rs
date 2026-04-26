@@ -14,7 +14,7 @@ pub struct Exponential<T> {
 impl<T: PrimInt + Integer> Exponential<T> {
     pub fn new(numer: T, denom: T) -> Self {
         Self {
-            sum: Ratio::one(),
+            sum: Ratio::zero(),
             val: Ratio::one(),
             x: Ratio::new(numer, denom),
             factorials: Factorials::new(),
@@ -37,7 +37,7 @@ impl Exponential<BigInt> {
         BigInt: From<G>,
     {
         Self {
-            sum: Ratio::one(),
+            sum: Ratio::zero(),
             val: Ratio::one(),
             x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
             factorials: Factorials::new_big(),
@@ -53,7 +53,7 @@ impl Exponential<BigInt> {
             BigInt::from(x.denom().clone()),
         );
         Self {
-            sum: Ratio::one(),
+            sum: Ratio::zero(),
             val: Ratio::one(),
             x,
             factorials: Factorials::new_big(),
