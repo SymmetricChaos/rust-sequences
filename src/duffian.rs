@@ -31,6 +31,9 @@ impl Iterator for Duffian {
     }
 }
 
+/// Duffian twins. Duffian numbers that differ by one.
+///
+/// (8, 9), (35, 36), (49, 50), (63, 64), (64, 65)...
 pub struct DuffianTwins {
     duff: Duffian,
     prev: u64,
