@@ -24,7 +24,7 @@ impl<T: PrimInt> Iterator for Gray<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.clone() ^ (self.ctr >> 1);
+        let out = self.ctr ^ (self.ctr >> 1);
         self.ctr.incr()?;
         Some(out)
     }

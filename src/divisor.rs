@@ -94,6 +94,9 @@ impl Iterator for AliquotSequence {
     }
 }
 
+/// The partial sums of the divisor function over the natural numbers.
+///
+/// 0, 1, 3, 5, 8, 10, 14, 16, 20, 23...
 pub struct DivisorSummatory {
     n: u64,
     s: u64,
