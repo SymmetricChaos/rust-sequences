@@ -1,8 +1,7 @@
-use num::rational::Ratio;
-
 use crate::utils::divisibility::{
     abundancy_index, aliquot_sum, proper_divisors, radical, sum_of_divisors,
 };
+use num::rational::Ratio;
 
 /// The abundant numbers. Positive integers which have an aliquot sum greater than themselves.
 ///

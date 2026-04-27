@@ -1,4 +1,4 @@
-use crate::{core::composite::Composites, utils::divisibility::sum_of_divisors};
+use crate::{core::Composites, utils::divisibility::sum_of_divisors};
 use num::integer::gcd;
 
 /// Duffian numbers. Composite numbers that are coprime to the sum of their divisors.

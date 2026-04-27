@@ -1,6 +1,5 @@
-use num::rational::Ratio;
-
 use crate::utils::divisibility::aliquot_sum;
+use num::rational::Ratio;
 
 /// The abundance of each positive integer. Its aliquot sum minus itself.
 ///

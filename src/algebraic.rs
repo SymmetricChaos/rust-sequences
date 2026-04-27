@@ -1,6 +1,5 @@
-use itertools::Itertools;
-
 use crate::{compositions_weak::WeakCompositionsNK, utils::polynomial::Polynomial};
+use itertools::Itertools;
 
 /// All integer valued polynomials as ordered by Cantor.
 pub struct Algebraic {
