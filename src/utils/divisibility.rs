@@ -295,6 +295,10 @@ pub fn factors(n: u64) -> Vec<u64> {
         return vec![0];
     }
 
+    if n == 1 {
+        return vec![1];
+    }
+
     let mut out = vec![1, n];
 
     if is_prime(n) {
@@ -315,9 +319,9 @@ pub fn factors(n: u64) -> Vec<u64> {
 }
 
 /// All of the factors of n except itself.
-/// Defined as [] for n = 0
+/// Defined as [] for n = 0.
 pub fn proper_factors(n: u64) -> Vec<u64> {
-    if n == 0 {
+    if n == 0 || n == 1 {
         return vec![];
     }
 
