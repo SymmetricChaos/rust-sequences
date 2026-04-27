@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use num::{CheckedAdd, CheckedMul, Integer};
+use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use std::collections::BTreeMap;
 
 // Modular exponentiation I got from a website
@@ -220,7 +220,7 @@ pub fn prime_power_factorization(n: u64) -> Vec<u64> {
         .collect_vec()
 }
 
-/// Number of divisors of n
+/// Number of divisors of n. Also known as σ_0(n).
 /// Defined as 0 for n = 0.
 pub fn number_of_divisors(n: u64) -> u64 {
     if n == 0 {
@@ -233,7 +233,7 @@ pub fn number_of_divisors(n: u64) -> u64 {
     out
 }
 
-/// Sum of all divisors of n.
+/// Sum of all divisors of n. Also known as σ_1(n).
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
 pub fn sum_of_divisors(n: u64) -> Option<u64> {
@@ -255,6 +255,16 @@ pub fn sum_of_divisors(n: u64) -> Option<u64> {
     }
 }
 
+/// Sum of all divisors of n. Divided by n. Also known as σ_-1(n).
+/// Returns None for n = 0 or if overflow occurs.
+pub fn abundancy_index(n: u64) -> Option<Ratio<u64>> {
+    if n == 0 {
+        None
+    } else {
+        Some(Ratio::new(sum_of_divisors(n)?, n))
+    }
+}
+
 /// Aliquot sum of n. The sum of all divisors except n itself.
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
@@ -265,14 +275,14 @@ pub fn aliquot_sum(n: u64) -> Option<u64> {
     }
 }
 
-/// Radical (aka squarefree kernel) of a number, product of unique prime factors. The largest squarefree factor.
-/// Defined as 1 for n == 0
+/// The radical of a number, the product of its unique prime factors. Also known as the squarefree kernel or the largest squarefree divisor.
+/// Defined as 1 for n == 0.
 pub fn radical(n: u64) -> u64 {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
 
 /// Euler's totient function. Number of positive integers coprime to n and less than n.
-/// Defined as 0 for n == 0
+/// Defined as 0 for n == 0.
 pub fn totient(n: u64) -> u64 {
     if n == 0 {
         return 0;
@@ -283,14 +293,14 @@ pub fn totient(n: u64) -> u64 {
 }
 
 /// Euler's cototient function. Number of positive integers not coprime to n and less than n.
-/// Defined as 0 for n == 0
+/// Defined as 0 for n == 0.
 pub fn cototient(n: u64) -> u64 {
     n - totient(n)
 }
 
-/// All of the factors of n.
-/// Defined as [0] for n = 0
-pub fn factors(n: u64) -> Vec<u64> {
+/// All of the divisors of n.
+/// Defined as [0] for n = 0.
+pub fn divisors(n: u64) -> Vec<u64> {
     if n == 0 {
         return vec![0];
     }
@@ -318,9 +328,9 @@ pub fn factors(n: u64) -> Vec<u64> {
     out
 }
 
-/// All of the factors of n except itself.
+/// All of the divisors of n except itself.
 /// Defined as [] for n = 0.
-pub fn proper_factors(n: u64) -> Vec<u64> {
+pub fn proper_divisors(n: u64) -> Vec<u64> {
     if n == 0 || n == 1 {
         return vec![];
     }
@@ -345,7 +355,7 @@ pub fn proper_factors(n: u64) -> Vec<u64> {
 }
 
 crate::print_sequences!(
-    factors(2*2*5*7).into_iter(), 20, "{:?}", ", ";
+    divisors(2*2*5*7).into_iter(), 20, "{:?}", ", ";
     prime_factorization(363747780).into_iter(), 10, "{:?}", ", ";
     prime_power_factorization(363747780).into_iter(), 10, "{:?}", ", ";
 );
