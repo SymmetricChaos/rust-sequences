@@ -4,7 +4,7 @@ use crate::utils::divisibility::{
     abundancy_index, aliquot_sum, proper_divisors, radical, sum_of_divisors,
 };
 
-/// The abundant numbers, those which have an aliquot sum greater than themselves.
+/// The abundant numbers. Positive integers which have an aliquot sum greater than themselves.
 ///
 /// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54...
 pub struct Abundant {
@@ -69,7 +69,7 @@ impl Iterator for PrimitiveAbundant {
     }
 }
 
-/// Highly abundant numbers. Positive integers for which the sum of divisors is greater than for any small number.
+/// Highly abundant numbers. Positive integers for which the sum of divisors is greater than for any smaller positive integer.
 ///
 /// 1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24...
 pub struct HighlyAbundant {
@@ -99,7 +99,7 @@ impl Iterator for HighlyAbundant {
     }
 }
 
-/// Superabundant numbers. Positive integers for which the ratio between the sum of divisors and itself is greater than for any small number.
+/// Superabundant numbers. Positive integers for which the ratio between the sum of divisors and itself is greater than for any smaller positive integer.
 ///
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
 pub struct Superabundant {
