@@ -1,20 +1,20 @@
 use crate::gray::Gray;
-use num::PrimInt;
+use num::{Integer, PrimInt};
 
-/// For each natural number the number of "runs" of matching bits in the binary expension. Assumes that 0 has no bits and so is assigned a value of zero.
+/// For each natural number the number of "runs" of matching bits in the binary expension. The number zero has no bits and is uniquely given a count of zero runs.
 ///
 /// 0, 1, 2, 1, 2, 3, 2, 1, 2, 3, 4, 3...
 pub struct BinaryRuns<T> {
     gray: Gray<T>,
 }
 
-impl<T: PrimInt> BinaryRuns<T> {
+impl<T: PrimInt + Integer> BinaryRuns<T> {
     pub fn new() -> Self {
         Self { gray: Gray::new() }
     }
 }
 
-impl<T: PrimInt> Iterator for BinaryRuns<T> {
+impl<T: PrimInt + Integer> Iterator for BinaryRuns<T> {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
