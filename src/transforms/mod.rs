@@ -8,4 +8,5 @@ pub mod ordinal;
 pub mod products;
 pub mod rational;
 pub mod run_length_encoding;
+pub mod shadow;
 pub mod sums;
