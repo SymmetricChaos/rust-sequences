@@ -4,7 +4,7 @@ use num::{CheckedAdd, Integer};
 
 use crate::core::traits::Increment;
 
-/// The shadow transform.
+/// The shadow transform of a sequence. The number of positive integers less than each term in the sequence which are factors of that term.
 pub struct ShadowTransform<T> {
     iter: Box<dyn Iterator<Item = T>>,
     terms: Vec<T>,
