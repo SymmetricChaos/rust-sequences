@@ -40,6 +40,7 @@ pub mod factorial;
 pub mod farey;
 pub mod fermat;
 pub mod fibonacci;
+pub mod fibonacci_lucky;
 pub mod figure_figure;
 pub mod fly_straight;
 pub mod forest_fire;
