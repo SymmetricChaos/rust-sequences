@@ -1,6 +1,6 @@
 use crate::{
     core::{parity::Odds, traits::Increment},
-    transforms::antisequence::AntiSequence,
+    transforms::complement::Complement,
 };
 use num::{BigInt, CheckedAdd, Integer};
 
@@ -74,11 +74,11 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
 /// The non-Ludic numbers.
 ///
 /// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21...
-pub struct NonLudic<T>(AntiSequence<T>);
+pub struct NonLudic<T>(Complement<T>);
 
 impl<T: CheckedAdd + Clone + Integer + 'static> NonLudic<T> {
     pub fn new() -> Self {
-        Self(AntiSequence::new(Ludic::new(), T::one()))
+        Self(Complement::new(Ludic::new(), T::one()))
     }
 }
 

@@ -1,7 +1,7 @@
-pub mod antisequence;
 pub mod binomial;
 pub mod boustrophedon;
 pub mod characteristic;
+pub mod complement;
 pub mod differences;
 pub mod lodumo;
 pub mod ordinal;

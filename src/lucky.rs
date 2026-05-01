@@ -1,6 +1,6 @@
 use crate::{
     core::{parity::Odds, traits::Increment},
-    transforms::antisequence::AntiSequence,
+    transforms::complement::Complement,
 };
 use num::{BigInt, CheckedAdd, Integer};
 
@@ -70,11 +70,11 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Lucky<T> {
 /// The unlucky numbers.
 ///
 /// 2, 4, 5, 6, 8, 10, 11, 12, 14, 16, 17, 18, 19, 20, 22...
-pub struct Unlucky<T>(AntiSequence<T>);
+pub struct Unlucky<T>(Complement<T>);
 
 impl<T: CheckedAdd + Clone + Integer + 'static> Unlucky<T> {
     pub fn new() -> Self {
-        Self(AntiSequence::new(Lucky::new(), T::one()))
+        Self(Complement::new(Lucky::new(), T::one()))
     }
 }
 
