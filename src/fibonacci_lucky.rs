@@ -4,15 +4,15 @@ use num::{BigInt, CheckedAdd, Integer};
 ///
 /// 1, 2, 4, 5, 7, 10, 11, 13, 16, 19, 20...
 pub struct FibonacciLucky<T> {
-    ctr: T,
-    terms: Vec<[T; 2]>,
+    idx: T,
+    sieve: Vec<[T; 2]>,
 }
 
 impl<T: CheckedAdd + Clone + Integer> FibonacciLucky<T> {
     pub fn new() -> Self {
         Self {
-            ctr: T::one(),
-            terms: Vec::new(),
+            idx: T::one(),
+            sieve: Vec::new(),
         }
     }
 }

@@ -5,6 +5,7 @@ pub mod utils;
 
 pub mod _playground;
 pub mod a005243;
+pub mod a005244;
 pub mod abelian_groups;
 pub mod abundance;
 pub mod abundant;
@@ -188,18 +189,18 @@ macro_rules! print_sequences {
 #[macro_export]
 macro_rules! check_row {
     ($seq:expr, $data:expr; $($args:tt)*) => {
-        let expected = $data.map(|x| x.to_string()).join(", ");
-        let calculated = itertools::Itertools::collect_vec($seq.take(expected.len()).map(|x| x.to_string())).join(", ");
-        if expected != calculated {
-            panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected, calculated);
+        let expected = $data.map(|x| x.to_string());
+        let calculated = itertools::Itertools::collect_vec($seq.take(expected.len()).map(|x| x.to_string()));
+        if expected.join(", ") != calculated.join(", ") {
+            panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected.join(", "), calculated.join(", "));
         }
         crate::check_row!($($args)*)
     };
     ($seq:expr, skip $skip:literal, $data:expr; $($args:tt)*) => {
-        let expected = $data.map(|x| x.to_string()).join(", ");
-        let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take(expected.len()).map(|x| x.to_string())).join(", ");
-        if expected != calculated {
-            panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected, calculated);
+        let expected = $data.map(|x| x.to_string());
+        let calculated = itertools::Itertools::collect_vec($seq.skip($skip).take(expected.len()).map(|x| x.to_string()));
+        if expected.join(", ") != calculated.join(", ") {
+            panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected.join(", "), calculated.join(", "));
         }
         crate::check_row!($($args)*)
     };
