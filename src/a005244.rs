@@ -1,7 +1,6 @@
+use crate::transforms::complement::Complement;
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::collections::BTreeSet;
-
-use crate::transforms::complement::Complement;
 
 /// Starting with 2 and 3 every number that can be written as (a*b)-1,  for a and b in the sequence, appears in increasing order.
 ///

@@ -95,6 +95,7 @@ pub mod smooth;
 pub mod sorted_pairs;
 pub mod squarefree;
 pub mod stirling;
+pub mod sum_prime_factors;
 pub mod sylverster;
 pub mod taxicab;
 pub mod thue_morse;
