@@ -2,6 +2,8 @@ use num::{CheckedAdd, Integer};
 use std::collections::VecDeque;
 
 /// The Figure-Figure sequence introduced by Hoftsader. Along with its first differences includes every positive integer exactly once. This property is not unique but this sequence is the lexicographically first.
+///
+/// 1, 3, 7, 12, 18, 26, 35, 45, 56, 69...
 pub struct FigureFigure<T> {
     ctr: T,
     comp: T,

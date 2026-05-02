@@ -1,5 +1,5 @@
-// These sequences are core in the sense that any other sequence may depend on them but none of them can depend on others
-// They should avoid using supertraits like Num or Integer in order to be as generic as possible.
+//! These sequences are core in the sense that any other sequence may depend on them but none of them can depend on any others.
+//! They should be as generic as possible and avoid using supertraits like Integer or Num that have many subtraits.
 pub mod arithmetic;
 pub mod bernoulli_numbers;
 pub mod catalan;

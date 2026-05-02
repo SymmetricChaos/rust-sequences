@@ -1,3 +1,4 @@
+//! Iterators that accept one or more other sequences in order to create a new sequence.
 pub mod binomial;
 pub mod boustrophedon;
 pub mod characteristic;

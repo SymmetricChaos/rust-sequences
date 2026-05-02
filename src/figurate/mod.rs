@@ -1,3 +1,4 @@
+//! Sequences related to various kinds of figurate numbers.
 pub mod centered_polygonal;
 pub mod cube;
 pub mod generalized_pentagonal;

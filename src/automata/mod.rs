@@ -1,3 +1,4 @@
+//! These sequences are related to automata rather than numbers.
 pub mod elementary_cellular_automata;
 pub mod finite_state_machine;
 pub mod lindenmayer_system;
