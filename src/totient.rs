@@ -143,7 +143,7 @@ impl Iterator for Nontotient {
     }
 }
 
-/// The even nontotient numbers. Even positive integers that are not in the range of Euler's totient function.
+/// The even nontotient numbers. Even positive integers that are not in the range of Euler's totient function. See also Nontotient which include all odd numbers except 1.
 ///
 /// 14, 26, 34, 38, 50, 62, 68, 74, 76, 86...
 pub struct EvenNontotient {

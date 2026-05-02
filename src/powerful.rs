@@ -1,7 +1,7 @@
 use crate::utils::divisibility::prime_factorization;
 use num::integer::gcd;
 
-/// Positive natural numbers that are divisible by all the squares of their prime factors.
+/// Positive natural numbers that are divisible by the squares of all their prime factors.
 ///
 /// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...
 pub struct Powerful {
@@ -66,6 +66,6 @@ impl Iterator for Achilles {
 }
 
 crate::check_sequences!(
-    Powerful::new(), [1, 4, 8, 9, 16, 25, 27, 32, 36, 49, 64, 72, 81, 100, 108, 121, 125, 128, 144, 169];
-    Achilles::new(), [72, 108, 200, 288, 392, 432, 500, 648, 675, 800];
+    Powerful::new(), [1, 4, 8, 9, 16, 25, 27, 32, 36, 49, 64, 72, 81, 100, 108, 121, 125, 128, 144, 169, 196, 200, 216, 225, 243, 256, 288, 289, 324, 343, 361, 392, 400, 432, 441, 484, 500, 512, 529, 576, 625, 648, 675, 676, 729, 784, 800, 841, 864, 900, 961, 968, 972, 1000];
+    Achilles::new(), [72, 108, 200, 288, 392, 432, 500, 648, 675, 800, 864, 968, 972, 1125, 1152, 1323, 1352, 1372, 1568, 1800, 1944, 2000, 2312, 2592, 2700, 2888, 3087, 3200, 3267, 3456, 3528, 3872, 3888, 4000, 4232, 4500, 4563, 4608, 5000, 5292, 5324, 5400, 5408, 5488, 6075];
 );

@@ -66,7 +66,6 @@ pub mod narayana_general;
 pub mod narayana_triangle;
 pub mod narayanas_cows;
 pub mod odd_part;
-pub mod odious;
 pub mod padic_valuation;
 pub mod paperfolding;
 pub mod partition;
