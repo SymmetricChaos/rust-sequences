@@ -2,7 +2,7 @@ use num::{CheckedAdd, One};
 
 use crate::core::traits::Increment;
 
-/// The complementary sequence is all the numbers that do not appear in it after some starting point, usually 0 or 1. This implementation only works for a strictly increasing sequence.
+/// The complement of a sequence is all the natural numbers that do not appear in it, typically starting at either 0 or 1. This implementation only works for a strictly increasing sequences.
 pub struct Complement<T> {
     iter: Box<dyn Iterator<Item = T>>,
     record: T,
