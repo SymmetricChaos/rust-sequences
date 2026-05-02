@@ -110,8 +110,73 @@ fn prime_factorization_timings() {
     }
 }
 
+pub fn prime_factorization_timings_huge() {
+    let start_time = std::time::Instant::now();
+    let mut longest = (std::time::Duration::ZERO, 0, vec![]);
+    let mut total_time = std::time::Duration::ZERO;
+
+    let d = 500_000;
+    let start = u64::MAX - d;
+    let end = u64::MAX;
+
+    let path_and_name = format!("src/_factorization_timings_huge_last_{d}_u64s..txt");
+    std::fs::File::create(&path_and_name).unwrap();
+    let mut file = std::fs::File::options()
+        .append(true)
+        .open(&path_and_name)
+        .unwrap();
+
+    for i in start..=end {
+        // Timed section
+        let t = std::time::Instant::now();
+        let fs = prime_factorization(i);
+        let d = std::time::Instant::now() - t;
+
+        total_time = total_time + d;
+
+        // Correctness check
+        // Also prevents factorization from being optimized away
+        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
+        assert_eq!(i, prod);
+
+        // Record and print a new record for time to factor
+        if d > longest.0 {
+            longest = (d, i, fs);
+            // Save information to file
+            file.write_all(
+                format!(
+                    "RECORD! {:<11?}    {} = {:?}\n\n",
+                    longest.0,
+                    longest.1.to_formatted_string(&num_format::Locale::en),
+                    longest.2
+                )
+                .as_bytes(),
+            )
+            .unwrap();
+            file.flush().unwrap();
+        }
+
+        // Heatbeat and average
+        if (u64::MAX - i) % 100_000 == 0 {
+            file.write_all(
+                format!(
+                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.0?}\nTOTAL RUNNING TIME:      {:.0?}\n\n",
+                    i.to_formatted_string(&num_format::Locale::en),
+                    total_time.div_f64((u64::MAX-i) as f64),
+                    total_time,
+                    std::time::Instant::now() - start_time,
+                )
+                .as_bytes(),
+            )
+            .unwrap();
+            file.flush().unwrap();
+        }
+    }
+}
+
 // cargo run --release
 fn main() {
     // partial_factorization_density_test();
-    prime_factorization_timings();
+    // prime_factorization_timings();
+    prime_factorization_timings_huge();
 }
