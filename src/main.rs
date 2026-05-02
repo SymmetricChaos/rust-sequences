@@ -43,7 +43,7 @@ fn _partial_factorization_density_test() {
     }
 }
 
-fn prime_factorization_timings() {
+fn _prime_factorization_timings() {
     let start_time = std::time::Instant::now();
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
@@ -110,12 +110,12 @@ fn prime_factorization_timings() {
     }
 }
 
-pub fn prime_factorization_timings_huge() {
+pub fn _prime_factorization_timings_huge() {
     let start_time = std::time::Instant::now();
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
 
-    let d = 500_000;
+    let d = 1_000_000;
     let start = u64::MAX - d;
     let end = u64::MAX;
 
@@ -176,7 +176,7 @@ pub fn prime_factorization_timings_huge() {
 
 // cargo run --release
 fn main() {
-    // partial_factorization_density_test();
-    // prime_factorization_timings();
-    prime_factorization_timings_huge();
+    // _partial_factorization_density_test();
+    // _prime_factorization_timings();
+    _prime_factorization_timings_huge();
 }
