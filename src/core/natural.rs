@@ -15,9 +15,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Naturals<T> {
 
 impl Naturals<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            ctr: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 

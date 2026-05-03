@@ -21,10 +21,7 @@ impl<T: One + Zero> Parity<T> {
 
 impl Parity<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            value: false,
-            _phantom: PhantomData,
-        }
+        Self::new()
     }
 }
 
@@ -56,9 +53,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Evens<T> {
 
 impl Evens<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 
@@ -87,7 +82,7 @@ impl<T: CheckedAdd + Clone + One> Odds<T> {
 
 impl Odds<BigInt> {
     pub fn new_big() -> Self {
-        Self { val: BigInt::one() }
+        Self::new()
     }
 }
 
@@ -116,9 +111,7 @@ impl<T: CheckedAdd + Clone + One + Signed + Zero> EvenIntegers<T> {
 
 impl EvenIntegers<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 
@@ -153,7 +146,7 @@ impl<T: CheckedAdd + Clone + Signed + One> OddIntegers<T> {
 
 impl OddIntegers<BigInt> {
     pub fn new_big() -> Self {
-        Self { val: BigInt::one() }
+        Self::new()
     }
 }
 

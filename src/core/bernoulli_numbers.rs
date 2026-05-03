@@ -1,10 +1,6 @@
-use std::marker::PhantomData;
-
-use num::{
-    BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, PrimInt, Signed, Zero, rational::Ratio,
-};
-
 use crate::core::alternating::Alternating;
+use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Signed, Zero, rational::Ratio};
+use std::marker::PhantomData;
 
 /// The Bernoulli numbers.
 /// Either the plus or minus version of the sequence may be chosen.
@@ -16,7 +12,10 @@ pub struct Bernoulli<T> {
     n: BigInt,
 }
 
-impl<T: Signed + PrimInt> Bernoulli<T> {
+impl<T: Signed> Bernoulli<T>
+where
+    T: TryFrom<BigInt>,
+{
     /// Internal calculations are done using BigInt and converted for output so there is no gain in speed or memory usage over ::new_big().
     pub fn new_plus() -> Self {
         Self {
@@ -38,19 +37,11 @@ impl<T: Signed + PrimInt> Bernoulli<T> {
 
 impl Bernoulli<BigInt> {
     pub fn new_plus_big() -> Self {
-        Self {
-            m: 0,
-            phantom: PhantomData,
-            n: BigInt::one(),
-        }
+        Self::new_plus()
     }
 
     pub fn new_minus_big() -> Self {
-        Self {
-            m: 0,
-            phantom: PhantomData,
-            n: BigInt::zero(),
-        }
+        Self::new_minus()
     }
 }
 

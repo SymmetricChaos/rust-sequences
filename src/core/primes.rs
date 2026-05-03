@@ -274,7 +274,7 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for Primorial
     }
 }
 
-/// The number of prime factors of each positive integer, counted with multiplicity. The prime Ω function.
+/// The number of prime factors of each positive integer, counted with multiplicity. The prime Ω (big omega) function.
 pub struct NPrimeFactors {
     ctr: u64,
 }
@@ -296,7 +296,7 @@ impl Iterator for NPrimeFactors {
     }
 }
 
-/// The number of distinct prime factors of each positive integer, counted with multiplicity. The prime ω function.
+/// The number of distinct prime factors of each positive integer. The prime ω (small omega) function.
 pub struct NDistinctPrimeFactors {
     ctr: u64,
 }
@@ -329,9 +329,9 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Primes::new_big(), skip 0, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+    Primes::new_big(), skip 0, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
     Primes::new_big(), skip 1000, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
-    PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37];
+    PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37, 41, 43, 47, 49, 53, 59, 61, 64, 67, 71, 73, 79, 81, 83, 89, 97, 101, 103, 107, 109, 113, 121, 125, 127, 128, 131, 137, 139, 149, 151, 157, 163, 167, 169, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227];
     Primorial::<u32>::new(), [1, 2, 6, 30, 210];
     GreatestPrimeFactor::new(), [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
     LeastPrimeFactor::new(), [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];

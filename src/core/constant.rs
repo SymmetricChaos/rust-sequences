@@ -16,9 +16,7 @@ impl Constant<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self {
-            val: BigInt::from(val),
-        }
+        Self::new(BigInt::from(val))
     }
 }
 
