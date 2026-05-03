@@ -1,6 +1,5 @@
 use crate::core::traits::Increment;
-use crate::utils::divisibility::{prime_factorization, prime_signature};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, One};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::{
     collections::{BinaryHeap, HashMap},
     hash::Hash, // Found to be much faster than BTreeMap
@@ -52,108 +51,6 @@ impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for Primes<T> {
                 self.sieve.remove(&self.n);
             }
         }
-    }
-}
-
-/// The the prime factorization of each positive integer.
-/// For instance 20 = 2^2 + 5^1 and is written here as [(2,2), (5,1)]
-/// [], [(2, 1)], [(3, 1)], [(2, 2)], [(5, 1)], [(2, 1), (3, 1)], [(7, 1)], [(2, 3)], [(3, 2)], [(2, 1), (5, 1)]
-pub struct PrimeFactorizations {
-    ctr: u64,
-}
-
-impl PrimeFactorizations {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for PrimeFactorizations {
-    type Item = Vec<(u64, u64)>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        Some(prime_factorization(self.ctr))
-    }
-}
-
-/// The greatest prime factor of each positive integer. Defined as 1 for 1.
-/// 1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7
-pub struct GreatestPrimeFactor {
-    ctr: u64,
-}
-
-impl GreatestPrimeFactor {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for GreatestPrimeFactor {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        if self.ctr.is_one() {
-            return Some(1);
-        }
-
-        Some(prime_factorization(self.ctr).last()?.0)
-    }
-}
-
-/// The least prime factor of each positive integer. Defined as 1 for 1.
-/// 1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2
-pub struct LeastPrimeFactor {
-    ctr: u64,
-}
-
-impl LeastPrimeFactor {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for LeastPrimeFactor {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        if self.ctr.is_one() {
-            return Some(1);
-        }
-
-        Some(prime_factorization(self.ctr)[0].0)
-    }
-}
-
-/// The the prime signature of each positive integer. The powers of the prime factorization in decreasing order.
-/// For instance the prime signature of 3918213 is [4, 2,1] because 3918213 = 3^4 * 13^1 * 61^2.
-/// [], [1], [1], [2], [1], [1, 1], [1], [3], [2], [1, 1]...
-pub struct PrimeSignatures {
-    ctr: u64,
-}
-
-impl PrimeSignatures {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for PrimeSignatures {
-    type Item = Vec<u64>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        Some(prime_signature(self.ctr))
     }
 }
 
@@ -269,15 +166,13 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for Primorial
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.prod.clone();
-        self.prod = self.prod.checked_mul(&self.primes.next()?)?;
+        self.prod = match self.prod.checked_mul(&self.primes.next()?) {
+            Some(n) => n,
+            None => return Some(out),
+        };
         Some(out)
     }
 }
-
-crate::print_sequences!(
-    PrimeSignatures::new(), 30, "{:?}", ", ";
-    PrimeFactorizations::new(), 15, "{:?}", ", ";
-);
 
 crate::check_iteration_times!(
     Primes::new_big(), 75_000;
@@ -285,10 +180,7 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Primes::new_big(), skip 0, [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
-    Primes::new_big(), skip 1000, [7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017];
+    Primes::new_big(),         [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
     PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37, 41, 43, 47, 49, 53, 59, 61, 64, 67, 71, 73, 79, 81, 83, 89, 97, 101, 103, 107, 109, 113, 121, 125, 127, 128, 131, 137, 139, 149, 151, 157, 163, 167, 169, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227];
-    Primorial::<u32>::new(), [1, 2, 6, 30, 210];
-    GreatestPrimeFactor::new(), [1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7];
-    LeastPrimeFactor::new(), [1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2];
+    Primorial::<u64>::new(),   [1_u64, 2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870, 6469693230, 200560490130, 7420738134810, 304250263527210, 13082761331670030, 614889782588491410];
 );

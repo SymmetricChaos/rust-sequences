@@ -1,4 +1,4 @@
-use crate::utils::divisibility::prime_factorization;
+use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
 
 /// The number of prime factors of each positive integer, counted with multiplicity. The prime Ω (big omega) function.
 ///
@@ -18,8 +18,7 @@ impl Iterator for NumberOfPrimeFactors {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
+        self.ctr.incr()?;
         Some(prime_factorization(self.ctr).iter().map(|x| x.1).sum())
     }
 }
@@ -42,8 +41,7 @@ impl Iterator for NumberOfDistinctPrimeFactors {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
+        self.ctr.incr()?;
         Some(prime_factorization(self.ctr).len() as u64)
     }
 }
