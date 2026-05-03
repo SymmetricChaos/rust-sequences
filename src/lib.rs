@@ -29,6 +29,7 @@ pub mod digital_sum;
 pub mod dirichlet_convolution;
 pub mod ducci;
 pub mod ecg;
+pub mod euclid_mullin;
 pub mod eulers_number;
 pub mod evil_and_odious;
 pub mod exponential;
