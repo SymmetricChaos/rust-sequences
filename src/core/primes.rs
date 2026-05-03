@@ -94,6 +94,7 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
 }
 
 /// The perfect powers of primes.
+///
 /// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
 pub struct PrimePowers<T: Eq> {
     priority_queue: BinaryHeap<PrimePower<T>>,
@@ -111,10 +112,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
 
 impl PrimePowers<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            priority_queue: BinaryHeap::new(),
-            primes: Primes::new_big(),
-        }
+        Self::new()
     }
 }
 
@@ -140,6 +138,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for PrimePowe
 }
 
 /// The primorials, the products of the sequential primes.
+///
 /// 1, 2, 6, 30, 210, 2310, 30030, 510510, 9699690...
 pub struct Primorial<T> {
     prod: T,
