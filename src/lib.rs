@@ -76,6 +76,7 @@ pub mod perrin_padovan;
 pub mod phythagorean;
 pub mod pi;
 pub mod pi_mu;
+pub mod pisano;
 pub mod powerful;
 pub mod prime_counting;
 pub mod prime_gaps;
