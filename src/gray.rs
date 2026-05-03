@@ -1,7 +1,7 @@
 use std::ops::{BitXor, Shr};
 
 use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer, Zero};
+use num::{BigInt, CheckedAdd, Integer};
 
 /// The Gray codes, bit sequence where each term differs from the previous by a single bit. A permutation of the non-negative integers.
 ///
@@ -18,9 +18,7 @@ impl<T: Shr<usize, Output = T> + Clone + BitXor<Output = T> + Integer + CheckedA
 
 impl Gray<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            ctr: BigInt::zero(),
-        }
+        Self::new()
     }
 }
 

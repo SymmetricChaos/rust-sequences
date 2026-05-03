@@ -21,7 +21,7 @@ impl Ducci<BigInt> {
         BigInt: From<G>,
     {
         let v = tup.into_iter().map(|g| BigInt::from(g)).collect();
-        Self { tup: v }
+        Self::new(v)
     }
 }
 

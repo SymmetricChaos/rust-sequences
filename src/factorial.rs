@@ -91,10 +91,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + One> DoubleFactorial<T> {
 
 impl DoubleFactorial<BigInt> {
     pub fn new_big() -> Self {
-        Self {
-            val: BigInt::from(1),
-            ctr: BigInt::from(1),
-        }
+        Self::new()
     }
 }
 
@@ -115,7 +112,7 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Factorials::new_big(), [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
+    Factorials::new_big(), [1_u128, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600, 6227020800, 87178291200, 1307674368000, 20922789888000, 355687428096000, 6402373705728000, 121645100408832000, 2432902008176640000, 51090942171709440000, 1124000727777607680000];
     Factorials::<i32>::new(), [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
     DoubleFactorial::new_big(), [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];
     DoubleFactorial::<i32>::new(), [1, 1, 3, 15, 105, 945, 10395, 135135, 2027025, 34459425];

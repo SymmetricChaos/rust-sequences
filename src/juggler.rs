@@ -12,9 +12,9 @@ impl<T> Juggler<T> {
 }
 
 impl Juggler<BigInt> {
-    pub fn new_big<T>(n: T) -> Self
+    pub fn new_big<G>(n: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         Self::new(BigInt::from(n))
     }

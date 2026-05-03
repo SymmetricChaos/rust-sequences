@@ -22,16 +22,11 @@ impl<T: CheckedMul + CheckedSub + Clone + One + Zero> LucasU<T> {
 }
 
 impl LucasU<BigInt> {
-    pub fn new_big<T>(p: T, q: T) -> Self
+    pub fn new_big<G>(p: G, q: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
-        Self {
-            a: BigInt::zero(),
-            b: BigInt::one(),
-            p: BigInt::from(p),
-            q: BigInt::from(q),
-        }
+        Self::new(BigInt::from(p), BigInt::from(q))
     }
 }
 
@@ -71,17 +66,11 @@ impl<T: CheckedMul + CheckedSub + Clone + One + Zero> LucasV<T> {
 }
 
 impl LucasV<BigInt> {
-    pub fn new_big<N>(p: N, q: N) -> Self
+    pub fn new_big<G>(p: G, q: G) -> Self
     where
-        BigInt: From<N>,
+        BigInt: From<G>,
     {
-        let p = BigInt::from(p);
-        Self {
-            a: BigInt::one() + BigInt::one(),
-            b: p.clone(),
-            p: p,
-            q: BigInt::from(q),
-        }
+        Self::new(BigInt::from(p), BigInt::from(q))
     }
 }
 
