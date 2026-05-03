@@ -1,21 +1,22 @@
 use num::{BigInt, Integer, One, Signed, Zero};
-use std::{cell::LazyCell, collections::BTreeMap};
+use std::cell::LazyCell;
 
 // These primes are sufficient witnessses for all 64 bit values
 const WITNESSES_BIG: LazyCell<[BigInt; 12]> =
     LazyCell::new(|| [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37].map(|x| BigInt::from(x)));
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Primality {
-    NonPrime,
+    NotPrime,
     Prime,
     ProbablyPrime,
 }
 
 // 64-bit primality test
-// First checks small prime factors then switches to deterministic Miller-Rabin if less than 2^64-1.
-pub fn is_prime(mut n: BigInt) -> Primality {
+// First checks small prime factors. Then, if n is less than 2^64-1, uses a deterministic Miller-Rabin or, if n is larger, uses several rounds of probabalistic Miller-Rabin.
+pub fn is_prime_big(mut n: BigInt) -> Primality {
     if n.is_one() || n.is_zero() {
-        return Primality::NonPrime;
+        return Primality::NotPrime;
     }
 
     if n.is_negative() {
@@ -28,37 +29,36 @@ pub fn is_prime(mut n: BigInt) -> Primality {
             return Primality::Prime;
         }
         if (&n % witness).is_zero() {
-            return Primality::NonPrime;
+            return Primality::NotPrime;
         }
-    }
-
-    let n_minus = n.clone() - 1;
-
-    // Begin Miller-Rabin
-    let mut d: BigInt = &n_minus / 2;
-    // Slight optimization for dividing out 2 and counting them
-    let r = 1_u64 + d.trailing_zeros().unwrap() as u64;
-    d >>= d.trailing_zeros().unwrap();
-
-    let two = BigInt::from(2);
-
-    'outer: for w in WITNESSES_BIG.iter() {
-        let mut x = w.modpow(&d, &n);
-
-        if x.is_one() || x == n_minus {
-            continue 'outer;
-        }
-        for _ in 0..(r - 1) {
-            x = x.modpow(&two, &n);
-
-            if x == n_minus {
-                continue 'outer;
-            }
-        }
-        return Primality::NonPrime;
     }
 
     if n < BigInt::from(u64::MAX) {
+        let n_minus = n.clone() - 1;
+
+        // Begin Miller-Rabin
+        let mut d: BigInt = &n_minus / 2;
+        // Slight optimization for dividing out 2 and counting them
+        let r = 1_u64 + d.trailing_zeros().unwrap() as u64;
+        d >>= d.trailing_zeros().unwrap();
+
+        let two = BigInt::from(2);
+
+        'outer: for w in WITNESSES_BIG.iter() {
+            let mut x = w.modpow(&d, &n);
+
+            if x.is_one() || x == n_minus {
+                continue 'outer;
+            }
+            for _ in 0..(r - 1) {
+                x = x.modpow(&two, &n);
+
+                if x == n_minus {
+                    continue 'outer;
+                }
+            }
+            return Primality::NotPrime;
+        }
         return Primality::Prime;
     } else {
         // This is not well defined at this point
@@ -93,7 +93,7 @@ pub fn is_prime_partial(n: BigInt) -> Primality {
                 continue 'outer;
             }
         }
-        return Primality::NonPrime;
+        return Primality::NotPrime;
     }
     Primality::ProbablyPrime
 }
@@ -195,3 +195,23 @@ fn pollards_rho(n: BigInt) -> Option<BigInt> {
 //     prime_factorization(&BigInt::from(363747780)).into_iter(), 10, "{:?}", ", ";
 
 // );
+
+#[test]
+fn mul() {
+    let n1: BigInt = BigInt::from(2).pow(101) - 69;
+    println!(
+        "is {} prime? It is {:?}.",
+        n1.clone(),
+        is_prime_big(n1.clone())
+    );
+
+    let n2: BigInt = BigInt::from(2).pow(53) - 111;
+    println!(
+        "is {} prime? It is {:?}.",
+        n2.clone(),
+        is_prime_big(n2.clone())
+    );
+
+    let n3: BigInt = (BigInt::from(2).pow(29) - 3) * (BigInt::from(2).pow(29) - 33);
+    println!("is {} prime? It is {:?}.", n3.clone(), is_prime_big(n3));
+}
