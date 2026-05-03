@@ -274,50 +274,6 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for Primorial
     }
 }
 
-/// The number of prime factors of each positive integer, counted with multiplicity. The prime Ω (big omega) function.
-pub struct NPrimeFactors {
-    ctr: u64,
-}
-
-impl NPrimeFactors {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for NPrimeFactors {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        Some(prime_factorization(self.ctr).iter().map(|x| x.1).sum())
-    }
-}
-
-/// The number of distinct prime factors of each positive integer. The prime ω (small omega) function.
-pub struct NDistinctPrimeFactors {
-    ctr: u64,
-}
-
-impl NDistinctPrimeFactors {
-    /// Only u64 output is supported
-    pub fn new() -> Self {
-        Self { ctr: 0 }
-    }
-}
-
-impl Iterator for NDistinctPrimeFactors {
-    type Item = u64;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
-        Some(prime_factorization(self.ctr).len() as u64)
-    }
-}
-
 crate::print_sequences!(
     PrimeSignatures::new(), 30, "{:?}", ", ";
     PrimeFactorizations::new(), 15, "{:?}", ", ";
