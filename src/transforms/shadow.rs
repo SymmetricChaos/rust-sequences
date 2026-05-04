@@ -1,8 +1,6 @@
-use std::ops::Rem;
-
-use num::{CheckedAdd, Integer};
-
 use crate::core::traits::Increment;
+use num::{CheckedAdd, Integer};
+use std::ops::Rem;
 
 /// The shadow transform of a sequence. The number of positive integers less than each term in the sequence which are factors of that term.
 pub struct ShadowTransform<T> {

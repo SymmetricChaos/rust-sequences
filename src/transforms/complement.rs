@@ -1,6 +1,5 @@
-use num::{CheckedAdd, One};
-
 use crate::core::traits::Increment;
+use num::{CheckedAdd, One};
 
 /// The complement of a sequence is all the natural numbers that do not appear in it, typically starting at either 0 or 1. This implementation only works for a strictly increasing sequences.
 pub struct Complement<T> {
