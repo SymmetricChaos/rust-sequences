@@ -1,6 +1,6 @@
 use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
 
-/// Sum of all prime factors (with multiplicity) of each natural number, starting at 1.
+/// Sum the prime factorization of each natural number, starting at 1.
 ///
 /// 0, 2, 3, 4, 5, 5, 7, 6, 6, 7, 11, 7, 13...
 pub struct SumOfPrimeFactors {
@@ -27,7 +27,7 @@ impl Iterator for SumOfPrimeFactors {
     }
 }
 
-/// Sum of the distinct prime factors of each natural number, starting from 1.
+/// Sum of the distinct prime divisors of each natural number, starting from 1.
 ///
 /// 0, 2, 3, 2, 5, 5, 7, 2, 3, 7, 11, 5, 13...
 pub struct SumOfDistinctPrimeFactors {

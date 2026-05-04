@@ -1,4 +1,4 @@
-//! Sequences related to the number of divisors (sigma_0) and sum of divisors (sigma_1) functions.
+//! Sequences related to the number of divisors (sigma_0) and sum of divisors (sigma_1) functions. This project generally uses "divisor" to refer to any number that divides a specificed integer and "factor" only for elements of a factorization, a set of numbers which have a product equal to a specified integer.
 pub mod abundance;
 pub mod abundant;
 pub mod aliquot;

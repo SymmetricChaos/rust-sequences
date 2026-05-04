@@ -1,7 +1,7 @@
 use crate::utils::divisibility::prime_factorization;
 use num::integer::gcd;
 
-/// Positive natural numbers that are divisible by the squares of all their prime factors.
+/// Positive natural numbers that are divisible by the squares of all their prime divisors.
 ///
 /// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...
 pub struct Powerful {

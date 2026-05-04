@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 
 use num::integer::gcd;
 
-/// The ECG sequence. Starting with 1 and 2 each term is the smallest positive integer not yet used which shares a factor with the previous term.
+/// The ECG sequence. Starting with 1 and 2 each term is the smallest positive integer not yet used which shares a divisor with the previous term.
 ///
 /// 1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24
 pub struct Ecg {

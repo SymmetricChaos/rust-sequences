@@ -5,7 +5,7 @@ use std::{
     hash::Hash, // Found to be much faster than BTreeMap
 };
 
-/// The prime natural numbers, those having exactly two distinct factors.
+/// The prime natural numbers, those having exactly two distinct divisors.
 ///
 /// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
 pub struct Primes<T> {
@@ -137,7 +137,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for PrimePowe
     }
 }
 
-/// The primorials, the products of the sequential primes.
+/// The primorials, the partial products of the primes.
 ///
 /// 1, 2, 6, 30, 210, 2310, 30030, 510510, 9699690...
 pub struct Primorial<T> {

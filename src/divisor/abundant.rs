@@ -30,7 +30,7 @@ impl Iterator for Abundant {
     }
 }
 
-/// The primitive abundant numbers. Abundant numbers that have no abundant factors.
+/// The primitive abundant numbers. Abundant numbers that have no abundant divisors.
 ///
 /// 12, 18, 20, 30, 42, 56, 66, 70, 78, 88...
 pub struct PrimitiveAbundant {

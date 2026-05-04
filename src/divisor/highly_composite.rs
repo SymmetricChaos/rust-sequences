@@ -1,6 +1,6 @@
 use crate::{check_sequences, utils::divisibility::number_of_divisors};
 
-/// The highly composite numbers, positive integers which have more factors than any smaller positive integers.
+/// The highly composite numbers, positive integers which have more divisors than any smaller positive integers.
 ///
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
 pub struct HighlyComposite {
@@ -33,7 +33,7 @@ impl Iterator for HighlyComposite {
     }
 }
 
-/// The largely composite numbers, positive integers which have at least as many factors as any smaller positive integers.
+/// The largely composite numbers, positive integers which have at least as many divisors as any smaller positive integers.
 ///
 /// 1, 2, 3, 4, 6, 8, 10, 12, 18, 20, 24...
 pub struct LargelyComposite {
