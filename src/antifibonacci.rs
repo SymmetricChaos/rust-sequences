@@ -49,6 +49,9 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for AntiFibonacci<T> {
     }
 }
 
+/// The non-anti-Fibonacci numbers.
+///
+/// 1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 19, 20...
 pub struct NonAntiFibonacci<T> {
     antifib: AntiFibonacci<T>,
     record: T,
