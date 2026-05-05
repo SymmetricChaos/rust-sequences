@@ -1,5 +1,6 @@
 use itertools::Itertools;
 
+/// The bits of a Euclidean Rhythm. These are defined only using the original iterative procedure without the alternate stopping rule. The two definitions always differ only by a cyclic shift.
 pub struct EuclideanRhythm {
     s: Vec<u32>,
     idx: usize,
@@ -55,6 +56,15 @@ impl Iterator for EuclideanRhythm {
         Some(out)
     }
 }
+
+crate::print_sequences!(
+    EuclideanRhythm::new(4, 17), 17, "{}", " ";
+    EuclideanRhythm::new(5, 17), 17, "{}", " ";
+    EuclideanRhythm::new(6, 17), 17, "{}", " ";
+    EuclideanRhythm::new(7, 17), 17, "{}", " ";
+    EuclideanRhythm::new(8, 17), 17, "{}", " ";
+    EuclideanRhythm::new(9, 17), 17, "{}", " ";
+);
 
 crate::check_sequences!(
     EuclideanRhythm::new(5, 13), [1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0];
