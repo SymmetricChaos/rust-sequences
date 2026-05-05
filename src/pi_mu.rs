@@ -42,6 +42,9 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for ReverseAndIncrement<T> {
     }
 }
 
+/// The pi-mu sequences. The signed differences of the the reverse and increment sequence.
+///
+/// 1, 1, -1, 1, 1, -1, -1, 1, 1, 1...
 pub struct PiMu<T> {
     prev: T,
     s: ReverseAndIncrement<T>,
