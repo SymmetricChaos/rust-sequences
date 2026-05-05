@@ -1,10 +1,8 @@
-use num::{Integer, rational::Ratio};
-
 use crate::{
     core::traits::Increment,
-    transforms::complement::Complement,
     utils::divisibility::{cototient, divisors, is_prime, totient},
 };
+use num::{Integer, rational::Ratio};
 
 /// The totient of each positive integer. For each positive integer n, the number of positive integers less than n which are coprime to n.
 ///
