@@ -1,19 +1,30 @@
 use num::{CheckedMul, Integer};
 
-pub fn pow_mod(n: u64, p: u64, m: u64) -> u64 {
-    if p == 0 {
+/// Modular exponentiation by squaring
+pub fn pow_mod(n: u64, x: u64, p: u64) -> u64 {
+    let mut n = u128::from(n);
+    let mut x = u128::from(x);
+    let p = u128::from(p);
+    let mut ans = 1;
+    if x <= 0 {
         return 1;
     }
-    if p == 1 {
-        return n % m;
-    }
-    if p % 2 == 0 {
-        return pow_mod((n * n) % m, p / 2, m) % m;
-    } else {
-        return (n * pow_mod((n * n) % m, (p - 1) / 2, m)) % m;
+    loop {
+        if x == 1 {
+            return ((ans * n) % p) as u64;
+        }
+        if x & 1 == 0 {
+            n = (n * n) % p;
+            x >>= 1;
+            continue;
+        } else {
+            ans = (ans * n) % p;
+            x -= 1;
+        }
     }
 }
 
+/// Modular exponentiation by squaring with checked multiplication
 pub fn checked_pow_mod<T: Integer + Clone + CheckedMul>(n: T, p: T, m: T) -> Option<T> {
     if p == T::zero() {
         return Some(T::one());
@@ -38,13 +49,4 @@ pub fn checked_pow_mod<T: Integer + Clone + CheckedMul>(n: T, p: T, m: T) -> Opt
                 % m,
         );
     }
-}
-
-#[test]
-fn mul() {
-    println!("{} = {}", pow_mod(2, 10, u64::MAX), 2_u64.pow(10));
-    println!("{} = {}", pow_mod(2, 10, 123), 2_u64.pow(10) % 123);
-    println!("{} = {}", pow_mod(2, 31, 123), 2_u64.pow(31) % 123);
-    println!("{} = {}", pow_mod(2, 61, 5181), 2_u64.pow(61) % 5181);
-    println!("{} ", pow_mod(2, 183, 5181));
 }

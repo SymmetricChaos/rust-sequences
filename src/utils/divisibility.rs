@@ -1,68 +1,7 @@
+use crate::utils::miller_rabin::{MR_WITNESSES_U64, miller_rabin};
 use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use std::collections::BTreeMap;
-
-// // Modular exponentiation I got from a website
-// fn pow_mod<N>(n: N, x: N, p: N) -> u64
-// where
-//     u128: From<N>,
-// {
-//     let mut n = u128::from(n);
-//     let mut x = u128::from(x);
-//     let p = u128::from(p);
-//     let mut ans = 1;
-//     if x <= 0 {
-//         return 1;
-//     }
-//     loop {
-//         if x == 1 {
-//             return ((ans * n) % p) as u64;
-//         }
-//         if x & 1 == 0 {
-//             n = (n * n) % p;
-//             x >>= 1;
-//             continue;
-//         } else {
-//             ans = (ans * n) % p;
-//             x -= 1;
-//         }
-//     }
-// }
-
-/// Modular exponentiation by squaring.
-pub fn pow_mod(n: u64, p: u64, m: u64) -> u64 {
-    if p == 0 {
-        return 1;
-    }
-    if p == 1 {
-        return n % m;
-    }
-    let n = n as u128;
-    let p = p as u128;
-    let m = m as u128;
-    if p % 2 == 0 {
-        return (pow_mod_128((n * n) % m, p / 2, m) % m) as u64;
-    } else {
-        return ((n * pow_mod_128((n * n) % m, (p - 1) / 2, m)) % m) as u64;
-    }
-}
-
-fn pow_mod_128(n: u128, p: u128, m: u128) -> u128 {
-    if p == 0 {
-        return 1;
-    }
-    if p == 1 {
-        return n % m;
-    }
-    if p % 2 == 0 {
-        return pow_mod_128((n * n) % m, p / 2, m) % m;
-    } else {
-        return (n * pow_mod_128((n * n) % m, (p - 1) / 2, m)) % m;
-    }
-}
-
-// These primes are sufficient witnessses for all u64.
-const WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
 // First checks small prime factors then switches to deterministic Miller-Rabin.
 /// 64-bit primality test
@@ -72,7 +11,7 @@ pub fn is_prime(n: u64) -> bool {
     }
 
     // Check by trial
-    for witness in WITNESSES_U64 {
+    for witness in MR_WITNESSES_U64 {
         if n == witness {
             return true;
         }
@@ -81,55 +20,19 @@ pub fn is_prime(n: u64) -> bool {
         }
     }
 
-    // Begin Miller-Rabin
-    let mut d = (n - 1) / 2;
-    // Slight optimization for dividing out 2 and counting them
-    let r = 1_u64 + d.trailing_zeros() as u64;
-    d >>= d.trailing_zeros();
-
-    'outer: for w in WITNESSES_U64.into_iter() {
-        let mut x = pow_mod(w, d, n);
-
-        if x == 1 || x == n - 1 {
-            continue 'outer;
-        }
-        for _ in 0..r - 1 {
-            x = pow_mod(x, 2, n);
-
-            if x == n - 1 {
-                continue 'outer;
-            }
-        }
-        return false;
+    match miller_rabin(n) {
+        super::miller_rabin::MRTest::Prime => true,
+        super::miller_rabin::MRTest::Composite(_) => false,
     }
-    true
 }
 
 // Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
 // This is true in the hybrid factoring algorithm after partial trial division
 pub fn is_prime_partial(n: u64) -> bool {
-    // Begin Miller-Rabin
-    let mut d = (n - 1) / 2;
-    // Slight optimization for dividing out 2 and counting them
-    let r = 1_u64 + d.trailing_zeros() as u64;
-    d >>= d.trailing_zeros();
-
-    'outer: for w in WITNESSES_U64.into_iter() {
-        let mut x = pow_mod(w, d, n);
-
-        if x == 1 || x == n - 1 {
-            continue 'outer;
-        }
-        for _ in 0..r - 1 {
-            x = pow_mod(x, 2, n);
-
-            if x == n - 1 {
-                continue 'outer;
-            }
-        }
-        return false;
+    match miller_rabin(n) {
+        super::miller_rabin::MRTest::Prime => true,
+        super::miller_rabin::MRTest::Composite(_) => false,
     }
-    true
 }
 
 /// Find a factor using Pollard's Rho
@@ -169,14 +72,28 @@ pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
             map.insert(p, ctr);
         }
     }
-    // is_prime_partial(n) will not catch this
+
+    // miller_rabin(n) will not catch this
     if n == 1 {
         return n;
     }
 
-    if is_prime_partial(n) {
-        map.insert(n, 1);
-        n = 1;
+    match miller_rabin(n) {
+        super::miller_rabin::MRTest::Prime => {
+            map.insert(n, 1);
+            n = 1;
+        }
+        super::miller_rabin::MRTest::Composite(w) => match w {
+            Some(d) => {
+                let mut ctr = 0;
+                while n % d == 0 {
+                    ctr += 1;
+                    n = n / d;
+                }
+                map.insert(d, ctr);
+            }
+            None => (),
+        },
     }
 
     n
@@ -194,9 +111,14 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     // Doesn't seem to be a large performance difference if using HashMap
     let mut map = BTreeMap::new();
 
-    // Handle primes and numbers with small factors. This is sufficient to factor ~38% of 32-bit numbers
+    // Handle numbers with easy to find divisors.
+    // This catches anything divisible by a small prime and anything with a factor that the Miller-Rabin test can find.
     n = partial_trial_division(n, &mut map);
     if n == 1 {
+        return map.into_iter().collect_vec();
+    }
+    if is_prime_partial(n) {
+        map.entry(n).and_modify(|x| *x += 1).or_insert(1);
         return map.into_iter().collect_vec();
     }
 

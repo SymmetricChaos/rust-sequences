@@ -30,7 +30,10 @@ fn _prime_factorization_timings() {
         // Correctness check
         // Also prevents factorization from being optimized away
         let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert_eq!(i, prod);
+        assert!(
+            i == prod,
+            "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
+        );
 
         // Record and print a new record for time to factor
         if d > longest.0 {
