@@ -125,17 +125,24 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     // Iteratively use Pollard's Rho
     let mut factors = vec![n];
     while !factors.is_empty() {
-        if let Some(f) = pollards_rho(factors.pop().unwrap()) {
-            if is_prime_partial(f.0) {
-                map.entry(f.0).and_modify(|x| *x += 1).or_insert(1);
-            } else {
-                factors.push(f.0);
+        let d = factors.pop().unwrap();
+        match miller_rabin(d) {
+            super::miller_rabin::MRTest::Prime => {
+                map.entry(d).and_modify(|x| *x += 1).or_insert(1);
+                continue;
             }
-            if is_prime_partial(f.1) {
-                map.entry(f.1).and_modify(|x| *x += 1).or_insert(1);
-            } else {
-                factors.push(f.1);
-            }
+            super::miller_rabin::MRTest::Composite(w) => match w {
+                Some(x) => {
+                    factors.push(x);
+                    factors.push(d / x);
+                    continue;
+                }
+                None => (),
+            },
+        }
+        if let Some(f) = pollards_rho(d) {
+            factors.push(f.0);
+            factors.push(f.1);
         } else {
             break;
         }
