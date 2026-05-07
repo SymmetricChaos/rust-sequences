@@ -2,39 +2,70 @@ use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use std::collections::BTreeMap;
 
-// Modular exponentiation I got from a website
-fn modular_exponent<N>(n: N, x: N, p: N) -> u64
-where
-    u128: From<N>,
-{
-    let mut n = u128::from(n);
-    let mut x = u128::from(x);
-    let p = u128::from(p);
-    let mut ans = 1;
-    if x <= 0 {
+// // Modular exponentiation I got from a website
+// fn pow_mod<N>(n: N, x: N, p: N) -> u64
+// where
+//     u128: From<N>,
+// {
+//     let mut n = u128::from(n);
+//     let mut x = u128::from(x);
+//     let p = u128::from(p);
+//     let mut ans = 1;
+//     if x <= 0 {
+//         return 1;
+//     }
+//     loop {
+//         if x == 1 {
+//             return ((ans * n) % p) as u64;
+//         }
+//         if x & 1 == 0 {
+//             n = (n * n) % p;
+//             x >>= 1;
+//             continue;
+//         } else {
+//             ans = (ans * n) % p;
+//             x -= 1;
+//         }
+//     }
+// }
+
+/// Modular exponentiation by squaring.
+pub fn pow_mod(n: u64, p: u64, m: u64) -> u64 {
+    if p == 0 {
         return 1;
     }
-    loop {
-        if x == 1 {
-            return ((ans * n) % p) as u64;
-        }
-        if x & 1 == 0 {
-            n = (n * n) % p;
-            x >>= 1;
-            continue;
-        } else {
-            ans = (ans * n) % p;
-            x -= 1;
-        }
+    if p == 1 {
+        return n % m;
+    }
+    let n = n as u128;
+    let p = p as u128;
+    let m = m as u128;
+    if p % 2 == 0 {
+        return (pow_mod_128((n * n) % m, p / 2, m) % m) as u64;
+    } else {
+        return ((n * pow_mod_128((n * n) % m, (p - 1) / 2, m)) % m) as u64;
     }
 }
 
-// These primes are sufficient witnessses for all 64 bit values
-const WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-// const WITNESSES_I64: [i64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+fn pow_mod_128(n: u128, p: u128, m: u128) -> u128 {
+    if p == 0 {
+        return 1;
+    }
+    if p == 1 {
+        return n % m;
+    }
+    if p % 2 == 0 {
+        return pow_mod_128((n * n) % m, p / 2, m) % m;
+    } else {
+        return (n * pow_mod_128((n * n) % m, (p - 1) / 2, m)) % m;
+    }
+}
 
-// 64-bit primality test
-// First checks small prime factors then switches to deterministic Miller-Rabin
+// These primes are sufficient witnessses for all u64.
+const WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+
+// First checks small prime factors then switches to deterministic Miller-Rabin.
+/// 64-bit primality test
 pub fn is_prime(n: u64) -> bool {
     if n <= 1 {
         return false;
@@ -57,13 +88,13 @@ pub fn is_prime(n: u64) -> bool {
     d >>= d.trailing_zeros();
 
     'outer: for w in WITNESSES_U64.into_iter() {
-        let mut x = modular_exponent(w, d, n);
+        let mut x = pow_mod(w, d, n);
 
         if x == 1 || x == n - 1 {
             continue 'outer;
         }
         for _ in 0..r - 1 {
-            x = modular_exponent(x, 2, n);
+            x = pow_mod(x, 2, n);
 
             if x == n - 1 {
                 continue 'outer;
@@ -84,13 +115,13 @@ pub fn is_prime_partial(n: u64) -> bool {
     d >>= d.trailing_zeros();
 
     'outer: for w in WITNESSES_U64.into_iter() {
-        let mut x = modular_exponent(w, d, n);
+        let mut x = pow_mod(w, d, n);
 
         if x == 1 || x == n - 1 {
             continue 'outer;
         }
         for _ in 0..r - 1 {
-            x = modular_exponent(x, 2, n);
+            x = pow_mod(x, 2, n);
 
             if x == n - 1 {
                 continue 'outer;

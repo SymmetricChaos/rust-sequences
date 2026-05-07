@@ -1,57 +1,18 @@
 use num_format::ToFormattedString;
-use rust_sequences::utils::divisibility::{is_prime, partial_trial_division, prime_factorization};
-use std::{collections::BTreeMap, io::Write, u64};
-
-fn _partial_factorization_density_test() {
-    let start = 1;
-    let end = u32::MAX as u64;
-    let mut num_factored = 0;
-
-    let path_and_name = format!("src/_partial_factorization_density_{start}..={end}.txt");
-    std::fs::File::create(&path_and_name).unwrap();
-    let mut file = std::fs::File::options()
-        .append(true)
-        .open(&path_and_name)
-        .unwrap();
-    file.write_all(
-        b"factorization using only partial trial division up to 37 and a primality test\n\n",
-    )
-    .unwrap();
-
-    for i in start..=end {
-        let mut map = BTreeMap::new();
-        let r = partial_trial_division(i, &mut map);
-        if is_prime(r) || r == 1 {
-            num_factored += 1;
-        }
-
-        // Save information to file
-        if i % 10_000_000 == 0
-            || i == end
-            || i == u8::MAX as u64
-            || i == u16::MAX as u64
-            || i == u32::MAX as u64
-        {
-            file.write_all(format!("searched {start}..={i}\n").as_bytes())
-                .unwrap();
-            file.write_all(
-                format!("density: {:.5}\n\n", num_factored as f64 / i as f64,).as_bytes(),
-            )
-            .unwrap();
-            file.flush().unwrap();
-        }
-    }
-}
+use rust_sequences::utils::divisibility::{is_prime, prime_factorization};
+use std::{io::Write, time::Duration, u64};
 
 fn _prime_factorization_timings() {
     let start_time = std::time::Instant::now();
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
 
+    let heartbeat = Duration::from_secs(30);
+
     let start = 1;
     let end = u64::MAX;
 
-    let path_and_name = format!("src/_factorization_timings_1..txt");
+    let path_and_name = format!("src/_factorization_timings_1.txt");
     std::fs::File::create(&path_and_name).unwrap();
     let mut file = std::fs::File::options()
         .append(true)
@@ -88,18 +49,25 @@ fn _prime_factorization_timings() {
             file.flush().unwrap();
         }
 
-        // Heatbeat and average
-        // Before 4,294,967,295 update every fifty million, after check at one tenth the rate
-        if (i % 50_000_000 == 0 && i < u32::MAX as u64)
-            || i == u32::MAX as u64
-            || i % 500_000_000 == 0
-        {
+        if i == u32::MAX as u64 {
             file.write_all(
                 format!(
-                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.0?}\nTOTAL RUNNING TIME:      {:.0?}\n\n",
+                    "reached u32::MAX after {:.0?}\n\n",
+                    std::time::Instant::now() - start_time,
+                )
+                .as_bytes(),
+            )
+            .unwrap();
+            file.flush().unwrap();
+        }
+
+        // Heartbeat
+        if total_time > heartbeat {
+            total_time -= heartbeat;
+            file.write_all(
+                format!(
+                    "reached {} after {:.0?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
-                    total_time.div_f64(i as f64),
-                    total_time,
                     std::time::Instant::now() - start_time,
                 )
                 .as_bytes(),
@@ -110,45 +78,40 @@ fn _prime_factorization_timings() {
     }
 }
 
-pub fn _prime_factorization_timings_huge() {
+pub fn _primality_check_time() {
     let start_time = std::time::Instant::now();
-    let mut longest = (std::time::Duration::ZERO, 0, vec![]);
+    let mut longest = (std::time::Duration::ZERO, 0);
     let mut total_time = std::time::Duration::ZERO;
 
-    let d = 1_000_000;
-    let start = u64::MAX - d;
-    let end = u64::MAX;
+    let heartbeat = Duration::from_secs(30);
 
-    let path_and_name = format!("src/_factorization_timings_huge_last_{d}_u64s..txt");
+    let path_and_name = format!("src/_primality_checking_u64s.txt");
     std::fs::File::create(&path_and_name).unwrap();
     let mut file = std::fs::File::options()
         .append(true)
         .open(&path_and_name)
         .unwrap();
 
+    let start = u32::MAX as u64;
+    let end = u64::MAX;
+
     for i in start..=end {
         // Timed section
         let t = std::time::Instant::now();
-        let fs = prime_factorization(i);
+        let _fs = is_prime(i);
         let d = std::time::Instant::now() - t;
 
         total_time = total_time + d;
 
-        // Correctness check
-        // Also prevents factorization from being optimized away
-        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert_eq!(i, prod);
-
         // Record and print a new record for time to factor
         if d > longest.0 {
-            longest = (d, i, fs);
+            longest = (d, i);
             // Save information to file
             file.write_all(
                 format!(
-                    "RECORD! {:<11?}    {} = {:?}\n\n",
+                    "RECORD! {:<11?}    {} is prime\n\n",
                     longest.0,
                     longest.1.to_formatted_string(&num_format::Locale::en),
-                    longest.2
                 )
                 .as_bytes(),
             )
@@ -156,14 +119,13 @@ pub fn _prime_factorization_timings_huge() {
             file.flush().unwrap();
         }
 
-        // Heatbeat and average
-        if (u64::MAX - i) % 100_000 == 0 {
+        // Heartbeat
+        if total_time > heartbeat {
+            total_time -= heartbeat;
             file.write_all(
                 format!(
-                    "{}\nAVERAGE TIME TO FACTOR:  {:.4?}\nTOTAL TIME FACTORING:    {:.0?}\nTOTAL RUNNING TIME:      {:.0?}\n\n",
+                    "reached {} after {:.0?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
-                    total_time.div_f64((u64::MAX-i) as f64),
-                    total_time,
                     std::time::Instant::now() - start_time,
                 )
                 .as_bytes(),
@@ -176,7 +138,6 @@ pub fn _prime_factorization_timings_huge() {
 
 // cargo run --release
 fn main() {
-    // _partial_factorization_density_test();
-    // _prime_factorization_timings();
-    _prime_factorization_timings_huge();
+    _prime_factorization_timings();
+    // _primality_check_time();
 }
