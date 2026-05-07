@@ -1,7 +1,7 @@
 use crate::utils::divisibility::{divisors, is_prime, totient};
 use num::BigRational;
 
-/// Positive natural numbers that appear as a totient more often than any small natural number.
+/// Positive natural numbers that appear as a totient more often than any smaller natural number.
 ///
 /// 1, 2, 4, 8, 12, 24, 48, 72, 144...
 pub struct HighlyTotient {

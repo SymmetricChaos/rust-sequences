@@ -8,6 +8,7 @@ pub struct RunLengthEncoding<T> {
 }
 
 impl<T: CheckedAdd + Clone + Integer> RunLengthEncoding<T> {
+    /// Returns tuples of the form (T,T).
     pub fn new<I>(mut iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
