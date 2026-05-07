@@ -107,7 +107,7 @@ impl<T: CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero> Iterator for R
 
 /// Convert a rational number to a string representing it in decimal with excactly the specificer number of digits after the decimal.
 pub fn rational_decimal_string<
-    T: Integer + CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Zero + Display + Clone,
+    T: Integer + CheckedDiv + CheckedSub + CheckedMul + CheckedAdd + Display + Clone,
 >(
     ratio: Ratio<T>,
     digits: usize,
