@@ -12,7 +12,6 @@ pub enum Primality {
     ProbablyPrime,
 }
 
-// 64-bit primality test
 // First checks small prime factors. Then, if n is less than 2^64-1, uses a deterministic Miller-Rabin or, if n is larger, uses several rounds of probabalistic Miller-Rabin.
 pub fn is_prime_big(mut n: BigInt) -> Primality {
     if n.is_one() || n.is_zero() {
@@ -61,9 +60,7 @@ pub fn is_prime_big(mut n: BigInt) -> Primality {
         }
         return Primality::Prime;
     } else {
-        // This is not well defined at this point
-        // Need to run random Miller-Rabin rounds
-        return Primality::ProbablyPrime;
+        todo!("Need to run random Miller-Rabin rounds")
     }
 }
 

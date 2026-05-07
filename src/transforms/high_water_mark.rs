@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-/// The terms that are greater than all previous terms in a seqeunce.
+/// The terms of a seqeunce that are greater than all previous terms in that seqeunce.
 pub struct HighWaterMark<T> {
     iter: Box<dyn Iterator<Item = T>>,
     record: T,
@@ -48,7 +48,7 @@ impl<T: Clone> Iterator for HighWaterMark<T> {
             let val = self.iter.next()?;
             match (self.compare)(&val, &self.record) {
                 Ordering::Greater => {
-                    let out = self.record.clone();
+                    let out = self.record.clone(); // this allows always returning the first term
                     self.record = val.clone();
                     return Some(out);
                 }
