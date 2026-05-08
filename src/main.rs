@@ -7,7 +7,7 @@ fn _prime_factorization_timings() {
     let mut longest = (std::time::Duration::ZERO, 0, vec![]);
     let mut total_time = std::time::Duration::ZERO;
 
-    let heartbeat = Duration::from_secs(30);
+    let heartbeat = Duration::from_mins(15);
 
     let start = 1;
     let end = u64::MAX;
@@ -56,7 +56,7 @@ fn _prime_factorization_timings() {
             file.write_all(
                 format!(
                     "reached u32::MAX after {:.0?}\n\n",
-                    std::time::Instant::now() - start_time,
+                    std::time::Instant::now().duration_since(start_time),
                 )
                 .as_bytes(),
             )
@@ -71,7 +71,7 @@ fn _prime_factorization_timings() {
                 format!(
                     "reached {} after {:.0?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
-                    std::time::Instant::now() - start_time,
+                    std::time::Instant::now().duration_since(start_time),
                 )
                 .as_bytes(),
             )
@@ -86,7 +86,7 @@ pub fn _primality_check_time() {
     let mut longest = (std::time::Duration::ZERO, 0);
     let mut total_time = std::time::Duration::ZERO;
 
-    let heartbeat = Duration::from_secs(30);
+    let heartbeat = Duration::from_mins(10);
 
     let path_and_name = format!("src/_primality_checking_u64s.txt");
     std::fs::File::create(&path_and_name).unwrap();
@@ -102,7 +102,7 @@ pub fn _primality_check_time() {
         // Timed section
         let t = std::time::Instant::now();
         let _fs = is_prime(i);
-        let d = std::time::Instant::now() - t;
+        let d = std::time::Instant::now().duration_since(t);
 
         total_time = total_time + d;
 
@@ -129,7 +129,7 @@ pub fn _primality_check_time() {
                 format!(
                     "reached {} after {:.0?}\n\n",
                     i.to_formatted_string(&num_format::Locale::en),
-                    std::time::Instant::now() - start_time,
+                    std::time::Instant::now().duration_since(start_time),
                 )
                 .as_bytes(),
             )
