@@ -1,6 +1,7 @@
 use crate::utils::miller_rabin::{MR_WITNESSES_U64, miller_rabin};
 use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::collections::BTreeMap;
 
 // First checks small prime factors then switches to deterministic Miller-Rabin.
@@ -20,23 +21,22 @@ pub fn is_prime(n: u64) -> bool {
         }
     }
 
-    match miller_rabin(n) {
-        super::miller_rabin::MRTest::Prime => true,
-        super::miller_rabin::MRTest::Composite(_) => false,
-    }
+    miller_rabin(n).is_prime()
 }
 
 // Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
 // This is true in the hybrid factoring algorithm after partial trial division
 pub fn is_prime_partial(n: u64) -> bool {
-    match miller_rabin(n) {
-        super::miller_rabin::MRTest::Prime => true,
-        super::miller_rabin::MRTest::Composite(_) => false,
-    }
+    miller_rabin(n).is_prime()
 }
 
 /// Find a factor using Pollard's Rho
-fn pollards_rho(n: u64) -> Option<(u64, u64)> {
+fn pollards_rho(n: u64) -> Option<u64> {
+    // The running time of Pollard's Rho doesn't become a major factor for numbers less than about 50_000_000
+    // For numbers above 2^32
+    if n > 50_000_000 {
+        return _pollards_rho_par(n);
+    }
     let n = u128::from(n);
     for s in 2..(n - 2) {
         let mut x = s;
@@ -49,16 +49,33 @@ fn pollards_rho(n: u64) -> Option<(u64, u64)> {
             d = x.abs_diff(y).gcd(&n);
         }
         if d != n {
-            return Some((d as u64, (n / d) as u64));
+            return Some(d as u64);
         }
     }
     None
 }
 
-// Factor out all primes up to 37 and return what is left after checking the remainder is prime
-// Can completely factor any number up 1369
-// This is sufficient to factor ~38% of 32-bit numbers
-pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
+/// Find a factor using Pollard's Rho in parallel
+
+fn _pollards_rho_par(n: u64) -> Option<u64> {
+    let n = u128::from(n);
+    (2..(n - 2)).into_par_iter().find_map_any(|s| {
+        let mut x = s;
+        let mut y = s;
+        let mut d = 1;
+        while d == 1 {
+            x = ((x * x) + 1) % n;
+            y = ((y * y) + 1) % n;
+            y = ((y * y) + 1) % n;
+            d = x.abs_diff(y).gcd(&n);
+        }
+        if d != n { Some(d as u64) } else { None }
+    })
+}
+
+// Factor out all primes up to 37 and put them into the map. Then apply the 64-bit Miller-Rabin test to the result.
+/// Catch all "easy" to find factors.
+pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>) -> u64 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
             break;
@@ -69,7 +86,7 @@ pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
             n = n / p;
         }
         if ctr != 0 {
-            map.insert(p, ctr);
+            prime_factors.insert(p, ctr);
         }
     }
 
@@ -78,22 +95,9 @@ pub fn partial_trial_division(mut n: u64, map: &mut BTreeMap<u64, u64>) -> u64 {
         return n;
     }
 
-    match miller_rabin(n) {
-        super::miller_rabin::MRTest::Prime => {
-            map.insert(n, 1);
-            n = 1;
-        }
-        super::miller_rabin::MRTest::Composite(w) => match w {
-            Some(d) => {
-                let mut ctr = 0;
-                while n % d == 0 {
-                    ctr += 1;
-                    n = n / d;
-                }
-                map.insert(d, ctr);
-            }
-            None => (),
-        },
+    if miller_rabin(n).is_prime() {
+        prime_factors.insert(n, 1);
+        n = 1;
     }
 
     n
@@ -109,46 +113,42 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
 
     // BTreeMap will provide us with easy way reference each prime and its multiplicity, and eventually an ordered output
     // Doesn't seem to be a large performance difference if using HashMap
-    let mut map = BTreeMap::new();
+    let mut prime_factors = BTreeMap::new();
 
     // Handle numbers with easy to find divisors.
     // This catches anything divisible by a small prime and anything with a factor that the Miller-Rabin test can find.
-    n = partial_trial_division(n, &mut map);
+    n = partial_factorization(n, &mut prime_factors);
     if n == 1 {
-        return map.into_iter().collect_vec();
-    }
-    if is_prime_partial(n) {
-        map.entry(n).and_modify(|x| *x += 1).or_insert(1);
-        return map.into_iter().collect_vec();
+        return prime_factors.into_iter().collect_vec();
     }
 
-    // Iteratively use Pollard's Rho
-    let mut factors = vec![n];
-    while !factors.is_empty() {
-        let d = factors.pop().unwrap();
+    // Iteratively use Pollard's Rho and Miller-Rabin on the divisors, splitting them until primes are found
+    let mut divisors = vec![n];
+    while !divisors.is_empty() {
+        let d = divisors.pop().unwrap();
         match miller_rabin(d) {
             super::miller_rabin::MRTest::Prime => {
-                map.entry(d).and_modify(|x| *x += 1).or_insert(1);
+                prime_factors.entry(d).and_modify(|x| *x += 1).or_insert(1);
                 continue;
             }
             super::miller_rabin::MRTest::Composite(w) => match w {
                 Some(x) => {
-                    factors.push(x);
-                    factors.push(d / x);
+                    divisors.push(x);
+                    divisors.push(d / x);
                     continue;
                 }
-                None => (),
+                None => (), // go on to Pollard's Rho,
             },
         }
-        if let Some(f) = pollards_rho(d) {
-            factors.push(f.0);
-            factors.push(f.1);
+        if let Some(x) = pollards_rho(d) {
+            divisors.push(x);
+            divisors.push(d / x);
         } else {
             break;
         }
     }
 
-    map.into_iter().collect_vec()
+    prime_factors.into_iter().collect_vec()
 }
 
 /// The number of prime factors of n counted with multiplicity.
@@ -319,3 +319,15 @@ crate::print_sequences!(
     prime_factorization(363747780).into_iter(), 10, "{:?}", ", ";
     prime_power_factorization(363747780).into_iter(), 10, "{:?}", ", ";
 );
+
+#[cfg(test)]
+#[test]
+#[ignore = "visualization"]
+fn speed_tests() {
+    for n in [5_392_920_426, 7_769_341_109, 1000000007 * 16548071329] {
+        let start = std::time::Instant::now();
+        prime_factorization(n);
+        let el = start.elapsed();
+        println!("factored {n} in {:?}", el);
+    }
+}

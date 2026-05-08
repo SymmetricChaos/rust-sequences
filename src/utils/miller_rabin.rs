@@ -1,6 +1,5 @@
-use num::integer::gcd;
-
 use crate::utils::exp_by_squaring::pow_mod;
+use num::integer::gcd;
 
 /// These primes are sufficient witnessses to do a deterministic Miller-Rabin test for all u64.
 pub(super) const MR_WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
@@ -9,6 +8,28 @@ pub(super) const MR_WITNESSES_U64: [u64; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 
 pub(super) enum MRTest {
     Prime,
     Composite(Option<u64>),
+}
+
+impl std::fmt::Display for MRTest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MRTest::Prime => write!(f, "Prime"),
+            MRTest::Composite(w) => match w {
+                Some(d) => write!(f, "Composite({d})"),
+                None => write!(f, "Composite"),
+            },
+        }
+    }
+}
+
+impl MRTest {
+    pub fn is_prime(&self) -> bool {
+        *self == MRTest::Prime
+    }
+
+    pub fn is_composite(&self) -> bool {
+        *self != MRTest::Prime
+    }
 }
 
 /// A Miller-Rabin test that assumes the input is an odd number greater than 2.

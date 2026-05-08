@@ -4,10 +4,10 @@ use std::{io::Write, time::Duration, u64};
 
 fn _prime_factorization_timings() {
     let start_time = std::time::Instant::now();
-    let mut longest = (std::time::Duration::ZERO, 0, vec![]);
-    let mut total_time = std::time::Duration::ZERO;
+    let mut record = (std::time::Duration::ZERO, 0, vec![]);
+    let mut factoring_time = std::time::Duration::ZERO;
 
-    let heartbeat = Duration::from_mins(15);
+    let heartbeat = Duration::from_secs(15);
 
     let start = 1;
     let end = u64::MAX;
@@ -25,26 +25,32 @@ fn _prime_factorization_timings() {
         let fs = prime_factorization(i);
         let d = std::time::Instant::now() - t;
 
-        total_time = total_time + d;
+        factoring_time = factoring_time + d;
 
-        // Correctness check
+        // Correctness checks
         // Also prevents factorization from being optimized away
         let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
         assert!(
             i == prod,
             "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
         );
+        for f in fs.iter() {
+            assert!(
+                is_prime(f.0),
+                "\nCORRECTNESS CHECK FAILED\nfound non-prime in factorization of {i}\n"
+            )
+        }
 
         // Record and print a new record for time to factor
-        if d > longest.0 {
-            longest = (d, i, fs);
+        if d > record.0 {
+            record = (d, i, fs);
             // Save information to file
             file.write_all(
                 format!(
                     "RECORD! {:<11?}    {} = {:?}\n\n",
-                    longest.0,
-                    longest.1.to_formatted_string(&num_format::Locale::en),
-                    longest.2
+                    record.0,
+                    record.1.to_formatted_string(&num_format::Locale::en),
+                    record.2
                 )
                 .as_bytes(),
             )
@@ -65,66 +71,8 @@ fn _prime_factorization_timings() {
         }
 
         // Heartbeat
-        if total_time > heartbeat {
-            total_time -= heartbeat;
-            file.write_all(
-                format!(
-                    "reached {} after {:.0?}\n\n",
-                    i.to_formatted_string(&num_format::Locale::en),
-                    std::time::Instant::now().duration_since(start_time),
-                )
-                .as_bytes(),
-            )
-            .unwrap();
-            file.flush().unwrap();
-        }
-    }
-}
-
-pub fn _primality_check_time() {
-    let start_time = std::time::Instant::now();
-    let mut longest = (std::time::Duration::ZERO, 0);
-    let mut total_time = std::time::Duration::ZERO;
-
-    let heartbeat = Duration::from_mins(10);
-
-    let path_and_name = format!("src/_primality_checking_u64s.txt");
-    std::fs::File::create(&path_and_name).unwrap();
-    let mut file = std::fs::File::options()
-        .append(true)
-        .open(&path_and_name)
-        .unwrap();
-
-    let start = u32::MAX as u64;
-    let end = u64::MAX;
-
-    for i in start..=end {
-        // Timed section
-        let t = std::time::Instant::now();
-        let _fs = is_prime(i);
-        let d = std::time::Instant::now().duration_since(t);
-
-        total_time = total_time + d;
-
-        // Record and print a new record for time to factor
-        if d > longest.0 {
-            longest = (d, i);
-            // Save information to file
-            file.write_all(
-                format!(
-                    "RECORD! {:<11?}    {} is prime\n\n",
-                    longest.0,
-                    longest.1.to_formatted_string(&num_format::Locale::en),
-                )
-                .as_bytes(),
-            )
-            .unwrap();
-            file.flush().unwrap();
-        }
-
-        // Heartbeat
-        if total_time > heartbeat {
-            total_time -= heartbeat;
+        if factoring_time > heartbeat {
+            factoring_time -= heartbeat;
             file.write_all(
                 format!(
                     "reached {} after {:.0?}\n\n",
@@ -142,5 +90,4 @@ pub fn _primality_check_time() {
 // cargo run --release
 fn main() {
     _prime_factorization_timings();
-    // _primality_check_time();
 }

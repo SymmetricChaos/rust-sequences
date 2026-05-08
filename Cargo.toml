@@ -13,3 +13,4 @@ opt-level = 3
 num = "0.4.3"
 itertools = "0.14.0"
 num-format = "0.4.4"
+rayon = "1.12.0"
