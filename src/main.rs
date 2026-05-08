@@ -7,7 +7,7 @@ fn _prime_factorization_timings() {
     let mut record = (std::time::Duration::ZERO, 0, vec![]);
     let mut factoring_time = std::time::Duration::ZERO;
 
-    let heartbeat = Duration::from_secs(15);
+    let heartbeat = Duration::from_secs(60);
 
     let start = 1;
     let end = u64::MAX;

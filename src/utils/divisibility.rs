@@ -320,11 +320,10 @@ crate::print_sequences!(
     prime_power_factorization(363747780).into_iter(), 10, "{:?}", ", ";
 );
 
-#[cfg(test)]
 #[test]
 #[ignore = "visualization"]
 fn speed_tests() {
-    for n in [5_392_920_426, 7_769_341_109, 1000000007 * 16548071329] {
+    for n in [5_392_920_426, 7_769_341_109] {
         let start = std::time::Instant::now();
         prime_factorization(n);
         let el = start.elapsed();
