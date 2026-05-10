@@ -22,7 +22,7 @@ impl std::fmt::Display for MRTest {
     }
 }
 
-/// A Miller-Rabin test that assumes the input is an odd number greater than 2.
+/// A Miller-Rabin test that assumes the input is an odd number greater than 2. Returns either Prime or Composite. Composite may include a factor.
 pub(super) fn miller_rabin(n: u64) -> MRTest {
     let mut d = (n - 1) / 2;
     let r = 1_u64 + d.trailing_zeros() as u64;
@@ -53,8 +53,7 @@ pub(super) fn miller_rabin(n: u64) -> MRTest {
     MRTest::Prime
 }
 
-// First checks small prime factors then switches to deterministic Miller-Rabin.
-/// 64-bit primality test
+/// 64-bit primality test. First checks small prime factors then switches to deterministic Miller-Rabin.
 pub fn is_prime(n: u64) -> bool {
     if n <= 1 {
         return false;
@@ -99,8 +98,7 @@ pub fn is_prime(n: u64) -> bool {
     true
 }
 
-// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
-// This is true in the hybrid factoring algorithm after partial trial division
+/// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
 pub(super) fn is_prime_partial(n: u64) -> bool {
     let mut d = (n - 1) / 2;
     let r = 1_u64 + d.trailing_zeros() as u64;
@@ -135,19 +133,8 @@ pub(super) fn is_prime_partial(n: u64) -> bool {
 #[test]
 #[ignore = "visualization"]
 fn factor_test() {
-    // for i in 100..100_000 {
-    //     match miller_rabin(i) {
-    //         MRTest::Prime => continue,
-    //         MRTest::Composite(c) => match c {
-    //             Some(f) => {
-    //                 println!("{} = {} * {}", i, f, i / f);
-    //                 assert_eq!(i, (i / f) * f);
-    //             }
-    //             None => continue,
-    //         },
-    //     }
-    // }
     println!("{:?}", miller_rabin(41));
     println!("{:?}", miller_rabin(5461));
+    println!("{:?}", miller_rabin(1681));
     println!("{:?}", miller_rabin(4_104_071));
 }

@@ -26,17 +26,17 @@ fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
         factoring_time = factoring_time + d;
 
         // // Correctness checks
-        // let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        // assert!(
-        //     i == prod,
-        //     "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
-        // );
-        // for f in fs.iter() {
-        //     assert!(
-        //         is_prime(f.0),
-        //         "\nCORRECTNESS CHECK FAILED\nfound non-prime in factorization of {i}\n"
-        //     )
-        // }
+        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
+        assert!(
+            i == prod,
+            "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
+        );
+        for f in fs.iter() {
+            assert!(
+                is_prime(f.0),
+                "\nCORRECTNESS CHECK FAILED\nfound non-prime in factorization of {i}\n"
+            )
+        }
 
         // Record and print a new record for time to factor
         if d > record.0 {
@@ -57,7 +57,7 @@ fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
 
         // Heartbeat
         if factoring_time > heartbeat {
-            factoring_time -= heartbeat;
+            factoring_time = std::time::Duration::ZERO;
             file.write_all(
                 format!(
                     "reached {} after {:.0?}\n\n",
@@ -85,7 +85,7 @@ fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
 // cargo run --release
 fn main() {
     let r = 2.pow(26);
-    for i in [1, 32, 40, 48, 56] {
-        _prime_factorization_timings(2.pow(i), 2.pow(i) + r, 30);
+    for i in [0, 32, 40, 48, 56] {
+        _prime_factorization_timings(2.pow(i), 2.pow(i) + r, 60);
     }
 }

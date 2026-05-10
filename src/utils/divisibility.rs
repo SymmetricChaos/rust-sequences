@@ -4,11 +4,29 @@ use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::collections::BTreeMap;
 
-/// Find a factor using Pollard's Rho, switching a parallelized version for numbers above 50_000_000
+/// Find a factor using Pollard's Rho. Uses 64-bit arithmetic  switching a parallelized version for moderately large numbers.
 fn pollards_rho(n: u64) -> Option<u64> {
-    if n > 33_554_431 {
+    if n > 0x1ffffff {
         return _pollards_rho_par(n);
     }
+    if n < 0xFFFFFFFF {
+        for s in 2..(n - 2) {
+            let mut x = s;
+            let mut y = s;
+            let mut d = 1;
+            while d == 1 {
+                x = ((x * x) + 1) % n;
+                y = ((y * y) + 1) % n;
+                y = ((y * y) + 1) % n;
+                d = x.abs_diff(y).gcd(&n);
+            }
+            if d != n {
+                return Some(d);
+            }
+        }
+        return None;
+    }
+
     let n = u128::from(n);
     for s in 2..(n - 2) {
         let mut x = s;
@@ -28,19 +46,38 @@ fn pollards_rho(n: u64) -> Option<u64> {
 }
 
 fn _pollards_rho_par(n: u64) -> Option<u64> {
-    let n = u128::from(n);
-    (2..(n - 2)).into_par_iter().find_map_any(|s| {
-        let mut x = s;
-        let mut y = s;
-        let mut d = 1;
-        while d == 1 {
-            x = ((x * x) + 1) % n;
-            y = ((y * y) + 1) % n;
-            y = ((y * y) + 1) % n;
-            d = x.abs_diff(y).gcd(&n);
-        }
-        if d != n { Some(d as u64) } else { None }
-    })
+    if n < 0xFFFFFFFF {
+        (2..(n - 2)).into_par_iter().find_map_any(|s| {
+            let mut x = s;
+            let mut y = s;
+            let mut d = 1;
+            while d == 1 {
+                x = ((x * x) + 1) % n;
+                y = ((y * y) + 1) % n;
+                y = ((y * y) + 1) % n;
+                d = x.abs_diff(y).gcd(&n);
+            }
+            if d != n {
+                return Some(d as u64);
+            } else {
+                return None;
+            }
+        })
+    } else {
+        let n = u128::from(n);
+        (2..(n - 2)).into_par_iter().find_map_any(|s| {
+            let mut x = s;
+            let mut y = s;
+            let mut d = 1;
+            while d == 1 {
+                x = ((x * x) + 1) % n;
+                y = ((y * y) + 1) % n;
+                y = ((y * y) + 1) % n;
+                d = x.abs_diff(y).gcd(&n);
+            }
+            if d != n { Some(d as u64) } else { None }
+        })
+    }
 }
 
 /// Factor out all primes up to 37 and put them into the map.
@@ -59,11 +96,6 @@ pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>)
         }
     }
 
-    // miller_rabin(n) will not catch this
-    if n == 1 {
-        return n;
-    }
-
     n
 }
 
@@ -80,12 +112,13 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     let mut prime_factors = BTreeMap::new();
 
     // Handle numbers with easy to find divisors.
-    // This catches anything divisible by a small prime and anything with a factor that the Miller-Rabin test can find.
+    // This catches anything divisible by a small prime.
     n = partial_factorization(n, &mut prime_factors);
     if n == 1 {
         return prime_factors.into_iter().collect_vec();
     }
 
+    // Use Miller-Rabin to try to find a factor or prove the remaining part is prime.
     let mut divisors = match miller_rabin(n) {
         super::miller_rabin::MRTest::Prime => {
             prime_factors.entry(n).and_modify(|x| *x += 1).or_insert(1);
@@ -98,7 +131,7 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
                 div.push(n / x);
                 div
             }
-            None => Vec::new(),
+            None => vec![n],
         },
     };
 
