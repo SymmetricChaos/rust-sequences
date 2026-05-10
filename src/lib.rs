@@ -107,6 +107,7 @@ pub mod twin_primes;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
+pub mod ore_numbers;
 
 #[macro_export]
 macro_rules! print_row {
