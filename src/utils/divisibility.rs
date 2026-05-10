@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 
 /// Find a factor using Pollard's Rho, switching a parallelized version for numbers above 50_000_000
 fn pollards_rho(n: u64) -> Option<u64> {
-    if n > 67_108_863 {
+    if n > 33_554_431 {
         return _pollards_rho_par(n);
     }
     let n = u128::from(n);
@@ -43,8 +43,7 @@ fn _pollards_rho_par(n: u64) -> Option<u64> {
     })
 }
 
-// Factor out all primes up to 37 and put them into the map. Then apply the 64-bit Miller-Rabin test to the result.
-/// Catch all "easy" to find factors.
+/// Factor out all primes up to 37 and put them into the map.
 pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>) -> u64 {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
@@ -63,11 +62,6 @@ pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>)
     // miller_rabin(n) will not catch this
     if n == 1 {
         return n;
-    }
-
-    if is_prime_partial(n) {
-        prime_factors.insert(n, 1);
-        n = 1;
     }
 
     n
@@ -92,23 +86,28 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
         return prime_factors.into_iter().collect_vec();
     }
 
+    let mut divisors = match miller_rabin(n) {
+        super::miller_rabin::MRTest::Prime => {
+            prime_factors.entry(n).and_modify(|x| *x += 1).or_insert(1);
+            return prime_factors.into_iter().collect_vec();
+        }
+        super::miller_rabin::MRTest::Composite(w) => match w {
+            Some(x) => {
+                let mut div = Vec::new();
+                div.push(x);
+                div.push(n / x);
+                div
+            }
+            None => Vec::new(),
+        },
+    };
+
     // Iteratively use Pollard's Rho and Miller-Rabin on the divisors, splitting them until primes are found
-    let mut divisors = vec![n];
     while !divisors.is_empty() {
         let d = divisors.pop().unwrap();
-        match miller_rabin(d) {
-            super::miller_rabin::MRTest::Prime => {
-                prime_factors.entry(d).and_modify(|x| *x += 1).or_insert(1);
-                continue;
-            }
-            super::miller_rabin::MRTest::Composite(w) => match w {
-                Some(x) => {
-                    divisors.push(x);
-                    divisors.push(d / x);
-                    continue;
-                }
-                None => (), // go on to Pollard's Rho,
-            },
+        if is_prime_partial(d) {
+            prime_factors.entry(d).and_modify(|x| *x += 1).or_insert(1);
+            continue;
         }
         if let Some(x) = pollards_rho(d) {
             divisors.push(x);
@@ -293,7 +292,7 @@ crate::print_sequences!(
 #[test]
 #[ignore = "visualization"]
 fn speed_tests() {
-    for n in [5_392_920_426, 7_769_341_109] {
+    for n in [125_047_306, 5_392_920_426, 6_031_036_133, 7_769_341_109] {
         let start = std::time::Instant::now();
         prime_factorization(n);
         let el = start.elapsed();

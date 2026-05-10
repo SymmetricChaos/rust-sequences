@@ -1,18 +1,16 @@
+use num::PrimInt;
 use num_format::ToFormattedString;
 use rust_sequences::utils::{divisibility::prime_factorization, miller_rabin::is_prime};
 use std::{io::Write, time::Duration, u64};
 
-fn _prime_factorization_timings() {
+fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
     let start_time = std::time::Instant::now();
     let mut record = (std::time::Duration::ZERO, 0, vec![]);
     let mut factoring_time = std::time::Duration::ZERO;
 
-    let heartbeat = Duration::from_secs(60);
+    let heartbeat = Duration::from_secs(heartbeat);
 
-    let start = 1;
-    let end = u64::MAX;
-
-    let path_and_name = format!("src/_factorization_timings_1.txt");
+    let path_and_name = format!("src/_factorization_timings_{start}..{end}.txt");
     std::fs::File::create(&path_and_name).unwrap();
     let mut file = std::fs::File::options()
         .append(true)
@@ -28,7 +26,6 @@ fn _prime_factorization_timings() {
         factoring_time = factoring_time + d;
 
         // // Correctness checks
-        // // Also prevents factorization from being optimized away
         // let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
         // assert!(
         //     i == prod,
@@ -58,18 +55,6 @@ fn _prime_factorization_timings() {
             file.flush().unwrap();
         }
 
-        if i == u32::MAX as u64 {
-            file.write_all(
-                format!(
-                    "reached u32::MAX after {:.0?}\n\n",
-                    std::time::Instant::now().duration_since(start_time),
-                )
-                .as_bytes(),
-            )
-            .unwrap();
-            file.flush().unwrap();
-        }
-
         // Heartbeat
         if factoring_time > heartbeat {
             factoring_time -= heartbeat;
@@ -85,9 +70,22 @@ fn _prime_factorization_timings() {
             file.flush().unwrap();
         }
     }
+
+    file.write_all(
+        format!(
+            "#finished after {:.0?}\n\n",
+            std::time::Instant::now().duration_since(start_time),
+        )
+        .as_bytes(),
+    )
+    .unwrap();
+    file.flush().unwrap();
 }
 
 // cargo run --release
 fn main() {
-    _prime_factorization_timings();
+    let r = 2.pow(26);
+    for i in [1, 32, 40, 48, 56] {
+        _prime_factorization_timings(2.pow(i), 2.pow(i) + r, 30);
+    }
 }

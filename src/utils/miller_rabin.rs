@@ -22,16 +22,6 @@ impl std::fmt::Display for MRTest {
     }
 }
 
-impl MRTest {
-    pub fn is_prime(&self) -> bool {
-        *self == MRTest::Prime
-    }
-
-    pub fn is_composite(&self) -> bool {
-        *self != MRTest::Prime
-    }
-}
-
 /// A Miller-Rabin test that assumes the input is an odd number greater than 2.
 pub(super) fn miller_rabin(n: u64) -> MRTest {
     let mut d = (n - 1) / 2;
@@ -159,4 +149,5 @@ fn factor_test() {
     // }
     println!("{:?}", miller_rabin(41));
     println!("{:?}", miller_rabin(5461));
+    println!("{:?}", miller_rabin(4_104_071));
 }
