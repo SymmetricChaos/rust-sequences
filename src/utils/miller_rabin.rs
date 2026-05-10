@@ -63,6 +63,84 @@ pub(super) fn miller_rabin(n: u64) -> MRTest {
     MRTest::Prime
 }
 
+// First checks small prime factors then switches to deterministic Miller-Rabin.
+/// 64-bit primality test
+pub fn is_prime(n: u64) -> bool {
+    if n <= 1 {
+        return false;
+    }
+
+    // Check by trial
+    for witness in MR_WITNESSES_U64 {
+        if n == witness {
+            return true;
+        }
+        if n % witness == 0 {
+            return false;
+        }
+    }
+
+    let mut d = (n - 1) / 2;
+    let r = 1_u64 + d.trailing_zeros() as u64;
+    d >>= d.trailing_zeros();
+
+    'outer: for w in MR_WITNESSES_U64.into_iter() {
+        let mut x = pow_mod(w, d, n);
+
+        if x == 1 || x == n - 1 {
+            continue 'outer;
+        }
+
+        for _ in 0..r - 1 {
+            let t = pow_mod(x, 2, n);
+
+            if t == n - 1 {
+                continue 'outer;
+            }
+
+            if t == 1 && x != 1 && x != (n - 1) {
+                return false;
+            }
+
+            x = t;
+        }
+        return false;
+    }
+    true
+}
+
+// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
+// This is true in the hybrid factoring algorithm after partial trial division
+pub(super) fn is_prime_partial(n: u64) -> bool {
+    let mut d = (n - 1) / 2;
+    let r = 1_u64 + d.trailing_zeros() as u64;
+    d >>= d.trailing_zeros();
+
+    'outer: for w in MR_WITNESSES_U64.into_iter() {
+        let mut x = pow_mod(w, d, n);
+
+        if x == 1 || x == n - 1 {
+            continue 'outer;
+        }
+
+        for _ in 0..r - 1 {
+            let t = pow_mod(x, 2, n);
+
+            if t == n - 1 {
+                continue 'outer;
+            }
+
+            if t == 1 && x != 1 && x != (n - 1) {
+                return false;
+            }
+
+            x = t;
+        }
+        return false;
+    }
+    true
+}
+
 #[cfg(test)]
 #[test]
 #[ignore = "visualization"]

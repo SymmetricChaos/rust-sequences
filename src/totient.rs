@@ -1,6 +1,9 @@
 use crate::{
     core::traits::Increment,
-    utils::divisibility::{cototient, divisors, is_prime, totient},
+    utils::{
+        divisibility::{cototient, divisors, totient},
+        miller_rabin::is_prime,
+    },
 };
 use num::{Integer, rational::Ratio};
 

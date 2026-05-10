@@ -1,4 +1,4 @@
-use crate::utils::{divisibility::is_prime, exp_by_squaring::pow_mod};
+use crate::utils::{exp_by_squaring::pow_mod, miller_rabin::is_prime};
 
 /// The Fermat pseudoprimes to a given base.
 /// For a base, b, the non-prime positive integers, n, for which the following holds (b^(n-1)) % n = 1

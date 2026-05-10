@@ -1,4 +1,4 @@
-use crate::{core::primes::Primorial, utils::divisibility::is_prime};
+use crate::{core::primes::Primorial, utils::miller_rabin::is_prime};
 
 /// The fortunate numbers. For each natural number, n, smallest natural number, k, such that primorial(n)+k is prime. All known values are prime.
 ///

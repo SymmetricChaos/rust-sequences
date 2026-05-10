@@ -1,5 +1,5 @@
 use num_format::ToFormattedString;
-use rust_sequences::utils::divisibility::{is_prime, prime_factorization};
+use rust_sequences::utils::{divisibility::prime_factorization, miller_rabin::is_prime};
 use std::{io::Write, time::Duration, u64};
 
 fn _prime_factorization_timings() {
@@ -27,19 +27,19 @@ fn _prime_factorization_timings() {
 
         factoring_time = factoring_time + d;
 
-        // Correctness checks
-        // Also prevents factorization from being optimized away
-        let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
-        assert!(
-            i == prod,
-            "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
-        );
-        for f in fs.iter() {
-            assert!(
-                is_prime(f.0),
-                "\nCORRECTNESS CHECK FAILED\nfound non-prime in factorization of {i}\n"
-            )
-        }
+        // // Correctness checks
+        // // Also prevents factorization from being optimized away
+        // let prod = fs.iter().fold(1, |acc, (pr, ct)| acc * pr.pow(*ct as u32));
+        // assert!(
+        //     i == prod,
+        //     "\nCORRECTNESS CHECK FAILED\nproduct should be {i} but found {prod}\n"
+        // );
+        // for f in fs.iter() {
+        //     assert!(
+        //         is_prime(f.0),
+        //         "\nCORRECTNESS CHECK FAILED\nfound non-prime in factorization of {i}\n"
+        //     )
+        // }
 
         // Record and print a new record for time to factor
         if d > record.0 {

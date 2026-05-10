@@ -1,40 +1,12 @@
-use crate::utils::miller_rabin::{MR_WITNESSES_U64, miller_rabin};
+use crate::utils::miller_rabin::{is_prime, is_prime_partial, miller_rabin};
 use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::collections::BTreeMap;
 
-// First checks small prime factors then switches to deterministic Miller-Rabin.
-/// 64-bit primality test
-pub fn is_prime(n: u64) -> bool {
-    if n <= 1 {
-        return false;
-    }
-
-    // Check by trial
-    for witness in MR_WITNESSES_U64 {
-        if n == witness {
-            return true;
-        }
-        if n % witness == 0 {
-            return false;
-        }
-    }
-
-    miller_rabin(n).is_prime()
-}
-
-// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
-// This is true in the hybrid factoring algorithm after partial trial division
-pub fn is_prime_partial(n: u64) -> bool {
-    miller_rabin(n).is_prime()
-}
-
-/// Find a factor using Pollard's Rho
+/// Find a factor using Pollard's Rho, switching a parallelized version for numbers above 50_000_000
 fn pollards_rho(n: u64) -> Option<u64> {
-    // The running time of Pollard's Rho doesn't become a major factor for numbers less than about 50_000_000
-    // For numbers above 2^32
-    if n > 50_000_000 {
+    if n > 67_108_863 {
         return _pollards_rho_par(n);
     }
     let n = u128::from(n);
@@ -54,8 +26,6 @@ fn pollards_rho(n: u64) -> Option<u64> {
     }
     None
 }
-
-/// Find a factor using Pollard's Rho in parallel
 
 fn _pollards_rho_par(n: u64) -> Option<u64> {
     let n = u128::from(n);
@@ -95,7 +65,7 @@ pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>)
         return n;
     }
 
-    if miller_rabin(n).is_prime() {
+    if is_prime_partial(n) {
         prime_factors.insert(n, 1);
         n = 1;
     }
