@@ -4,30 +4,12 @@ use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::collections::BTreeMap;
 
-/// Find a factor using Pollard's Rho. Uses 64-bit arithmetic  switching a parallelized version for moderately large numbers.
+/// Find a factor using Pollard's Rho. Uses 64-bit arithmetic on a single thread for small numbers. Uses parallelized 64-bit arithmetic up to 2^32 and parallelized 128-bit arithmetic for larger numbers.
 fn pollards_rho(n: u64) -> Option<u64> {
-    if n > 0x1ffffff {
+    if n > 0x3FFFFFF {
         return _pollards_rho_par(n);
     }
-    if n < 0xFFFFFFFF {
-        for s in 2..(n - 2) {
-            let mut x = s;
-            let mut y = s;
-            let mut d = 1;
-            while d == 1 {
-                x = ((x * x) + 1) % n;
-                y = ((y * y) + 1) % n;
-                y = ((y * y) + 1) % n;
-                d = x.abs_diff(y).gcd(&n);
-            }
-            if d != n {
-                return Some(d);
-            }
-        }
-        return None;
-    }
 
-    let n = u128::from(n);
     for s in 2..(n - 2) {
         let mut x = s;
         let mut y = s;
@@ -39,10 +21,10 @@ fn pollards_rho(n: u64) -> Option<u64> {
             d = x.abs_diff(y).gcd(&n);
         }
         if d != n {
-            return Some(d as u64);
+            return Some(d);
         }
     }
-    None
+    return None;
 }
 
 fn _pollards_rho_par(n: u64) -> Option<u64> {
@@ -118,7 +100,7 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
         return prime_factors.into_iter().collect_vec();
     }
 
-    // Use Miller-Rabin to try to find a factor or prove the remaining part is prime.
+    // Use Miller-Rabin to try to find a factor or prove the remaining part is prime. If the remainin part is not prime create a list of divisors.
     let mut divisors = match miller_rabin(n) {
         super::miller_rabin::MRTest::Prime => {
             prime_factors.entry(n).and_modify(|x| *x += 1).or_insert(1);
@@ -135,7 +117,7 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
         },
     };
 
-    // Iteratively use Pollard's Rho and Miller-Rabin on the divisors, splitting them until primes are found
+    // Iteratively use Pollard's Rho on the divisors, splitting them until primes are found
     while !divisors.is_empty() {
         let d = divisors.pop().unwrap();
         if is_prime_partial(d) {

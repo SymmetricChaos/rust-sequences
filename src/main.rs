@@ -56,7 +56,7 @@ fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
         }
 
         // Heartbeat
-        if factoring_time > heartbeat {
+        if factoring_time >= heartbeat {
             factoring_time = std::time::Duration::ZERO;
             file.write_all(
                 format!(
