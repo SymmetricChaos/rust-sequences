@@ -80,16 +80,12 @@ impl<'a> Iterator for TagSystemIter<'a> {
 
 /// The halting state of a Cyclic Tag System is the empty string.
 pub struct CyclicTagSystem {
-    string: String,
     productions: Vec<String>,
-    ctr: usize,
 }
 
 impl CyclicTagSystem {
     /// Panics if any of the productions contain letters other than '0' and '1'
-    pub fn new<S: ToString>(init: S, productions: &[S]) -> Self {
-        let s = init.to_string();
-
+    pub fn new<S: ToString>(productions: &[S]) -> Self {
         let productions: Vec<String> = productions.iter().map(|p| p.to_string()).collect();
         for pro in productions.iter() {
             for c in pro.chars() {
@@ -99,15 +95,26 @@ impl CyclicTagSystem {
             }
         }
 
-        Self {
-            string: s,
-            productions,
+        Self { productions }
+    }
+
+    /// Run the automaton on an input.
+    pub fn create_iter(&self, initial_string: &str) -> CyclicTagSystemIter<'_> {
+        CyclicTagSystemIter {
+            string: initial_string.to_string(),
+            productions: &self.productions,
             ctr: 0,
         }
     }
 }
 
-impl Iterator for CyclicTagSystem {
+pub struct CyclicTagSystemIter<'a> {
+    string: String,
+    productions: &'a Vec<String>,
+    ctr: usize,
+}
+
+impl<'a> Iterator for CyclicTagSystemIter<'a> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -166,5 +173,5 @@ tag_system!(
 
 crate::print_sequences!(
     TagSystem::new(2, illustration_system, 'H').create_iter("baa"), 10;
-    CyclicTagSystem::new("11001", &["010", "000", "1111"]), 10;
+    CyclicTagSystem::new( &["010", "000", "1111"]).create_iter("11001"), 10;
 );

@@ -1,4 +1,4 @@
-/// Apply a Markov algorithm to a string.
+/// A Markov string rewrite system. Given a string and ordered set of rules the first rule found to be applicable is applied once in the first applicable position at each step.
 pub struct Markov {
     patterns: Vec<(&'static str, &'static str)>,
 }
@@ -47,7 +47,15 @@ impl<'a> Iterator for MarkovIter<'a> {
     }
 }
 
-/// Nicer way to make the transformations
+/// Create a set of Markov rewrite rules.
+///
+/// ```
+/// let pairs = markov_pairs!(
+///     "I0" => "0II"
+///     "1" => "0I"
+///     "0" => ""
+/// );
+/// ```
 #[macro_export]
 macro_rules! markov_pairs {
     ($($a:literal => $b:literal)+) => {

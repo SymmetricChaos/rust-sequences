@@ -1,5 +1,4 @@
-/// An L-system defined by a function from char to Option<&'static str>
-/// Constant symbols should return None and variables Some.
+/// An L-system defined by a function on chars.
 pub struct Lindenmayer {
     transition: Box<dyn Fn(char) -> Option<&'static str>>,
 }
@@ -50,14 +49,14 @@ impl<'a> Iterator for LindenmayerIter<'a> {
 ///
 /// Example:
 /// ```
-/// l_system!(
+/// l_system_rules!(
 ///    tree;
 ///    '0' => "1[0]0"
 ///    '1' => "11"
 /// );
 /// ```
 #[macro_export]
-macro_rules! l_system {
+macro_rules! l_system_rules {
     ($name:ident; $($a:literal => $b:literal)+) => {
         fn $name(x: char) -> Option<&'static str> {
             match x {
@@ -75,32 +74,32 @@ mod tests {
     use super::*;
 
     // Lindenmayer's original algae system
-    l_system!(
+    l_system_rules!(
         algae;
         'a' => "ab"
         'b' => "a"
     );
 
     // Simple system featuring constant symbols
-    l_system!(
+    l_system_rules!(
         tree;
         '0' => "1[0]0"
         '1' => "11"
     );
 
-    l_system!(
+    l_system_rules!(
         cantor;
         'a' => "aba"
         'b' => "bbb"
     );
 
-    l_system!(
+    l_system_rules!(
         peano_curve;
         'X' => "XFYFX+F+YFXFY-F-XFYFX"
         'Y' => "YFXFY-F-XFYFX+F+YFXFY"
     );
 
-    l_system!(
+    l_system_rules!(
         complex_bush;
         'V' => "[+++W][---W]YV"
         'W' => "+X[-W]Z"
@@ -109,32 +108,32 @@ mod tests {
         'Z' => "[-FFF][+FFF]F"
     );
 
-    l_system!(
+    l_system_rules!(
         thue_morse;
         '0' => "01"
         '1' => "10"
     );
 
-    l_system!(
+    l_system_rules!(
         ternary_thue_morse;
         '0' => "1"
         '1' => "20"
         '2' => "210"
     );
 
-    l_system!(
+    l_system_rules!(
         period_doubling;
         '0' => "01"
         '1' => "00"
     );
 
-    l_system!(
+    l_system_rules!(
         fibonacci;
         '_' => "_|"
         '|' => "_"
     );
 
-    l_system!(
+    l_system_rules!(
         tribonacci;
         'a' => "ab"
         'b' => "ac"

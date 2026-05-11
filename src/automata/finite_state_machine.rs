@@ -38,19 +38,6 @@ impl StateMachine {
     }
 }
 
-// impl Automata for StateMachine {
-//     type Item = &'static str;
-//     fn run_automata(&self, input: Vec<Self::Item>) -> impl Iterator {
-//         StateMachineIter {
-//             tape: input,
-//             position: 0,
-//             current_state: self.initial_state,
-//             states: &self.states,
-//             output: &self.output,
-//         }
-//     }
-// }
-
 pub struct StateMachineIter<'a> {
     tape: Vec<&'static str>,
     position: usize,

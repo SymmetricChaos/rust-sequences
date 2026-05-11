@@ -1,14 +1,13 @@
 #[cfg(test)]
 mod tests {
-    #[cfg(test)]
     use crate::{automata::markov_algorithm::Markov, markov_pairs};
     use crate::{
         automata::{lindenmayer_system::Lindenmayer, tag_machine::TagSystem},
-        l_system, tag_system,
+        l_system_rules, tag_system,
     };
 
     // Each term has a length that is equal to the matching term of the Padovan sequence
-    l_system!(
+    l_system_rules!(
         padovan;
         'a' => "b"
         'b' => "c"
@@ -17,7 +16,6 @@ mod tests {
 
     // Shortcut version of the Collatz sequence. Each term that is entire 'a's eventually generates a new all 'a's sequence with a length
     // that is equal to (3n+1)/2 if the length is odd or n/2 if the length is even.
-
     tag_system!(
         collatz;
         'a' => "bc"

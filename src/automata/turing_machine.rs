@@ -17,9 +17,9 @@ pub enum Move {
 /// A one dimensional Turing machine tape
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Tape {
-    pub tape: VecDeque<char>,
-    pub position: usize,
-    pub blank: char,
+    tape: VecDeque<char>,
+    position: usize,
+    blank: char,
 }
 
 impl Tape {
@@ -42,18 +42,18 @@ impl Tape {
         }
     }
 
-    /// Read the current symbol
-    pub fn read(&self) -> char {
+    /// Read the current symbol.
+    fn read(&self) -> char {
         self.tape[self.position]
     }
 
-    /// Write a symbol at the current positions
-    pub fn write(&mut self, symbol: char) {
+    /// Write a symbol at the current positions.
+    fn write(&mut self, symbol: char) {
         self.tape[self.position] = symbol;
     }
 
     /// Shift left or right or remain in the same position. The tape is infinite so new blanks can be inserted when this occurs.
-    pub fn shift(&mut self, direction: Move) {
+    fn shift(&mut self, direction: Move) {
         match direction {
             Move::Left => {
                 if self.position == 0 {
@@ -76,7 +76,7 @@ impl Tape {
         }
     }
 
-    /// Concatenate all the symbols on the tape into a String and place a dot to indicate the head position
+    /// Concatenate all the symbols on the tape into a String and place a dot to indicate the head position.
     pub fn indicate_tape(&self) -> String {
         let mut s = " ".repeat(self.position);
         s.push('.');
