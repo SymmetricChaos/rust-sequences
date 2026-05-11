@@ -1,12 +1,13 @@
 #[cfg(test)]
 mod tests {
+    use crate::automata::finite_state_machine::StateMachine;
     use crate::automata::pushdown::PushdownAutomaton;
-    use crate::pushdown_states;
     use crate::{automata::markov_algorithm::Markov, markov_pairs};
     use crate::{
         automata::{lindenmayer_system::Lindenmayer, tag_machine::TagSystem},
         l_system_rules, tag_system,
     };
+    use crate::{fsm_output, fsm_states, pushdown_states};
 
     // Each term has a length that is equal to the matching term of the Padovan sequence
     l_system_rules!(
@@ -108,6 +109,33 @@ mod tests {
             for p in machine.create_iter(tape) {
                 println!("{p}");
             }
+        }
+    }
+
+    #[test]
+    fn fsm_turnstile() {
+        let states = fsm_states!(
+            state "Locked"
+                "Coin" => "Unlocked"
+                "Push" => "Locked"
+            state "Unlocked"
+                "Coin" => "Unlocked"
+                "Push" => "Locked"
+        );
+
+        let output = fsm_output!(
+            "Coin", "Locked" => "Coin Accepted, Unlocking"
+            "Push", "Locked" => "No Entry Allowed, Insert Coin"
+            "Coin", "Unlocked" => "Coin Wasted, Still Unlocked"
+            "Push", "Unlocked" => "One Entry Allowed, Locking"
+        );
+
+        let machine = StateMachine::new("Locked", states, output);
+
+        let tape = vec!["Push", "Push", "Coin", "Push", "Coin", "Coin"];
+
+        for (i, out) in machine.create_iter(tape).enumerate() {
+            println!("{i:<2}  {}", out);
         }
     }
 }

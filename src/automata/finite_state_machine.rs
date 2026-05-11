@@ -1,26 +1,32 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Index};
 
 /// The state transition function takes in a tape symbol then returns a state name.
-pub struct State(Box<dyn Fn(&'static str) -> &'static str>);
+pub struct State(pub Box<dyn Fn(&'static str) -> &'static str>);
+
+pub struct States(pub HashMap<&'static str, State>);
+
+impl Index<&str> for States {
+    type Output = State;
+
+    fn index(&self, index: &str) -> &Self::Output {
+        &self.0[index]
+    }
+}
 
 /// The output function takes in a tape symbol and state name then returns a state name.
-pub struct Output(Box<dyn Fn(&'static str, &'static str) -> &'static str>);
+pub struct Output(pub Box<dyn Fn(&'static str, &'static str) -> &'static str>);
 
 /// A deterministic finite state machine.
 pub struct StateMachine {
-    initial_state: &'static str,
-    states: HashMap<&'static str, State>,
+    initial_state_name: &'static str,
+    states: States,
     output: Output,
 }
 
 impl StateMachine {
-    pub fn new(
-        initial_state: &'static str,
-        states: HashMap<&'static str, State>,
-        output: Output,
-    ) -> Self {
+    pub fn new(initial_state_name: &'static str, states: States, output: Output) -> Self {
         Self {
-            initial_state,
+            initial_state_name,
             states,
             output,
         }
@@ -31,7 +37,7 @@ impl StateMachine {
         StateMachineIter {
             tape,
             position: 0,
-            current_state: self.initial_state,
+            current_state_name: self.initial_state_name,
             states: &self.states,
             output: &self.output,
         }
@@ -41,8 +47,8 @@ impl StateMachine {
 pub struct StateMachineIter<'a> {
     tape: Vec<&'static str>,
     position: usize,
-    current_state: &'static str,
-    states: &'a HashMap<&'static str, State>,
+    current_state_name: &'static str,
+    states: &'a States,
     output: &'a Output,
 }
 
@@ -52,13 +58,10 @@ impl<'a> Iterator for StateMachineIter<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         // Automatically terminates at the end of the tape.
         let tape_symbol = *self.tape.get(self.position)?;
-        let state = self
-            .states
-            .get(self.current_state)
-            .expect("invalid state encountered");
+        let state = &self.states[self.current_state_name];
 
-        let out = Some(self.output.0(tape_symbol, self.current_state));
-        self.current_state = state.0(tape_symbol);
+        let out = Some(self.output.0(tape_symbol, self.current_state_name));
+        self.current_state_name = state.0(tape_symbol);
 
         self.position += 1;
         out
@@ -82,11 +85,11 @@ impl<'a> Iterator for StateMachineIter<'a> {
 macro_rules! fsm_states {
     ($(state $name_symbol: literal $($input:literal => $state:literal)+ )+) => {
         {
-            let mut hmap = HashMap::new();
+            let mut hmap = std::collections::HashMap::new();
             $(
                 hmap.insert(
                     $name_symbol,
-                    State ( Box::new(|x: &'static str| -> &'static str {
+                    crate::automata::finite_state_machine::State ( Box::new(|x: &'static str| -> &'static str {
                             match x {
                                 $(
                                     $input => $state,
@@ -98,7 +101,7 @@ macro_rules! fsm_states {
                 );
 
             )+
-            hmap
+            crate::automata::finite_state_machine::States(hmap)
         }
     };
 }
@@ -116,7 +119,7 @@ macro_rules! fsm_states {
 #[macro_export]
 macro_rules! fsm_output{
     ( $($tape:literal, $state:literal => $out:literal)+ ) => {
-        Output ( Box::new(|x: &'static str, y: &'static str | -> &'static str {
+        crate::automata::finite_state_machine::Output ( Box::new(|x: &'static str, y: &'static str | -> &'static str {
                 match (x,y) {
                     $(
                         ($tape, $state) => $out,
