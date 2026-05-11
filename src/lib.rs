@@ -38,6 +38,7 @@ pub mod factoradic;
 pub mod factorial;
 pub mod farey;
 pub mod fermat;
+pub mod fibbinary;
 pub mod fibonacci;
 pub mod fibonacci_lucky;
 pub mod figure_figure;
@@ -68,6 +69,7 @@ pub mod narayana_general;
 pub mod narayana_triangle;
 pub mod narayanas_cows;
 pub mod odd_part;
+pub mod ore_numbers;
 pub mod padic_valuation;
 pub mod paperfolding;
 pub mod partition;
@@ -107,7 +109,6 @@ pub mod twin_primes;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
-pub mod ore_numbers;
 
 #[macro_export]
 macro_rules! print_row {
