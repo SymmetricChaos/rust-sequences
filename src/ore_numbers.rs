@@ -5,6 +5,9 @@ use crate::{
     utils::divisibility::{number_of_divisors, sum_of_divisors},
 };
 
+/// The Ore numbers.
+///
+/// 1, 6, 28, 140, 270, 496, 672, 1638, 2970...
 pub struct Ore {
     ctr: u64,
 }
