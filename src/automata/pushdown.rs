@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Index};
 
 const BLANK: char = '\0';
 
@@ -10,36 +10,46 @@ pub enum StackChange {
 }
 
 /// The state transition function takes in a tape symbol and a stack symbol. Based on these it returns the name of a State and optionally a symbol to push onto the stack.
-pub struct State(Box<dyn Fn(char, char) -> (&'static str, StackChange)>);
+pub struct PushdownState(pub Box<dyn Fn(char, char) -> (String, StackChange)>);
+
+pub struct PushdownStates(pub HashMap<String, PushdownState>);
+
+impl Index<&str> for PushdownStates {
+    type Output = PushdownState;
+
+    fn index(&self, index: &str) -> &Self::Output {
+        &self.0[index]
+    }
+}
 
 /// A pushdown automata is effectively a finite state machine equipped with a stack.
 pub struct PushdownAutomaton {
     stack: Vec<char>,
-    states: HashMap<&'static str, State>,
-    current_state: &'static str,
-    halting_states: Vec<&'static str>,
+    states: PushdownStates,
+    current_state: String,
+    halting_states: Vec<String>,
 }
 
 impl PushdownAutomaton {
-    pub fn new(
-        states: HashMap<&'static str, State>,
-        initial_state: &'static str,
+    pub fn new<S: ToString>(
+        states: PushdownStates,
+        initial_state: S,
         initial_stack: Option<Vec<char>>,
-        halting_states: Vec<&'static str>,
+        halting_states: Vec<S>,
     ) -> Self {
         if let Some(cs) = initial_stack {
             Self {
                 stack: cs,
-                current_state: initial_state,
+                current_state: initial_state.to_string(),
                 states,
-                halting_states,
+                halting_states: halting_states.iter().map(|s| s.to_string()).collect(),
             }
         } else {
             Self {
                 stack: vec![],
-                current_state: initial_state,
+                current_state: initial_state.to_string(),
                 states,
-                halting_states,
+                halting_states: halting_states.iter().map(|s| s.to_string()).collect(),
             }
         }
     }
@@ -51,7 +61,7 @@ impl PushdownAutomaton {
             tape,
             position: 0,
             states: &self.states,
-            current_state: self.current_state,
+            current_state: self.current_state.clone(),
             halting_states: &self.halting_states,
         }
     }
@@ -61,13 +71,13 @@ pub struct PushdownAutomatonIter<'a> {
     stack: Vec<char>,
     tape: Vec<char>,
     position: usize,
-    states: &'a HashMap<&'static str, State>,
-    current_state: &'static str,
-    halting_states: &'a Vec<&'static str>,
+    states: &'a PushdownStates,
+    current_state: String,
+    halting_states: &'a Vec<String>,
 }
 
 impl<'a> Iterator for PushdownAutomatonIter<'a> {
-    type Item = &'static str;
+    type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.halting_states.contains(&self.current_state) {
@@ -76,11 +86,11 @@ impl<'a> Iterator for PushdownAutomatonIter<'a> {
 
         let tape_symbol = *self.tape.get(self.position).unwrap_or(&BLANK);
         let stack_symbol = *self.stack.last().unwrap_or(&BLANK);
-        let state = self.states.get(self.current_state)?;
 
-        let (next_state, stack_change) = state.0(tape_symbol, stack_symbol);
+        let (next_state, stack_change) =
+            self.states[&self.current_state].0(tape_symbol, stack_symbol);
 
-        self.current_state = next_state;
+        self.current_state = next_state.clone();
         if self.position < self.tape.len() {
             self.position += 1;
         }
@@ -102,15 +112,15 @@ impl<'a> Iterator for PushdownAutomatonIter<'a> {
 macro_rules! pushdown_states {
     ($(state $name_symbol: literal $($t_input:literal, $s_input:literal => $state:literal, $change:expr)+ )+) => {
         {
-            use StackChange::*;
-            let mut hmap = HashMap::new();
+            use crate::automata::pushdown::StackChange::*;
+            let mut hmap = std::collections::HashMap::new();
             $(
                 hmap.insert(
-                    $name_symbol,
-                    State (Box::new(|t: char, s:char| -> (&'static str, StackChange) {
+                    $name_symbol.to_string(),
+                    crate::automata::pushdown::PushdownState(Box::new(|t: char, s:char| -> (String, crate::automata::pushdown::StackChange) {
                             match (t,s) {
                                 $(
-                                    ($t_input, $s_input) => ($state, $change),
+                                    ($t_input, $s_input) => ($state.to_string(), $change),
                                 )+
                                 _ => panic!("symbol pair (`{}`, `{}`) not handled in state {}", t,s, $name_symbol),
                             }
@@ -119,7 +129,7 @@ macro_rules! pushdown_states {
                 );
 
             )+
-            hmap
+            crate::automata::pushdown::PushdownStates(hmap)
         }
     };
 }

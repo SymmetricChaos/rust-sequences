@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use crate::automata::pushdown::PushdownAutomaton;
+    use crate::pushdown_states;
     use crate::{automata::markov_algorithm::Markov, markov_pairs};
     use crate::{
         automata::{lindenmayer_system::Lindenmayer, tag_machine::TagSystem},
@@ -44,14 +46,14 @@ mod tests {
 
         let bb_states = turing_states!(
             state "A"
-                '0' => '1', TuringMove::Right, "B"
-                '1' => '1', TuringMove::Left, "C"
+                '0' => '1', Right, "B"
+                '1' => '1', Left, "C"
             state "B"
-                '0' => '1', TuringMove::Left, "A"
-                '1' => '1', TuringMove::Right, "B"
+                '0' => '1', Left, "A"
+                '1' => '1', Right, "B"
             state "C"
-                '0' => '1', TuringMove::Left, "B"
-                '1' => '1', TuringMove::Right, "HALT"
+                '0' => '1', Left, "B"
+                '1' => '1', Right, "HALT"
         );
 
         let machine = TuringMachine::new("A", bb_states);
@@ -60,6 +62,52 @@ mod tests {
 
         for (i, state) in machine.create_iter(tape).enumerate() {
             println!("{i:<2}  {:<5} {}", state.0, state.1);
+        }
+    }
+
+    #[test]
+    fn pushdown_bit_counter() {
+        use itertools::Itertools;
+
+        // determine if the input consists of bitstring, then a 'c', then the reverse of the bitstring
+        let states = pushdown_states![
+            state "ADD"
+                '1', '1' => "ADD", Push('1') // push a 1 or 0 whenever we find it
+                '1', '0' => "ADD", Push('1')
+                '1', '\0' => "ADD", Push('1')
+                '0', '1' => "ADD", Push('0')
+                '0', '0' => "ADD", Push('0')
+                '0', '\0' => "ADD", Push('0')
+                'c', '1' => "SUB", Stay // switch to SUB after finding a c
+                'c', '0' => "SUB", Stay
+                '\0', '1' => "NOT ACCEPT", Stay // do not accept if the tape runs out while in ADD
+                '\0', '0' => "NOT ACCEPT", Stay
+            state "SUB"
+                '1', '1' => "SUB", Pop // if we find a 1 or 0 when we expect we pop them
+                '0', '0' => "SUB", Pop
+                '\0', '\0' => "ACCEPT", Stay // if the stack and tape are both empty we accept the input
+                '1', '0' => "NOT ACCEPT", Stay // in all other cases we do not accept the string
+                '0', '1' => "NOT ACCEPT", Stay
+                'c', '1' => "NOT ACCEPT", Stay
+                'c', '0' => "NOT ACCEPT", Stay
+                '\0', '1' => "NOT ACCEPT", Stay
+                '\0', '0' => "NOT ACCEPT", Stay
+                '1', '\0' => "NOT ACCEPT", Stay
+                '0', '\0' => "NOT ACCEPT", Stay
+        ];
+        let machine = PushdownAutomaton::new(states, "ADD", None, vec!["ACCEPT", "NOT ACCEPT"]);
+
+        let tapes = vec![
+            vec!['1', '1', '0', '0', '1', '1'],
+            vec!['1', '1', '0', 'c', '0', '1', '1'],
+            vec!['1', '1', '0', 'c', '0', '0', '1'],
+            vec!['1', '1', '0', 'c', '0', '1'],
+        ];
+        for tape in tapes {
+            println!("\nCheck acceptance for the tape `{}`", tape.iter().join(""));
+            for p in machine.create_iter(tape) {
+                println!("{p}");
+            }
         }
     }
 }

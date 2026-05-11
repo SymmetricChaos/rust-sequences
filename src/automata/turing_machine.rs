@@ -210,6 +210,7 @@ impl<'a> Iterator for TuringMachineIter<'a> {
 macro_rules! turing_states {
     ($(state $name_symbol: literal $($input:literal => $symbol:literal, $movement:expr, $state:literal)+ )+) => {
         {
+            use crate::automata::turing_machine::TuringMove::*;
             let mut hmap = std::collections::HashMap::new();
             $(
                 hmap.insert(

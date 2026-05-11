@@ -1,12 +1,12 @@
 /// An L-system defined by a function on chars.
 pub struct Lindenmayer {
-    transition: Box<dyn Fn(char) -> Option<&'static str>>,
+    transition: Box<dyn Fn(char) -> Option<String>>,
 }
 
 impl Lindenmayer {
     pub fn new<T>(transition: T) -> Self
     where
-        T: Fn(char) -> Option<&'static str> + 'static,
+        T: Fn(char) -> Option<String> + 'static,
     {
         Self {
             transition: Box::new(transition),
@@ -24,7 +24,7 @@ impl Lindenmayer {
 
 pub struct LindenmayerIter<'a> {
     string: String,
-    transition: &'a Box<dyn Fn(char) -> Option<&'static str>>,
+    transition: &'a Box<dyn Fn(char) -> Option<String>>,
 }
 
 impl<'a> Iterator for LindenmayerIter<'a> {
@@ -35,7 +35,7 @@ impl<'a> Iterator for LindenmayerIter<'a> {
         let mut next = String::with_capacity(self.string.len());
         for c in self.string.chars() {
             if let Some(s) = (self.transition)(c) {
-                next.push_str(s);
+                next.push_str(&s);
             } else {
                 next.push(c);
             }
@@ -58,10 +58,10 @@ impl<'a> Iterator for LindenmayerIter<'a> {
 #[macro_export]
 macro_rules! l_system_rules {
     ($name:ident; $($a:literal => $b:literal)+) => {
-        fn $name(x: char) -> Option<&'static str> {
+        fn $name(x: char) -> Option<String> {
             match x {
                 $(
-                    $a => Some($b),
+                    $a => Some($b.to_string()),
                 )+
                 _ => None,
             }

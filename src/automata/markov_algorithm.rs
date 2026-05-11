@@ -1,10 +1,10 @@
 /// A Markov string rewrite system. Given a string and ordered set of rules the first rule found to be applicable is applied once in the first applicable position at each step.
 pub struct Markov {
-    patterns: Vec<(&'static str, &'static str)>,
+    patterns: Vec<(String, String)>,
 }
 
 impl Markov {
-    pub fn new(patterns: &[(&'static str, &'static str)]) -> Self {
+    pub fn new(patterns: &[(String, String)]) -> Self {
         Self {
             patterns: patterns.to_vec(),
         }
@@ -22,7 +22,7 @@ impl Markov {
 
 pub struct MarkovIter<'a> {
     string: String,
-    patterns: &'a Vec<(&'static str, &'static str)>,
+    patterns: &'a Vec<(String, String)>,
     halted: bool,
 }
 
@@ -61,7 +61,7 @@ macro_rules! markov_pairs {
     ($($a:literal => $b:literal)+) => {
         &[
             $(
-                ($a, $b),
+                ($a.to_string(), $b.to_string()),
             )+
         ]
     };
