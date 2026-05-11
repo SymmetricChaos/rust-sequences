@@ -38,25 +38,25 @@ mod tests {
     #[test]
     fn busy_beaver() {
         use crate::{
-            automata::turing_machine::{Move, Tape, TuringMachine},
+            automata::turing_machine::{TuringMachine, TuringMove, TuringTape},
             turing_states,
         };
 
         let bb_states = turing_states!(
             state "A"
-                '0' => '1', Move::Right, "B"
-                '1' => '1', Move::Left, "C"
+                '0' => '1', TuringMove::Right, "B"
+                '1' => '1', TuringMove::Left, "C"
             state "B"
-                '0' => '1', Move::Left, "A"
-                '1' => '1', Move::Right, "B"
+                '0' => '1', TuringMove::Left, "A"
+                '1' => '1', TuringMove::Right, "B"
             state "C"
-                '0' => '1', Move::Left, "B"
-                '1' => '1', Move::Right, "HALT"
+                '0' => '1', TuringMove::Left, "B"
+                '1' => '1', TuringMove::Right, "HALT"
         );
 
         let machine = TuringMachine::new("A", bb_states);
 
-        let tape = Tape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0');
+        let tape = TuringTape::new(vec!['0', '0', '0', '0', '0', '0'], 3, '0');
 
         for (i, state) in machine.create_iter(tape).enumerate() {
             println!("{i:<2}  {:<5} {}", state.0, state.1);

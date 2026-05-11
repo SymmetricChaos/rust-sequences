@@ -2,27 +2,38 @@ use itertools::Itertools;
 use std::{
     collections::{HashMap, VecDeque},
     fmt::Display,
+    ops::Index,
 };
 
-pub struct State(pub Box<dyn Fn(char) -> (char, Move, &'static str)>);
+pub struct TuringState(pub Box<dyn Fn(char) -> (char, TuringMove, String)>);
 
-/// Movement on a one dimensional Turing machine tape
+pub struct TuringStates(pub HashMap<String, TuringState>);
+
+impl Index<&str> for TuringStates {
+    type Output = TuringState;
+
+    fn index(&self, index: &str) -> &Self::Output {
+        &self.0[index]
+    }
+}
+
+/// Movement on a one dimensional Turing machine tape.
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum Move {
+pub enum TuringMove {
     Left,
     Right,
     Stay,
 }
 
-/// A one dimensional Turing machine tape
+/// A one dimensional Turing machine tape.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Tape {
+pub struct TuringTape {
     tape: VecDeque<char>,
     position: usize,
     blank: char,
 }
 
-impl Tape {
+impl TuringTape {
     pub fn new(tape: Vec<char>, position: usize, blank: char) -> Self {
         if tape.is_empty() {
             Self {
@@ -53,16 +64,16 @@ impl Tape {
     }
 
     /// Shift left or right or remain in the same position. The tape is infinite so new blanks can be inserted when this occurs.
-    fn shift(&mut self, direction: Move) {
+    fn shift(&mut self, direction: TuringMove) {
         match direction {
-            Move::Left => {
+            TuringMove::Left => {
                 if self.position == 0 {
                     self.tape.push_front(self.blank);
                 } else {
                     self.position -= 1
                 }
             }
-            Move::Right => {
+            TuringMove::Right => {
                 if self.position == self.tape.len() - 1 {
                     self.tape.push_back(self.blank);
                     self.position += 1;
@@ -70,7 +81,7 @@ impl Tape {
                     self.position += 1;
                 }
             }
-            Move::Stay => {
+            TuringMove::Stay => {
                 // do nothing
             }
         }
@@ -123,7 +134,7 @@ impl Tape {
 }
 
 /// Indicate the current position with a dot above the symbols.
-impl Display for Tape {
+impl Display for TuringTape {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.tape.iter().join(""))
     }
@@ -131,51 +142,51 @@ impl Display for Tape {
 
 /// A one dimension Turing machine.
 pub struct TuringMachine {
-    states: HashMap<&'static str, State>,
-    initial_state: &'static str,
+    states: TuringStates,
+    initial_state_name: String,
 }
 
 impl TuringMachine {
-    /// A new TuringMachine defined by a Tape, the name of the initial state, and a map of named States.
-    pub fn new(initial_state: &'static str, states: HashMap<&'static str, State>) -> Self {
+    /// A new TuringMachine defined by the name of the initial state, and a TuringStateMap that connects a name to each TuringState.
+    pub fn new<S: ToString>(initial_state_name: S, states: TuringStates) -> Self {
         Self {
-            initial_state,
+            initial_state_name: initial_state_name.to_string(),
             states,
         }
     }
 
-    /// Run the automaton on an input.
-    pub fn create_iter(&self, tape: Tape) -> TuringMachineIter<'_> {
+    /// Run the automaton on a provided TuringTape.
+    pub fn create_iter(&self, tape: TuringTape) -> TuringMachineIter<'_> {
         TuringMachineIter {
             tape,
             states: &self.states,
-            current_state: self.initial_state,
+            current_state_name: self.initial_state_name.clone(),
         }
     }
 }
 
 pub struct TuringMachineIter<'a> {
-    tape: Tape,
-    states: &'a HashMap<&'static str, State>,
-    current_state: &'static str,
+    tape: TuringTape,
+    states: &'a TuringStates,
+    current_state_name: String,
 }
 
 impl<'a> Iterator for TuringMachineIter<'a> {
-    type Item = (&'static str, Tape);
+    type Item = (String, TuringTape);
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.current_state == "HALT" {
+        if self.current_state_name == "HALT" {
             return None;
         }
 
         let cur_symbol = self.tape.read();
-        let (symbol, direction, next_state) = self.states[self.current_state].0(cur_symbol);
+        let (symbol, direction, next_state) = self.states[&self.current_state_name].0(cur_symbol);
         self.tape.write(symbol);
         self.tape.shift(direction);
 
-        self.current_state = next_state;
+        self.current_state_name = next_state;
 
-        Some((self.current_state, self.tape.clone()))
+        Some((self.current_state_name.to_string(), self.tape.clone()))
     }
 }
 
@@ -202,12 +213,12 @@ macro_rules! turing_states {
             let mut hmap = std::collections::HashMap::new();
             $(
                 hmap.insert(
-                    $name_symbol,
-                    crate::automata::turing_machine::State (
-                        Box::new(|x: char| -> (char, Move, &'static str) {
+                    $name_symbol.to_string(),
+                    crate::automata::turing_machine::TuringState (
+                        Box::new(|x: char| -> (char, TuringMove, String) {
                             match x {
                                 $(
-                                    $input => ($symbol, $movement, $state),
+                                    $input => ($symbol, $movement, $state.to_string()),
                                 )+
                                 _ => panic!("symbol not handled"),
                             }
@@ -216,7 +227,7 @@ macro_rules! turing_states {
                 );
 
             )+
-            hmap
+            crate::automata::turing_machine::TuringStates(hmap)
         }
     };
 }
