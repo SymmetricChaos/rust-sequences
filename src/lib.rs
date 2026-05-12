@@ -89,6 +89,7 @@ pub mod pseudoprime;
 pub mod rado_pairs;
 pub mod recaman;
 pub mod repint;
+pub mod rngs;
 pub mod rowland;
 pub mod rueppel;
 pub mod ruler;
