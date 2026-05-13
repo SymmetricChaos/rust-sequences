@@ -1,4 +1,7 @@
-use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
+use crate::{
+    core::{Primes, traits::Increment},
+    utils::{divisibility::prime_factorization, miller_rabin::is_prime},
+};
 
 /// The Blum integers. Natural numbers of the form p*q where p and q are primes congruent to 3 modulo 4 and p is not equal to q. They are relevant to the Blum-Blum-Shub PRNG.
 ///
@@ -29,6 +32,88 @@ impl Iterator for Blum {
     }
 }
 
+/// Primes that can be factors of the modulus of a maximum length Blue-Blum-Shub PRNG.
+///
+/// 11, 23, 47, 167, 359, 719, 1439, 2039...
+pub struct BlumBlumShubPrimes {
+    primes: Primes<u64>,
+}
+
+impl BlumBlumShubPrimes {
+    pub fn new() -> Self {
+        Self {
+            primes: Primes::new(),
+        }
+    }
+}
+
+impl Iterator for BlumBlumShubPrimes {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let p = self.primes.next()?;
+            if p % 4 != 3 {
+                continue;
+            }
+            let a = (p - 1) / 2;
+            let b = (a - 1) / 2;
+            if is_prime(a) && is_prime(b) {
+                return Some(p);
+            }
+        }
+    }
+}
+
+/// The values of a modulus that give maximum period for the Blum-Blum-Shub PRNG.
+///
+/// 1081, 3841, 7849, 8257, 16537, 16873...
+pub struct BlumBlumShubMaximum {
+    ctr: u64,
+}
+
+impl BlumBlumShubMaximum {
+    pub fn new() -> Self {
+        Self { ctr: 1080 }
+    }
+}
+
+impl Iterator for BlumBlumShubMaximum {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            todo!()
+        }
+    }
+}
+
+/// Sequence of state values from the Blum-Blum-Shub PRNG. These values are not returned by the algorithm, however, with a few bits being extracted via parity or masking.
+pub struct BlumBlumShub {
+    val: u128,
+    modulus: u128,
+}
+
+impl BlumBlumShub {
+    pub fn new(inital_value: u64, modulus: u64) -> Self {
+        Self {
+            val: inital_value as u128,
+            modulus: modulus as u128,
+        }
+    }
+}
+
+impl Iterator for BlumBlumShub {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.val as u64;
+        self.val = (self.val * self.val) % self.modulus;
+        Some(out)
+    }
+}
+
 crate::check_sequences!(
     Blum::new(), [21, 33, 57, 69, 77, 93, 129, 133, 141, 161, 177, 201, 209, 213, 217, 237, 249, 253, 301, 309, 321, 329, 341, 381, 393, 413, 417, 437, 453, 469, 473, 489, 497, 501, 517, 537, 553, 573, 581, 589, 597, 633, 649, 669, 681, 713, 717, 721, 737, 749, 753, 781, 789];
+    BlumBlumShubPrimes::new(), [11, 23, 47, 167, 359, 719, 1439, 2039, 2879, 4079, 4127, 4919, 5639, 5807, 5927, 6047, 7247, 7559, 7607, 7727, 9839, 10799, 11279, 13799, 13967, 14159, 15287, 15647, 20327, 21599, 21767, 23399, 24407, 24527, 25799, 28319, 28607, 29399];
 );
