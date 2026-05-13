@@ -111,6 +111,7 @@ pub mod twin_primes;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
+pub mod hyperfactorial;
 
 #[macro_export]
 macro_rules! print_row {
