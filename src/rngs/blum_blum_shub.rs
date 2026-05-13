@@ -2,6 +2,7 @@ use crate::{
     core::{Primes, traits::Increment},
     utils::{divisibility::prime_factorization, miller_rabin::is_prime},
 };
+use std::collections::VecDeque;
 
 /// The Blum integers. Natural numbers of the form p*q where p and q are primes congruent to 3 modulo 4 and p is not equal to q. They are relevant to the Blum-Blum-Shub PRNG.
 ///
@@ -69,12 +70,20 @@ impl Iterator for BlumBlumShubPrimes {
 ///
 /// 1081, 3841, 7849, 8257, 16537, 16873...
 pub struct BlumBlumShubMaximum {
-    ctr: u64,
+    bbsp: BlumBlumShubPrimes,
+    s: Vec<u64>,
+    t: VecDeque<u64>,
+    p: u64,
 }
 
 impl BlumBlumShubMaximum {
     pub fn new() -> Self {
-        Self { ctr: 1080 }
+        Self {
+            bbsp: BlumBlumShubPrimes::new(),
+            s: Vec::new(),
+            t: VecDeque::new(),
+            p: 0,
+        }
     }
 }
 
@@ -83,7 +92,20 @@ impl Iterator for BlumBlumShubMaximum {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            todo!()
+            if self.t.len() > 0 && self.t[0] < self.p * self.s[0] {
+                return self.t.pop_front();
+            } else {
+                let p = self.bbsp.next()?;
+                for s in self.s.iter() {
+                    // is 2 a quadratic residue mod p or mod s (but not both)
+                    if !((p % 8 == 1 || p % 8 == 7) ^ (s % 8 == 1 || s % 8 == 7)) {
+                        self.t.push_back(p * s);
+                    }
+                }
+                self.p = p;
+                self.s.push(p);
+                self.t.make_contiguous().sort();
+            }
         }
     }
 }
@@ -116,4 +138,5 @@ impl Iterator for BlumBlumShub {
 crate::check_sequences!(
     Blum::new(), [21, 33, 57, 69, 77, 93, 129, 133, 141, 161, 177, 201, 209, 213, 217, 237, 249, 253, 301, 309, 321, 329, 341, 381, 393, 413, 417, 437, 453, 469, 473, 489, 497, 501, 517, 537, 553, 573, 581, 589, 597, 633, 649, 669, 681, 713, 717, 721, 737, 749, 753, 781, 789];
     BlumBlumShubPrimes::new(), [11, 23, 47, 167, 359, 719, 1439, 2039, 2879, 4079, 4127, 4919, 5639, 5807, 5927, 6047, 7247, 7559, 7607, 7727, 9839, 10799, 11279, 13799, 13967, 14159, 15287, 15647, 20327, 21599, 21767, 23399, 24407, 24527, 25799, 28319, 28607, 29399];
+    BlumBlumShubMaximum::new(), [1081, 3841, 7849, 8257, 16537, 16873, 33097, 46897, 59953, 66217, 93817, 94921, 95833, 113137, 120073, 129697, 133561, 136321, 139081, 166681, 173857, 174961, 177721, 226297, 231193, 240313, 248377, 258121, 259417, 265033, 278569, 317377, 321241, 325657];
 );
