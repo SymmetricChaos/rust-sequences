@@ -35,7 +35,7 @@ impl Iterator for Blum {
 
 /// Primes that can be factors of the modulus of a maximum length Blue-Blum-Shub PRNG.
 ///
-/// 11, 23, 47, 167, 359, 719, 1439, 2039...
+/// 23, 47, 167, 359, 719, 1439, 2039...
 pub struct BlumBlumShubPrimes {
     primes: Primes<u64>,
 }
@@ -59,6 +59,9 @@ impl Iterator for BlumBlumShubPrimes {
             }
             let a = (p - 1) / 2;
             let b = (a - 1) / 2;
+            if a == 2 || b == 2 {
+                continue;
+            }
             if is_prime(a) && is_prime(b) {
                 return Some(p);
             }
@@ -68,7 +71,7 @@ impl Iterator for BlumBlumShubPrimes {
 
 /// The values of a modulus that give maximum period for the Blum-Blum-Shub PRNG.
 ///
-/// 1081, 3841, 7849, 8257, 16537, 16873...
+/// 1081, 3841, 7849, 8257, 16537, 16873, 33097, 46897...
 pub struct BlumBlumShubMaximum {
     bbsp: BlumBlumShubPrimes,
     s: Vec<u64>,
@@ -97,8 +100,9 @@ impl Iterator for BlumBlumShubMaximum {
             } else {
                 let p = self.bbsp.next()?;
                 for s in self.s.iter() {
-                    // is 2 a quadratic residue mod p or mod s (but not both)
-                    if !((p % 8 == 1 || p % 8 == 7) ^ (s % 8 == 1 || s % 8 == 7)) {
+                    // is 2 a quadratic residue (mod p/2) or (mod s/2), but not both
+                    // it is only necessary to check that they are equal to 7 (mod 8) as all other conditions have been ruled out
+                    if !((p / 2 % 8 == 7) && (s / 2 % 8 == 7)) {
                         self.t.push_back(p * s);
                     }
                 }
@@ -110,7 +114,7 @@ impl Iterator for BlumBlumShubMaximum {
     }
 }
 
-/// Sequence of state values from the Blum-Blum-Shub PRNG. These values are not returned by the algorithm, however, with a few bits being extracted via parity or masking.
+/// Sequence of state for a Blum-Blum-Shub PRNG. These states are not returned directly by the actual algorithm, however, instead a few bits being extracted via parity or masking.
 pub struct BlumBlumShub {
     val: u128,
     modulus: u128,
@@ -137,6 +141,6 @@ impl Iterator for BlumBlumShub {
 
 crate::check_sequences!(
     Blum::new(), [21, 33, 57, 69, 77, 93, 129, 133, 141, 161, 177, 201, 209, 213, 217, 237, 249, 253, 301, 309, 321, 329, 341, 381, 393, 413, 417, 437, 453, 469, 473, 489, 497, 501, 517, 537, 553, 573, 581, 589, 597, 633, 649, 669, 681, 713, 717, 721, 737, 749, 753, 781, 789];
-    BlumBlumShubPrimes::new(), [11, 23, 47, 167, 359, 719, 1439, 2039, 2879, 4079, 4127, 4919, 5639, 5807, 5927, 6047, 7247, 7559, 7607, 7727, 9839, 10799, 11279, 13799, 13967, 14159, 15287, 15647, 20327, 21599, 21767, 23399, 24407, 24527, 25799, 28319, 28607, 29399];
+    BlumBlumShubPrimes::new(), [23, 47, 167, 359, 719, 1439, 2039, 2879, 4079, 4127, 4919, 5639, 5807, 5927, 6047, 7247, 7559, 7607, 7727, 9839, 10799, 11279, 13799, 13967, 14159, 15287, 15647, 20327, 21599, 21767, 23399, 24407, 24527, 25799, 28319, 28607, 29399];
     BlumBlumShubMaximum::new(), [1081, 3841, 7849, 8257, 16537, 16873, 33097, 46897, 59953, 66217, 93817, 94921, 95833, 113137, 120073, 129697, 133561, 136321, 139081, 166681, 173857, 174961, 177721, 226297, 231193, 240313, 248377, 258121, 259417, 265033, 278569, 317377, 321241, 325657];
 );
