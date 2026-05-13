@@ -52,6 +52,7 @@ pub mod highly_totient;
 pub mod hofstadter_g;
 pub mod hofstadter_h;
 pub mod hofstadter_q;
+pub mod hyperprimorial;
 pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod juggler;
