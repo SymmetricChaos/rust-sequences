@@ -102,7 +102,7 @@ impl Iterator for BlumBlumShubMaximum {
                 for s in self.s.iter() {
                     // is 2 a quadratic residue (mod p/2) or (mod s/2), but not both
                     // it is only necessary to check that they are equal to 7 (mod 8) as all other conditions have been ruled out
-                    if !((p / 2 % 8 == 7) && (s / 2 % 8 == 7)) {
+                    if !(((p - 1) / 2 % 8 == 7) && ((s - 1) / 2 % 8 == 7)) {
                         self.t.push_back(p * s);
                     }
                 }
