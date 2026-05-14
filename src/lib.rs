@@ -112,6 +112,7 @@ pub mod unit;
 pub mod weyl;
 pub mod zeta;
 pub mod hyperfactorial;
+pub mod reduced_totient;
 
 #[macro_export]
 macro_rules! print_row {
