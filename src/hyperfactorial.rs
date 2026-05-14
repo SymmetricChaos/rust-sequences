@@ -1,9 +1,9 @@
 use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
-/// The hyperprimorial numbers. Partial products of each prime to the power of itself.
+/// The hyperfactorials numbers. Partial products of each positive natural number to the power of itself.
 ///
-///
+/// 1, 1, 4, 108, 27648, 86400000...
 pub struct HyperFactorial<T> {
     prod: T,
     ctr: T,
