@@ -225,10 +225,8 @@ pub fn sigma(n: u64, e: u32) -> Option<u64> {
         let divs = divisors(n);
         let mut out = 0;
         for d in divs {
-            println!("{d} {}", d.pow(e));
             out = out.checked_add(&d.pow(e))?;
         }
-        println!();
         Some(out)
     }
 }
