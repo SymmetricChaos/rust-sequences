@@ -101,12 +101,8 @@ pub fn prime_divisors(n: u64) -> Vec<u64> {
 /// All of the divisors of n.
 /// Defined as [0] for n = 0.
 pub fn divisors(n: u64) -> Vec<u64> {
-    if n == 0 {
-        return vec![0];
-    }
-
-    if n == 1 {
-        return vec![1];
+    if n <= 1 {
+        return vec![n];
     }
 
     let mut out = vec![1, n];
@@ -117,9 +113,14 @@ pub fn divisors(n: u64) -> Vec<u64> {
 
     for f in 2..=n.isqrt() {
         let (d, r) = n.div_rem(&f);
+
         if r == 0 {
-            out.push(f);
-            out.push(d);
+            if f == d {
+                out.push(f);
+            } else {
+                out.push(f);
+                out.push(d);
+            }
         }
     }
 
@@ -131,7 +132,7 @@ pub fn divisors(n: u64) -> Vec<u64> {
 /// All of the divisors of n except itself.
 /// Defined as [] for n = 0.
 pub fn proper_divisors(n: u64) -> Vec<u64> {
-    if n == 0 || n == 1 {
+    if n <= 1 {
         return vec![];
     }
 
@@ -144,8 +145,12 @@ pub fn proper_divisors(n: u64) -> Vec<u64> {
     for f in 2..=n.isqrt() {
         let (d, r) = n.div_rem(&f);
         if r == 0 {
-            out.push(f);
-            out.push(d);
+            if f == d {
+                out.push(f);
+            } else {
+                out.push(f);
+                out.push(d);
+            }
         }
     }
 
@@ -211,13 +216,20 @@ pub fn sum_of_divisors(n: u64) -> Option<u64> {
 }
 
 /// The number theoretic sigma function.
-pub fn sigma(n: u64, e: u64) -> Option<u64> {
+pub fn sigma(n: u64, e: u32) -> Option<u64> {
     if e == 0 {
         Some(number_of_divisors(n))
     } else if e == 1 {
         sum_of_divisors(n)
     } else {
-        todo!()
+        let divs = divisors(n);
+        let mut out = 0;
+        for d in divs {
+            println!("{d} {}", d.pow(e));
+            out = out.checked_add(&d.pow(e))?;
+        }
+        println!();
+        Some(out)
     }
 }
 
