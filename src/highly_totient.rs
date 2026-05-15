@@ -1,7 +1,4 @@
-use crate::utils::{
-    divisibility::{divisors, totient},
-    miller_rabin::is_prime,
-};
+use crate::utils::{divisibility::divisors, miller_rabin::is_prime, totient::totient};
 use num::BigRational;
 
 /// Positive natural numbers that appear as a totient more often than any smaller natural number.

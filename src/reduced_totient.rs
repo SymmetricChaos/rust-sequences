@@ -1,6 +1,6 @@
 use crate::{
     core::traits::Increment,
-    utils::divisibility::{prime_power_factorization, totient},
+    utils::{divisibility::prime_power_factorization, totient::totient},
 };
 use num::{Integer, integer::lcm};
 

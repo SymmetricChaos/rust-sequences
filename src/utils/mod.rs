@@ -10,3 +10,4 @@ pub mod pollard;
 pub mod polynomial;
 pub mod polynomial_arithmetic;
 pub mod polynomial_printing;
+pub mod totient;

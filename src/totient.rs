@@ -1,8 +1,9 @@
 use crate::{
     core::traits::Increment,
     utils::{
-        divisibility::{cototient, divisors, totient},
+        divisibility::divisors,
         miller_rabin::is_prime,
+        totient::{cototient, totient},
     },
 };
 use num::{Integer, rational::Ratio};
@@ -26,7 +27,7 @@ impl Iterator for Totients {
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr = self.ctr.checked_add(1)?;
-        Some(crate::utils::divisibility::totient(self.ctr))
+        Some(totient(self.ctr))
     }
 }
 
