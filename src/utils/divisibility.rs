@@ -1,66 +1,10 @@
-use crate::utils::miller_rabin::{is_prime, is_prime_partial, miller_rabin};
+use crate::utils::{
+    miller_rabin::{is_prime, is_prime_partial, miller_rabin},
+    pollard::pollards_rho,
+};
 use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
-use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::collections::BTreeMap;
-
-/// Find a factor using Pollard's Rho. Uses 64-bit arithmetic on a single thread for small numbers. Uses parallelized 64-bit arithmetic up to 2^32 and parallelized 128-bit arithmetic for larger numbers.
-fn pollards_rho(n: u64) -> Option<u64> {
-    if n > 0x3FFFFFF {
-        return _pollards_rho_par(n);
-    }
-
-    for s in 2..(n - 2) {
-        let mut x = s;
-        let mut y = s;
-        let mut d = 1;
-        while d == 1 {
-            x = ((x * x) + 1) % n;
-            y = ((y * y) + 1) % n;
-            y = ((y * y) + 1) % n;
-            d = x.abs_diff(y).gcd(&n);
-        }
-        if d != n {
-            return Some(d);
-        }
-    }
-    return None;
-}
-
-fn _pollards_rho_par(n: u64) -> Option<u64> {
-    if n < 0xFFFFFFFF {
-        (2..(n - 2)).into_par_iter().find_map_any(|s| {
-            let mut x = s;
-            let mut y = s;
-            let mut d = 1;
-            while d == 1 {
-                x = ((x * x) + 1) % n;
-                y = ((y * y) + 1) % n;
-                y = ((y * y) + 1) % n;
-                d = x.abs_diff(y).gcd(&n);
-            }
-            if d != n {
-                return Some(d as u64);
-            } else {
-                return None;
-            }
-        })
-    } else {
-        let n = u128::from(n);
-        (2..(n - 2)).into_par_iter().find_map_any(|s| {
-            let mut x = s;
-            let mut y = s;
-            let mut d = 1;
-            while d == 1 {
-                x = ((x * x) + 1) % n;
-                y = ((y * y) + 1) % n;
-                y = ((y * y) + 1) % n;
-                d = x.abs_diff(y).gcd(&n);
-            }
-            if d != n { Some(d as u64) } else { None }
-        })
-    }
-}
 
 /// Factor out all primes up to 37 and put them into the map.
 pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>) -> u64 {
@@ -135,6 +79,14 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
     prime_factors.into_iter().collect_vec()
 }
 
+/// The unique prime factors of n.
+pub fn prime_divisors(n: u64) -> Vec<u64> {
+    prime_factorization(n)
+        .into_iter()
+        .map(|(p, _)| p)
+        .collect_vec()
+}
+
 /// The number of prime factors of n counted with multiplicity.
 pub fn big_omega(n: u64) -> u64 {
     prime_factorization(n).into_iter().map(|(_, m)| m).sum()
@@ -142,7 +94,7 @@ pub fn big_omega(n: u64) -> u64 {
 
 /// The number of distinct prime factors of n.
 pub fn small_omega(n: u64) -> u64 {
-    prime_factorization(n).into_iter().map(|_| 1).sum()
+    prime_factorization(n).len() as u64
 }
 
 /// Powers of the prime factors of n in descending order
@@ -234,6 +186,15 @@ pub fn totient(n: u64) -> u64 {
     prime_factorization(n)
         .iter()
         .fold(1, |acc, x| acc * (x.0.pow((x.1 - 1) as u32) * (x.0 - 1)))
+}
+
+/// Jordan's totient function.
+/// Defined as 0 for n == 0.
+pub fn jordan_totient(n: u64) -> u64 {
+    if n == 0 {
+        return 0;
+    }
+    todo!()
 }
 
 /// Euler's cototient function. Number of positive integers not coprime to n and less than n.

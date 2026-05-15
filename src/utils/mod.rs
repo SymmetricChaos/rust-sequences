@@ -6,6 +6,7 @@ pub mod factorial;
 pub mod miller_rabin;
 pub mod modular_int;
 pub mod padic;
+pub mod pollard;
 pub mod polynomial;
 pub mod polynomial_arithmetic;
 pub mod polynomial_printing;

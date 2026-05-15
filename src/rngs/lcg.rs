@@ -1,3 +1,4 @@
+/// A linear congruential generator. A kind of simple PRNG.
 pub struct Lcg {
     n: u64,
     a: u64,
