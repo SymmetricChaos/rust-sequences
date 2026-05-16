@@ -52,9 +52,11 @@ pub mod highly_totient;
 pub mod hofstadter_g;
 pub mod hofstadter_h;
 pub mod hofstadter_q;
+pub mod hyperfactorial;
 pub mod hyperprimorial;
 pub mod hypotenuse;
 pub mod jordan_polya;
+pub mod jordan_totient;
 pub mod juggler;
 pub mod leonardo;
 pub mod look_and_say;
@@ -89,6 +91,7 @@ pub mod prime_line_cover;
 pub mod pseudoprime;
 pub mod rado_pairs;
 pub mod recaman;
+pub mod reduced_totient;
 pub mod repint;
 pub mod rngs;
 pub mod rowland;
@@ -111,8 +114,6 @@ pub mod twin_primes;
 pub mod unit;
 pub mod weyl;
 pub mod zeta;
-pub mod hyperfactorial;
-pub mod reduced_totient;
 
 #[macro_export]
 macro_rules! print_row {
