@@ -9,6 +9,7 @@ pub mod totient;
 pub use count::*;
 pub use highly_totient::*;
 pub use jordan_totient::*;
+pub use nontotient::*;
 pub use range::*;
 pub use reduced_totient::*;
 pub use totient::*;
