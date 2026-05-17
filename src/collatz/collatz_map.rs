@@ -1,6 +1,6 @@
 use num::{BigInt, CheckedAdd, Integer};
 
-use crate::{collatz::funcs::CollatzTrait, core::traits::Increment};
+use crate::{collatz::traits::CollatzTrait, core::traits::Increment};
 
 /// The mapping of the Collatz function. n/2 for even n and 3n+1 for odd n.
 ///

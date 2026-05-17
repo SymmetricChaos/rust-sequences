@@ -3,6 +3,7 @@ pub mod collatz;
 pub mod collatz_length;
 pub mod collatz_map;
 pub mod funcs;
+pub mod traits;
 
 pub use collataz_general::*;
 pub use collatz::*;

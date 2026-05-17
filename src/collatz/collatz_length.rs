@@ -1,6 +1,5 @@
+use crate::{collatz::traits::CollatzTrait, core::traits::Increment};
 use num::{BigInt, CheckedAdd, Integer};
-
-use crate::{collatz::funcs::CollatzTrait, core::traits::Increment};
 
 /// Number of steps to reach 1 for a Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///

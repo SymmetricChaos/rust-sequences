@@ -1,4 +1,4 @@
-use crate::collatz::funcs::CollatzTrait;
+use crate::collatz::traits::CollatzTrait;
 use num::BigInt;
 
 /// The values of a Collatz sequence.
