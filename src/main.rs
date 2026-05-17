@@ -1,6 +1,6 @@
 use num::PrimInt;
 use num_format::ToFormattedString;
-use rust_sequences::utils::{divisibility::prime_factorization, miller_rabin::is_prime};
+use rust_sequences::utils::divisibility::prime_factorization;
 use std::{io::Write, time::Duration, u64};
 
 fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {

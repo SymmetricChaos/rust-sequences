@@ -2,10 +2,6 @@ use crate::core::rational_decimal_string;
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, One, rational::Ratio};
 use std::fmt::Display;
 
-pub trait CustomNumTraits: CountBits + Decrement + Increment {}
-
-impl<T> CustomNumTraits for T where T: CountBits + Decrement + Increment {}
-
 /// Convenience trait for counting one and zeroes.
 pub trait CountBits {
     fn count_ones_64(&self) -> u64;
@@ -90,6 +86,7 @@ where
     }
 }
 
+/// Return the specfied number of digits of the Ratio in decimal.
 pub trait DigitSequence<T> {
     fn digits(&self, digits: usize) -> Option<String>;
 }
@@ -97,6 +94,7 @@ pub trait DigitSequence<T> {
 impl<T: CheckedAdd + CheckedDiv + CheckedMul + CheckedSub + Clone + Display + Integer>
     DigitSequence<T> for Ratio<T>
 {
+    /// Return the specfied number of digits of the Ratio in decimal.
     fn digits(&self, digits: usize) -> Option<String> {
         rational_decimal_string(self.clone(), digits)
     }

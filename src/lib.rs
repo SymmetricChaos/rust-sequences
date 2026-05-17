@@ -1,4 +1,5 @@
 pub mod automata;
+pub mod collatz;
 pub mod core;
 pub mod divisor;
 pub mod figurate;
@@ -21,7 +22,7 @@ pub mod bell;
 pub mod binary_runs;
 pub mod binary_weight;
 pub mod binomial_distribution;
-pub mod collatz;
+
 pub mod compositions;
 pub mod compositions_weak;
 pub mod curzon;
