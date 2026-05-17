@@ -1,5 +1,6 @@
 pub mod collataz_general;
 pub mod collatz;
+pub mod collatz_length;
 pub mod collatz_map;
 pub mod funcs;
 
