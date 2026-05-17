@@ -26,4 +26,17 @@ pub fn reduced_collatz<T: Clone + Integer + CheckedAdd + CheckedDiv + CheckedDiv
     Some(n)
 }
 
-pub trait Collatz {}
+pub trait Collatz {
+    fn collatz() -> Self;
+    fn reduced_collatz() -> Self;
+}
+
+impl<T> Collatz for T {
+    fn collatz() -> Self {
+        todo!()
+    }
+
+    fn reduced_collatz() -> Self {
+        todo!()
+    }
+}
