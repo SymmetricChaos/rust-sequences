@@ -2,7 +2,9 @@ use crate::collatz::traits::CollatzTrait;
 use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, Integer, Zero};
 
-/// The trajectory of
+/// The trajectory of each Collatz sequence.
+///
+/// [1], [2,1], [3, 10, 5, 16, 8, 4, 2, 1]...
 pub struct CollatzTrajectories<T> {
     ctr: T,
 }
@@ -28,6 +30,7 @@ impl<T: CollatzTrait + Clone + CheckedAdd + Integer> Iterator for CollatzTraject
         let mut n = self.ctr.clone();
         let mut out = vec![];
         out.push(n.clone());
+        // this stopping condition is not currently known to be correct for all inputs but it is correct up to huge starting values
         while !n.is_one() {
             n = n.collatz()?;
             out.push(n.clone());
