@@ -1,0 +1,42 @@
+use crate::collatz::traits::CollatzTrait;
+use crate::core::traits::Increment;
+use num::{BigInt, CheckedAdd, Integer, Zero};
+
+/// The trajectory of
+pub struct CollatzTrajectories<T> {
+    ctr: T,
+}
+
+impl<T: CollatzTrait + Clone + Zero> CollatzTrajectories<T> {
+    pub fn new() -> Self {
+        Self { ctr: T::zero() }
+    }
+}
+
+impl CollatzTrajectories<BigInt> {
+    pub fn new_big() -> Self {
+        Self::new()
+    }
+}
+
+impl<T: CollatzTrait + Clone + CheckedAdd + Integer> Iterator for CollatzTrajectories<T> {
+    type Item = Vec<T>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr.incr()?;
+
+        let mut n = self.ctr.clone();
+        let mut out = vec![];
+        out.push(n.clone());
+        while !n.is_one() {
+            n = n.collatz()?;
+            out.push(n.clone());
+        }
+
+        Some(out)
+    }
+}
+
+crate::check_sequences!(
+    CollatzTrajectories::new_big().flatten(), [1, 2, 1, 3, 10, 5, 16, 8, 4, 2, 1, 4, 2, 1, 5, 16, 8, 4, 2, 1, 6, 3, 10, 5, 16, 8, 4, 2, 1, 7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1, 8, 4, 2, 1, 9, 28, 14, 7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1, 10, 5, 16, 8, 4, 2, 1, 11, 34, 17, 52, 26, 13];
+);
