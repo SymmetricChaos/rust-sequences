@@ -1,12 +1,12 @@
-use crate::collatz::traits::CollatzTrait;
-use num::BigInt;
+use crate::utils::collatz::{collatz, reduced_collatz};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// The values of a Collatz sequence.
 pub struct Collatz<T> {
     value: T,
 }
 
-impl<T: CollatzTrait + Clone> Collatz<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Collatz<T> {
     /// Start a Collatz sequence from n.
     pub fn new(n: T) -> Self {
         Self { value: n }
@@ -25,12 +25,12 @@ impl Collatz<BigInt> {
     }
 }
 
-impl<T: CollatzTrait + Clone> Iterator for Collatz<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Collatz<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.value.clone();
-        self.value = match self.value.collatz() {
+        self.value = match collatz(self.value.clone()) {
             Some(n) => n,
             None => return Some(out),
         };
@@ -43,8 +43,8 @@ pub struct ReducedCollatz<T> {
     value: T,
 }
 
-impl<T: Clone + CollatzTrait> ReducedCollatz<T> {
-    /// Start an odd Collatz sequence from n.
+impl<T: Clone> ReducedCollatz<T> {
+    /// Start a reduced Collatz sequence from n.
     pub fn new(n: T) -> Self {
         Self { value: n }
     }
@@ -62,12 +62,12 @@ impl ReducedCollatz<BigInt> {
     }
 }
 
-impl<T: Clone + CollatzTrait> Iterator for ReducedCollatz<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for ReducedCollatz<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.value.clone();
-        self.value = match self.value.reduced_collatz() {
+        self.value = match reduced_collatz(self.value.clone()) {
             Some(n) => n,
             None => return Some(out),
         };

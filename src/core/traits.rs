@@ -50,10 +50,7 @@ pub trait Increment {
         Self: Sized;
 }
 
-impl<T> Increment for T
-where
-    T: One + CheckedAdd,
-{
+impl<T: One + CheckedAdd> Increment for T {
     /// Failable increment.
     fn incr(&mut self) -> Option<()>
     where
@@ -72,10 +69,7 @@ pub trait Decrement {
         Self: Sized;
 }
 
-impl<T> Decrement for T
-where
-    T: One + CheckedSub,
-{
+impl<T: One + CheckedSub> Decrement for T {
     /// Failable decrement.
     fn decr(&mut self) -> Option<()>
     where

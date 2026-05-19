@@ -1,6 +1,5 @@
-use crate::collatz::traits::CollatzTrait;
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer, Zero};
+use crate::{core::traits::Increment, utils::collatz::collatz};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 
 /// The trajectory of each Collatz sequence.
 ///
@@ -9,7 +8,7 @@ pub struct CollatzTrajectories<T> {
     ctr: T,
 }
 
-impl<T: CollatzTrait + Clone + Zero> CollatzTrajectories<T> {
+impl<T: Clone + Zero> CollatzTrajectories<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -21,7 +20,7 @@ impl CollatzTrajectories<BigInt> {
     }
 }
 
-impl<T: CollatzTrait + Clone + CheckedAdd + Integer> Iterator for CollatzTrajectories<T> {
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for CollatzTrajectories<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -32,7 +31,7 @@ impl<T: CollatzTrait + Clone + CheckedAdd + Integer> Iterator for CollatzTraject
         out.push(n.clone());
         // this stopping condition is not currently known to be correct for all inputs but it is correct up to huge starting values
         while !n.is_one() {
-            n = n.collatz()?;
+            n = collatz(n.clone())?;
             out.push(n.clone());
         }
 

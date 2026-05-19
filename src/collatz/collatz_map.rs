@@ -1,6 +1,8 @@
-use num::{BigInt, CheckedAdd, Integer};
-
-use crate::{collatz::traits::CollatzTrait, core::traits::Increment};
+use crate::{
+    core::traits::Increment,
+    utils::collatz::{collatz, reduced_collatz},
+};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// The mapping of the Collatz function. n/2 for even n and 3n+1 for odd n.
 ///
@@ -9,7 +11,7 @@ pub struct CollatzMap<T> {
     ctr: T,
 }
 
-impl<T: Clone + CollatzTrait + Integer + CheckedAdd> CollatzMap<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> CollatzMap<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -21,11 +23,11 @@ impl CollatzMap<BigInt> {
     }
 }
 
-impl<T: Clone + CollatzTrait + Integer + CheckedAdd> Iterator for CollatzMap<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzMap<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.collatz();
+        let out = collatz(self.ctr.clone());
         self.ctr.incr()?;
         out
     }
@@ -38,7 +40,7 @@ pub struct ReducedCollatzMap<T> {
     ctr: T,
 }
 
-impl<T: Clone + CollatzTrait + Integer + CheckedAdd> ReducedCollatzMap<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> ReducedCollatzMap<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -50,7 +52,7 @@ impl ReducedCollatzMap<BigInt> {
     }
 }
 
-impl<T: Clone + CollatzTrait + Integer + CheckedAdd> Iterator for ReducedCollatzMap<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ReducedCollatzMap<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -58,7 +60,7 @@ impl<T: Clone + CollatzTrait + Integer + CheckedAdd> Iterator for ReducedCollatz
             self.ctr.incr()?;
             return Some(T::zero());
         }
-        let out = self.ctr.reduced_collatz();
+        let out = reduced_collatz(self.ctr.clone());
         self.ctr.incr()?;
         out
     }

@@ -1,5 +1,8 @@
-use crate::{collatz::traits::CollatzTrait, core::traits::Increment};
-use num::{BigInt, CheckedAdd, Integer};
+use crate::{
+    core::traits::Increment,
+    utils::collatz::{collatz, reduced_collatz},
+};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// Number of steps to reach 1 for a Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///
@@ -8,7 +11,7 @@ pub struct CollatzLength<T> {
     ctr: T,
 }
 
-impl<T: Clone + CollatzTrait + CheckedAdd + Integer> CollatzLength<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> CollatzLength<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -20,7 +23,7 @@ impl CollatzLength<BigInt> {
     }
 }
 
-impl<T: Clone + CollatzTrait + CheckedAdd + Integer> Iterator for CollatzLength<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzLength<T> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -29,7 +32,7 @@ impl<T: Clone + CollatzTrait + CheckedAdd + Integer> Iterator for CollatzLength<
 
         let mut val = self.ctr.clone();
         while !val.is_one() {
-            val = val.collatz()?;
+            val = collatz(val)?;
             steps.incr()?;
         }
 
@@ -44,7 +47,7 @@ pub struct ReducedCollatzLength<T> {
     ctr: T,
 }
 
-impl<T: Clone + CollatzTrait + CheckedAdd + Integer> ReducedCollatzLength<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> ReducedCollatzLength<T> {
     pub fn new() -> Self {
         Self { ctr: T::zero() }
     }
@@ -56,7 +59,7 @@ impl ReducedCollatzLength<BigInt> {
     }
 }
 
-impl<T: Clone + CollatzTrait + CheckedAdd + Integer> Iterator for ReducedCollatzLength<T> {
+impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ReducedCollatzLength<T> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -65,7 +68,7 @@ impl<T: Clone + CollatzTrait + CheckedAdd + Integer> Iterator for ReducedCollatz
 
         let mut val = self.ctr.clone();
         while !val.is_one() {
-            val = val.reduced_collatz()?;
+            val = reduced_collatz(val)?;
             steps.incr()?;
         }
 

@@ -1,5 +1,6 @@
 //! Widely used utility functions or those not obviously linked to a specific sequence.
 pub mod bit_predicate;
+pub mod collatz;
 pub mod divisibility;
 pub mod exp_by_squaring;
 pub mod factorial;
