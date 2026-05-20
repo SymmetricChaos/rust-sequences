@@ -10,7 +10,7 @@ pub fn collatz<T: CheckedAdd + CheckedMul + Clone + Integer>(n: T) -> Option<T> 
     }
 }
 
-/// Apply the reduced Collatz function. n/2^k if n is even and (3n+1)2^k if n is odd, for the largest value of k that gives an integer. Always produces an odd number.
+/// Apply the reduced Collatz function. n/2^k if n is even and (3n+1)/2^k if n is odd, for the largest value of k that gives an integer. Always produces an odd number.
 pub fn reduced_collatz<T: CheckedAdd + CheckedMul + Clone + Integer>(n: T) -> Option<T> {
     let mut n = n;
     if n.is_odd() {
