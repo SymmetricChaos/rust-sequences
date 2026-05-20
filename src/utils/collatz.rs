@@ -1,6 +1,7 @@
 use num::{CheckedAdd, CheckedMul, Integer};
 
-pub fn collatz<T: Clone + Integer + CheckedAdd + CheckedMul>(n: T) -> Option<T> {
+/// Apply the Collatz function. n/2 if n is even and 3n+1 if n is odd.
+pub fn collatz<T: CheckedAdd + CheckedMul + Clone + Integer>(n: T) -> Option<T> {
     if n.is_even() {
         Some(n.clone() / (T::one() + T::one()))
     } else {
@@ -9,7 +10,8 @@ pub fn collatz<T: Clone + Integer + CheckedAdd + CheckedMul>(n: T) -> Option<T> 
     }
 }
 
-pub fn reduced_collatz<T: Clone + Integer + CheckedAdd + CheckedMul>(n: T) -> Option<T> {
+/// Apply the reduced Collatz function. n/2^k if n is even and (3n+1)2^k if n is odd, or the largest value of k that gives an integer. Always produces an odd number.
+pub fn reduced_collatz<T: CheckedAdd + CheckedMul + Clone + Integer>(n: T) -> Option<T> {
     let mut n = n;
     if n.is_odd() {
         n = n

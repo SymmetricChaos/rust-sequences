@@ -1,6 +1,6 @@
 use num::{BigInt, One};
 
-/// The Collatz tree. Each layer contains the numbers that have a trajectory one greater than the pevious layer.
+/// The Collatz tree. Each layer contains the numbers that have a trajectory one step longer than the pevious layer.
 ///
 /// [1], [2], [4], [8], [16], [5, 32], [10, 64], [3, 20, 21, 128]...
 pub struct CollatzTree {
@@ -27,7 +27,7 @@ impl Iterator for CollatzTree {
                 self.layer.push((n - 1) / 3);
             }
         }
-        self.layer.sort();
+        self.layer.sort(); // does this need to also check for uniqueness at some point?
         Some(out)
     }
 }

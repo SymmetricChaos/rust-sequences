@@ -1,12 +1,15 @@
 pub mod collataz_general;
 pub mod collatz;
-pub mod collatz_length;
-pub mod collatz_map;
+pub mod heights;
+pub mod lengths;
+pub mod mapping;
 pub mod trajectories;
 pub mod tree;
 
 pub use collataz_general::*;
 pub use collatz::*;
-pub use collatz_length::*;
-pub use collatz_map::*;
+pub use heights::*;
+pub use lengths::*;
+pub use mapping::*;
 pub use trajectories::*;
+pub use tree::*;
