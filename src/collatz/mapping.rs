@@ -33,7 +33,7 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzMap<T> {
     }
 }
 
-/// The mapping of the reduced Collatz function.
+/// The mapping of the reduced Collatz function. n/2^k for even n and (3n+1)/2^k for odd n, for the largest value of k that gives an integer.
 ///
 /// 0, 1, 1, 5, 1, 1, 3, 11, 1, 7...
 pub struct ReducedCollatzMap<T> {
