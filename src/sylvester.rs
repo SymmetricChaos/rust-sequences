@@ -5,12 +5,14 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 /// 2, 3, 7, 43, 1807, 3263443...
 pub struct Sylvester<T> {
     current: T,
+    overflowed: bool,
 }
 
-impl<T: Clone + One + CheckedMul + CheckedAdd> Sylvester<T> {
+impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Sylvester<T> {
     pub fn new() -> Self {
         Self {
             current: T::one() + T::one(),
+            overflowed: false,
         }
     }
 }
@@ -27,15 +29,27 @@ impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Iterator for Sylvest
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.current.clone();
 
-        self.current = self
-            .current
-            .checked_mul(&(self.current.checked_sub(&T::one()))?)?
-            .checked_add(&T::one())?;
+        // Always returns some but this avoids a clone.
+        let m1 = self.current.checked_sub(&T::one()).unwrap();
+
+        self.current = match self.current.checked_mul(&m1) {
+            Some(n) => match n.checked_add(&T::one()) {
+                Some(n) => n,
+                None => {
+                    self.overflowed = true;
+                    return Some(out);
+                }
+            },
+            None => {
+                self.overflowed = true;
+                return Some(out);
+            }
+        };
 
         Some(out)
     }
 }
 
 crate::check_sequences!(
-    Sylvester::new_big(), [2, 3, 7, 43, 1807, 3263443];
+    Sylvester::new_big(), [2_u64, 3, 7, 43, 1807, 3263443, 10650056950807];
 );

@@ -23,6 +23,7 @@ pub mod binary_runs;
 pub mod binary_weight;
 pub mod binomial_distribution;
 
+pub mod cahen;
 pub mod champernowne;
 pub mod compositions;
 pub mod compositions_weak;
