@@ -3,7 +3,8 @@ use num::{
 };
 use std::fmt::Display;
 
-pub fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
+/// Digits of an integer in reverse order.
+fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
     let mut out = Vec::new();
     let mut n = n;
     while n > T::zero() {
@@ -198,4 +199,6 @@ fn check_decimals() {
         rational_decimal_string(Ratio::new(46, 3), 10).unwrap(),
         rational_decimal_string(Ratio::new(10, 7), 10).unwrap(),
     );
+
+    println!("{:?}", integer_digits(1636, 10))
 }

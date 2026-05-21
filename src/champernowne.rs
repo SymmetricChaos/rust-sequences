@@ -1,0 +1,53 @@
+use crate::core::traits::Increment;
+use num::{BigInt, CheckedAdd, Integer, Zero};
+
+pub struct Champernowne<T> {
+    ctr: T,
+    digits: Vec<T>,
+    base: T,
+}
+
+impl<T: Integer + CheckedAdd + Clone> Champernowne<T> {
+    pub fn new(base: T) -> Self {
+        Self {
+            ctr: T::zero(),
+            digits: Vec::new(),
+            base,
+        }
+    }
+}
+
+impl Champernowne<BigInt> {
+    pub fn new_big<G>(base: G) -> Self
+    where
+        BigInt: From<G>,
+    {
+        Self {
+            ctr: BigInt::zero(),
+            digits: Vec::new(),
+            base: BigInt::from(base),
+        }
+    }
+}
+
+impl<T: Integer + CheckedAdd + Clone> Iterator for Champernowne<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.digits.is_empty() {
+            self.ctr.incr()?;
+
+            let mut n = self.ctr.clone();
+            while n > T::zero() {
+                let (div, rem) = n.div_rem(&self.base);
+                self.digits.push(rem);
+                n = div;
+            }
+        }
+        self.digits.pop()
+    }
+}
+
+crate::check_sequences!(
+    Champernowne::new_big(10), [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 1, 6, 1, 7, 1, 8, 1, 9, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5, 2, 6, 2, 7, 2, 8, 2, 9, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, 3, 5, 3, 6, 3, 7, 3, 8, 3, 9, 4, 0, 4, 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4, 9, 5, 0, 5, 1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7];
+);
