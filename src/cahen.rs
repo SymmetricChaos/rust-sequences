@@ -1,8 +1,10 @@
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
 
-use crate::{core::traits::DigitSequence, sylvester::Sylvester};
+use crate::sylvester::Sylvester;
 
-/// Rational convergents of Cahen's constant.
+/// Rational convergents of Cahen's constant. Partial sums of the reciprocals of the even terms of Sylvester's sequence.
+///
+/// The constant is a trancendental number equal to approximately 0.64341054...
 pub struct Cahen<T> {
     sylvester: Sylvester<T>,
     sum: Ratio<T>,
@@ -51,7 +53,9 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul + CheckedSub> Iterator for Cah
     }
 }
 
+#[cfg(test)]
+use crate::core::traits::DigitSequence;
 crate::print_sequences!(
     Cahen::new_big(), 5;
-    Cahen::new_big().map(|q| q.digits(5).unwrap()), 5;
+    Cahen::new_big().map(|q| q.digits(15).unwrap()), 5;
 );
