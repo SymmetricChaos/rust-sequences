@@ -63,6 +63,7 @@ pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod juggler;
 pub mod leonardo;
+pub mod liouville;
 pub mod look_and_say;
 pub mod lucas;
 pub mod lucas_sequence;
