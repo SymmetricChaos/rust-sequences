@@ -27,6 +27,7 @@ pub mod cahen;
 pub mod champernowne;
 pub mod compositions;
 pub mod compositions_weak;
+pub mod copeland_erdos;
 pub mod curzon;
 pub mod de_bruijn;
 pub mod derangement;
