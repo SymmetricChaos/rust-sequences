@@ -1,11 +1,12 @@
 use crate::{core::traits::Increment, utils::exp_by_squaring::checked_pow_mod};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
+/// ```test
 /// The Curzon numbers. Those for which k^n+1 is a multiple of k*n+1 for positive integers n. Only even values of k have solutions.
 ///
 /// For k = 2
-///
 /// 1, 2, 5, 6, 9, 14, 18, 21, 26, 29, 30, 33, 41...
+/// ```
 pub struct Curzon<T> {
     base: T,
     ctr: T,

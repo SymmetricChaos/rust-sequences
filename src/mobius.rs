@@ -3,7 +3,7 @@ use crate::utils::divisibility::prime_factorization;
 use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 
-/// The Möbius function over the positive integers
+/// The Möbius function over the positive integers.
 ///
 /// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
 pub struct Mobius<T> {

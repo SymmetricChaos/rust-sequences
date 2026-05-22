@@ -2,7 +2,14 @@ use crate::core::Primes;
 use num::{BigInt, CheckedAdd, Integer};
 use std::hash::Hash;
 
-/// The Copeland-Erdős constants. Infinite words formed by listing the digits of of the natural numbers in a given base.
+/// ```text
+/// The Copeland-Erdős constants. Infinite words formed by listing the digits of the prime natural numbers in a given base.
+///
+/// for base 10
+/// 2, 3, 5, 7, 1, 1, 1, 3, 1, 7, 1, 9, 2, 3, 2, 9...
+/// for base 2
+/// 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1...
+/// ```
 pub struct CopelandErdos<T> {
     primes: Primes<T>,
     digits: Vec<T>,
@@ -45,6 +52,6 @@ impl<T: Integer + CheckedAdd + Clone + Hash> Iterator for CopelandErdos<T> {
 }
 
 crate::check_sequences!(
-    CopelandErdos::new_big(2), [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1];
+    CopelandErdos::new_big(2),  [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1];
     CopelandErdos::new_big(10), [2, 3, 5, 7, 1, 1, 1, 3, 1, 7, 1, 9, 2, 3, 2, 9, 3, 1, 3, 7, 4, 1, 4, 3, 4, 7, 5, 3, 5, 9, 6, 1, 6, 7, 7, 1, 7, 3, 7, 9, 8, 3, 8, 9, 9, 7, 1, 0, 1, 1, 0, 3, 1, 0, 7, 1, 0, 9, 1, 1, 3, 1, 2, 7, 1, 3, 1, 1, 3, 7, 1, 3, 9, 1, 4, 9, 1, 5, 1, 1, 5, 7, 1, 6, 3, 1, 6, 7, 1, 7, 3, 1, 7, 9, 1, 8, 1, 1, 9, 1, 1];
 );

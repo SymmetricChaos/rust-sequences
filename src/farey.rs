@@ -1,8 +1,11 @@
 use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 
+/// ```text
 /// The Farey sequence with selectable order.
-/// For instance Farey::new_big(4) produces
+///
+/// For order 4
 /// 0, 1/4, 1/3, 1/2, 2/3, 3/4, 1
+/// ```
 pub struct Farey {
     n0: BigInt,
     d0: BigInt,

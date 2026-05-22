@@ -1,9 +1,8 @@
-use num::rational::Ratio;
-
 use crate::{
     core::traits::Increment,
     utils::divisibility::{number_of_divisors, sum_of_divisors},
 };
+use num::rational::Ratio;
 
 /// The Ore numbers.
 ///

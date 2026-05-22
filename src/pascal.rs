@@ -1,6 +1,8 @@
 use num::{BigInt, CheckedAdd, One};
 
 /// The rows of Pascal's triangle, aka the binomial coefficients.
+///
+/// [1], [1,1], [1,2,1], [1,3,3,1], [1,4,6,4,1]...
 pub struct PascalsTriangle<T> {
     row: Vec<T>,
 }
@@ -38,6 +40,8 @@ impl<T: CheckedAdd + Clone + One> Iterator for PascalsTriangle<T> {
 }
 
 /// Bernoulli's triangle. The partial sums of the rows of Pascal's triangle.
+///
+/// [1], [1,2], [1,3,4], [1,4,7,8], [1,5,11,15,16]...
 pub struct BernoullisTriangle<T> {
     row: Vec<T>,
 }

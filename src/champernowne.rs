@@ -1,7 +1,7 @@
 use crate::core::traits::Increment;
 use num::{BigInt, CheckedAdd, Integer};
 
-/// The Champernowne constants. Infinite words formed by listing the digits of of the natural numbers in a given base.
+/// The Champernowne constants. Infinite words formed by listing the digits of the natural numbers in a given base.
 pub struct Champernowne<T> {
     ctr: T,
     digits: Vec<T>,

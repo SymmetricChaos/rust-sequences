@@ -4,7 +4,7 @@ use crate::sylvester::Sylvester;
 
 /// Rational convergents of Cahen's constant. Partial sums of the reciprocals of the even terms of Sylvester's sequence.
 ///
-/// The constant is a trancendental number equal to approximately 0.64341054...
+/// The constant is a trancendental number equal to approximately 0.643410546288...
 pub struct Cahen<T> {
     sylvester: Sylvester<T>,
     sum: Ratio<T>,

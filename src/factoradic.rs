@@ -57,7 +57,5 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Factoradic<T> {
 
 crate::print_sequences!(
     Factoradic::new_big(0), 10, "{:?}", "\n";
-    Factoradic::new_big(1), 10, "{:?}", "\n";
-    Factoradic::new_big(2), 10, "{:?}", "\n";
     Factoradic::new_big(3), 10, "{:?}", "\n";
 );

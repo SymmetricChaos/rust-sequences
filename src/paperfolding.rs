@@ -1,8 +1,6 @@
-use std::marker::PhantomData;
-
-use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
-
 use crate::odd_part::OddPart;
+use num::{BigInt, CheckedAdd, CheckedDiv, Integer};
+use std::marker::PhantomData;
 
 /// The regular paperfolding sequence, derived from the direction of folds that ooccur when a sheet of paper is folded in half in the same direction repeatedly. Each term is 1 if the odd part of n is equal to 1 modulo 4 and otherwise is 0.
 ///
