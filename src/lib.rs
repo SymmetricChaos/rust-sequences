@@ -105,6 +105,7 @@ pub mod rueppel;
 pub mod ruler;
 pub mod safe_primes;
 pub mod semiprime;
+pub mod sierpinsky_triangle;
 pub mod smooth;
 pub mod sorted_pairs;
 pub mod squarefree;
