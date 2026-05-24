@@ -1,6 +1,8 @@
-///Sierpiński's triangle
+use crate::core::traits::Increment;
+
+/// Sierpiński's triangle.
 ///
-///
+/// [1], [1,1], [1,0,1], [1,1,1,1], [1,0,0,0,1]...
 pub struct SierpinskyTriangle {
     ctr: usize,
 }
@@ -24,13 +26,13 @@ impl Iterator for SierpinskyTriangle {
                 out.push(0);
             }
         }
-        self.ctr += 1;
+        self.ctr.incr()?;
         Some(out)
     }
 }
 
 crate::print_sequences!(
-    SierpinskyTriangle::new(), 5, "{:?}", "\n";
+    SierpinskyTriangle::new(), 16, "{:?}", "\n";
 );
 
 crate::check_sequences!(
