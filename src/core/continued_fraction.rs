@@ -85,6 +85,7 @@ pub struct SimpleContinuedFraction<T> {
     a1: T,
     b1: T,
     dens: Box<dyn Iterator<Item = T>>,
+    ended: bool,
 }
 
 impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFraction<T> {
@@ -99,6 +100,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
             a1: d.next().unwrap(),
             b1: T::one(),
             dens: Box::new(d),
+            ended: false,
         }
     }
 
@@ -106,43 +108,38 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
     pub fn new_periodic(fixed: &[T], periodic: &[T]) -> Self {
         assert!(fixed.len() > 0);
         assert!(periodic.len() > 0);
-        Self {
-            a0: T::one(),
-            b0: T::zero(),
-            a1: fixed[0].clone(),
-            b1: T::one(),
-            dens: Box::new(
-                fixed
-                    .to_vec()
-                    .into_iter()
-                    .skip(1)
-                    .chain(periodic.to_vec().into_iter().cycle()),
-            ),
-        }
+        Self::new(Box::new(
+            fixed
+                .to_vec()
+                .into_iter()
+                .chain(periodic.to_vec().into_iter().cycle()),
+        ))
     }
 
     /// A simple continued fraction with a finite number of terms.
     pub fn new_finite(dens: &[T]) -> Self {
         assert!(dens.len() > 0);
-        let mut p = dens.to_vec();
-        p.push(T::zero());
-        Self {
-            a0: T::one(),
-            b0: T::zero(),
-            a1: p[0].clone(),
-            b1: T::one(),
-            dens: Box::new(p.into_iter().skip(1)),
-        }
+        Self::new(Box::new(dens.to_vec().into_iter()))
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedFraction<T> {
+impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for SimpleContinuedFraction<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if self.ended {
+            return None;
+        }
         let out = Ratio::new(self.a1.clone(), self.b1.clone());
 
-        let d = self.dens.next()?;
+        // Catch the last term of a finite sequence of denominators
+        let d = match self.dens.next() {
+            Some(d) => d,
+            None => {
+                self.ended = true;
+                return Some(out);
+            }
+        };
 
         let a2 = d.checked_mul(&self.a1)?.checked_add(&self.a0)?;
         let b2 = d.checked_mul(&self.b1)?.checked_add(&self.b0)?;
@@ -157,10 +154,12 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for SimpleContinuedF
 }
 
 #[cfg(test)]
-use crate::core::rational_digits::rational_decimal_string as rds;
+use crate::core::{Primes, traits::DigitSequence};
 crate::print_sequences!(
-    SimpleContinuedFraction::new_periodic(&[1], &[1]).map(|q| rds(q, 5).unwrap()), 10; // Converges on phi
-    SimpleContinuedFraction::new_periodic(&[1], &[2]).map(|q| rds(q, 5).unwrap()), 10; // Cnverges on sqrt(2)
-    SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]).map(|q| rds(q, 7).unwrap()), 10; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
-    SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]), 10;
+    SimpleContinuedFraction::new_periodic(&[1], &[1]).map(|q| q.digits(5).unwrap()), 10; // Converges on phi
+    SimpleContinuedFraction::new_periodic(&[1], &[2]).map(|q| q.digits(5).unwrap()), 10; // Cnverges on sqrt(2)
+    SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]).map(|q| q.digits(10).unwrap()), 6; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
+    SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]), 6;
+    SimpleContinuedFraction::new(Primes::new_big()).map(|q| q.digits(10).unwrap()), 10;
+    SimpleContinuedFraction::new(Primes::new_big()), 6;
 );

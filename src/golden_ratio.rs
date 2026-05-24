@@ -2,6 +2,8 @@ use crate::fibonacci::Fibonacci;
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, rational::Ratio};
 
 /// Convergents of the golden ratio as calculated from the Fibonacci sequence.
+///
+/// Ratios converge on 1.6180339887...
 pub struct GoldenRatio<T> {
     fib: Fibonacci<T>,
     a: T,
@@ -33,6 +35,9 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for GoldenRatio<T> {
     }
 }
 
+#[cfg(test)]
+use crate::core::traits::DigitSequence;
 crate::print_sequences!(
-    GoldenRatio::new_big(), 20;
+    GoldenRatio::new_big(), 10;
+    GoldenRatio::new_big().map(|q| q.digits(5).unwrap()), 10;
 );
