@@ -2,7 +2,9 @@ use num::{BigInt, Integer, One, Zero};
 
 /// The Baum-Sweet sequence. Characteristic function of non-negative intgers which have binary expansions that never contain an odd number of sequential 0s.
 ///
-/// 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1..
+/// ```text
+/// 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1...
+/// ```
 pub struct BaumSweet<T> {
     terms: Vec<T>, // TODO: how to trim this to reduce storage?
     ctr: usize,

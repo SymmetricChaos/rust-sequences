@@ -41,7 +41,10 @@ fn multiplicative_persistence<N: Integer>(mut n: N, base: &N) -> N {
 
 /// The product of the digits of each natural number to a given base.
 ///
+/// ```text
+/// For base = 10
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4...
+/// ```
 pub struct DigitalProds<N> {
     ctr: N,
     base: N,

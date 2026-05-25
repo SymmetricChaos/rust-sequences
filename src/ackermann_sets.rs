@@ -69,8 +69,10 @@ pub const BASE_SETS: [&str; 64] = [
 ];
 
 /// The Ackerman sets, a bijection between the naturals and the pure sets.
+/// ```text
 /// f({}) = 0
 /// f(A) = sum 2^f(a_i) for all a_i in A
+/// ```
 pub struct AckermannSet {
     ctr: BigInt,
 }

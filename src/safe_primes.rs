@@ -4,7 +4,9 @@ use std::hash::Hash;
 
 /// Safe primes. The prime numbers, p, such that (p-1)/2 is also prime.
 ///
+/// ```text
 /// 5, 7, 11, 23, 47, 59, 83, 107...
+/// ```
 pub struct SafePrimes<T> {
     primes: Primes<T>,
     list: Vec<T>,
@@ -41,7 +43,9 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for SafePrimes<T> {
 
 /// Sophie Germain Primes. The prime numbers, p, such that 2p+1 is also prime.
 ///
+/// ```text
 /// 2, 3, 5, 11, 23, 29, 41, 53, 83, 89...
+/// ```
 pub struct SophieGermainPrimes<T> {
     primes: Primes<T>,
     list: Vec<T>,

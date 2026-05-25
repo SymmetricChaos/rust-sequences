@@ -2,7 +2,9 @@ use num::{BigInt, CheckedAdd, CheckedSub, Integer};
 
 /// Recamán's sequence. Decreases by n unless that number has already appeared or would be negative in which case it increases by n.
 ///
+/// ```text
 /// 0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, 22...
+/// ```
 pub struct Recaman<T> {
     n: T,
     ctr: T,

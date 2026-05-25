@@ -4,7 +4,9 @@ use std::collections::BTreeSet;
 
 /// The anti-Fibonacci numbers. Starting with zero the next term is the sum of the two smallest unique positive integers that have not previously been added together or been a sum.
 ///
+/// ```text
 /// 0, 3, 9, 13, 18, 23, 29, 33, 39, 43...
+/// ```
 pub struct AntiFibonacci<T> {
     terms: BTreeSet<T>,
     a: T,
@@ -51,7 +53,9 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for AntiFibonacci<T> {
 
 /// The non-anti-Fibonacci numbers.
 ///
+/// ```text
 /// 1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 19, 20...
+/// ```
 pub struct NonAntiFibonacci<T> {
     antifib: AntiFibonacci<T>,
     record: T,

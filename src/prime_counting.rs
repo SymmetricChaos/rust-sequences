@@ -4,7 +4,9 @@ use std::hash::Hash;
 
 /// The prime counting function evaluated at each positive integer.
 ///
+/// ```text
 /// 0, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5...
+/// ```
 pub struct PrimeCounting<T> {
     prime: Primes<T>,
     next_prime: T,

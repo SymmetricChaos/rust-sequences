@@ -4,7 +4,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer};
 
 /// The taxicab numbers. The natural numbers that are the sum of two positive cubes in more than one way. Named for an ancedote by G. H. Hardy about Srinivasa Ramanujan.
 ///
+/// ```text
 /// 1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683...
+/// ```
 pub struct Taxicab<T> {
     ctr: T,
     cubes: Vec<T>,

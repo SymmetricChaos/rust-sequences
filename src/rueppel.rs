@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer};
 
 /// The Rueppel sequence. The parity of the Catalan numbers.
 ///
+/// ```text
 /// 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0...
+/// ```
 pub struct Rueppel<T> {
     catalan: Catalan<T>,
 }

@@ -4,7 +4,9 @@ use std::collections::BTreeSet;
 
 /// Starting with 2 and 3 every number that can be written as (a*b)-1,  for a and b in the sequence, appears in increasing order.
 ///
+/// ```text
 /// 2, 3, 5, 9, 14, 17, 26, 27, 33, 41...
+/// ```
 pub struct A005244<T> {
     terms: Vec<T>,
     products: BTreeSet<T>,

@@ -4,7 +4,9 @@ use num::{BigInt, Integer, One, Zero};
 
 /// The evil numbers, those natural numbers having an even number of bits 1s in their binary representation. So called as a pun on its complementary sequence the odius numbers.
 ///
+/// ```text
 /// 0, 3, 5, 6, 9, 10, 12, 15, 17, 18...
+/// ```
 pub struct Evil {
     ctr: BigInt,
 }
@@ -34,7 +36,9 @@ impl Iterator for Evil {
 
 /// The odious numbers, those natural numbers having an odd number of 1s in their binary representation. So called as a pun on its complementary sequence the evil numbers.
 ///
+/// ```text
 /// 1, 2, 4, 7, 8, 11, 13, 14, 16, 19...
+/// ```
 pub struct Odious {
     ctr: BigInt,
 }

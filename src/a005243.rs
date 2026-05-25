@@ -4,7 +4,9 @@ use std::collections::BTreeSet;
 
 /// Starts with 1 and 2 and then every sum of sequential terms appears in ascending order.
 ///
+/// ```text
 /// 1, 2, 3, 5, 6, 8, 10, 11, 14, 16, 17, 18, 19, 21, 22, 24, 25, 29, 30, 32, 33, 34
+/// ```
 pub struct A005243<T> {
     terms: Vec<T>,
     heap: BTreeSet<T>,

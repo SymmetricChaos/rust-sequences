@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The ordered pairs of numbers connected by an edge in the infinite Rado graph. Alternatively every pair of numbers (a,b) such that the ath digit of b is 1.
 ///
+/// ```text
 /// (0,1), (1,2), (0,3), (1,3), (2,4), (0,5), (2,5)
+/// ```
 pub struct RadoPairs<T> {
     pairs: SortedPairsStrict<T>,
 }

@@ -4,7 +4,9 @@ use std::collections::HashMap;
 
 /// The Pisano period for each positive integer.
 ///
+/// ```text
 /// 1, 3, 8, 6, 20, 24, 16, 12, 24...
+/// ```
 pub struct PisanoPeriods {
     ctr: u64,
     prime_power_map: HashMap<u64, u64>,

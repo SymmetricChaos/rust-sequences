@@ -1,7 +1,6 @@
 use crate::utils::{exp_by_squaring::pow_mod, miller_rabin::is_prime};
 
-/// The Fermat pseudoprimes to a given base.
-/// For a base, b, the non-prime positive integers, n, for which the following holds (b^(n-1)) % n = 1
+/// The Fermat pseudoprimes to a given base. For a base, b, the non-prime positive integers, n, for which the following holds (b^(n-1)) % n = 1
 pub struct FermatPseudoprimes {
     ctr: u64,
     base: u64,
@@ -40,8 +39,7 @@ impl Iterator for FermatPseudoprimes {
     }
 }
 
-/// The Euler pseudoprimes to a given base.
-/// For a base, b, the odd non-prime positive integers, n, for which the following holds (b^((n-1)/2)) % n = (1 or n-1)
+/// The Euler pseudoprimes to a given base. For a base, b, the odd non-prime positive integers, n, for which the following holds (b^((n-1)/2)) % n = (1 or n-1)
 pub struct EulerPseudoprimes {
     ctr: u64,
     base: u64,

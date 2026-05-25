@@ -2,7 +2,9 @@ use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The Pell numbers.
 ///
+/// ```text
 /// 0, 1, 2, 5, 12, 29, 70, 169, 408, 985...
+/// ```
 pub struct Pell<T> {
     a: T,
     b: T,
@@ -37,7 +39,9 @@ impl<T: CheckedAdd + Clone + One + Zero> Iterator for Pell<T> {
 
 /// The companion Pell numbers.
 ///
+/// ```text
 /// 2, 2, 6, 14, 34, 82, 198, 478, 1154, 2786...
+/// ```
 pub struct CompanionPell<T> {
     a: T,
     b: T,

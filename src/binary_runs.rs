@@ -3,7 +3,9 @@ use num::{Integer, PrimInt};
 
 /// For each natural number the number of "runs" of matching bits in the binary expension. The number zero has no bits and is uniquely given a count of zero runs.
 ///
+/// ```text
 /// 0, 1, 2, 1, 2, 3, 2, 1, 2, 3, 4, 3...
+/// ```
 pub struct BinaryRuns<T> {
     gray: Gray<T>,
 }

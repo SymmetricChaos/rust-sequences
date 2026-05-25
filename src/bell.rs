@@ -1,6 +1,10 @@
 use num::{BigInt, CheckedAdd, Integer};
 
 /// The rows of the Bell triangle. The leftmost values are the Bell numbers, which count the number of ways to partition a set with n elements.
+///
+/// ```text
+/// [1], ]1,2], [2,3,5], [5,7,10,15]...
+/// ```
 pub struct BellTriangle<T> {
     row: Vec<T>,
 }
@@ -36,7 +40,9 @@ impl<T: Integer + Clone + CheckedAdd> Iterator for BellTriangle<T> {
 
 /// The Bell numbers. The number of ways to partition a set with n elements.
 ///
+/// ```text
 /// 1, 1, 2, 5, 15, 52, 203, 877...
+/// ```
 pub struct Bell<T> {
     tri: BellTriangle<T>,
 }

@@ -2,7 +2,9 @@ use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
 
 /// Sum the prime factorization of each natural number, starting at 1.
 ///
+/// ```text
 /// 0, 2, 3, 4, 5, 5, 7, 6, 6, 7, 11, 7, 13...
+/// ```
 pub struct SumOfPrimeFactors {
     ctr: u64,
 }
@@ -29,7 +31,9 @@ impl Iterator for SumOfPrimeFactors {
 
 /// Sum of the distinct prime divisors of each natural number, starting from 1.
 ///
+/// ```text
 /// 0, 2, 3, 2, 5, 5, 7, 2, 3, 7, 11, 5, 13...
+/// ```
 pub struct SumOfDistinctPrimeFactors {
     ctr: u64,
 }

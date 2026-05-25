@@ -2,7 +2,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 /// The number of derangements for a set of n elements (starting from 0).
 ///
+/// ```text
 /// 1, 0, 1, 2, 9, 44, 265, 1854...
+/// ```
 pub struct Derangements<T> {
     a: T,
     b: T,

@@ -1,6 +1,11 @@
 use num::{BigInt, CheckedAdd, Integer};
 
 /// A Weyl-Marsaglia sequence starting at zero. A permutation of all integers 0..n that repeats every n values.
+///
+/// ```text
+/// For step = 5 amd modulus = 16:
+/// 0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12, 1, 6, 11, 0
+/// ```
 pub struct WeylMarsaglia<T> {
     n: T,
     step: T,

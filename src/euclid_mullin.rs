@@ -4,7 +4,9 @@ use crate::utils::divisibility::prime_factorization;
 
 /// The Euclid-Mullin sequence defined using the smallest prime factors of the products.
 ///
+/// ```text
 /// 2, 3, 7, 43, 13, 53, 5, 6221671...
+/// ```
 pub struct EuclidMullinSmallest {
     terms: Vec<u64>,
     overflowed: bool,

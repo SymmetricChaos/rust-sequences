@@ -4,7 +4,9 @@ use num::CheckedMul;
 
 /// The number of abelian groups of order n for each positive integer n.
 ///
+/// ```text
 /// 1, 1, 1, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1...
+/// ```
 pub struct AbelianGroups {
     ctr: u64,
     partition_number: Vec<u64>,

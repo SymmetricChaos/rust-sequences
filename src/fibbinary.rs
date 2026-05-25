@@ -2,7 +2,9 @@ use crate::core::traits::Increment;
 
 /// The Fibbinary numbers, the natural numbers, starting at zero, which contain no consecutive 1s in their binary expansion.
 ///
+/// ```text
 /// 0, 1, 2, 4, 5, 8, 9, 10, 16, 17, 18...
+/// ```
 pub struct Fibbinary {
     ctr: u64,
 }

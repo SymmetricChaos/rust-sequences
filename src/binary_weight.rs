@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, Integer};
 
 /// The binary weight of each natural number, starting from zero.
 ///
+/// ```text
 /// 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2...
+/// ```
 pub struct BinaryWeight<T> {
     ctr: T,
 }

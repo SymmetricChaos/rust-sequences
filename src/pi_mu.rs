@@ -2,7 +2,9 @@ use num::{BigInt, CheckedAdd, Integer, Signed};
 
 /// Starting with 1 the sequence is extended by repeatedly taking the terms generated so far and appending them in reverse order, each incremented by one.
 ///
+/// ```text
 /// 1, 2, 3, 2, 3, 4, 3, 2, 3, 4...
+/// ```
 pub struct ReverseAndIncrement<T> {
     terms: Vec<T>,
     idx: usize,

@@ -2,7 +2,9 @@ use crate::core::traits::Increment;
 
 /// Sierpiński's triangle.
 ///
+/// ```text
 /// [1], [1,1], [1,0,1], [1,1,1,1], [1,0,0,0,1]...
+/// ```
 pub struct SierpinskyTriangle {
     ctr: usize,
 }

@@ -3,8 +3,9 @@ use num::{BigInt, CheckedAdd, Integer};
 use std::ops::Rem;
 
 /// The period doubling sequence. Fixed point for the string rewrite rule 0 -> 01 and 1 -> 00. Equivalent to the parity of the 2-adic valuation of each non-negative integer.
-///
+/// ```text
 /// 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0...
+/// ```
 pub struct PeriodDoubling<T> {
     two_adic_val: Ruler<T>,
     two: T,
