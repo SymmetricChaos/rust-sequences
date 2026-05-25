@@ -28,7 +28,6 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + 'static> SimpleContinuedFrac
 
     /// A simple continued fraction with some fixed starting denominators and then a periodic part.
     pub fn new_periodic(fixed: &[T], periodic: &[T]) -> Self {
-        assert!(fixed.len() > 0);
         assert!(periodic.len() > 0);
         Self::new(Box::new(
             fixed
@@ -78,7 +77,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for SimpleContinuedF
 #[cfg(test)]
 use crate::core::{Naturals, traits::DigitSequence};
 crate::print_sequences!(
-    SimpleContinuedFraction::new_periodic(&[1], &[1]).map(|q| q.digits(5).unwrap()), 10; // Converges on phi
+    SimpleContinuedFraction::new_periodic(&[], &[1]).map(|q| q.digits(5).unwrap()), 10; // Converges on phi
     SimpleContinuedFraction::new_periodic(&[1], &[2]).map(|q| q.digits(5).unwrap()), 10; // Cnverges on sqrt(2)
     SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]).map(|q| q.digits(10).unwrap()), 10; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
     SimpleContinuedFraction::new(Naturals::new_big()).map(|q| q.digits(10).unwrap()), 12; // converges on 0.697774657964007982

@@ -2,7 +2,9 @@ use crate::{core::primes::Primorial, utils::miller_rabin::is_prime};
 
 /// The fortunate numbers. For each natural number, n, smallest natural number, k, such that primorial(n)+k is prime. All known values are prime.
 ///
+/// ```text
 /// 3, 5, 7, 13, 23, 17, 19, 23, 37, 61, 67, 61, 71, 47...
+/// ```
 pub struct Fortunate {
     primorials: Primorial<u64>,
 }

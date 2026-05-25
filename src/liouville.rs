@@ -4,7 +4,9 @@ use std::marker::PhantomData;
 
 /// Liouville's constant, decimal expansion of the first number proven to be transcendental. Also the characteristic function of the factorials.
 ///
+/// ```text
 /// 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0...
+/// ```
 pub struct Liouville<T> {
     factorial: Factorials<BigInt>,
     next_factorial: BigInt,

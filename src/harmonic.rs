@@ -6,7 +6,9 @@ use num::{
 
 /// The terms of the harmonic series.
 ///
+/// ```text
 /// 1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7...
+/// ```
 pub struct Harmonic<T> {
     ctr: Ratio<T>,
 }
@@ -34,7 +36,9 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for Harmonic<T> {
 
 /// The terms of the alternating harmonic series.
 ///
+/// ```text
 /// 1, -1/2, 1/3, -1/4, 1/5, -1/6, 1/7...
+/// ```
 pub struct HarmonicAlternating<T> {
     ctr: Ratio<T>,
     sign: Sign,
@@ -73,7 +77,10 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + Signed> Iterator for Harmoni
 }
 
 /// The partial sums of the harmonic series. This sequence diverges.
+///
+/// ```text
 /// 0, 1, 3/2, 11/6, 25/12, 137/60, 49/20, 363/140...
+/// ```
 pub struct HarmonicNumbers<T> {
     series: PartialSums<Ratio<T>>,
 }
@@ -103,7 +110,10 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for HarmonicNumbers<
 }
 
 /// The partial sums of the alternating harmonic series. They converge on the natural logarithm of 2.
+///
+/// ```text
 /// 0, 1, 1/2, 5/6, 7/12, 47/60, 37/60...
+/// ```
 pub struct AlternatingHarmonicNumbers<T> {
     series: PartialSums<Ratio<T>>,
 }

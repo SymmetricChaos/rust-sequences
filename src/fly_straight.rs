@@ -1,8 +1,10 @@
 use num::{BigInt, CheckedAdd, Integer};
 
-/// Solane's "fly straight" sequence. Although it appears chaotic after the 638th term is suddenly falls into a simple pattern.
+/// Solane's "fly straight" sequence. Although it initiatially appears chaotic, after the 638th term is suddenly falls into a simple pattern.
 ///
+/// ```text
 /// 1, 1, 4, 8, 2, 8, 4, 12, 3, 1, 12, 24, 2, 16...
+/// ```
 pub struct FlyStraight<T> {
     a: T,
     b: T,

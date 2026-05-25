@@ -4,8 +4,9 @@ use std::hash::Hash;
 use crate::prime_gaps::PrimeGaps;
 
 /// The Mersenne numbers. 2^p-1 for all primes p.
-///
+/// ```text
 /// 3, 7, 31, 127, 2047, 8191, 131071...
+/// ```
 pub struct Mersenne<T> {
     gaps: PrimeGaps<usize>,
     ctr: T,

@@ -1,8 +1,8 @@
 use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
 
-/// ```text
-/// The Farey sequence with selectable order.
+/// The Farey sequence of a given order.
 ///
+/// ```text
 /// For order 4
 /// 0, 1/4, 1/3, 1/2, 2/3, 3/4, 1
 /// ```

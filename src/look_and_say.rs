@@ -1,9 +1,9 @@
 use num::{BigInt, Num};
 use std::marker::PhantomData;
 
-/// ```text
 /// The sequence of look-and-say strings. Each is determiend by how the runs of numbers in the previous string might be said alound.
 ///
+/// ```text
 /// 1 (one one)
 /// 11 (two one)
 /// 21 (one two, one one)

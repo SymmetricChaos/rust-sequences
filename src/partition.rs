@@ -1,9 +1,10 @@
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One};
 
-/// The number of partitons for each integer.
-///
+/// The number of partitons for each non-negative integer.
+/// ```text
 /// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30...
+/// ```
 pub struct Partition<T> {
     values: Vec<T>,
     ctr: usize,
@@ -30,7 +31,7 @@ impl<T: Clone + Integer + CheckedAdd + CheckedSub> Iterator for Partition<T> {
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.values[self.ctr].clone();
 
-        self.ctr += 1;
+        self.ctr += 1; // the values will always overflow before this does
         let mut parts = T::zero();
         let mut sign = 0;
 
@@ -56,6 +57,11 @@ impl<T: Clone + Integer + CheckedAdd + CheckedSub> Iterator for Partition<T> {
 
 // https://github.com/quadrupleslap/integer-partitions/blob/master/src/lib.rs
 /// The partitions of a non-negative integer.
+///
+/// ```text
+/// For n = 4
+/// [1, 1, 1, 1], [1, 1, 2], [1, 3], [2, 2], [4]
+/// ```
 pub struct PartitionsN {
     k: usize,
     y: usize,
@@ -175,6 +181,6 @@ crate::check_sequences!(
 
 crate::print_sequences!(
     print_arrays;
-    PartitionsN::new(5), 10, "{:?}", "\n";
+    PartitionsN::new(4), 10, "{:?}", "\n";
     Partitions::new(), 5, "{:?}", "\n";
 );

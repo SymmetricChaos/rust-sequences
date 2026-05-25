@@ -1,9 +1,12 @@
 use num::BigInt;
 use std::marker::PhantomData;
 
-/// Hofstadter's G-sequence. A multiply recursive sequence starting with 0. a(n) = n - a(a(n-1))
+/// Hofstadter's G-sequence. A multiply recursive sequence starting with 0.
 ///
+/// ```text
+/// a(n) = n - a(a(n-1))
 /// 0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9...
+/// ```
 pub struct HofstadterG<T> {
     terms: Vec<usize>,
     ctr: usize,

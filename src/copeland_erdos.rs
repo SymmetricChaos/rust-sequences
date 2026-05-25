@@ -2,9 +2,9 @@ use crate::core::Primes;
 use num::{BigInt, CheckedAdd, Integer};
 use std::hash::Hash;
 
-/// ```text
 /// The Copeland-Erdős constants. Infinite words formed by listing the digits of the prime natural numbers in a given base.
 ///
+/// ```text
 /// for base 10
 /// 2, 3, 5, 7, 1, 1, 1, 3, 1, 7, 1, 9, 2, 3, 2, 9...
 /// for base 2

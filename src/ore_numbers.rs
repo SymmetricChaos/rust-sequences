@@ -6,7 +6,9 @@ use num::rational::Ratio;
 
 /// The Ore numbers.
 ///
+/// ```text
 /// 1, 6, 28, 140, 270, 496, 672, 1638, 2970...
+/// ```
 pub struct Ore {
     ctr: u64,
 }

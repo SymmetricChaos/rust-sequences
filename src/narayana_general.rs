@@ -1,10 +1,8 @@
+use num::{BigInt, CheckedAdd, One};
 use std::collections::VecDeque;
 
-use num::{BigInt, CheckedAdd, One};
-
-/// ```text
 /// A generalization of the Fibonacci and Narayana sequences. For a non-negative constant, k, the sequence begins with the number 1 repeated k+1) times. Further terms are equal to f(n) = f(n-1) + f(n-k). Any of these sequences may be prefixed by a single zero.
-///
+/// ```text
 /// k = 0 gives the powers of two
 /// k = 1 gives the Fibonacci sequence
 /// k = 2 gives the Narayana cow sequence

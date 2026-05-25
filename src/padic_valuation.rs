@@ -5,6 +5,11 @@ use crate::{
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Signed, rational::Ratio};
 
 /// The k-adic valuation of each positive integer. When k is prime it is a p-adic valuation.
+///
+/// ```text
+/// For k = 2
+/// 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0...
+/// ```
 pub struct PadicValuation<T> {
     p: T,
     ctr: T,
@@ -39,6 +44,10 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for PadicValuation<T> {
 }
 
 /// The k-adic absolute value of each positive integer. When k is prime it is a p-adic absolute value.
+/// ```text
+/// For k = 2
+/// 1, 1/2, 1, 1/4, 1, 1/2, 1, 1/8...
+/// ```
 pub struct PadicAbs<T> {
     p: T,
     ctr: T,

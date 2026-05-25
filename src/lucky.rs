@@ -6,7 +6,9 @@ use num::{BigInt, CheckedAdd, Integer};
 
 /// The lucky numbers of number theory. They are produced using an algorithm similar to the Sieve of Eratosthenes, which produces the primes.
 ///
+/// ```text
 /// 1, 3, 7, 9, 13, 15, 21, 25, 31, 33...
+/// ```
 pub struct Lucky<T> {
     ctr: T,
     odds: Odds<T>,

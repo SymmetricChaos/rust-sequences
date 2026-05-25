@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 
 /// The golden rectangle numbers. The area of triangles that converge on having sides with lengths that are the golden ration.
 ///
+/// ```text
 /// 0, 1, 2, 6, 15, 40, 104, 273...
+/// ```
 pub struct GoldenRectangle<T> {
     fib: Fibonacci<T>,
     a: T,

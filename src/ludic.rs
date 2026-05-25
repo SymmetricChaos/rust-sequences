@@ -6,7 +6,9 @@ use num::{BigInt, CheckedAdd, Integer};
 
 /// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.
 ///
+/// ```text
 /// 1, 2, 3, 5, 7, 11, 13, 17, 23, 25, 29, 37, 41, 43, 47, 53, 61, 67...
+/// ```
 pub struct Ludic<T> {
     ctr: usize,
     odds: Odds<T>,

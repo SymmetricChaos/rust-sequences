@@ -2,7 +2,9 @@ use std::collections::HashSet;
 
 /// The forest fire sequence. Each term is the smallest value such that not three terms form an arithmetic sequences. The graph resembles wind blown spoke.
 ///
+/// ```text
 /// 1, 1, 2, 1, 1, 2, 2, 4, 4, 1, 1, 2, 1, 1, 2, 2...
+/// ```
 pub struct ForestFire {
     terms: Vec<u64>,
     n: usize,

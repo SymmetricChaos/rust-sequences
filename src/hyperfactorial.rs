@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// The hyperfactorials numbers. Partial products of each positive natural number to the power of itself.
 ///
+/// ```text
 /// 1, 1, 4, 108, 27648, 86400000...
+/// ```
 pub struct HyperFactorial<T> {
     prod: T,
     ctr: T,

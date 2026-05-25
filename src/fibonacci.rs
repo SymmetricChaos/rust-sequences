@@ -3,7 +3,9 @@ use std::collections::VecDeque;
 
 /// The Fibonacci numbers. Starting with 0 and 1 every term is the sum of the two previous.
 ///
+/// ```text
 /// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34...
+/// ```
 pub struct Fibonacci<T> {
     a: T,
     b: T,

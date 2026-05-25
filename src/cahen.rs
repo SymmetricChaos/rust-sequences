@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
-
 use crate::sylvester::Sylvester;
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
 
 /// Rational convergents of Cahen's constant. Partial sums of the reciprocals of the even terms of Sylvester's sequence.
 ///

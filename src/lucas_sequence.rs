@@ -1,9 +1,9 @@
 use num::{BigInt, CheckedMul, CheckedSub, One, Zero};
 
 /// Any recurrence of the form
-///
+/// ```text
 /// a_x = p * a_{x-1} - q * a_{x-2}
-///
+/// ```
 /// beginning with a_0 = 0 and a_1 = 1
 pub struct LucasU<T> {
     a: T,
@@ -47,9 +47,9 @@ impl<T: CheckedMul + CheckedSub + Clone> Iterator for LucasU<T> {
 }
 
 /// Any recurrence of the form
-///
+/// ```text
 /// a_x = p * a_{x-1} - q * a_{x-2}
-///
+/// ```
 /// beginning with a_0 = 2 and a_1 = p
 pub struct LucasV<T> {
     a: T,

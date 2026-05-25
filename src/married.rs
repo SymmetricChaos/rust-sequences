@@ -1,9 +1,9 @@
 use num::BigInt;
 use std::marker::PhantomData;
 
-/// ```text
 /// Hofstadter's married sequences aka the male-female sequences. Defined by two entanged recurrences:
 ///
+/// ```text
 /// a(n) = n - b(a(n-1)), a(0) = 1
 /// b(n) = n - a(b(n-1)), b(0) = 0
 ///

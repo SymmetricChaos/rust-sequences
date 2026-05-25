@@ -3,7 +3,9 @@ use std::marker::PhantomData;
 
 /// Hofstadter's Q-sequence. A doubly recursive sequence in which the two previous terms determine the terms added together to determine the next.
 ///
+/// ```text
 /// 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10, 11, 11...
+/// ```
 pub struct HofstadterQ<T> {
     terms: Vec<usize>,
     ctr: usize,

@@ -4,7 +4,9 @@ use std::hash::Hash;
 
 /// The hyperprimorial numbers. Partial products of each prime to the power of itself.
 ///
+/// ```text
 /// 4, 108, 337500, 277945762500...
+/// ```
 pub struct HyperPrimorial<T> {
     prod: T,
     primes: Primes<T>,

@@ -4,8 +4,9 @@ use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
 use std::marker::PhantomData;
 
 /// The Möbius function over the positive integers.
-///
+/// ```text
 /// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
+/// ```
 pub struct Mobius<T> {
     n: u64,
     _phantom: PhantomData<T>,

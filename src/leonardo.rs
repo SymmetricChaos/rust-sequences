@@ -2,7 +2,9 @@ use num::{BigInt, CheckedAdd, One};
 
 /// The Leonardo numbers. Defined by a linear recurrence similar to the Fibonnaci numbers.
 ///
+/// ```text
 /// 1, 1, 3, 5, 9, 15, 25, 41, 67, 109...
+/// ```
 pub struct Leonardo<T> {
     a: T,
     b: T,

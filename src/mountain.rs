@@ -42,8 +42,9 @@ impl<T: Clone + Integer> Iterator for SingleMountain<T> {
 }
 
 /// The mountain sequence. Consists of non-overlapping "mountains" that start at n, increase to 2n, then decrease back to n. The height of each moutnain is determined by the corresponding term of the sequence.
-///
+/// ```text
 /// 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2...
+/// ```
 pub struct Mountain<T> {
     current_mountian: SingleMountain<T>,
     terms: Vec<T>,

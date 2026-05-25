@@ -5,7 +5,9 @@ use num::{BigInt, CheckedAdd, Integer};
 
 /// The Gray codes, bit sequence where each term differs from the previous by a single bit. A permutation of the non-negative integers.
 ///
+/// ```text
 /// 0, 1, 3, 2, 6, 7, 5, 4, 12, 13...
+/// ```
 pub struct Gray<T> {
     ctr: T,
 }
