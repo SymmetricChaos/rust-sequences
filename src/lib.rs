@@ -33,7 +33,6 @@ pub mod de_bruijn;
 pub mod derangement;
 pub mod digital_product;
 pub mod digital_sum;
-pub mod dirichlet_convolution;
 pub mod ducci;
 pub mod ecg;
 pub mod euclid_mullin;

@@ -5,6 +5,7 @@ pub mod characteristic;
 pub mod complement;
 pub mod counting;
 pub mod differences;
+pub mod dirichlet_convolution;
 pub mod high_water_mark;
 pub mod lodumo;
 pub mod ordinal;
