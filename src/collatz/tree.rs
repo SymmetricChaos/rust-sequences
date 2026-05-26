@@ -2,7 +2,9 @@ use num::{BigInt, One};
 
 /// The Collatz tree. Each layer contains the numbers that have a trajectory one step longer than the pevious layer.
 ///
+/// ```text
 /// [1], [2], [4], [8], [16], [5, 32], [10, 64], [3, 20, 21, 128]...
+/// ```
 pub struct CollatzTree {
     layer: Vec<BigInt>,
 }

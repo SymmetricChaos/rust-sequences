@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// The maximum value reached by the Collatz sequence that starts at each positive integer.
 ///
+/// ```text
 /// 1, 2, 16, 4, 16, 16, 52, 8, 52...
+/// ```
 pub struct CollatzHeights<T> {
     ctr: T,
 }

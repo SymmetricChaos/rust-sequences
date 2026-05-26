@@ -1,6 +1,11 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer};
 
-/// The values of a generalized Collatz sequence. The term after n is an+b if n is odd or n/2 if n is even.
+/// The values of a generalized Collatz sequence.
+///
+/// ```text
+/// f(n) = an+b for odd n
+///      = n/2  for even n
+/// ```
 pub struct CollatzGeneral<T> {
     n: T,
     a: T,
@@ -8,14 +13,12 @@ pub struct CollatzGeneral<T> {
 }
 
 impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> CollatzGeneral<T> {
-    /// Start a generalized Collatz sequence from n. The term after n is an+b if n is odd or n/2 if n is even.
     pub fn new(n: T, a: T, b: T) -> Self {
         Self { n, a, b }
     }
 }
 
 impl CollatzGeneral<BigInt> {
-    /// Start a generalized Collatz sequence from n. The term after n is an+b if n is odd or n/2 if n is even.
     pub fn new_big<T>(n: T, a: T, b: T) -> Self
     where
         BigInt: From<T>,

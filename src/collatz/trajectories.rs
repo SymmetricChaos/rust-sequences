@@ -3,7 +3,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 
 /// The trajectory of each Collatz sequence.
 ///
+/// ```text
 /// [1], [2,1], [3, 10, 5, 16, 8, 4, 2, 1]...
+/// ```
 pub struct CollatzTrajectories<T> {
     ctr: T,
 }

@@ -6,7 +6,9 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// Number of steps to reach 1 for a Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///
+/// ```text
 /// 0, 1, 7, 2, 5, 8, 16, 3, 19, 6, 14, 9, 9...
+/// ```
 pub struct CollatzLength<T> {
     ctr: T,
 }
@@ -42,7 +44,9 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzLength<T>
 
 /// Number of steps to reach 1 for the reduced Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///
+/// ```text
 /// 0, 1, 7, 2, 5, 8, 16, 3, 19, 6, 14, 9, 9...
+/// ```
 pub struct ReducedCollatzLength<T> {
     ctr: T,
 }

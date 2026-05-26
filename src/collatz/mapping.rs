@@ -4,9 +4,14 @@ use crate::{
 };
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
-/// The mapping of the Collatz function. n/2 for even n and 3n+1 for odd n.
+/// The mapping of the Collatz function.
+///
+/// ```text
+/// f(n) = 3n+1 for odd n
+///      = n/2  for even n
 ///
 /// 0, 4, 1, 10, 2, 16, 3, 22, 4...
+/// ```
 pub struct CollatzMap<T> {
     ctr: T,
 }
@@ -33,9 +38,14 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzMap<T> {
     }
 }
 
-/// The mapping of the reduced Collatz function. n/2^k for even n and (3n+1)/2^k for odd n, for the largest value of k that gives an integer.
+/// The mapping of the reduced Collatz function.
+///
+/// ```text
+/// f(n) = (3n+1)/2^k for odd n
+///      = n/2^k      for even n
 ///
 /// 0, 1, 1, 5, 1, 1, 3, 11, 1, 7...
+/// ```
 pub struct ReducedCollatzMap<T> {
     ctr: T,
 }
