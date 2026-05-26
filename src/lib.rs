@@ -120,34 +120,34 @@ pub mod weyl;
 pub mod zeta;
 
 #[macro_export]
-macro_rules! print_row {
+macro_rules! print_rows {
     // Take and use default formatting
     ($seq:expr, $take:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
-        crate::print_row!($($args)*)
+        crate::print_rows!($($args)*)
     };
     // Skip, then take and use default formatting
     ($seq:expr, skip $skip:literal, $take:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!("{}", x)), ", ");
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
-        crate::print_row!($($args)*)
+        crate::print_rows!($($args)*)
     };
     // Take and use custom formatting
     ($seq:expr, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
         println!("{} {}..{}\n{}\n", stringify!($seq), 0, $take, s);
-        crate::print_row!($($args)*)
+        crate::print_rows!($($args)*)
     };
     // Skip, then take and use custom formatting
     ($seq:expr, skip $skip:literal, $take:literal, $format:literal, $sep:literal; $($args:tt)*) => {
         let ns = itertools::Itertools::collect_vec($seq.skip($skip).take($take));
         let s = itertools::Itertools::join(&mut ns.into_iter().map(|x| format!($format, x)), $sep);
         println!("{} {}..{}\n{}\n", stringify!($seq), $skip, $skip+$take, s);
-        crate::print_row!($($args)*)
+        crate::print_rows!($($args)*)
     };
     () => {}
 }
@@ -183,7 +183,7 @@ macro_rules! print_sequences {
         #[test]
         #[ignore="visualization"]
         fn $name() {
-            crate::print_row!($($args)*);
+            crate::print_rows!($($args)*);
         }
     };
     ($($args:tt)*) => {
@@ -191,20 +191,20 @@ macro_rules! print_sequences {
         #[test]
         #[ignore="visualization"]
         fn print_sequences() {
-            crate::print_row!($($args)*);
+            crate::print_rows!($($args)*);
         }
     };
 }
 
 #[macro_export]
-macro_rules! check_row {
+macro_rules! check_rows {
     ($seq:expr, $data:expr; $($args:tt)*) => {
         let expected = $data.map(|x| x.to_string());
         let calculated = itertools::Itertools::collect_vec($seq.take(expected.len()).map(|x| x.to_string()));
         if expected.join(", ") != calculated.join(", ") {
             panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected.join(", "), calculated.join(", "));
         }
-        crate::check_row!($($args)*)
+        crate::check_rows!($($args)*)
     };
     ($seq:expr, skip $skip:literal, $data:expr; $($args:tt)*) => {
         let expected = $data.map(|x| x.to_string());
@@ -212,7 +212,7 @@ macro_rules! check_row {
         if expected.join(", ") != calculated.join(", ") {
             panic!("failure to agree for {}\nexpected:   {}\ncalculated: {}", stringify!($seq), expected.join(", "), calculated.join(", "));
         }
-        crate::check_row!($($args)*)
+        crate::check_rows!($($args)*)
     };
     () => {}
 }
@@ -223,14 +223,14 @@ macro_rules! check_sequences {
         #[cfg(test)]
         #[test]
         fn $name() {
-            crate::check_row!($($args)*);
+            crate::check_rows!($($args)*);
         }
     };
     ($($args:tt)*) => {
         #[cfg(test)]
         #[test]
         fn check_sequences() {
-            crate::check_row!($($args)*);
+            crate::check_rows!($($args)*);
         }
     };
 }

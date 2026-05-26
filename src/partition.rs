@@ -180,7 +180,6 @@ crate::check_sequences!(
 );
 
 crate::print_sequences!(
-    print_arrays;
     PartitionsN::new(4), 10, "{:?}", "\n";
     Partitions::new(), 5, "{:?}", "\n";
 );

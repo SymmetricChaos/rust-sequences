@@ -27,7 +27,6 @@ use crate::{
 };
 
 crate::print_sequences!(
-    print_integers;
     PartialSums::new(Harmonic::new_big()), 10; // identical to harmonic numbers, below
     HarmonicNumbers::<i64>::new(), 10;
     AlternatingPartialSums::new(Harmonic::new_big()), 10;
