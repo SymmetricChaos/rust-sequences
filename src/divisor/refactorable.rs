@@ -2,7 +2,9 @@ use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
 
 /// The refactorable or tau numbers. Positive integers which are divisible by the number of divisors they have.
 ///
+/// ```text
 /// 1, 2, 8, 9, 12, 18, 24, 36, 40, 56, 60...
+/// ```
 pub struct Refactorable {
     n: u64,
 }

@@ -1,8 +1,10 @@
 use crate::{core::traits::Increment, utils::divisibility::sum_of_divisors};
 
-/// Sum of divisors of each positive integer. Also known as sigma_1(n) [σ_1(n)].
+/// Sum of divisors of each positive integer. Also known as sigma_1(n).
 ///
+/// ```text
 /// 1, 3, 4, 7, 6, 12, 8, 15, 13, 18...
+/// ```
 pub struct SumOfDivisors {
     ctr: u64,
 }

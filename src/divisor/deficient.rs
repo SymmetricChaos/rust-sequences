@@ -1,8 +1,10 @@
-use crate::utils::divisibility::aliquot_sum;
+use crate::{core::traits::Increment, utils::divisibility::aliquot_sum};
 
 /// The deficient numbers, those which have an aliquot sum less than themselves.
 ///
+/// ```text
 /// 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14...
+/// ```
 pub struct Deficient {
     n: u64,
 }
@@ -18,7 +20,7 @@ impl Iterator for Deficient {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.n = self.n.checked_add(1)?;
+        self.n.incr()?;
         while aliquot_sum(self.n).unwrap() >= self.n {
             self.n += 1;
         }

@@ -1,15 +1,23 @@
 use crate::{core::traits::Increment, utils::divisibility::sigma};
 
-/// Sum of powers of divisors of n. Also known as sigma_z(n) [σ_z(n)].
+/// Sum of powers of divisors of n. Also known as sigma_z(n).
+///
+/// ```text
+/// for z = 2:
+/// 1, 5, 10, 21, 26, 50, 50, 85, 91...
+///
+/// for z = 3:
+/// 1, 9, 28, 73, 126, 252, 344, 585, 757...
+/// ```
 pub struct Sigma {
     ctr: u64,
-    e: u32,
+    z: u32,
 }
 
 impl Sigma {
     /// Only u64 output is supported.
-    pub fn new(e: u32) -> Self {
-        Self { ctr: 0, e }
+    pub fn new(z: u32) -> Self {
+        Self { ctr: 0, z }
     }
 }
 
@@ -18,7 +26,7 @@ impl Iterator for Sigma {
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
-        sigma(self.ctr, self.e)
+        sigma(self.ctr, self.z)
     }
 }
 crate::check_sequences!(

@@ -3,7 +3,9 @@ use num::integer::gcd;
 
 /// Duffian numbers. Composite numbers that are coprime to the sum of their divisors.
 ///
+/// ```text
 /// 4, 8, 9, 16, 21, 25, 27, 32, 35, 36...
+/// ```
 pub struct Duffian {
     c: Composites<u64>,
 }
@@ -33,7 +35,9 @@ impl Iterator for Duffian {
 
 /// Duffian twins. Duffian numbers that differ by one.
 ///
+/// ```text
 /// (8, 9), (35, 36), (49, 50), (63, 64), (64, 65)...
+/// ```
 pub struct DuffianTwins {
     duff: Duffian,
     prev: u64,

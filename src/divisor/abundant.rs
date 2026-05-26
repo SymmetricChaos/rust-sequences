@@ -1,11 +1,16 @@
-use crate::utils::divisibility::{
-    abundancy_index, aliquot_sum, proper_divisors, radical, sum_of_divisors,
+use crate::{
+    core::traits::Increment,
+    utils::divisibility::{
+        abundancy_index, aliquot_sum, proper_divisors, radical, sum_of_divisors,
+    },
 };
 use num::rational::Ratio;
 
 /// The abundant numbers. Positive integers which have an aliquot sum greater than themselves.
 ///
+/// ```text
 /// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54...
+/// ```
 pub struct Abundant {
     n: u64,
 }
@@ -22,7 +27,7 @@ impl Iterator for Abundant {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.n = self.n.checked_add(1)?;
+            self.n.incr()?;
             if aliquot_sum(self.n).unwrap() > self.n {
                 return Some(self.n);
             }
@@ -32,7 +37,9 @@ impl Iterator for Abundant {
 
 /// The primitive abundant numbers. Abundant numbers that have no abundant divisors.
 ///
+/// ```text
 /// 12, 18, 20, 30, 42, 56, 66, 70, 78, 88...
+/// ```
 pub struct PrimitiveAbundant {
     n: u64,
     terms: Vec<u64>,
@@ -53,7 +60,7 @@ impl Iterator for PrimitiveAbundant {
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
-            self.n = self.n.checked_add(1)?;
+            self.n.incr()?;
             let factors = proper_divisors(self.n);
             if aliquot_sum(self.n).unwrap() > self.n {
                 self.terms.push(self.n);
@@ -70,7 +77,9 @@ impl Iterator for PrimitiveAbundant {
 
 /// Highly abundant numbers. Positive integers for which the sum of divisors is greater than for any smaller positive integer.
 ///
+/// ```text
 /// 1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24...
+/// ```
 pub struct HighlyAbundant {
     record: u64,
     n: u64,
@@ -88,7 +97,7 @@ impl Iterator for HighlyAbundant {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.n = self.n.checked_add(1)?;
+            self.n.incr()?;
             let s = sum_of_divisors(self.n)?;
             if s > self.record {
                 self.record = s;
@@ -100,7 +109,9 @@ impl Iterator for HighlyAbundant {
 
 /// Superabundant numbers. Positive integers for which the ratio between the sum of divisors and itself is greater than for any smaller positive integer.
 ///
+/// ```text
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
+/// ```
 pub struct Superabundant {
     record: Ratio<u64>,
     n: u64,

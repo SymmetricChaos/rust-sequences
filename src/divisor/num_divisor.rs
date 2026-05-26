@@ -1,8 +1,10 @@
 use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
 
-/// Number of divisors for each positive integer. Also known as sigma_0(n) [σ_0(n)].
+/// Number of divisors for each positive integer. Also known as sigma_0(n).
 ///
+/// ```text
 /// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
+/// ```
 pub struct NumberOfDivisors {
     ctr: u64,
 }
@@ -25,7 +27,9 @@ impl Iterator for NumberOfDivisors {
 
 /// The partial sums of the divisor function over the natural numbers.
 ///
+/// ```text
 /// 0, 1, 3, 5, 8, 10, 14, 16, 20, 23...
+/// ```
 pub struct DivisorSummatory {
     n: u64,
     s: u64,
@@ -43,7 +47,7 @@ impl Iterator for DivisorSummatory {
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.s;
-        self.n += 1;
+        self.n.incr()?;
         match self.s.checked_add(number_of_divisors(self.n)) {
             Some(x) => self.s = x,
             None => return Some(out),
