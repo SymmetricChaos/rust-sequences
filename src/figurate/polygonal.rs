@@ -1,6 +1,17 @@
-use num::{BigInt, One, Zero};
+use num::{BigInt, One, Signed, Zero};
 
-/// The polygonal numbers with selectable order.
+/// The polygonal numbers with selectable order, k, with k >= 2.
+///
+/// ```text
+/// k = 2
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
+///
+/// k = 3
+/// 0, 1, 3, 6, 10, 15, 21, 28, 36...
+///
+/// k = 4
+/// 0, 1, 4, 9, 16, 25, 36, 49...
+/// ```
 pub struct Polygonal {
     val: BigInt,
     gnomon: BigInt,
@@ -8,39 +19,19 @@ pub struct Polygonal {
 }
 
 impl Polygonal {
-    /// The order, k, is the number of sides of the polygon.
-    ///
-    /// k = 2 produces the natural numbers
-    ///
-    /// k = 3 produces the triangular numbers
-    ///
-    /// k = 4 produces the square numbers
-    ///
-    /// and so on for higher orders
-    ///
-    /// Lower values of k are allowed but do not have standard names.
     pub fn new_big<T>(k: T) -> Self
     where
         BigInt: From<T>,
     {
+        let order: BigInt = BigInt::from(k) - 2;
+        assert!(!order.is_negative());
         Self {
             val: BigInt::zero(),
             gnomon: BigInt::one(),
-            order: BigInt::from(k) - 2,
+            order,
         }
     }
 
-    /// The order, k, is the number of sides of the polygon.
-    ///
-    /// k = 2 produces the natural numbers
-    ///
-    /// k = 3 produces the triangular numbers
-    ///
-    /// k = 4 produces the square numbers
-    ///
-    /// and so on for higher orders
-    ///
-    /// Lower values of k are allowed but do not have standard names.
     pub fn nth<T>(n: T, k: T) -> BigInt
     where
         BigInt: From<T>,
@@ -83,25 +74,9 @@ impl Iterator for Polygonal {
     }
 }
 
-crate::print_sequences!(
-    // For testing that .nth() words
-    Polygonal::new_big(3), skip 0, 10;
-    Polygonal::new_big(3), skip 1, 10;
-    Polygonal::new_big(3), skip 2, 10;
-    Polygonal::new_big(3), skip 3, 10;
-    Polygonal::new_big(3), skip 4, 10;
-
-    Polygonal::new_big(4), skip 0, 10;
-    Polygonal::new_big(4), skip 1, 10;
-    Polygonal::new_big(4), skip 2, 10;
-    Polygonal::new_big(4), skip 3, 10;
-    Polygonal::new_big(4), skip 4, 10;
-
-);
-
 crate::check_sequences!(
     Polygonal::new_big(2), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Polygonal::new_big(3), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45];
+    Polygonal::new_big(3), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105, 120, 136, 153, 171, 190, 210, 231, 253, 276, 300, 325, 351, 378, 406, 435, 465, 496, 528, 561, 595, 630, 666, 703, 741, 780, 820, 861, 903, 946, 990, 1035, 1081, 1128, 1176, 1225, 1275, 1326, 1378, 1431];
 );
 
 #[test]
