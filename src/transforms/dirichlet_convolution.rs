@@ -12,6 +12,7 @@ pub fn one(_: BigInt) -> BigInt {
     BigInt::one()
 }
 
+/// The Dirichlet convolution.
 pub struct DirichletConvolution {
     ctr: usize,
     f: Box<dyn Fn(BigInt) -> BigInt>,

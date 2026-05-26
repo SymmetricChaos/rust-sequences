@@ -21,6 +21,7 @@ pub use characteristic::*;
 pub use complement::*;
 pub use counting::*;
 pub use differences::*;
+pub use dirichlet_convolution::*;
 pub use high_water_mark::*;
 pub use lodumo::*;
 pub use ordinal::*;

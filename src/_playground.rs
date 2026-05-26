@@ -1,11 +1,8 @@
 #[cfg(test)]
 use crate::{
     core::{
-        constant::Constant,
-        continued_fraction::SimpleContinuedFraction,
-        primes::Primes,
+        Constant, CubeRoot, Primes, SimpleContinuedFraction, SquareRoot,
         rational_digits::rational_decimal_string as to_dec,
-        roots::{CubeRoot, SquareRoot},
     },
     divisor::{Deficient, NumberOfDivisors},
     exponential::Exponential,
@@ -14,14 +11,9 @@ use crate::{
     harmonic::{Harmonic, HarmonicNumbers},
     ruler::Ruler,
     transforms::{
-        boustrophedon::{Boustrophedon, BoustrophedonTriangle},
-        complement::Complement,
-        differences::AbsDiffs,
-        dirichlet_convolution::{DirichletConvolution, one},
-        lodumo::Lodumo,
-        ordinal::OrdinalTransform,
-        rational::Ratios,
-        sums::{AlternatingPartialSums, CesaroPartialSums, PartialSums},
+        AbsDiffs, AlternatingPartialSums, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums,
+        Complement, DirichletConvolution, Lodumo, OrdinalTransform, PartialSums, Ratios,
+        dirichlet_convolution::one,
     },
     zeta::Zeta,
 };
