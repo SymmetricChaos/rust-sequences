@@ -1,6 +1,13 @@
 use crate::utils::totient::jordan_totient;
 
 /// The Jordan totient of each positive integer.
+/// ```text
+/// k = 2
+/// 1, 3, 8, 12, 24, 24, 48, 48, 72, 72...
+///
+/// k = 3
+/// 1, 7, 26, 56, 124, 182, 342, 448...
+/// ```
 pub struct JordanTotients {
     ctr: u64,
     k: u32,

@@ -7,7 +7,9 @@ use crate::{
 
 /// The nontotient numbers. Posititve integers that do not appear in the range of Euler's totient function. Includes all odd naturals except 1. Also see EvenNontotient.
 ///
+/// ```text
 /// 3, 5, 7, 9, 11, 13, 14, 15, 17, 19, 21...
+/// ```
 pub struct Nontotient {
     ctr: u64,
 }
@@ -54,7 +56,9 @@ impl Iterator for Nontotient {
 
 /// The even nontotient numbers. Even positive integers that are not in the range of Euler's totient function. See also Nontotient which include all odd numbers except 1.
 ///
+/// ```text
 /// 14, 26, 34, 38, 50, 62, 68, 74, 76, 86...
+/// ```
 pub struct EvenNontotient {
     ctr: u64,
 }

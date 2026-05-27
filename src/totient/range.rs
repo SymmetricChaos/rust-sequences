@@ -6,7 +6,9 @@ use num::{Integer, rational::Ratio};
 
 /// The range of Euler's totient function in increasing order.
 ///
+/// ```text
 /// 1, 2, 4, 6, 8, 10, 12, 16, 18...
+/// ```
 pub struct TotientRange {
     ctr: u64,
 }

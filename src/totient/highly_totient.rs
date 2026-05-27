@@ -3,7 +3,9 @@ use num::BigRational;
 
 /// Positive natural numbers that appear as a totient more often than any smaller natural number.
 ///
+/// ```text
 /// 1, 2, 4, 8, 12, 24, 48, 72, 144...
+/// ```
 pub struct HighlyTotient {
     ctr: u64,
     record: u64,

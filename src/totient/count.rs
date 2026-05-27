@@ -6,7 +6,9 @@ use num::{Integer, rational::Ratio};
 
 /// The count of natural number which have totient n for each positive integer n.
 ///
+/// ```text
 /// 2, 3, 0, 4, 0, 4, 0, 5, 0, 2, 0, 6, 0...
+/// ```
 pub struct TotientCount {
     ctr: u64,
 }

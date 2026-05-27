@@ -6,7 +6,9 @@ use num::{Integer, integer::lcm};
 
 /// The reduced totient function or Carmichael lambda function. Smallest exponent such that n to that power is congruent to 1 modulo for all coprime numbers.
 ///
+/// ```text
 /// 1, 1, 2, 2, 4, 2, 6, 2, 6, 4, 10, 2, 12...
+/// ```
 pub struct ReducedTotient {
     ctr: u64,
 }
