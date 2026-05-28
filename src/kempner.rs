@@ -48,27 +48,24 @@ impl Iterator for Kempner<Number> {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            let p = {
-                let mut n = self.ctr;
-                let mut pos = 1;
-                loop {
-                    if n == 0 {
-                        break 0;
-                    }
-                    if &(&n % &self.base) == &self.digit {
-                        break pos;
-                    } else {
-                        n = &n / &self.base;
-                        pos = &pos * &self.base;
-                    }
+            let mut n = self.ctr;
+            let mut pos = 1;
+            loop {
+                // doesn't contain 9 so include it
+                if n == 0 {
+                    self.sum = self.sum.checked_add(&Ratio::new(1, self.ctr))?;
+                    self.ctr.incr()?;
+                    return Some(self.sum.clone());
                 }
-            };
-            if p.is_zero() {
-                self.sum = self.sum.checked_add(&Ratio::new(1, self.ctr.clone()))?;
-                self.ctr.incr()?;
-                return Some(self.sum.clone());
-            } else {
-                self.ctr = self.ctr.checked_add(p)?;
+                // contains a 9 so skip forward to the next numbers without one
+                if n % self.base == self.digit {
+                    self.ctr = self.ctr.checked_add(pos)?;
+                    break;
+                // keep searching
+                } else {
+                    n /= self.base;
+                    pos *= self.base;
+                }
             }
         }
     }
