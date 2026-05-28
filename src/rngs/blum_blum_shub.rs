@@ -122,7 +122,8 @@ impl Iterator for BlumBlumShubMaximum {
 
 /// Sequence of state for a Blum-Blum-Shub PRNG. These states are not returned directly by the actual algorithm, however, instead a few bits being extracted via parity or masking.
 /// ```text
-///
+/// seed = 1234, modulus = 325657
+/// 1234, 220128, 203069, 49822, 74030, 284904...
 /// ```
 pub struct BlumBlumShub {
     val: u128,
