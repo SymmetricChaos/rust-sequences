@@ -120,6 +120,11 @@ pub mod unit;
 pub mod weyl;
 pub mod zeta;
 
+#[cfg(target_pointer_width = "32")]
+type Number = i32;
+#[cfg(target_pointer_width = "64")]
+type Number = i64;
+
 #[macro_export]
 macro_rules! print_rows {
     // Take and use default formatting

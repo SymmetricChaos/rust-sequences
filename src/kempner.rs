@@ -1,48 +1,107 @@
-use crate::core::traits::Increment;
-use num::{CheckedAdd, rational::Ratio};
-
-fn contains_nine(mut n: u64) -> bool {
-    while n != 0 {
-        if n % 10 == 9 {
-            return true;
-        } else {
-            n = n / 10;
-        }
-    }
-    false
-}
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, CheckedAdd, One, Zero, rational::Ratio};
 
 /// The partial sums of Kempner's series. Similar to the harmonic series of terms where the denominator contains a 9 in the decimal expansion are exluded. The sum converges (very slowly) on a value of about 22.92.
-pub struct Kempner {
-    ctr: u64,
-    sum: Ratio<u64>,
+pub struct Kempner<T> {
+    ctr: T,
+    sum: Ratio<T>,
+    digit: T,
+    base: T,
 }
 
-impl Kempner {
+impl Kempner<Number> {
     pub fn new() -> Self {
         Self {
-            ctr: 0,
+            ctr: 1,
             sum: Ratio::new(0, 1),
+            digit: 9,
+            base: 10,
         }
     }
-
-    pub fn numers() -> impl Iterator<Item = u64> {
+    pub fn numers() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.numer().clone())
     }
-    pub fn denoms() -> impl Iterator<Item = u64> {
+    pub fn denoms() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.denom().clone())
     }
 }
 
-impl Iterator for Kempner {
-    type Item = Ratio<u64>;
+impl Kempner<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            ctr: BigInt::one(),
+            sum: Ratio::new(BigInt::zero(), BigInt::one()),
+            digit: BigInt::from(9),
+            base: BigInt::from(10),
+        }
+    }
+    pub fn numers_big() -> impl Iterator<Item = BigInt> {
+        Self::new_big().map(|q| q.numer().clone())
+    }
+    pub fn denoms_big() -> impl Iterator<Item = BigInt> {
+        Self::new_big().map(|q| q.denom().clone())
+    }
+}
+
+impl Iterator for Kempner<Number> {
+    type Item = Ratio<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            self.ctr.incr();
-            if !contains_nine(self.ctr) {
-                self.sum = self.sum.checked_add(&Ratio::new(1, self.ctr))?;
-                return Some(self.sum);
+            let p = {
+                let mut n = self.ctr;
+                let mut pos = 1;
+                loop {
+                    if n == 0 {
+                        break 0;
+                    }
+                    if &(&n % &self.base) == &self.digit {
+                        break pos;
+                    } else {
+                        n = &n / &self.base;
+                        pos = &pos * &self.base;
+                    }
+                }
+            };
+            if p.is_zero() {
+                self.sum = self.sum.checked_add(&Ratio::new(1, self.ctr.clone()))?;
+                self.ctr.incr()?;
+                return Some(self.sum.clone());
+            } else {
+                self.ctr = self.ctr.checked_add(p)?;
+            }
+        }
+    }
+}
+
+impl Iterator for Kempner<BigInt> {
+    type Item = Ratio<BigInt>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let p = {
+                let mut n = self.ctr.clone();
+                let mut pos = BigInt::one();
+                loop {
+                    if n.is_zero() {
+                        break BigInt::zero();
+                    }
+                    if &(&n % &self.base) == &self.digit {
+                        break pos;
+                    } else {
+                        n = &n / &self.base;
+                        pos = &pos * &self.base;
+                    }
+                }
+            };
+            if p.is_zero() {
+                self.sum = self
+                    .sum
+                    .checked_add(&Ratio::new(BigInt::one(), self.ctr.clone()))?;
+                self.ctr.incr()?;
+                return Some(self.sum.clone());
+            } else {
+                self.ctr = self.ctr.checked_add(&p)?;
             }
         }
     }
@@ -51,7 +110,7 @@ impl Iterator for Kempner {
 #[cfg(test)]
 use crate::core::traits::DigitSequence;
 crate::print_sequences!(
-    Kempner::new().map(|q| q.digits(10).unwrap()), skip 30, 5;
+    Kempner::new_big().map(|q| q.digits(10).unwrap()), skip 1000, 5; // Convergence is very slow but approaches 22.92
 );
 
 crate::check_sequences!(

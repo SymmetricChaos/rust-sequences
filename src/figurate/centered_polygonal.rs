@@ -22,7 +22,7 @@ use crate::figurate::polygonal::Polygonal;
 /// ```
 pub struct CenteredPolygonal {
     k: BigInt,
-    polygonal: Polygonal,
+    polygonal: Polygonal<BigInt>,
 }
 
 impl CenteredPolygonal {

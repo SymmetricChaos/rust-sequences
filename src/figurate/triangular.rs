@@ -46,13 +46,6 @@ impl<T: Clone + CheckedAdd + One> Iterator for Triangular<T> {
     }
 }
 
-crate::print_sequences!(
-    Triangular::<i32>::new(), skip 0, 10;
-    Triangular::<i32>::new(), skip 1, 10;
-    Triangular::<i32>::new(), skip 2, 10;
-    [0,1,2,3,10,25,100,1234].into_iter().map(|x| Triangular::nth(x)), 8;
-);
-
 crate::check_sequences!(
     Triangular::new_big(), [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105, 120, 136, 153, 171, 190, 210, 231, 253, 276, 300, 325, 351, 378, 406, 435, 465, 496, 528, 561, 595, 630, 666, 703, 741, 780, 820, 861, 903, 946, 990, 1035, 1081, 1128, 1176, 1225, 1275, 1326, 1378, 1431];
 );
