@@ -8,19 +8,18 @@ use crate::{
     exponential::Exponential,
     fibonacci::Fibonacci,
     figurate::Triangular,
-    harmonic::{Harmonic, HarmonicNumbers},
+    harmonic::Harmonic,
     ruler::Ruler,
     transforms::{
         AbsDiffs, AlternatingPartialSums, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums,
-        Complement, DirichletConvolution, Lodumo, OrdinalTransform, PartialSums, Ratios,
+        Complement, DirichletConvolution, Lodumo, OrdinalTransform, Ratios,
         dirichlet_convolution::one,
     },
     zeta::Zeta,
 };
 
 crate::print_sequences!(
-    PartialSums::new(Harmonic::new_big()), 10; // identical to harmonic numbers, below
-    HarmonicNumbers::<i64>::new(), 10;
+    Harmonic::<i64>::new(), 10;
     AlternatingPartialSums::new(Harmonic::new_big()), 10;
     Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 10;
     AbsDiffs::new(Primes::new_big()), 10;

@@ -64,6 +64,7 @@ pub mod hyperprimorial;
 pub mod hypotenuse;
 pub mod jordan_polya;
 pub mod juggler;
+pub mod kempner;
 pub mod leonardo;
 pub mod liouville;
 pub mod look_and_say;
