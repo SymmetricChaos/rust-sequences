@@ -61,7 +61,7 @@ impl Iterator for Kempner<Number> {
                 if n % self.base == self.digit {
                     self.ctr = self.ctr.checked_add(pos)?;
                     break;
-                // keep searching
+                // keep searching for a 9
                 } else {
                     n /= self.base;
                     pos *= self.base;
@@ -76,29 +76,26 @@ impl Iterator for Kempner<BigInt> {
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            let p = {
-                let mut n = self.ctr.clone();
-                let mut pos = BigInt::one();
-                loop {
-                    if n.is_zero() {
-                        break BigInt::zero();
-                    }
-                    if &(&n % &self.base) == &self.digit {
-                        break pos;
-                    } else {
-                        n = &n / &self.base;
-                        pos = &pos * &self.base;
-                    }
+            let mut n = self.ctr.clone();
+            let mut pos = BigInt::one();
+            loop {
+                // doesn't contain 9 so include it
+                if n.is_zero() {
+                    self.sum = self
+                        .sum
+                        .checked_add(&Ratio::new(BigInt::one(), self.ctr.clone()))?;
+                    self.ctr.incr()?;
+                    return Some(self.sum.clone());
                 }
-            };
-            if p.is_zero() {
-                self.sum = self
-                    .sum
-                    .checked_add(&Ratio::new(BigInt::one(), self.ctr.clone()))?;
-                self.ctr.incr()?;
-                return Some(self.sum.clone());
-            } else {
-                self.ctr = self.ctr.checked_add(&p)?;
+                // contains a 9 so skip forward to the next numbers without one
+                if &(&n % &self.base) == &self.digit {
+                    self.ctr = self.ctr.checked_add(&pos)?;
+                    break;
+                // keep searching for a 9
+                } else {
+                    n = &n / &self.base;
+                    pos = &pos * &self.base;
+                }
             }
         }
     }

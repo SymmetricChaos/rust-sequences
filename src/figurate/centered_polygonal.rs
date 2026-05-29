@@ -20,12 +20,12 @@ use crate::figurate::polygonal::Polygonal;
 /// k = 4 (centered square)
 /// 1, 5, 13, 25, 41, 61, 85, 113, 145...
 /// ```
-pub struct CenteredPolygonal {
-    k: BigInt,
-    polygonal: Polygonal<BigInt>,
+pub struct CenteredPolygonal<T> {
+    k: T,
+    polygonal: Polygonal<T>,
 }
 
-impl CenteredPolygonal {
+impl CenteredPolygonal<BigInt> {
     pub fn new_big<T: One>(k: T) -> Self
     where
         BigInt: From<T>,
@@ -48,7 +48,7 @@ impl CenteredPolygonal {
     }
 }
 
-impl Iterator for CenteredPolygonal {
+impl Iterator for CenteredPolygonal<BigInt> {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
