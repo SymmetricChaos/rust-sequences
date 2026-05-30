@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, One, Zero};
 
 /// The square triangular numbers.
@@ -5,12 +6,18 @@ use num::{BigInt, One, Zero};
 /// ```text
 /// 0, 1, 36, 1225, 41616, 1413721, 48024900...
 /// ```
-pub struct SquareTriangular {
-    a: BigInt,
-    b: BigInt,
+pub struct SquareTriangular<T> {
+    a: T,
+    b: T,
 }
 
-impl SquareTriangular {
+impl SquareTriangular<Number> {
+    pub fn new() -> Self {
+        Self { a: 0, b: 1 }
+    }
+}
+
+impl SquareTriangular<BigInt> {
     pub fn new_big() -> Self {
         Self {
             a: BigInt::zero(),
@@ -19,7 +26,19 @@ impl SquareTriangular {
     }
 }
 
-impl Iterator for SquareTriangular {
+impl Iterator for SquareTriangular<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a;
+        let t = (self.b.checked_mul(34)? - self.a).checked_add(2)?;
+        self.a = self.b;
+        self.b = t;
+        Some(out)
+    }
+}
+
+impl Iterator for SquareTriangular<BigInt> {
     type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {

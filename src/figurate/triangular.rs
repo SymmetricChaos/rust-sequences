@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, FromPrimitive, One, Signed, Zero};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, FromPrimitive, Integer, One, Signed, Zero};
 
 /// The triangular numbers. The partial sums of the natural numbers.
 ///
@@ -11,18 +12,18 @@ pub struct Triangular<T> {
     ctr: T,
 }
 
-impl<T: Clone + CheckedAdd + One + Zero> Triangular<T> {
+impl Triangular<Number> {
     pub fn new() -> Self {
-        Self {
-            val: T::zero(),
-            ctr: T::one(),
-        }
+        Self { val: 0, ctr: 1 }
     }
 }
 
 impl Triangular<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            val: BigInt::zero(),
+            ctr: BigInt::one(),
+        }
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -35,13 +36,24 @@ impl Triangular<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + One> Iterator for Triangular<T> {
-    type Item = T;
+impl Iterator for Triangular<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.val.clone();
-        self.val = self.val.checked_add(&self.ctr)?;
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.val = self.val.checked_add(self.ctr)?;
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for Triangular<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.val.clone();
+        self.val += &self.ctr;
+        self.ctr.inc();
         Some(out)
     }
 }

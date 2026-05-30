@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, One, Zero};
+use crate::Number;
+use num::{BigInt, Zero};
 
 /// The oblong or pronic numbers.
 ///
@@ -11,18 +12,18 @@ pub struct Oblong<T> {
     b: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Oblong<T> {
+impl Oblong<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::zero(),
-            b: T::one() + T::one(),
-        }
+        Self { a: 0, b: 2 }
     }
 }
 
 impl Oblong<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::zero(),
+            b: BigInt::from(2),
+        }
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -34,18 +35,30 @@ impl Oblong<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + One> Iterator for Oblong<T> {
-    type Item = T;
+impl Iterator for Oblong<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        self.a = self.a.checked_add(&self.b)?;
-        self.b = self.b.checked_add(&(T::one() + T::one()))?;
+        self.a = self.a.checked_add(self.b)?;
+        self.b = self.b.checked_add(2)?;
+        Some(out)
+    }
+}
+
+impl Iterator for Oblong<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a.clone();
+        self.a += &self.b;
+        self.b += 2;
         Some(out)
     }
 }
 
 crate::check_iteration_times!(
+    Oblong::new(), 3_200_000;
     Oblong::new_big(), 3_200_000;
 );
 

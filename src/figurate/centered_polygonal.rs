@@ -1,6 +1,5 @@
+use crate::{Number, figurate::polygonal::Polygonal};
 use num::{BigInt, One, Signed};
-
-use crate::figurate::polygonal::Polygonal;
 
 /// The centered polygonal numbers with selectable order, k, k >= 0. There are not standard names for k=1 and k=2 but they are related to Hogben's central polygonal numbers.
 ///
@@ -25,6 +24,16 @@ pub struct CenteredPolygonal<T> {
     polygonal: Polygonal<T>,
 }
 
+impl CenteredPolygonal<Number> {
+    pub fn new(k: Number) -> Self {
+        assert!(!k.is_negative());
+        Self {
+            k,
+            polygonal: Polygonal::new(3),
+        }
+    }
+}
+
 impl CenteredPolygonal<BigInt> {
     pub fn new_big<T: One>(k: T) -> Self
     where
@@ -34,7 +43,7 @@ impl CenteredPolygonal<BigInt> {
         assert!(!k.is_negative());
         Self {
             k,
-            polygonal: Polygonal::new_big::<i32>(3),
+            polygonal: Polygonal::new_big::<i32>(3), // have to specify the type being accepted by Polygonal::new_big
         }
     }
 
@@ -45,6 +54,15 @@ impl CenteredPolygonal<BigInt> {
         let k = &BigInt::from(k);
         let n = &BigInt::from(n);
         (k * n * (n - 1)) / 2 + 1
+    }
+}
+
+impl Iterator for CenteredPolygonal<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.polygonal.next()?.checked_mul(self.k)?.checked_add(1)?;
+        Some(out)
     }
 }
 

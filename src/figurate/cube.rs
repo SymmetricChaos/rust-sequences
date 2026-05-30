@@ -1,4 +1,6 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use num::{BigInt, Integer, Zero};
+
+use crate::{Number, core::traits::Increment};
 
 /// The cube numbers.
 ///
@@ -7,18 +9,20 @@ use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 /// 0, 1, 8, 27, 64, 125, 216, 343, 512, 729...
 /// ```
 pub struct Cube<T> {
-    val: T,
+    ctr: T,
 }
 
-impl<T: CheckedMul + CheckedAdd + One + Zero> Cube<T> {
+impl Cube<Number> {
     pub fn new() -> Self {
-        Self { val: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl Cube<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -30,13 +34,22 @@ impl Cube<BigInt> {
     }
 }
 
-impl<T: CheckedMul + CheckedAdd + One> Iterator for Cube<T> {
-    type Item = T;
+impl Iterator for Cube<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.checked_mul(&self.val)?.checked_mul(&self.val)?;
-        self.val = self.val.checked_add(&T::one())?;
+        let out = self.ctr.checked_mul(self.ctr)?.checked_mul(self.ctr)?;
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
 
+impl Iterator for Cube<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = &self.ctr * &self.ctr * &self.ctr;
+        self.ctr.inc();
         Some(out)
     }
 }

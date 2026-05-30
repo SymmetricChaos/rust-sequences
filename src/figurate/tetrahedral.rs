@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedSub, One, Zero};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, Integer, One, Zero};
 
 /// The tetrahedral numbers. The partial sums of the triangular numbers.
 ///
@@ -11,19 +12,19 @@ pub struct Tetrahedral<T> {
     ctr: T,
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + One + Zero> Tetrahedral<T> {
+impl Tetrahedral<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::zero(),
-            b: T::one(),
-            ctr: T::one() + T::one(),
-        }
+        Self { a: 0, b: 1, ctr: 2 }
     }
 }
 
 impl Tetrahedral<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::zero(),
+            b: BigInt::one(),
+            ctr: BigInt::from(2),
+        }
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -35,19 +36,32 @@ impl Tetrahedral<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + One> Iterator for Tetrahedral<T> {
-    type Item = T;
+impl Iterator for Tetrahedral<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a;
+        let t = self
+            .b
+            .checked_add(self.b)?
+            .checked_sub(self.a)?
+            .checked_add(self.ctr)?;
+        self.a = self.b;
+        self.b = t;
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for Tetrahedral<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = self
-            .b
-            .checked_add(&self.b)?
-            .checked_sub(&self.a)?
-            .checked_add(&self.ctr)?;
+        let t = &self.b + &self.b - &self.a + &self.ctr;
         self.a = self.b.clone();
         self.b = t;
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.inc();
         Some(out)
     }
 }

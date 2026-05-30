@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, Integer, Zero};
 
 /// The square numbers.
 ///
@@ -9,15 +10,17 @@ use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
 pub struct Square<T> {
     val: T,
 }
-impl<T: Clone + CheckedAdd + CheckedMul + One + Zero> Square<T> {
+impl Square<Number> {
     pub fn new() -> Self {
-        Self { val: T::zero() }
+        Self { val: 0 }
     }
 }
 
 impl Square<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            val: BigInt::zero(),
+        }
     }
 
     pub fn nth<T>(n: T) -> BigInt
@@ -29,13 +32,22 @@ impl Square<BigInt> {
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Square<T> {
-    type Item = T;
+impl Iterator for Square<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.val.checked_mul(&self.val)?;
-        self.val = self.val.checked_add(&T::one())?;
+        let out = self.val.checked_mul(self.val)?;
+        self.val.incr()?;
+        Some(out)
+    }
+}
 
+impl Iterator for Square<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = &self.val * &self.val;
+        self.val.inc();
         Some(out)
     }
 }
