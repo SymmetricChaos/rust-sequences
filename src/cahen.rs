@@ -1,16 +1,14 @@
-use crate::sylvester::Sylvester;
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
+use crate::{Number, sylvester::Sylvester};
+use num::{BigInt, CheckedAdd, One, Zero, rational::Ratio};
 
-/// Rational convergents of Cahen's constant. Partial sums of the reciprocals of the even terms of Sylvester's sequence.
-///
-/// The constant is a trancendental number equal to approximately 0.643410546288...
+/// Rational convergents of Cahen's constant. Partial sums of the reciprocals of the even terms of Sylvester's sequence. The constant is a trancendental number equal to approximately 0.643410546288...
 pub struct Cahen<T> {
     sylvester: Sylvester<T>,
     sum: Ratio<T>,
     overflowed: bool,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul + CheckedSub> Cahen<T> {
+impl Cahen<Number> {
     pub fn new() -> Self {
         Self {
             sylvester: Sylvester::new(),
@@ -22,12 +20,16 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul + CheckedSub> Cahen<T> {
 
 impl Cahen<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            sylvester: Sylvester::new_big(),
+            sum: Ratio::zero(),
+            overflowed: false,
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul + CheckedSub> Iterator for Cahen<T> {
-    type Item = Ratio<T>;
+impl Iterator for Cahen<Number> {
+    type Item = Ratio<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
@@ -35,7 +37,33 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul + CheckedSub> Iterator for Cah
         }
         let out = self.sum.clone();
         match self.sylvester.next() {
-            Some(n) => match self.sum.checked_add(&Ratio::new(T::one(), n)) {
+            Some(n) => match self.sum.checked_add(&Ratio::new(1, n)) {
+                Some(s) => self.sum = s,
+                None => {
+                    self.overflowed = true;
+                    return Some(out);
+                }
+            },
+            None => {
+                self.overflowed = true;
+                return Some(out);
+            }
+        }
+        self.sylvester.next();
+        Some(out)
+    }
+}
+
+impl Iterator for Cahen<BigInt> {
+    type Item = Ratio<BigInt>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.overflowed {
+            return None;
+        }
+        let out = self.sum.clone();
+        match self.sylvester.next() {
+            Some(n) => match self.sum.checked_add(&Ratio::new(BigInt::one(), n)) {
                 Some(s) => self.sum = s,
                 None => {
                     self.overflowed = true;

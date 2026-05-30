@@ -1,5 +1,5 @@
+use crate::Number;
 use num::BigInt;
-use std::ops::Sub;
 
 /// A Ducci sequence.
 /// Each term a tuple containing the absolute difference of each adjacent pair of the previous tuple (with the last adjacent to the first).
@@ -9,8 +9,8 @@ pub struct Ducci<T> {
     tup: Vec<T>,
 }
 
-impl<T: Clone + Ord + Sub<Output = T>> Ducci<T> {
-    pub fn new(tup: Vec<T>) -> Self {
+impl Ducci<Number> {
+    pub fn new(tup: Vec<Number>) -> Self {
         Self { tup }
     }
 }
@@ -20,13 +20,31 @@ impl Ducci<BigInt> {
     where
         BigInt: From<G>,
     {
-        let v = tup.into_iter().map(|g| BigInt::from(g)).collect();
-        Self::new(v)
+        let tup = tup.into_iter().map(|g| BigInt::from(g)).collect();
+        Self { tup }
     }
 }
 
-impl<T: Clone + Ord + Sub<Output = T>> Iterator for Ducci<T> {
-    type Item = Vec<T>;
+impl Iterator for Ducci<BigInt> {
+    type Item = Vec<BigInt>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.tup.clone();
+        for i in 0..self.tup.len() {
+            let a = out[i].clone();
+            let b = out[(i + 1) % self.tup.len()].clone();
+            if a >= b {
+                self.tup[i] = a - b;
+            } else {
+                self.tup[i] = b - a;
+            }
+        }
+        Some(out)
+    }
+}
+
+impl Iterator for Ducci<Number> {
+    type Item = Vec<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.tup.clone();

@@ -1,5 +1,5 @@
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, FromPrimitive, Integer, Zero};
 
 // Doesn't check for sign so only use internally
 fn digital_sum<N: Integer>(mut n: N, base: &N) -> N {
@@ -33,32 +33,46 @@ fn additive_persistence<N: Integer>(mut n: N, base: &N) -> N {
 }
 
 /// The sums of the digits of each natural number in a given base.
-pub struct DigitalSums<N> {
-    ctr: N,
-    base: N,
+pub struct DigitalSums<T> {
+    ctr: T,
+    base: T,
 }
 
-impl<N: CheckedAdd + Clone + Integer> DigitalSums<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl DigitalSums<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
 
 impl DigitalSums<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalSums<N> {
-    type Item = N;
+impl Iterator for DigitalSums<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = digital_sum(self.ctr, &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for DigitalSums<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_sum(self.ctr.clone(), &self.base);
@@ -73,27 +87,41 @@ pub struct DigitalRoots<N> {
     base: N,
 }
 
-impl<N: CheckedAdd + Clone + Integer> DigitalRoots<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl DigitalRoots<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
 
 impl DigitalRoots<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalRoots<N> {
-    type Item = N;
+impl Iterator for DigitalRoots<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = digital_root(self.ctr, &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for DigitalRoots<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_root(self.ctr.clone(), &self.base);
@@ -108,27 +136,41 @@ pub struct AdditivePersistence<N> {
     base: N,
 }
 
-impl<N: CheckedAdd + Clone + Integer> AdditivePersistence<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl AdditivePersistence<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
 
 impl AdditivePersistence<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for AdditivePersistence<N> {
-    type Item = N;
+impl Iterator for AdditivePersistence<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = additive_persistence(self.ctr, &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for AdditivePersistence<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = additive_persistence(self.ctr.clone(), &self.base);

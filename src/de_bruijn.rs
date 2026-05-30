@@ -1,5 +1,5 @@
-use crate::utils::factorial::factorial;
-use num::{BigInt, CheckedMul, Integer};
+use crate::{Number, utils::factorial::factorial};
+use num::{BigInt, One, Signed, Zero};
 
 /// The number of de Bruijn sequences for an alphabet with k symbols for each substring length n, starting at zero.
 pub struct DeBruijn<T> {
@@ -10,15 +10,16 @@ pub struct DeBruijn<T> {
     overflowed: bool,
 }
 
-impl<T: CheckedMul + Clone + Integer> DeBruijn<T> {
-    /// All fixed width integers will overflow quickly due to a doubly exponential term.
-    pub fn new(k: T) -> Self {
+impl DeBruijn<Number> {
+    /// k must be greater than or equal to one.
+    pub fn new(k: Number) -> Self {
+        assert!(k.is_positive());
         let f = factorial(k.clone());
         Self {
             k,
             f,
-            dividend: T::one(),
-            divisior: T::one(),
+            dividend: 1,
+            divisior: 1,
             overflowed: false,
         }
     }
@@ -29,34 +30,68 @@ impl DeBruijn<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(k))
+        let k = BigInt::from(k);
+        assert!(k.is_positive());
+        let f = factorial(k.clone());
+        Self {
+            k,
+            f,
+            dividend: BigInt::one(),
+            divisior: BigInt::one(),
+            overflowed: false,
+        }
     }
 }
 
-impl<T: CheckedMul + Clone + Integer> Iterator for DeBruijn<T> {
-    type Item = T;
+impl Iterator for DeBruijn<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
             return None;
         }
-        let out = self.dividend.clone() / self.divisior.clone();
+        let out = self.dividend / self.divisior;
 
-        // Advance dividend
-        let mut ex = self.divisior.clone();
+        // Advance the dividend
+        let mut ex = self.divisior;
         while !ex.is_zero() {
-            self.dividend = match self.dividend.checked_mul(&self.f) {
+            self.dividend = match self.dividend.checked_mul(self.f) {
                 Some(n) => n,
                 None => {
                     self.overflowed = true;
                     return Some(out);
                 }
             };
-            ex = ex - T::one();
+            ex = ex - 1;
         }
 
         // Advance the divisor
-        self.divisior = self.divisior.checked_mul(&self.k)?;
+        self.divisior = match self.divisior.checked_mul(self.k) {
+            Some(n) => n,
+            None => {
+                self.overflowed = true;
+                return Some(out);
+            }
+        };
+        Some(out)
+    }
+}
+
+impl Iterator for DeBruijn<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = &self.dividend / &self.divisior;
+
+        // Advance the dividend
+        let mut ex = self.divisior.clone();
+        while !ex.is_zero() {
+            self.dividend *= &self.f;
+            ex = ex - 1;
+        }
+
+        // Advance the divisor
+        self.divisior *= &self.k;
         Some(out)
     }
 }
@@ -113,6 +148,6 @@ impl Iterator for DeBruijnWord {
 
 crate::check_sequences!(
     DeBruijn::new_big(2), ["1", "1", "2", "16", "2048", "67108864", "144115188075855872", "1329227995784915872903807060280344576"];
-    DeBruijn::<u32>::new(2), [1, 1, 2, 16, 2048, 67108864]; // check that we return the largest term we can
+    DeBruijn::new(2), [1_i64, 1, 2, 16, 2048, 67108864, 144115188075855872]; // check that we return the largest term we can
     DeBruijnWord::new("abcd", 2), ["a", "a", "b", "a", "c", "a", "d", "b", "b", "c", "b", "d", "c", "c", "d", "d"];
 );

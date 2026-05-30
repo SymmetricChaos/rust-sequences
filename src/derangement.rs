@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, One, Zero};
 
 /// The number of derangements for a set of n elements (starting from 0).
 ///
@@ -12,12 +13,12 @@ pub struct Derangements<T> {
     overflowed: bool,
 }
 
-impl<T: One + Zero> Derangements<T> {
+impl Derangements<Number> {
     pub fn new() -> Self {
         Self {
-            a: T::one(),
-            b: T::zero(),
-            ctr: T::one(),
+            a: 1,
+            b: 0,
+            ctr: 1,
             overflowed: false,
         }
     }
@@ -25,35 +26,55 @@ impl<T: One + Zero> Derangements<T> {
 
 impl Derangements<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::one(),
+            b: BigInt::zero(),
+            ctr: BigInt::one(),
+            overflowed: false,
+        }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + One> Iterator for Derangements<T> {
-    type Item = T;
+impl Iterator for Derangements<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
             return None;
         }
 
-        let out = self.a.clone();
+        let out = self.a;
 
-        let next = match self.ctr.checked_mul(&self.a.checked_add(&self.b)?) {
+        let next = match self.ctr.checked_mul(self.a.checked_add(self.b)?) {
             Some(n) => n,
             None => {
                 self.overflowed = true;
                 return Some(out);
             }
         };
+        self.a = self.b;
+        self.b = next;
+        self.ctr.incr()?;
+
+        Some(out)
+    }
+}
+
+impl Iterator for Derangements<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a.clone();
+
+        let next = &self.ctr * (&self.a + &self.b);
         self.a = self.b.clone();
         self.b = next;
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.incr()?;
 
         Some(out)
     }
 }
 
 crate::check_sequences!(
-    Derangements::<u64>::new(), [1_u64, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570, 176214841, 2290792932, 32071101049, 481066515734, 7697064251745, 130850092279664, 2355301661033953, 44750731559645106];
+    Derangements::new(), [1_i64, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570, 176214841, 2290792932, 32071101049, 481066515734, 7697064251745, 130850092279664, 2355301661033953, 44750731559645106];
 );

@@ -1,5 +1,5 @@
-use crate::{core::traits::Increment, utils::exp_by_squaring::checked_pow_mod};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use crate::{Number, core::traits::Increment, utils::exp_by_squaring::checked_pow_mod};
+use num::{BigInt, FromPrimitive, Zero};
 
 /// The Curzon numbers. Those for which k^n+1 is a multiple of k*n+1 for positive integers n. Only even values of k have solutions.
 ///
@@ -12,12 +12,11 @@ pub struct Curzon<T> {
     ctr: T,
 }
 
-impl<T: CheckedMul + Clone + Integer> Curzon<T> {
-    pub fn new(base: T) -> Self {
-        Self {
-            base,
-            ctr: T::zero(),
-        }
+impl Curzon<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { base, ctr: 0 }
     }
 }
 
@@ -26,19 +25,39 @@ impl Curzon<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for Curzon<T> {
-    type Item = T;
+impl Iterator for Curzon<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.ctr.incr()?;
-            let modulus = self.ctr.checked_mul(&self.base)?.checked_add(&T::one())?;
+            let modulus = self.ctr.checked_mul(self.base)?.checked_add(1)?;
             let p = checked_pow_mod(self.base.clone(), self.ctr.clone(), modulus.clone())?;
-            if p == modulus - T::one() {
+            if p == modulus - 1 {
+                return Some(self.ctr.clone());
+            }
+        }
+    }
+}
+
+impl Iterator for Curzon<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            self.ctr.incr()?;
+            let modulus: BigInt = (&self.ctr * &self.base) + 1;
+            let p = checked_pow_mod(self.base.clone(), self.ctr.clone(), modulus.clone())?;
+            if p == modulus - 1 {
                 return Some(self.ctr.clone());
             }
         }

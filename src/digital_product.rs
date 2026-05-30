@@ -1,5 +1,5 @@
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, FromPrimitive, Integer, Zero};
 
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {
@@ -45,32 +45,46 @@ fn multiplicative_persistence<N: Integer>(mut n: N, base: &N) -> N {
 /// For base = 10
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4...
 /// ```
-pub struct DigitalProds<N> {
-    ctr: N,
-    base: N,
+pub struct DigitalProds<T> {
+    ctr: T,
+    base: T,
 }
 
-impl<N: CheckedAdd + Clone + Integer> DigitalProds<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl DigitalProds<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
 
 impl DigitalProds<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalProds<N> {
-    type Item = N;
+impl Iterator for DigitalProds<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = digital_prod(self.ctr.clone(), &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for DigitalProds<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_prod(self.ctr.clone(), &self.base);
@@ -80,31 +94,46 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for DigitalProds<N> {
 }
 
 /// The multiplicative digital root of each natural number to a given base. The fixed point when repeatedly applying the digital product.
-pub struct MultiplicativeDigitalRoots<N> {
-    ctr: N,
-    base: N,
+pub struct MultiplicativeDigitalRoots<T> {
+    ctr: T,
+    base: T,
 }
 
-impl<N: CheckedAdd + Clone + Integer> MultiplicativeDigitalRoots<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl MultiplicativeDigitalRoots<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
+
 impl MultiplicativeDigitalRoots<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativeDigitalRoots<N> {
-    type Item = N;
+impl Iterator for MultiplicativeDigitalRoots<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = multiplicative_digital_root(self.ctr, &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for MultiplicativeDigitalRoots<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_digital_root(self.ctr.clone(), &self.base);
@@ -114,32 +143,46 @@ impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativeDigitalRoots<N>
 }
 
 /// The multiplicative persistence of each natural number to a given base. The number of times the digital product function must be applied before it reaches a fixed point.
-pub struct MultiplicativePersistence<N> {
-    ctr: N,
-    base: N,
+pub struct MultiplicativePersistence<T> {
+    ctr: T,
+    base: T,
 }
 
-impl<N: CheckedAdd + Clone + Integer> MultiplicativePersistence<N> {
-    pub fn new(base: N) -> Self {
-        assert!(base >= N::one() + N::one());
-        Self {
-            ctr: N::zero(),
-            base: base,
-        }
+impl MultiplicativePersistence<Number> {
+    /// Base must be greater than or equal to 2.
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
+        Self { ctr: 0, base }
     }
 }
 
 impl MultiplicativePersistence<BigInt> {
+    /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        let base = BigInt::from(base);
+        assert!(base >= BigInt::from_i32(2).unwrap());
+        Self {
+            base,
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<N: CheckedAdd + Clone + Integer> Iterator for MultiplicativePersistence<N> {
-    type Item = N;
+impl Iterator for MultiplicativePersistence<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = multiplicative_persistence(self.ctr, &self.base);
+        self.ctr.incr()?;
+        Some(out)
+    }
+}
+
+impl Iterator for MultiplicativePersistence<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_persistence(self.ctr.clone(), &self.base);
