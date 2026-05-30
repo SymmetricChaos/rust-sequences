@@ -1,4 +1,4 @@
-use crate::{core::Composites, utils::divisibility::sum_of_divisors};
+use crate::{Number, core::Composites, utils::divisibility::sum_of_divisors};
 use num::integer::gcd;
 
 /// Duffian numbers. Composite numbers that are coprime to the sum of their divisors.
@@ -7,11 +7,10 @@ use num::integer::gcd;
 /// 4, 8, 9, 16, 21, 25, 27, 32, 35, 36...
 /// ```
 pub struct Duffian {
-    c: Composites<u64>,
+    c: Composites<Number>,
 }
 
 impl Duffian {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             c: Composites::new(),
@@ -20,7 +19,7 @@ impl Duffian {
 }
 
 impl Iterator for Duffian {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -40,11 +39,10 @@ impl Iterator for Duffian {
 /// ```
 pub struct DuffianTwins {
     duff: Duffian,
-    prev: u64,
+    prev: Number,
 }
 
 impl DuffianTwins {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             duff: Duffian::new(),
@@ -54,7 +52,7 @@ impl DuffianTwins {
 }
 
 impl Iterator for DuffianTwins {
-    type Item = (u64, u64);
+    type Item = (Number, Number);
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

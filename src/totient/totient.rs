@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::totient::{cototient, totient},
 };
@@ -9,18 +10,17 @@ use crate::{
 /// 1, 1, 2, 2, 4, 2, 6, 4, 6, 4...
 /// ```
 pub struct Totients {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Totients {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for Totients {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -34,18 +34,17 @@ impl Iterator for Totients {
 /// 0, 1, 1, 2, 1, 4, 1, 4, 3, 6...
 /// ```
 pub struct Cototients {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Cototients {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for Cototients {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

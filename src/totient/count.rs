@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::{divisibility::divisors, miller_rabin::is_prime, totient::totient},
 };
@@ -10,11 +11,10 @@ use num::{Integer, rational::Ratio};
 /// 2, 3, 0, 4, 0, 4, 0, 5, 0, 2, 0, 6, 0...
 /// ```
 pub struct TotientCount {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl TotientCount {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
@@ -31,12 +31,12 @@ impl Iterator for TotientCount {
             return Some(0);
         } else {
             let m = self.ctr;
-            let nmax: Ratio<u64> = divisors(m)
+            let nmax: Ratio<Number> = divisors(m)
                 .iter()
                 .map(|n| *n + 1)
                 .filter(|n| is_prime(*n))
                 .map(|n| Ratio::new(n, n - 1))
-                .product::<Ratio<u64>>()
+                .product::<Ratio<Number>>()
                 * m;
             let mut n = m;
             let mut k = 0;

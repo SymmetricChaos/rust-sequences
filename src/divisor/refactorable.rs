@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
+use crate::{Number, core::traits::Increment, utils::divisibility::number_of_divisors};
 
 /// The refactorable or tau numbers. Positive integers which are divisible by the number of divisors they have.
 ///
@@ -6,23 +6,22 @@ use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
 /// 1, 2, 8, 9, 12, 18, 24, 36, 40, 56, 60...
 /// ```
 pub struct Refactorable {
-    n: u64,
+    n: Number,
 }
 
 impl Refactorable {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { n: 0 }
     }
 }
 
 impl Iterator for Refactorable {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.n.incr()?;
-            if self.n % number_of_divisors(self.n) == 0 {
+            if self.n % number_of_divisors(self.n) as Number == 0 {
                 return Some(self.n);
             }
         }

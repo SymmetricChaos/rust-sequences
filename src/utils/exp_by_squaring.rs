@@ -1,17 +1,18 @@
+use crate::Number;
 use num::{CheckedMul, Integer};
 
 /// Modular exponentiation by squaring
-pub fn pow_mod(n: u64, x: u64, p: u64) -> u64 {
-    let mut n = u128::from(n);
-    let mut x = u128::from(x);
-    let p = u128::from(p);
+pub fn pow_mod(n: Number, x: Number, p: Number) -> Number {
+    let mut n = i128::from(n);
+    let mut x = i128::from(x);
+    let p = i128::from(p);
     let mut ans = 1;
     if x <= 0 {
         return 1;
     }
     loop {
         if x == 1 {
-            return ((ans * n) % p) as u64;
+            return ((ans * n) % p) as Number;
         }
         if x & 1 == 0 {
             n = (n * n) % p;

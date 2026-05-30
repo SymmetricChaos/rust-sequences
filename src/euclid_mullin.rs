@@ -1,6 +1,6 @@
 use num::CheckedMul;
 
-use crate::utils::divisibility::prime_factorization;
+use crate::{Number, utils::divisibility::prime_factorization};
 
 /// The Euclid-Mullin sequence defined using the smallest prime factors of the products.
 ///
@@ -8,7 +8,7 @@ use crate::utils::divisibility::prime_factorization;
 /// 2, 3, 7, 43, 13, 53, 5, 6221671...
 /// ```
 pub struct EuclidMullinSmallest {
-    terms: Vec<u64>,
+    terms: Vec<Number>,
     overflowed: bool,
 }
 
@@ -22,7 +22,7 @@ impl EuclidMullinSmallest {
 }
 
 impl Iterator for EuclidMullinSmallest {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
@@ -51,7 +51,7 @@ impl Iterator for EuclidMullinSmallest {
 ///
 /// 2, 3, 7, 43, 13, 53, 5, 6221671...
 pub struct EuclidMullinLargest {
-    terms: Vec<u64>,
+    terms: Vec<Number>,
     overflowed: bool,
 }
 
@@ -65,7 +65,7 @@ impl EuclidMullinLargest {
 }
 
 impl Iterator for EuclidMullinLargest {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {

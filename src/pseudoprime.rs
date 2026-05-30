@@ -1,20 +1,23 @@
-use crate::utils::{exp_by_squaring::pow_mod, miller_rabin::is_prime};
+use crate::{
+    Number,
+    utils::{exp_by_squaring::pow_mod, miller_rabin::is_prime},
+};
 
 /// The Fermat pseudoprimes to a given base. For a base, b, the non-prime positive integers, n, for which the following holds (b^(n-1)) % n = 1
 pub struct FermatPseudoprimes {
-    ctr: u64,
-    base: u64,
+    ctr: Number,
+    base: Number,
 }
 
 impl FermatPseudoprimes {
-    /// Omly u64 output is supported.
-    pub fn new(base: u64) -> Self {
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
         Self { ctr: 2, base }
     }
 }
 
 impl Iterator for FermatPseudoprimes {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -41,19 +44,19 @@ impl Iterator for FermatPseudoprimes {
 
 /// The Euler pseudoprimes to a given base. For a base, b, the odd non-prime positive integers, n, for which the following holds (b^((n-1)/2)) % n = (1 or n-1)
 pub struct EulerPseudoprimes {
-    ctr: u64,
-    base: u64,
+    ctr: Number,
+    base: Number,
 }
 
 impl EulerPseudoprimes {
-    /// Omly u64 output is supported.
-    pub fn new(base: u64) -> Self {
+    pub fn new(base: Number) -> Self {
+        assert!(base >= 2);
         Self { ctr: 3, base }
     }
 }
 
 impl Iterator for EulerPseudoprimes {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
+use crate::{Number, core::traits::Increment, utils::divisibility::number_of_divisors};
 
 /// Number of divisors for each positive integer. Also known as sigma_0(n).
 ///
@@ -6,18 +6,17 @@ use crate::{core::traits::Increment, utils::divisibility::number_of_divisors};
 /// 1, 2, 2, 3, 2, 4, 2, 4, 3, 4...
 /// ```
 pub struct NumberOfDivisors {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl NumberOfDivisors {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for NumberOfDivisors {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -31,19 +30,18 @@ impl Iterator for NumberOfDivisors {
 /// 0, 1, 3, 5, 8, 10, 14, 16, 20, 23...
 /// ```
 pub struct DivisorSummatory {
-    n: u64,
-    s: u64,
+    n: Number,
+    s: Number,
 }
 
 impl DivisorSummatory {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { n: 0, s: 0 }
     }
 }
 
 impl Iterator for DivisorSummatory {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.s;

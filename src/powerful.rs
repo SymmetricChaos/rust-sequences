@@ -1,4 +1,4 @@
-use crate::utils::divisibility::prime_factorization;
+use crate::{Number, utils::divisibility::prime_factorization};
 use num::integer::gcd;
 
 /// Positive natural numbers that are divisible by the squares of all their prime divisors.
@@ -7,7 +7,7 @@ use num::integer::gcd;
 /// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...
 /// ```
 pub struct Powerful {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Powerful {
@@ -17,7 +17,7 @@ impl Powerful {
 }
 
 impl Iterator for Powerful {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -37,7 +37,7 @@ impl Iterator for Powerful {
 /// 72, 108, 200, 288, 392, 432, 500, 648, 675, 800...
 /// ```
 pub struct Achilles {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Achilles {
@@ -47,7 +47,7 @@ impl Achilles {
 }
 
 impl Iterator for Achilles {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

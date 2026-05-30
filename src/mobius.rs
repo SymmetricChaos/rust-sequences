@@ -1,52 +1,38 @@
-use crate::core::traits::Increment;
 use crate::utils::divisibility::prime_factorization;
-use num::{BigInt, CheckedAdd, Integer, One, Signed, Zero};
-use std::marker::PhantomData;
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, Integer, Zero};
 
 /// The Möbius function over the positive integers.
 /// ```text
 /// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
 /// ```
 pub struct Mobius<T> {
-    n: u64,
-    _phantom: PhantomData<T>,
+    n: T,
 }
 
-impl<T: One + Zero + Signed> Mobius<T> {
+impl Mobius<Number> {
     pub fn new() -> Self {
-        Self {
-            n: 0,
-            _phantom: PhantomData,
-        }
+        Self { n: 0 }
     }
 }
 
-impl Mobius<BigInt> {
-    pub fn new_big() -> Self {
-        Self {
-            n: 0,
-            _phantom: PhantomData,
-        }
-    }
-}
-
-impl<T: One + Zero + Signed> Iterator for Mobius<T> {
-    type Item = T;
+impl Iterator for Mobius<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.n.incr()?;
 
         if self.n == 1 {
-            return Some(T::one());
+            return Some(1);
         } else {
             let pf = prime_factorization(self.n);
             if pf.iter().map(|x| x.1).any(|m| m > 1) {
-                return Some(T::zero());
+                return Some(0);
             } else {
                 if pf.len().is_even() {
-                    return Some(T::one());
+                    return Some(1);
                 } else {
-                    return Some(-T::one());
+                    return Some(-1);
                 }
             }
         }
@@ -57,16 +43,13 @@ impl<T: One + Zero + Signed> Iterator for Mobius<T> {
 ///
 /// 1, 0, -1, -1, -2, -1, -2, -2, -2, -1
 pub struct Mertens<T> {
-    n: u64,
+    n: Number,
     sum: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Signed + Zero> Mertens<T> {
+impl Mertens<Number> {
     pub fn new() -> Self {
-        Self {
-            n: 0,
-            sum: T::zero(),
-        }
+        Self { n: 0, sum: 0 }
     }
 }
 
@@ -79,23 +62,23 @@ impl Mertens<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + One + Signed + Zero> Iterator for Mertens<T> {
-    type Item = T;
+impl Iterator for Mertens<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.n.incr()?;
 
         if self.n == 1 {
-            self.sum = self.sum.checked_add(&T::one())?;
+            self.sum = self.sum.checked_add(1)?;
         } else {
             let pf = prime_factorization(self.n);
             if pf.iter().map(|x| x.1).any(|m| m > 1) {
                 // add zero
             } else {
                 if pf.len().is_even() {
-                    self.sum = self.sum.checked_add(&T::one())?;
+                    self.sum = self.sum.checked_add(1)?;
                 } else {
-                    self.sum = self.sum.checked_add(&-T::one())?;
+                    self.sum = self.sum.checked_add(-1)?;
                 }
             }
         }
@@ -105,6 +88,6 @@ impl<T: CheckedAdd + Clone + One + Signed + Zero> Iterator for Mertens<T> {
 }
 
 crate::check_sequences!(
-    Mobius::<i32>::new(), [1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0, -1, 1, 1, 0, -1, 0, -1, 0];
-    Mertens::<i32>::new(), [1, 0, -1, -1, -2, -1, -2, -2, -2, -1, -2, -2, -3, -2, -1, -1, -2, -2, -3, -3];
+    Mobius::new(), [1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0, -1, 1, 1, 0, -1, 0, -1, 0];
+    Mertens::new(), [1, 0, -1, -1, -2, -1, -2, -2, -2, -1, -2, -2, -3, -2, -1, -1, -2, -2, -3, -3];
 );

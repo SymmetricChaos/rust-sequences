@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::divisibility::{prime_factorization, prime_signature},
 };
@@ -9,18 +10,17 @@ use num::One;
 ///
 /// [], [(2, 1)], [(3, 1)], [(2, 2)], [(5, 1)], [(2, 1), (3, 1)], [(7, 1)], [(2, 3)], [(3, 2)], [(2, 1), (5, 1)]
 pub struct PrimeFactorizations {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl PrimeFactorizations {
-    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for PrimeFactorizations {
-    type Item = Vec<(u64, u64)>;
+    type Item = Vec<(Number, Number)>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -33,18 +33,17 @@ impl Iterator for PrimeFactorizations {
 ///
 /// 1, 2, 3, 2, 5, 3, 7, 2, 3, 5, 11, 3, 13, 7
 pub struct GreatestPrimeFactor {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl GreatestPrimeFactor {
-    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for GreatestPrimeFactor {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -61,18 +60,17 @@ impl Iterator for GreatestPrimeFactor {
 ///
 /// 1, 2, 3, 2, 5, 2, 7, 2, 3, 2, 11, 2, 13, 2
 pub struct LeastPrimeFactor {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl LeastPrimeFactor {
-    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for LeastPrimeFactor {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -90,22 +88,20 @@ impl Iterator for LeastPrimeFactor {
 ///
 /// [], [1], [1], [2], [1], [1, 1], [1], [3], [2], [1, 1]...
 pub struct PrimeSignatures {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl PrimeSignatures {
-    /// Only u64 output is supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for PrimeSignatures {
-    type Item = Vec<u64>;
+    type Item = Vec<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
-
+        self.ctr.incr()?;
         Some(prime_signature(self.ctr))
     }
 }

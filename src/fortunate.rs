@@ -1,4 +1,4 @@
-use crate::{core::primes::Primorial, utils::miller_rabin::is_prime};
+use crate::{Number, core::primes::Primorial, utils::miller_rabin::is_prime};
 
 /// The fortunate numbers. For each natural number, n, smallest natural number, k, such that primorial(n)+k is prime. All known values are prime.
 ///
@@ -6,11 +6,10 @@ use crate::{core::primes::Primorial, utils::miller_rabin::is_prime};
 /// 3, 5, 7, 13, 23, 17, 19, 23, 37, 61, 67, 61, 71, 47...
 /// ```
 pub struct Fortunate {
-    primorials: Primorial<u64>,
+    primorials: Primorial<Number>,
 }
 
 impl Fortunate {
-    /// Only u64 output is supported. This limits output to 14 terms due to overflow.
     pub fn new() -> Self {
         let mut primorials = Primorial::new();
         primorials.next();
@@ -19,7 +18,7 @@ impl Fortunate {
 }
 
 impl Iterator for Fortunate {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let p = self.primorials.next()?;

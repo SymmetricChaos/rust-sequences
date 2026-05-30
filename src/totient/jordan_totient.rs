@@ -1,4 +1,4 @@
-use crate::utils::totient::jordan_totient;
+use crate::{Number, core::traits::Increment, utils::totient::jordan_totient};
 
 /// The Jordan totient of each positive integer.
 /// ```text
@@ -9,22 +9,21 @@ use crate::utils::totient::jordan_totient;
 /// 1, 7, 26, 56, 124, 182, 342, 448...
 /// ```
 pub struct JordanTotients {
-    ctr: u64,
+    ctr: Number,
     k: u32,
 }
 
 impl JordanTotients {
-    /// Only u64 output is supported.
     pub fn new(k: u32) -> Self {
         Self { ctr: 0, k }
     }
 }
 
 impl Iterator for JordanTotients {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr = self.ctr.checked_add(1)?;
+        self.ctr.incr()?;
         Some(jordan_totient(self.ctr, self.k))
     }
 }

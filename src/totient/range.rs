@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::{divisibility::divisors, miller_rabin::is_prime, totient::totient},
 };
@@ -10,18 +11,17 @@ use num::{Integer, rational::Ratio};
 /// 1, 2, 4, 6, 8, 10, 12, 16, 18...
 /// ```
 pub struct TotientRange {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl TotientRange {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for TotientRange {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -33,12 +33,12 @@ impl Iterator for TotientRange {
                 // skip it
             } else {
                 let m = self.ctr;
-                let nmax: Ratio<u64> = divisors(m)
+                let nmax: Ratio<Number> = divisors(m)
                     .iter()
                     .map(|n| *n + 1)
                     .filter(|n| is_prime(*n))
                     .map(|n| Ratio::new(n, n - 1))
-                    .product::<Ratio<u64>>()
+                    .product::<Ratio<Number>>()
                     * m;
                 let mut n = m;
                 let mut k = 0;

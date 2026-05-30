@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::prime_power_factorization};
+use crate::{Number, core::traits::Increment, utils::divisibility::prime_power_factorization};
 use num::{One, integer::lcm};
 use std::collections::HashMap;
 
@@ -8,12 +8,11 @@ use std::collections::HashMap;
 /// 1, 3, 8, 6, 20, 24, 16, 12, 24...
 /// ```
 pub struct PisanoPeriods {
-    ctr: u64,
-    prime_power_map: HashMap<u64, u64>,
+    ctr: Number,
+    prime_power_map: HashMap<Number, Number>,
 }
 
 impl PisanoPeriods {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -23,7 +22,7 @@ impl PisanoPeriods {
 }
 
 impl Iterator for PisanoPeriods {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

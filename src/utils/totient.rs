@@ -1,8 +1,8 @@
-use crate::utils::divisibility::prime_factorization;
+use crate::{Number, utils::divisibility::prime_factorization};
 
 /// Euler's totient function. Number of positive integers coprime to n and less than n.
 /// Defined as 0 for n == 0.
-pub fn totient(n: u64) -> u64 {
+pub fn totient(n: Number) -> Number {
     if n == 0 {
         return 0;
     }
@@ -13,13 +13,13 @@ pub fn totient(n: u64) -> u64 {
 
 /// Euler's cototient function. Number of positive integers not coprime to n and less than n.
 /// Defined as 0 for n == 0.
-pub fn cototient(n: u64) -> u64 {
+pub fn cototient(n: Number) -> Number {
     n - totient(n)
 }
 
 /// Jordan's totient function. The number of k-tuples of positive integers that can be made such that the k-tuple is setwise coprime.
 /// Defined as 0 for n == 0.
-pub fn jordan_totient(n: u64, k: u32) -> u64 {
+pub fn jordan_totient(n: Number, k: u32) -> Number {
     if n == 0 {
         return 0;
     }

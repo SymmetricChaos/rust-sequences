@@ -1,9 +1,9 @@
 use num::PrimInt;
 use num_format::ToFormattedString;
 use rust_sequences::utils::divisibility::prime_factorization;
-use std::{io::Write, time::Duration, u64};
+use std::{io::Write, time::Duration};
 
-fn _prime_factorization_timings(start: u64, end: u64, heartbeat: u64) {
+fn _prime_factorization_timings(start: i64, end: i64, heartbeat: u64) {
     let start_time = std::time::Instant::now();
     let mut record = (std::time::Duration::ZERO, 0, vec![]);
     let mut factoring_time = std::time::Duration::ZERO;

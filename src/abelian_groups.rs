@@ -1,4 +1,4 @@
-use crate::{partition::Partition, utils::divisibility::prime_factorization};
+use crate::{Number, partition::Partition, utils::divisibility::prime_factorization};
 use itertools::Itertools;
 use num::CheckedMul;
 
@@ -8,7 +8,7 @@ use num::CheckedMul;
 /// 1, 1, 1, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1...
 /// ```
 pub struct AbelianGroups {
-    ctr: u64,
+    ctr: Number,
     partition_number: Vec<u64>,
     partition_number_generator: Partition<u64>,
 }

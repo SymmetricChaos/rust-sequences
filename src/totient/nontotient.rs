@@ -1,9 +1,9 @@
-use num::{Integer, rational::Ratio};
-
 use crate::{
+    Number,
     core::traits::Increment,
     utils::{divisibility::divisors, miller_rabin::is_prime, totient::totient},
 };
+use num::{Integer, rational::Ratio};
 
 /// The nontotient numbers. Posititve integers that do not appear in the range of Euler's totient function. Includes all odd naturals except 1. Also see EvenNontotient.
 ///
@@ -11,18 +11,17 @@ use crate::{
 /// 3, 5, 7, 9, 11, 13, 14, 15, 17, 19, 21...
 /// ```
 pub struct Nontotient {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Nontotient {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for Nontotient {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -31,12 +30,12 @@ impl Iterator for Nontotient {
                 return Some(self.ctr);
             } else {
                 let m = self.ctr;
-                let nmax: Ratio<u64> = divisors(m)
+                let nmax: Ratio<Number> = divisors(m)
                     .iter()
                     .map(|n| *n + 1)
                     .filter(|n| is_prime(*n))
                     .map(|n| Ratio::new(n, n - 1))
-                    .product::<Ratio<u64>>()
+                    .product::<Ratio<Number>>()
                     * m;
                 let mut n = m;
                 let mut k = 0;
@@ -60,30 +59,29 @@ impl Iterator for Nontotient {
 /// 14, 26, 34, 38, 50, 62, 68, 74, 76, 86...
 /// ```
 pub struct EvenNontotient {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl EvenNontotient {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for EvenNontotient {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.ctr = self.ctr.checked_add(2)?;
 
             let m = self.ctr;
-            let nmax: Ratio<u64> = divisors(m)
+            let nmax: Ratio<Number> = divisors(m)
                 .iter()
                 .map(|n| *n + 1)
                 .filter(|n| is_prime(*n))
                 .map(|n| Ratio::new(n, n - 1))
-                .product::<Ratio<u64>>()
+                .product::<Ratio<Number>>()
                 * m;
             let mut n = m;
             let mut k = 0;

@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::sum_of_divisors};
+use crate::{Number, core::traits::Increment, utils::divisibility::sum_of_divisors};
 
 /// Sum of divisors of each positive integer. Also known as sigma_1(n).
 ///
@@ -6,18 +6,17 @@ use crate::{core::traits::Increment, utils::divisibility::sum_of_divisors};
 /// 1, 3, 4, 7, 6, 12, 8, 15, 13, 18...
 /// ```
 pub struct SumOfDivisors {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl SumOfDivisors {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for SumOfDivisors {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

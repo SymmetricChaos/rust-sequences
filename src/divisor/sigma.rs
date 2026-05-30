@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::sigma};
+use crate::{Number, core::traits::Increment, utils::divisibility::sigma};
 
 /// Sum of powers of divisors of n. Also known as sigma_z(n).
 ///
@@ -10,19 +10,18 @@ use crate::{core::traits::Increment, utils::divisibility::sigma};
 /// 1, 9, 28, 73, 126, 252, 344, 585, 757...
 /// ```
 pub struct Sigma {
-    ctr: u64,
+    ctr: Number,
     z: u32,
 }
 
 impl Sigma {
-    /// Only u64 output is supported.
     pub fn new(z: u32) -> Self {
         Self { ctr: 0, z }
     }
 }
 
 impl Iterator for Sigma {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

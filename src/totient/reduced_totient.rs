@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::{divisibility::prime_power_factorization, totient::totient},
 };
@@ -10,7 +11,7 @@ use num::{Integer, integer::lcm};
 /// 1, 1, 2, 2, 4, 2, 6, 2, 6, 4, 10, 2, 12...
 /// ```
 pub struct ReducedTotient {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl ReducedTotient {
@@ -18,7 +19,7 @@ impl ReducedTotient {
         Self { ctr: 0 }
     }
 
-    pub fn nth(n: u64) -> u64 {
+    pub fn nth(n: Number) -> Number {
         if n == 0 {
             return 0;
         }
@@ -46,7 +47,7 @@ impl ReducedTotient {
 }
 
 impl Iterator for ReducedTotient {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

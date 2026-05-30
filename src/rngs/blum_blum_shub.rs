@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::{Primes, traits::Increment},
     utils::{divisibility::prime_factorization, miller_rabin::is_prime},
 };
@@ -10,7 +11,7 @@ use std::collections::VecDeque;
 /// 21, 33, 57, 69, 77, 93, 129, 133, 141...
 /// ```
 pub struct Blum {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Blum {
@@ -20,7 +21,7 @@ impl Blum {
 }
 
 impl Iterator for Blum {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -41,7 +42,7 @@ impl Iterator for Blum {
 /// 23, 47, 167, 359, 719, 1439, 2039...
 /// ```
 pub struct BlumBlumShubPrimes {
-    primes: Primes<u64>,
+    primes: Primes<Number>,
 }
 
 impl BlumBlumShubPrimes {
@@ -53,7 +54,7 @@ impl BlumBlumShubPrimes {
 }
 
 impl Iterator for BlumBlumShubPrimes {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -80,9 +81,9 @@ impl Iterator for BlumBlumShubPrimes {
 /// ```
 pub struct BlumBlumShubMaximum {
     bbsp: BlumBlumShubPrimes,
-    s: Vec<u64>,
-    t: VecDeque<u64>,
-    p: u64,
+    s: Vec<Number>,
+    t: VecDeque<Number>,
+    p: Number,
 }
 
 impl BlumBlumShubMaximum {
@@ -97,7 +98,7 @@ impl BlumBlumShubMaximum {
 }
 
 impl Iterator for BlumBlumShubMaximum {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

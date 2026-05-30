@@ -1,7 +1,7 @@
-use crate::utils::divisibility::prime_factorization;
+use crate::{Number, utils::divisibility::prime_factorization};
 use num::{Integer, Zero, rational::Ratio};
 
-fn arith_deriv(n: u64) -> u64 {
+fn arith_deriv(n: Number) -> Number {
     let factors = prime_factorization(n);
     if factors.len() == 0 {
         return 0;
@@ -11,7 +11,7 @@ fn arith_deriv(n: u64) -> u64 {
     } else {
         let mut s = Ratio::zero();
         for (prime, mult) in factors {
-            s += Ratio::new(mult, prime);
+            s += Ratio::new(mult as Number, prime);
         }
         *(s * Ratio::new_raw(n, 1)).numer()
     }
@@ -26,18 +26,17 @@ fn arith_deriv(n: u64) -> u64 {
 /// 0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9...
 /// ```
 pub struct ArithmeticDerivative {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl ArithmeticDerivative {
-    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for ArithmeticDerivative {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = arith_deriv(self.ctr);
@@ -48,13 +47,12 @@ impl Iterator for ArithmeticDerivative {
 
 /// The arithmetic derivatives of the positive rational numbers ordered by antidiagonals.
 pub struct ArithmeticDerivativeRational {
-    numer: u64,
-    denom: u64,
-    row: u64,
+    numer: Number,
+    denom: Number,
+    row: Number,
 }
 
 impl ArithmeticDerivativeRational {
-    /// Only Ration<i64> output supported.
     pub fn new() -> Self {
         Self {
             numer: 1,

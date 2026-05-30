@@ -1,4 +1,6 @@
-use crate::{check_sequences, core::traits::Increment, utils::divisibility::number_of_divisors};
+use crate::{
+    Number, check_sequences, core::traits::Increment, utils::divisibility::number_of_divisors,
+};
 
 /// The highly composite numbers, positive integers which have more divisors than any smaller positive integers.
 ///
@@ -6,12 +8,11 @@ use crate::{check_sequences, core::traits::Increment, utils::divisibility::numbe
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
 /// ```
 pub struct HighlyComposite {
-    ctr: u64,
-    record_divisors: u64,
+    ctr: Number,
+    record_divisors: Number,
 }
 
 impl HighlyComposite {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -21,7 +22,7 @@ impl HighlyComposite {
 }
 
 impl Iterator for HighlyComposite {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -41,12 +42,11 @@ impl Iterator for HighlyComposite {
 /// 1, 2, 3, 4, 6, 8, 10, 12, 18, 20, 24...
 /// ```
 pub struct LargelyComposite {
-    ctr: u64,
-    record_divisors: u64,
+    ctr: Number,
+    record_divisors: Number,
 }
 
 impl LargelyComposite {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -56,7 +56,7 @@ impl LargelyComposite {
 }
 
 impl Iterator for LargelyComposite {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

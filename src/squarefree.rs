@@ -1,9 +1,9 @@
 use crate::{
+    Number,
     core::{primes::Primes, traits::Increment},
     utils::divisibility::radical,
 };
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
-use std::hash::Hash;
+use num::{BigInt, Integer, Zero};
 
 /// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
 ///
@@ -16,13 +16,13 @@ pub struct Squarefree<T> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squarefree<T> {
+impl Squarefree<Number> {
     pub fn new() -> Self {
         let mut primes = Primes::new();
         primes.next();
         Self {
-            ctr: T::zero(),
-            squares: vec![T::one() + T::one() + T::one() + T::one()],
+            ctr: 0,
+            squares: vec![4],
             primes,
         }
     }
@@ -30,19 +30,46 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squarefree<T> {
 
 impl Squarefree<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut primes = Primes::new_big();
+        primes.next();
+        Self {
+            ctr: BigInt::zero(),
+            squares: vec![BigInt::from(4)],
+            primes,
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squarefree<T> {
-    type Item = T;
+impl Iterator for Squarefree<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
             self.ctr.incr()?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(n.checked_mul(&n)?);
+                self.squares.push(n.checked_mul(n)?);
+            }
+            for square in self.squares.iter() {
+                if self.ctr.is_multiple_of(square) {
+                    continue 'outer;
+                }
+            }
+            break;
+        }
+        Some(self.ctr.clone())
+    }
+}
+
+impl Iterator for Squarefree<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        'outer: loop {
+            self.ctr.incr()?;
+            if &self.ctr >= self.squares.last().unwrap() {
+                let n = self.primes.next().unwrap();
+                self.squares.push(&n * &n);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {
@@ -66,13 +93,13 @@ pub struct Squareful<T> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squareful<T> {
+impl Squareful<Number> {
     pub fn new() -> Self {
         let mut primes = Primes::new();
         primes.next();
         Self {
-            ctr: T::zero(),
-            squares: vec![T::one() + T::one() + T::one() + T::one()],
+            ctr: 0,
+            squares: vec![4],
             primes,
         }
     }
@@ -80,19 +107,45 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Squareful<T> {
 
 impl Squareful<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut primes = Primes::new_big();
+        primes.next();
+        Self {
+            ctr: BigInt::zero(),
+            squares: vec![BigInt::from(4)],
+            primes,
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squareful<T> {
-    type Item = T;
+impl Iterator for Squareful<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
             self.ctr.incr()?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(n.checked_mul(&n)?);
+                self.squares.push(n.checked_mul(n)?);
+            }
+            for square in self.squares.iter() {
+                if self.ctr.is_multiple_of(square) {
+                    break 'outer;
+                }
+            }
+        }
+        Some(self.ctr.clone())
+    }
+}
+
+impl Iterator for Squareful<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        'outer: loop {
+            self.ctr.incr()?;
+            if &self.ctr >= self.squares.last().unwrap() {
+                let n = self.primes.next().unwrap();
+                self.squares.push(&n * &n);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {
@@ -108,21 +161,20 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for Squareful
 ///
 /// 1, 2, 3, 2, 5, 6, 7, 2, 3, 10, 11, 6, 13, 14, 15, 2, 17, 6, 19...
 pub struct Radicals {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Radicals {
-    /// Only u64 currently supported
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for Radicals {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.ctr += 1;
+        self.ctr.incr()?;
         Some(radical(self.ctr))
     }
 }

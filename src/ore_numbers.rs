@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::divisibility::{number_of_divisors, sum_of_divisors},
 };
@@ -10,7 +11,7 @@ use num::rational::Ratio;
 /// 1, 6, 28, 140, 270, 496, 672, 1638, 2970...
 /// ```
 pub struct Ore {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Ore {
@@ -20,12 +21,12 @@ impl Ore {
 }
 
 impl Iterator for Ore {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.ctr.incr()?;
-            let s0 = number_of_divisors(self.ctr);
+            let s0 = number_of_divisors(self.ctr) as Number;
             let s1 = sum_of_divisors(self.ctr)?;
             if Ratio::new(s0.checked_mul(self.ctr)?, s1).is_integer() {
                 return Some(self.ctr);

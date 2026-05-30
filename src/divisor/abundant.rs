@@ -1,4 +1,5 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::divisibility::{
         abundancy_index, aliquot_sum, proper_divisors, radical, sum_of_divisors,
@@ -12,7 +13,7 @@ use num::rational::Ratio;
 /// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54...
 /// ```
 pub struct Abundant {
-    n: u64,
+    n: Number,
 }
 
 impl Abundant {
@@ -23,7 +24,7 @@ impl Abundant {
 }
 
 impl Iterator for Abundant {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -41,12 +42,11 @@ impl Iterator for Abundant {
 /// 12, 18, 20, 30, 42, 56, 66, 70, 78, 88...
 /// ```
 pub struct PrimitiveAbundant {
-    n: u64,
-    terms: Vec<u64>,
+    n: Number,
+    terms: Vec<Number>,
 }
 
 impl PrimitiveAbundant {
-    /// Only u64 output supported.
     pub fn new() -> Self {
         Self {
             n: 11,
@@ -56,7 +56,7 @@ impl PrimitiveAbundant {
 }
 
 impl Iterator for PrimitiveAbundant {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
@@ -81,19 +81,18 @@ impl Iterator for PrimitiveAbundant {
 /// 1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24...
 /// ```
 pub struct HighlyAbundant {
-    record: u64,
-    n: u64,
+    record: Number,
+    n: Number,
 }
 
 impl HighlyAbundant {
-    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { record: 0, n: 0 }
     }
 }
 
 impl Iterator for HighlyAbundant {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -113,13 +112,12 @@ impl Iterator for HighlyAbundant {
 /// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
 /// ```
 pub struct Superabundant {
-    record: Ratio<u64>,
-    n: u64,
-    step: u64,
+    record: Ratio<Number>,
+    n: Number,
+    step: Number,
 }
 
 impl Superabundant {
-    /// Only u64 output supported.
     pub fn new() -> Self {
         Self {
             record: Ratio::ZERO,
@@ -130,7 +128,7 @@ impl Superabundant {
 }
 
 impl Iterator for Superabundant {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

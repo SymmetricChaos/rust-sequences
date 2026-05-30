@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::aliquot_sum};
+use crate::{Number, core::traits::Increment, utils::divisibility::aliquot_sum};
 
 /// The aliquot sum of each positive integer, the sum of all of its divisors except itself.
 ///
@@ -6,18 +6,17 @@ use crate::{core::traits::Increment, utils::divisibility::aliquot_sum};
 /// 0, 1, 1, 3, 1, 6, 1, 7, 4, 8...
 /// ```
 pub struct AliquotSums {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl AliquotSums {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }
 }
 
 impl Iterator for AliquotSums {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -32,18 +31,17 @@ impl Iterator for AliquotSums {
 /// 10, 8, 7, 1, 0, 0, 0...
 /// ```
 pub struct AliquotSequence {
-    n: u64,
+    n: Number,
 }
 
 impl AliquotSequence {
-    /// Only u64 output is supported.
-    pub fn new(n: u64) -> Self {
+    pub fn new(n: Number) -> Self {
         Self { n }
     }
 }
 
 impl Iterator for AliquotSequence {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.n;

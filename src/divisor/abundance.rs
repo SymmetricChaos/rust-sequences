@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::aliquot_sum};
+use crate::{Number, core::traits::Increment, utils::divisibility::aliquot_sum};
 use num::rational::Ratio;
 
 /// The abundance of each positive integer. Its aliquot sum minus itself.
@@ -7,22 +7,21 @@ use num::rational::Ratio;
 /// -1, -1, -2, -1, -4, 0, -6, -1, -5, -2, -10, 4, -12, -4, -6...
 /// ```
 pub struct Abundance {
-    n: i64,
+    n: Number,
 }
 
 impl Abundance {
-    /// Only i64 outupt is supported.
     pub fn new() -> Self {
         Self { n: 0 }
     }
 }
 
 impl Iterator for Abundance {
-    type Item = i64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.n.incr()?;
-        let x: i64 = aliquot_sum(self.n.try_into().unwrap())?
+        let x: Number = aliquot_sum(self.n.try_into().unwrap())?
             .try_into()
             .expect("fail to convert");
         Some(x - self.n)
@@ -35,28 +34,25 @@ impl Iterator for Abundance {
 /// 1/1, 3/2, 4/3, 7/4, 6/5, 2/1, 8/7, 15/8...
 /// ```
 pub struct AbundancyIndex {
-    n: u64,
+    n: Number,
 }
 
 impl AbundancyIndex {
-    /// Only Ratio<u64> outupt is supported.
     pub fn new() -> Self {
         Self { n: 0 }
     }
 
-    /// Only u64 outupt is supported.
-    pub fn numers() -> impl Iterator<Item = u64> {
+    pub fn numers() -> impl Iterator<Item = Number> {
         Self::new().map(|x| *x.numer())
     }
 
-    /// Only u64 outupt is supported.
-    pub fn denoms() -> impl Iterator<Item = u64> {
+    pub fn denoms() -> impl Iterator<Item = Number> {
         Self::new().map(|x| *x.denom())
     }
 }
 
 impl Iterator for AbundancyIndex {
-    type Item = Ratio<u64>;
+    type Item = Ratio<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.n.incr()?;

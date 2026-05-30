@@ -1,4 +1,4 @@
-use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
+use crate::{Number, core::traits::Increment, utils::divisibility::prime_factorization};
 
 /// Sum the prime factorization of each natural number, starting at 1.
 ///
@@ -6,7 +6,7 @@ use crate::{core::traits::Increment, utils::divisibility::prime_factorization};
 /// 0, 2, 3, 4, 5, 5, 7, 6, 6, 7, 11, 7, 13...
 /// ```
 pub struct SumOfPrimeFactors {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl SumOfPrimeFactors {
@@ -16,7 +16,7 @@ impl SumOfPrimeFactors {
 }
 
 impl Iterator for SumOfPrimeFactors {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -35,7 +35,7 @@ impl Iterator for SumOfPrimeFactors {
 /// 0, 2, 3, 2, 5, 5, 7, 2, 3, 7, 11, 5, 13...
 /// ```
 pub struct SumOfDistinctPrimeFactors {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl SumOfDistinctPrimeFactors {
@@ -45,7 +45,7 @@ impl SumOfDistinctPrimeFactors {
 }
 
 impl Iterator for SumOfDistinctPrimeFactors {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;

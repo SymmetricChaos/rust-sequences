@@ -1,13 +1,19 @@
-use crate::utils::{
-    miller_rabin::{is_prime, is_prime_partial, miller_rabin},
-    pollard::pollards_rho,
+use crate::{
+    Number,
+    utils::{
+        miller_rabin::{is_prime, is_prime_partial, miller_rabin},
+        pollard::pollards_rho,
+    },
 };
 use itertools::Itertools;
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
 use std::collections::BTreeMap;
 
 /// Factor out all primes up to 37 and put them into the map.
-pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>) -> u64 {
+pub fn partial_factorization(
+    mut n: Number,
+    prime_factors: &mut BTreeMap<Number, Number>,
+) -> Number {
     for p in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37] {
         if n <= 1 {
             break;
@@ -26,7 +32,7 @@ pub fn partial_factorization(mut n: u64, prime_factors: &mut BTreeMap<u64, u64>)
 }
 
 /// Each prime factor and its multiplicity. Returns an empty vector for 0 and 1.
-pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
+pub fn prime_factorization(mut n: Number) -> Vec<(Number, Number)> {
     // Handle 0 and 1
     if n <= 1 {
         return Vec::new();
@@ -83,7 +89,7 @@ pub fn prime_factorization(mut n: u64) -> Vec<(u64, u64)> {
 }
 
 /// Factor a number into prime powers
-pub fn prime_power_factorization(n: u64) -> Vec<u64> {
+pub fn prime_power_factorization(n: Number) -> Vec<Number> {
     prime_factorization(n)
         .iter()
         .map(|x| x.0.pow(x.1 as u32))
@@ -91,7 +97,7 @@ pub fn prime_power_factorization(n: u64) -> Vec<u64> {
 }
 
 /// The unique prime divisors of n.
-pub fn prime_divisors(n: u64) -> Vec<u64> {
+pub fn prime_divisors(n: Number) -> Vec<Number> {
     prime_factorization(n)
         .into_iter()
         .map(|(p, _)| p)
@@ -100,7 +106,7 @@ pub fn prime_divisors(n: u64) -> Vec<u64> {
 
 /// All of the divisors of n.
 /// Defined as [0] for n = 0.
-pub fn divisors(n: u64) -> Vec<u64> {
+pub fn divisors(n: Number) -> Vec<Number> {
     if n <= 1 {
         return vec![n];
     }
@@ -131,7 +137,7 @@ pub fn divisors(n: u64) -> Vec<u64> {
 
 /// All of the divisors of n except itself.
 /// Defined as [] for n = 0.
-pub fn proper_divisors(n: u64) -> Vec<u64> {
+pub fn proper_divisors(n: Number) -> Vec<Number> {
     if n <= 1 {
         return vec![];
     }
@@ -160,18 +166,18 @@ pub fn proper_divisors(n: u64) -> Vec<u64> {
 }
 
 /// The number of prime factors of n counted with multiplicity.
-pub fn big_omega(n: u64) -> u64 {
+pub fn big_omega(n: Number) -> Number {
     prime_factorization(n).into_iter().map(|(_, m)| m).sum()
 }
 
 /// The number of distinct prime factors of n.
-pub fn small_omega(n: u64) -> u64 {
-    prime_factorization(n).len() as u64
+pub fn small_omega(n: Number) -> Number {
+    prime_factorization(n).len() as Number
 }
 
 /// Powers of the prime factors of n in descending order
 /// returns [] for both 0 and 1
-pub fn prime_signature(n: u64) -> Vec<u64> {
+pub fn prime_signature(n: Number) -> Vec<Number> {
     prime_factorization(n)
         .iter()
         .map(|x| x.1)
@@ -182,7 +188,7 @@ pub fn prime_signature(n: u64) -> Vec<u64> {
 
 /// Number of divisors of n. Also known as σ_0(n) "sigma sub zero of n".
 /// Defined as 0 for n = 0.
-pub fn number_of_divisors(n: u64) -> u64 {
+pub fn number_of_divisors(n: Number) -> Number {
     if n == 0 {
         return 0;
     }
@@ -196,7 +202,7 @@ pub fn number_of_divisors(n: u64) -> u64 {
 /// Sum of all divisors of n. Also known as σ_1(n) "sigma sub one of n".
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
-pub fn sum_of_divisors(n: u64) -> Option<u64> {
+pub fn sum_of_divisors(n: Number) -> Option<Number> {
     if n == 0 {
         Some(0)
     } else {
@@ -216,9 +222,9 @@ pub fn sum_of_divisors(n: u64) -> Option<u64> {
 }
 
 /// The number theoretic sigma function.
-pub fn sigma(n: u64, e: u32) -> Option<u64> {
+pub fn sigma(n: Number, e: u32) -> Option<Number> {
     if e == 0 {
-        Some(number_of_divisors(n))
+        Some(number_of_divisors(n) as Number)
     } else if e == 1 {
         sum_of_divisors(n)
     } else {
@@ -233,7 +239,7 @@ pub fn sigma(n: u64, e: u32) -> Option<u64> {
 
 /// Sum of all divisors of n. Divided by n. Also known as σ_-1(n).
 /// Returns None for n = 0 or if overflow occurs.
-pub fn abundancy_index(n: u64) -> Option<Ratio<u64>> {
+pub fn abundancy_index(n: Number) -> Option<Ratio<Number>> {
     if n == 0 {
         None
     } else {
@@ -244,7 +250,7 @@ pub fn abundancy_index(n: u64) -> Option<Ratio<u64>> {
 /// Aliquot sum of n. The sum of all divisors except n itself.
 /// Defined as 0 for n = 0.
 /// Returns None if overflow occurs.
-pub fn aliquot_sum(n: u64) -> Option<u64> {
+pub fn aliquot_sum(n: Number) -> Option<Number> {
     match sum_of_divisors(n) {
         Some(total) => Some(total - n),
         None => None,
@@ -253,7 +259,7 @@ pub fn aliquot_sum(n: u64) -> Option<u64> {
 
 /// The radical of a number, the product of its unique prime factors. Also known as the squarefree kernel or the largest squarefree divisor.
 /// Defined as 1 for n == 0.
-pub fn radical(n: u64) -> u64 {
+pub fn radical(n: Number) -> Number {
     prime_factorization(n).iter().fold(1, |acc, p| acc * p.0)
 }
 
