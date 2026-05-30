@@ -1,5 +1,5 @@
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, One, Zero};
 use std::collections::BTreeSet;
 
 /// The anti-Fibonacci numbers. Starting with zero the next term is the sum of the two smallest unique positive integers that have not previously been added together or been a sum.
@@ -13,24 +13,50 @@ pub struct AntiFibonacci<T> {
     b: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> AntiFibonacci<T> {
+impl AntiFibonacci<Number> {
     pub fn new() -> Self {
         Self {
             terms: BTreeSet::new(),
-            a: T::zero(),
-            b: T::zero(),
+            a: 0,
+            b: 0,
         }
     }
 }
 
 impl AntiFibonacci<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            terms: BTreeSet::new(),
+            a: BigInt::zero(),
+            b: BigInt::zero(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for AntiFibonacci<T> {
-    type Item = T;
+impl Iterator for AntiFibonacci<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a.checked_add(self.b)?;
+
+        self.terms.insert(out);
+
+        while self.terms.contains(&self.a) {
+            self.a = self.a.checked_add(1)?;
+        }
+        self.terms.insert(self.a);
+
+        while self.terms.contains(&self.b) {
+            self.b = self.b.checked_add(1)?;
+        }
+        self.terms.insert(self.b);
+
+        Some(out)
+    }
+}
+
+impl Iterator for AntiFibonacci<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.checked_add(&self.b)?;
@@ -38,12 +64,12 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for AntiFibonacci<T> {
         self.terms.insert(out.clone());
 
         while self.terms.contains(&self.a) {
-            self.a = self.a.checked_add(&T::one())?;
+            self.a.incr()?;
         }
         self.terms.insert(self.a.clone());
 
         while self.terms.contains(&self.b) {
-            self.b = self.b.checked_add(&T::one())?;
+            self.b.incr();
         }
         self.terms.insert(self.b.clone());
 
@@ -62,7 +88,7 @@ pub struct NonAntiFibonacci<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> NonAntiFibonacci<T> {
+impl NonAntiFibonacci<Number> {
     pub fn new() -> Self {
         let mut antifib = AntiFibonacci::new();
         antifib.next();
@@ -70,19 +96,43 @@ impl<T: CheckedAdd + Clone + Integer> NonAntiFibonacci<T> {
         Self {
             antifib,
             record,
-            ctr: T::one(),
+            ctr: 1,
         }
     }
 }
 
 impl NonAntiFibonacci<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut antifib = AntiFibonacci::new_big();
+        antifib.next();
+        let record = antifib.next().unwrap();
+        Self {
+            antifib,
+            record,
+            ctr: BigInt::one(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for NonAntiFibonacci<T> {
-    type Item = T;
+impl Iterator for NonAntiFibonacci<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.ctr;
+        loop {
+            self.ctr.incr()?;
+            if self.ctr == self.record {
+                self.record = self.antifib.next()?;
+            } else {
+                break;
+            }
+        }
+        Some(out)
+    }
+}
+
+impl Iterator for NonAntiFibonacci<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.ctr.clone();
@@ -99,7 +149,7 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for NonAntiFibonacci<T> {
 }
 
 crate::check_iteration_times!(
-    AntiFibonacci::<i32>::new(), [100, 1_000, 10_000, 100_000, 1_000_000];
+    AntiFibonacci::new(), [100, 1_000, 10_000, 100_000, 1_000_000];
     AntiFibonacci::new_big(), [100, 1_000, 10_000, 100_000, 1_000_000];
 );
 

@@ -9,12 +9,11 @@ use num::CheckedMul;
 /// ```
 pub struct AbelianGroups {
     ctr: Number,
-    partition_number: Vec<u64>,
-    partition_number_generator: Partition<u64>,
+    partition_number: Vec<Number>,
+    partition_number_generator: Partition<Number>,
 }
 
 impl AbelianGroups {
-    /// Only u64 outupt is supported.
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -25,7 +24,7 @@ impl AbelianGroups {
 }
 
 impl Iterator for AbelianGroups {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr += 1;

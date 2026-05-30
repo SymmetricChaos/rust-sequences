@@ -63,18 +63,18 @@ impl ArithmeticDerivativeRational {
 }
 
 impl Iterator for ArithmeticDerivativeRational {
-    type Item = Ratio<i64>;
+    type Item = Ratio<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let a: i64 = arith_deriv(self.numer)
+        let a: Number = arith_deriv(self.numer)
             .checked_mul(self.denom)?
             .try_into()
             .ok()?;
-        let b: i64 = arith_deriv(self.denom)
+        let b: Number = arith_deriv(self.denom)
             .checked_mul(self.numer)?
             .try_into()
             .ok()?;
-        let n: i64 = self.numer.checked_mul(self.numer)?.try_into().ok()?;
+        let n: Number = self.numer.checked_mul(self.numer)?.try_into().ok()?;
 
         let out = Ratio::new(a - b, n);
         loop {
