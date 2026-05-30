@@ -1,5 +1,7 @@
 use num::{BigInt, Integer, One, Zero};
 
+use crate::Number;
+
 /// The Baum-Sweet sequence. Characteristic function of non-negative intgers which have binary expansions that never contain an odd number of sequential 0s.
 ///
 /// ```text
@@ -10,10 +12,10 @@ pub struct BaumSweet<T> {
     ctr: usize,
 }
 
-impl<T: Clone + One + Zero> BaumSweet<T> {
+impl BaumSweet<Number> {
     pub fn new() -> Self {
         Self {
-            terms: vec![T::one()],
+            terms: vec![0],
             ctr: 0,
         }
     }
@@ -21,16 +23,19 @@ impl<T: Clone + One + Zero> BaumSweet<T> {
 
 impl BaumSweet<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            terms: vec![BigInt::zero()],
+            ctr: 0,
+        }
     }
 }
 
-impl<T: Clone + One + Zero> Iterator for BaumSweet<T> {
-    type Item = T;
+impl Iterator for BaumSweet<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = if self.ctr.is_zero() {
-            T::zero()
+            1
         } else {
             self.terms[self.ctr].clone()
         };
@@ -42,7 +47,33 @@ impl<T: Clone + One + Zero> Iterator for BaumSweet<T> {
             n = n / 4;
         }
         if n.is_even() {
-            self.terms.push(T::zero());
+            self.terms.push(1);
+        } else {
+            self.terms.push(self.terms[(n - 1) / 2].clone());
+        }
+
+        Some(out)
+    }
+}
+
+impl Iterator for BaumSweet<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = if self.ctr.is_zero() {
+            BigInt::one()
+        } else {
+            self.terms[self.ctr].clone()
+        };
+
+        self.ctr += 1;
+        let mut n = self.ctr.clone();
+
+        while (n % 4).is_zero() {
+            n = n / 4;
+        }
+        if n.is_even() {
+            self.terms.push(BigInt::one());
         } else {
             self.terms.push(self.terms[(n - 1) / 2].clone());
         }
