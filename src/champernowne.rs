@@ -1,5 +1,5 @@
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, Integer, Signed, Zero};
 
 /// The Champernowne constants. Infinite words formed by listing the digits of the natural numbers in a given base.
 pub struct Champernowne<T> {
@@ -8,10 +8,10 @@ pub struct Champernowne<T> {
     base: T,
 }
 
-impl<T: Integer + CheckedAdd + Clone> Champernowne<T> {
-    pub fn new(base: T) -> Self {
+impl Champernowne<Number> {
+    pub fn new(base: Number) -> Self {
         Self {
-            ctr: T::zero(),
+            ctr: 0,
             digits: Vec::new(),
             base,
         }
@@ -23,17 +23,46 @@ impl Champernowne<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(base))
+        Self {
+            ctr: BigInt::zero(),
+            digits: Vec::new(),
+            base: BigInt::from(base),
+        }
     }
 }
 
-impl<T: Integer + CheckedAdd + Clone> Iterator for Champernowne<T> {
-    type Item = T;
+impl Iterator for Champernowne<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if self.ctr.is_zero() {
+            self.ctr.incr()?;
+            self.digits.push(0);
+        }
         if self.digits.is_empty() {
             let mut n = self.ctr.clone();
-            while n > T::zero() {
+            while n.is_positive() {
+                let (div, rem) = n.div_rem(&self.base);
+                self.digits.push(rem);
+                n = div;
+            }
+            self.ctr.incr()?;
+        }
+        self.digits.pop()
+    }
+}
+
+impl Iterator for Champernowne<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ctr.is_zero() {
+            self.ctr.incr()?;
+            self.digits.push(BigInt::zero());
+        }
+        if self.digits.is_empty() {
+            let mut n = self.ctr.clone();
+            while n.is_positive() {
                 let (div, rem) = n.div_rem(&self.base);
                 self.digits.push(rem);
                 n = div;

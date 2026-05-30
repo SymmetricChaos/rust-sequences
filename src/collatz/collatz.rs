@@ -1,5 +1,8 @@
-use crate::utils::collatz::{collatz, reduced_collatz};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use crate::{
+    Number,
+    utils::collatz::{collatz, reduced_collatz},
+};
+use num::{BigInt, Integer};
 
 /// The values of a Collatz sequence.
 ///
@@ -14,12 +17,12 @@ use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 /// 27, 82, 41, 124, 62, 31, 94, 47, 142, 71...
 /// ```
 pub struct Collatz<T> {
-    value: T,
+    n: T,
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Integer> Collatz<T> {
-    pub fn new(n: T) -> Self {
-        Self { value: n }
+impl Collatz<Number> {
+    pub fn new(n: Number) -> Self {
+        Self { n }
     }
 }
 
@@ -28,21 +31,33 @@ impl Collatz<BigInt> {
     where
         BigInt: From<T>,
     {
-        Self {
-            value: BigInt::from(n),
-        }
+        Self { n: BigInt::from(n) }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Collatz<T> {
-    type Item = T;
+impl Iterator for Collatz<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.value.clone();
-        self.value = match collatz(self.value.clone()) {
+        let out = self.n.clone();
+        self.n = match collatz(self.n) {
             Some(n) => n,
             None => return Some(out),
         };
+        Some(out)
+    }
+}
+
+impl Iterator for Collatz<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.n.clone();
+        if self.n.is_even() {
+            self.n /= 2
+        } else {
+            self.n = (&self.n * 3) + 1
+        }
         Some(out)
     }
 }
@@ -57,12 +72,12 @@ impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Collatz<T> {
 /// 27, 41, 31, 47, 71, 107, 161, 121, 91, 137...
 /// ```
 pub struct ReducedCollatz<T> {
-    value: T,
+    n: T,
 }
 
-impl<T: Clone> ReducedCollatz<T> {
-    pub fn new(n: T) -> Self {
-        Self { value: n }
+impl ReducedCollatz<Number> {
+    pub fn new(n: Number) -> Self {
+        Self { n }
     }
 }
 
@@ -71,21 +86,32 @@ impl ReducedCollatz<BigInt> {
     where
         BigInt: From<T>,
     {
-        Self {
-            value: BigInt::from(n),
-        }
+        Self { n: BigInt::from(n) }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for ReducedCollatz<T> {
-    type Item = T;
+impl Iterator for ReducedCollatz<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.value.clone();
-        self.value = match reduced_collatz(self.value.clone()) {
+        let out = self.n.clone();
+        self.n = match reduced_collatz(self.n) {
             Some(n) => n,
             None => return Some(out),
         };
+        Some(out)
+    }
+}
+
+impl Iterator for ReducedCollatz<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.n.clone();
+        self.n = (&self.n * 3) + 1;
+        while self.n.is_even() {
+            self.n /= 2;
+        }
         Some(out)
     }
 }

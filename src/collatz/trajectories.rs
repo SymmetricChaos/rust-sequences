@@ -1,5 +1,5 @@
-use crate::{core::traits::Increment, utils::collatz::collatz};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
+use crate::{Number, core::traits::Increment, utils::collatz::collatz};
+use num::{BigInt, Integer, One, Zero};
 
 /// The trajectory of each Collatz sequence.
 ///
@@ -10,20 +10,22 @@ pub struct CollatzTrajectories<T> {
     ctr: T,
 }
 
-impl<T: Clone + Zero> CollatzTrajectories<T> {
+impl CollatzTrajectories<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl CollatzTrajectories<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for CollatzTrajectories<T> {
-    type Item = Vec<T>;
+impl Iterator for CollatzTrajectories<Number> {
+    type Item = Vec<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -34,6 +36,29 @@ impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for CollatzTrajector
         // this stopping condition is not currently known to be correct for all inputs but it is correct up to huge starting values
         while !n.is_one() {
             n = collatz(n.clone())?;
+            out.push(n.clone());
+        }
+
+        Some(out)
+    }
+}
+
+impl Iterator for CollatzTrajectories<BigInt> {
+    type Item = Vec<BigInt>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr.incr()?;
+
+        let mut n = self.ctr.clone();
+        let mut out = vec![];
+        out.push(n.clone());
+        // this stopping condition is not currently known to be correct for all inputs but it is correct up to huge starting values
+        while !n.is_one() {
+            if n.is_even() {
+                n /= 2
+            } else {
+                n = (&n * 3) + 1
+            }
             out.push(n.clone());
         }
 

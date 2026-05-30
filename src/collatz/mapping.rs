@@ -1,8 +1,9 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::collatz::{collatz, reduced_collatz},
 };
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use num::{BigInt, Integer, Zero};
 
 /// The mapping of the Collatz function.
 ///
@@ -16,25 +17,43 @@ pub struct CollatzMap<T> {
     ctr: T,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> CollatzMap<T> {
+impl CollatzMap<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl CollatzMap<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzMap<T> {
-    type Item = T;
+impl Iterator for CollatzMap<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = collatz(self.ctr.clone());
+        let out = collatz(self.ctr);
         self.ctr.incr()?;
         out
+    }
+}
+
+impl Iterator for CollatzMap<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = {
+            if self.ctr.is_even() {
+                &self.ctr / 2
+            } else {
+                (&self.ctr * 3) + 1
+            }
+        };
+        self.ctr.incr()?;
+        Some(out)
     }
 }
 
@@ -50,29 +69,51 @@ pub struct ReducedCollatzMap<T> {
     ctr: T,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> ReducedCollatzMap<T> {
+impl ReducedCollatzMap<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl ReducedCollatzMap<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ReducedCollatzMap<T> {
-    type Item = T;
+impl Iterator for ReducedCollatzMap<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.ctr.is_zero() {
+        if self.ctr == 0 {
             self.ctr.incr()?;
-            return Some(T::zero());
+            return Some(0);
         }
         let out = reduced_collatz(self.ctr.clone());
         self.ctr.incr()?;
         out
+    }
+}
+
+impl Iterator for ReducedCollatzMap<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ctr.is_zero() {
+            self.ctr.incr()?;
+            return Some(BigInt::zero());
+        }
+        let mut out = self.ctr.clone();
+        if out.is_odd() {
+            out = (&out * 3) + 1;
+        }
+        while out.is_even() {
+            out /= 2;
+        }
+        self.ctr.incr()?;
+        Some(out)
     }
 }
 

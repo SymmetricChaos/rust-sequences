@@ -1,5 +1,5 @@
-use crate::{core::traits::Increment, utils::collatz::collatz};
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use crate::{Number, core::traits::Increment, utils::collatz::collatz};
+use num::{BigInt, Integer, One, Zero};
 
 /// The maximum value reached by the Collatz sequence that starts at each positive integer.
 ///
@@ -10,20 +10,22 @@ pub struct CollatzHeights<T> {
     ctr: T,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> CollatzHeights<T> {
+impl CollatzHeights<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl CollatzHeights<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzHeights<T> {
-    type Item = T;
+impl Iterator for CollatzHeights<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -33,6 +35,31 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzHeights<T
 
         while !val.is_one() {
             val = collatz(val)?;
+
+            if val > peak {
+                peak = val.clone()
+            }
+        }
+
+        Some(peak)
+    }
+}
+
+impl Iterator for CollatzHeights<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr.inc();
+
+        let mut peak = self.ctr.clone();
+        let mut val = self.ctr.clone();
+
+        while !val.is_one() {
+            if val.is_even() {
+                val /= 2
+            } else {
+                val = (&val * 3) + 1
+            }
 
             if val > peak {
                 peak = val.clone()

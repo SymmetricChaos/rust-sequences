@@ -1,8 +1,9 @@
 use crate::{
+    Number,
     core::traits::Increment,
     utils::collatz::{collatz, reduced_collatz},
 };
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use num::{BigInt, Integer, One, Zero};
 
 /// Number of steps to reach 1 for a Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///
@@ -13,19 +14,21 @@ pub struct CollatzLength<T> {
     ctr: T,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> CollatzLength<T> {
+impl CollatzLength<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl CollatzLength<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzLength<T> {
+impl Iterator for CollatzLength<Number> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -42,6 +45,27 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for CollatzLength<T>
     }
 }
 
+impl Iterator for CollatzLength<BigInt> {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr.incr()?;
+        let mut steps: u64 = 0;
+
+        let mut val = self.ctr.clone();
+        while !val.is_one() {
+            if val.is_even() {
+                val /= 2
+            } else {
+                val = (&val * 3) + 1
+            }
+            steps.incr()?;
+        }
+
+        Some(steps)
+    }
+}
+
 /// Number of steps to reach 1 for the reduced Collatz sequence starting at each positive natural number. It is not known if this sequence is defined for all inputs.
 ///
 /// ```text
@@ -51,19 +75,21 @@ pub struct ReducedCollatzLength<T> {
     ctr: T,
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> ReducedCollatzLength<T> {
+impl ReducedCollatzLength<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 impl ReducedCollatzLength<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ReducedCollatzLength<T> {
+impl Iterator for ReducedCollatzLength<Number> {
     type Item = u64;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -73,6 +99,28 @@ impl<T: Clone + Integer + CheckedAdd + CheckedMul> Iterator for ReducedCollatzLe
         let mut val = self.ctr.clone();
         while !val.is_one() {
             val = reduced_collatz(val)?;
+            steps.incr()?;
+        }
+
+        Some(steps)
+    }
+}
+
+impl Iterator for ReducedCollatzLength<BigInt> {
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.ctr.incr()?;
+        let mut steps: u64 = 0;
+
+        let mut val = self.ctr.clone();
+        while !val.is_one() {
+            if val.is_odd() {
+                val = (&val * 3) + 1;
+            }
+            while val.is_even() {
+                val /= 2;
+            }
             steps.incr()?;
         }
 

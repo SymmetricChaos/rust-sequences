@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, Integer};
+use crate::Number;
+use num::{BigInt, Integer};
 
 /// The values of a generalized Collatz sequence.
 ///
@@ -12,8 +13,8 @@ pub struct CollatzGeneral<T> {
     b: T,
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> CollatzGeneral<T> {
-    pub fn new(n: T, a: T, b: T) -> Self {
+impl CollatzGeneral<Number> {
+    pub fn new(n: Number, a: Number, b: Number) -> Self {
         Self { n, a, b }
     }
 }
@@ -23,20 +24,39 @@ impl CollatzGeneral<BigInt> {
     where
         BigInt: From<T>,
     {
-        Self::new(BigInt::from(n), BigInt::from(a), BigInt::from(b))
+        Self {
+            n: BigInt::from(n),
+            a: BigInt::from(a),
+            b: BigInt::from(b),
+        }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + CheckedDiv + Integer> Iterator for CollatzGeneral<T> {
-    type Item = T;
+impl Iterator for CollatzGeneral<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.n;
+        if out.is_even() {
+            self.n /= 2;
+        } else {
+            self.n = self.n.checked_mul(self.a)?;
+            self.n = self.n.checked_add(self.b)?;
+        }
+        Some(out)
+    }
+}
+
+impl Iterator for CollatzGeneral<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.n.clone();
         if out.is_even() {
-            self.n = self.n.checked_div(&(T::one() + T::one()))?;
+            self.n /= 2;
         } else {
-            self.n = self.n.checked_mul(&self.a)?;
-            self.n = self.n.checked_add(&self.b)?;
+            self.n *= &self.a;
+            self.n += &self.b;
         }
         Some(out)
     }
