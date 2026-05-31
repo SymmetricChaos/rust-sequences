@@ -25,8 +25,8 @@ impl Ducci<BigInt> {
     }
 }
 
-impl Iterator for Ducci<BigInt> {
-    type Item = Vec<BigInt>;
+impl Iterator for Ducci<Number> {
+    type Item = Vec<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.tup.clone();
@@ -43,8 +43,8 @@ impl Iterator for Ducci<BigInt> {
     }
 }
 
-impl Iterator for Ducci<Number> {
-    type Item = Vec<Number>;
+impl Iterator for Ducci<BigInt> {
+    type Item = Vec<BigInt>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.tup.clone();

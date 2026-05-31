@@ -1,13 +1,18 @@
 use itertools::Itertools;
 
+use crate::Number;
+
 /// The bits of a Euclidean Rhythm. These are defined only using the original iterative procedure without the alternate stopping rule. The two definitions always differ only by a cyclic shift.
 pub struct EuclideanRhythm {
-    s: Vec<u32>,
+    s: Vec<Number>,
     idx: usize,
 }
 
 impl EuclideanRhythm {
-    pub fn new(a: u32, b: u32) -> Self {
+    /// a and b must both be positive.
+    pub fn new(a: Number, b: Number) -> Self {
+        assert!(a.is_positive());
+        assert!(b.is_positive());
         let s = EuclideanRhythm::string(a, b)
             .chars()
             .map(|c| if c == '0' { 0 } else { 1 })
@@ -16,7 +21,10 @@ impl EuclideanRhythm {
         Self { s, idx: 0 }
     }
 
-    pub fn string(a: u32, b: u32) -> String {
+    /// a and b must both be positive.
+    pub fn string(a: Number, b: Number) -> String {
+        assert!(a.is_positive());
+        assert!(b.is_positive());
         let mut left = Vec::new();
         let mut right = Vec::new();
         for _ in 0..a {
@@ -47,7 +55,7 @@ impl EuclideanRhythm {
 }
 
 impl Iterator for EuclideanRhythm {
-    type Item = u32;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.s[self.idx];

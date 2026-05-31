@@ -1,6 +1,6 @@
-use std::collections::BTreeSet;
-
+use crate::Number;
 use num::integer::gcd;
+use std::collections::BTreeSet;
 
 /// The ECG sequence. Starting with 1 and 2 each term is the smallest positive integer not yet used which shares a divisor with the previous term.
 ///
@@ -8,13 +8,12 @@ use num::integer::gcd;
 /// 1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24...
 /// ```
 pub struct Ecg {
-    used: BTreeSet<u64>, // Checking this becomes much faster than checking a Vec after a few hundred terms
-    last: u64,
-    initial_ctr: u64,
+    used: BTreeSet<Number>, // Checking this becomes much faster than checking a Vec after a few hundred terms
+    last: Number,
+    initial_ctr: Number,
 }
 
 impl Ecg {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             used: BTreeSet::from([1, 2]),
@@ -25,7 +24,7 @@ impl Ecg {
 }
 
 impl Iterator for Ecg {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.last == 0 {
