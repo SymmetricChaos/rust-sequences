@@ -1,5 +1,5 @@
-use crate::core::traits::Increment;
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, One, Zero};
 
 /// The hyperfactorials numbers. Partial products of each positive natural number to the power of itself.
 ///
@@ -11,23 +11,43 @@ pub struct HyperFactorial<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + CheckedMul + Integer + Clone> HyperFactorial<T> {
+impl HyperFactorial<Number> {
     pub fn new() -> Self {
-        Self {
-            prod: T::one(),
-            ctr: T::zero(),
-        }
+        Self { prod: 1, ctr: 0 }
     }
 }
 
 impl HyperFactorial<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            prod: BigInt::one(),
+            ctr: BigInt::zero(),
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Integer + Clone> Iterator for HyperFactorial<T> {
-    type Item = T;
+impl Iterator for HyperFactorial<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.prod.clone();
+        self.ctr.incr()?;
+        let p = self.ctr;
+        let mut ctr = p;
+        while ctr != 0 {
+            ctr = ctr - 1;
+            self.prod = match self.prod.checked_mul(p) {
+                Some(n) => n,
+                None => return Some(out),
+            };
+        }
+
+        Some(out)
+    }
+}
+
+impl Iterator for HyperFactorial<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.prod.clone();
@@ -35,13 +55,12 @@ impl<T: CheckedAdd + CheckedMul + Integer + Clone> Iterator for HyperFactorial<T
         let p = self.ctr.clone();
         let mut ctr = p.clone();
         while !ctr.is_zero() {
-            ctr = ctr - T::one();
+            ctr = ctr - 1;
             self.prod = match self.prod.checked_mul(&p) {
                 Some(n) => n,
                 None => return Some(out),
             };
         }
-
         Some(out)
     }
 }

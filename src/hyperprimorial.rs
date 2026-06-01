@@ -1,6 +1,5 @@
-use crate::core::Primes;
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
-use std::hash::Hash;
+use crate::{Number, core::Primes};
+use num::{BigInt, One, Zero};
 
 /// The hyperprimorial numbers. Partial products of each prime to the power of itself.
 ///
@@ -12,10 +11,10 @@ pub struct HyperPrimorial<T> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> HyperPrimorial<T> {
+impl HyperPrimorial<Number> {
     pub fn new() -> Self {
         Self {
-            prod: T::one(),
+            prod: 1,
             primes: Primes::new(),
         }
     }
@@ -23,19 +22,41 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> HyperPrimorial<T> {
 
 impl HyperPrimorial<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            prod: BigInt::one(),
+            primes: Primes::new_big(),
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for HyperPrimorial<T> {
-    type Item = T;
+impl Iterator for HyperPrimorial<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.prod.clone();
         let p = self.primes.next()?;
         let mut ctr = p.clone();
         while !ctr.is_zero() {
-            ctr = ctr - T::one();
+            ctr = ctr - 1;
+            self.prod = match self.prod.checked_mul(p) {
+                Some(n) => n,
+                None => return Some(out),
+            };
+        }
+
+        Some(out)
+    }
+}
+
+impl Iterator for HyperPrimorial<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.prod.clone();
+        let p = self.primes.next()?;
+        let mut ctr = p.clone();
+        while !ctr.is_zero() {
+            ctr = ctr - BigInt::one();
             self.prod = match self.prod.checked_mul(&p) {
                 Some(n) => n,
                 None => return Some(out),
