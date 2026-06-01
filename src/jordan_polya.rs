@@ -36,7 +36,7 @@ impl Iterator for JordanPolya {
             if self.factorials_vec.last().unwrap() < &self.ctr {
                 self.factorials_vec.push(self.factorials.next()?);
             }
-            if factorable(self.ctr, &self.factorials_vec, 0) {
+            if factorable(self.ctr, &self.factorials_vec) {
                 return Some(self.ctr);
             }
         }

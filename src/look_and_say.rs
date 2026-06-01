@@ -1,7 +1,9 @@
 use num::{BigInt, Num};
 use std::marker::PhantomData;
 
-/// The sequence of look-and-say strings. Each is determiend by how the runs of numbers in the previous string might be said alound.
+use crate::Number;
+
+/// The sequence of look-and-say strings. Each is determiend by how the runs of numbers in the previous string might be said aloud.
 ///
 /// ```text
 /// 1 (one one)
@@ -54,15 +56,19 @@ impl Iterator for LookAndSayString {
 }
 
 /// The look-and-say sequence interpreted as numbers.
+///
+/// ```text
+/// 1, 11, 21, 1211, 111221...
+/// ```
 pub struct LookAndSay<T> {
-    string: String,
+    string: LookAndSayString,
     _phantom: PhantomData<T>,
 }
 
-impl<T> LookAndSay<T> {
+impl LookAndSay<Number> {
     pub fn new() -> Self {
         Self {
-            string: String::from("1"),
+            string: LookAndSayString::new(),
             _phantom: PhantomData,
         }
     }
@@ -70,7 +76,10 @@ impl<T> LookAndSay<T> {
 
 impl LookAndSay<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            string: LookAndSayString::new(),
+            _phantom: PhantomData,
+        }
     }
 }
 
@@ -78,34 +87,11 @@ impl<T: Num> Iterator for LookAndSay<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = T::from_str_radix(&self.string, 10).ok();
-
-        let mut cur = '#'; // start with a char that does not occur
-        let mut ctr = 0;
-        let mut new = String::new();
-        for c in self.string.chars() {
-            if c != cur {
-                if ctr != 0 {
-                    new.push_str(&format!("{ctr}{cur}"));
-                    ctr = 1;
-                    cur = c;
-                } else {
-                    ctr = 1;
-                    cur = c;
-                }
-            } else {
-                ctr += 1;
-            }
-        }
-        new.push_str(&format!("{ctr}{cur}"));
-
-        self.string = new;
-
-        out
+        T::from_str_radix(&self.string.next()?, 10).ok()
     }
 }
 
 crate::check_sequences!(
-    LookAndSayString::new(), ["1", "11", "21", "1211", "111221", "312211", "13112221", "1113213211", "31131211131221", "13211311123113112211"];
-    LookAndSay::<u32>::new(), [1, 11, 21, 1211, 111221, 312211, 13112221, 1113213211];
+    LookAndSayString::new(), ["1", "11", "21", "1211", "111221", "312211", "13112221", "1113213211", "31131211131221", "13211311123113112211", "11131221133112132113212221", "3113112221232112111312211312113211"];
+    LookAndSay::new_big(), [1_i64, 11, 21, 1211, 111221, 312211, 13112221, 1113213211, 31131211131221];
 );
