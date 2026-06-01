@@ -3,6 +3,7 @@ use crate::{Number, core::traits::Increment};
 use num::{BigInt, Integer, Zero};
 
 /// The Möbius function over the positive integers.
+///
 /// ```text
 /// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
 /// ```

@@ -1,4 +1,6 @@
-use num::{BigInt, Integer};
+use num::{BigInt, Integer, One};
+
+use crate::Number;
 
 struct SingleMountain<T> {
     n: T,
@@ -51,10 +53,10 @@ pub struct Mountain<T> {
     idx: usize,
 }
 
-impl<T: Clone + Integer> Mountain<T> {
+impl Mountain<Number> {
     pub fn new() -> Self {
         Self {
-            current_mountian: SingleMountain::new(T::one()),
+            current_mountian: SingleMountain::new(1),
             terms: Vec::new(),
             idx: 0,
         }
@@ -63,7 +65,11 @@ impl<T: Clone + Integer> Mountain<T> {
 
 impl Mountain<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            current_mountian: SingleMountain::new(BigInt::one()),
+            terms: Vec::new(),
+            idx: 0,
+        }
     }
 }
 
@@ -86,5 +92,5 @@ impl<T: Clone + Integer> Iterator for Mountain<T> {
 }
 
 crate::check_sequences!(
-    Mountain::<u32>::new(), [1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5];
+    Mountain::new(), [1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5];
 );

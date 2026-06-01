@@ -1,9 +1,8 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
-use std::hash::Hash;
-
-use crate::prime_gaps::PrimeGaps;
+use crate::{Number, prime_gaps::PrimeGaps};
+use num::BigInt;
 
 /// The Mersenne numbers. 2^p-1 for all primes p.
+///
 /// ```text
 /// 3, 7, 31, 127, 2047, 8191, 131071...
 /// ```
@@ -13,11 +12,11 @@ pub struct Mersenne<T> {
     overflowed: bool,
 }
 
-impl<T: CheckedAdd + Clone + Integer + Hash> Mersenne<T> {
+impl Mersenne<Number> {
     pub fn new() -> Self {
         Self {
             gaps: PrimeGaps::new(),
-            ctr: T::one() + T::one() + T::one() + T::one(),
+            ctr: 4,
             overflowed: false,
         }
     }
@@ -25,12 +24,16 @@ impl<T: CheckedAdd + Clone + Integer + Hash> Mersenne<T> {
 
 impl Mersenne<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            gaps: PrimeGaps::new(),
+            ctr: BigInt::from(4),
+            overflowed: false,
+        }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Integer + Hash> Iterator for Mersenne<T> {
-    type Item = T;
+impl Iterator for Mersenne<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
@@ -38,18 +41,32 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer + Hash> Iterator for Mersenne<
         }
 
         let p = self.gaps.next()?;
-        let two = T::one() + T::one();
-
-        let out = self.ctr.clone() - T::one();
+        let out = self.ctr - 1;
 
         for _ in 0..p {
-            match self.ctr.checked_mul(&two) {
+            match self.ctr.checked_mul(2) {
                 Some(n) => self.ctr = n,
                 None => {
                     self.overflowed = true;
                     return Some(out);
                 }
             };
+        }
+
+        Some(out)
+    }
+}
+
+impl Iterator for Mersenne<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let p = self.gaps.next()?;
+
+        let out = self.ctr.clone() - 1;
+
+        for _ in 0..p {
+            self.ctr *= 2;
         }
 
         Some(out)

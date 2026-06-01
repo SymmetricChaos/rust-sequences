@@ -1,8 +1,9 @@
 use crate::{
+    Number,
     core::{parity::Odds, traits::Increment},
     transforms::complement::Complement,
 };
-use num::{BigInt, CheckedAdd, Integer};
+use num::{BigInt, One, Zero};
 
 /// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.
 ///
@@ -15,7 +16,7 @@ pub struct Ludic<T> {
     terms: Vec<[T; 2]>,
 }
 
-impl<T: CheckedAdd + Clone + Integer> Ludic<T> {
+impl Ludic<Number> {
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -27,12 +28,16 @@ impl<T: CheckedAdd + Clone + Integer> Ludic<T> {
 
 impl Ludic<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: 0,
+            odds: Odds::new(),
+            terms: Vec::new(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
-    type Item = T;
+impl Iterator for Ludic<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         // First term
@@ -44,8 +49,8 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
         // Second term
         if self.ctr == 1 {
             self.ctr += 1;
-            self.terms.push([self.odds.next()?, T::zero()]);
-            return Some(T::one() + T::one());
+            self.terms.push([self.odds.next()?, 0]);
+            return Some(2);
         }
 
         // Most recently added number will be output
@@ -66,7 +71,49 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
             }
 
             // Now that a new term has been determined it starts it own independent counter
-            self.terms.push([n, T::zero()]);
+            self.terms.push([n, 0]);
+
+            return Some(out);
+        }
+    }
+}
+
+impl Iterator for Ludic<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        // First term
+        if self.ctr == 0 {
+            self.ctr += 1;
+            return self.odds.next();
+        }
+
+        // Second term
+        if self.ctr == 1 {
+            self.ctr += 1;
+            self.terms.push([self.odds.next()?, BigInt::zero()]);
+            return Some(BigInt::from(2));
+        }
+
+        // Most recently added number will be output
+        let out = self.terms.last()?[0].clone();
+
+        'outer: loop {
+            // Look at the next odd number.
+            let n = self.odds.next()?;
+
+            // In order (important!) step the counters for the known terms and stop if any of the counters reach a multiple of the term
+            // Doing it this way ensures we do not double count anything and that we eliminate terms with the lower sequences first
+            for [term, count] in self.terms.iter_mut() {
+                count.incr()?;
+                *count = count.clone() % term.clone();
+                if count.is_zero() {
+                    continue 'outer;
+                }
+            }
+
+            // Now that a new term has been determined it starts it own independent counter
+            self.terms.push([n, BigInt::zero()]);
 
             return Some(out);
         }
@@ -78,20 +125,28 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ludic<T> {
 /// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21...
 pub struct NonLudic<T>(Complement<T>);
 
-impl<T: CheckedAdd + Clone + Integer + 'static> NonLudic<T> {
+impl NonLudic<Number> {
     pub fn new() -> Self {
-        Self(Complement::new(Ludic::new(), T::one()))
+        Self(Complement::new(Ludic::new(), 1))
     }
 }
 
 impl NonLudic<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self(Complement::new(Ludic::new_big(), BigInt::one()))
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for NonLudic<T> {
-    type Item = T;
+impl Iterator for NonLudic<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.next()
+    }
+}
+
+impl Iterator for NonLudic<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.0.next()

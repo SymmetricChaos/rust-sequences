@@ -1,4 +1,6 @@
-use num::{BigInt, Integer, integer::binomial};
+use num::{BigInt, Integer, One, integer::binomial};
+
+use crate::Number;
 
 /// The Narayana triangle.
 ///
@@ -10,18 +12,18 @@ pub struct NarayanaTriangle<T> {
     idx: T,
 }
 
-impl<T: Integer + Clone> NarayanaTriangle<T> {
+impl NarayanaTriangle<Number> {
     pub fn new() -> Self {
-        Self {
-            row: T::one(),
-            idx: T::one(),
-        }
+        Self { row: 1, idx: 1 }
     }
 }
 
 impl NarayanaTriangle<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            row: BigInt::one(),
+            idx: BigInt::one(),
+        }
     }
 }
 

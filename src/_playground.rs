@@ -19,7 +19,7 @@ use crate::{
 };
 
 crate::print_sequences!(
-    Harmonic::<i64>::new(), 10;
+    Harmonic::new(), 10;
     AlternatingPartialSums::new(Harmonic::new_big()), 10;
     Ratios::new(Primes::new_big(),Fibonacci::new_big().skip(1)), 10;
     AbsDiffs::new(Primes::new_big()), 10;

@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, CheckedAdd, One};
 
 /// The values of Narayana's cows sequence. From a word problem in which a mature cow produces one cow per year and a cow takes four years to mature.
@@ -10,19 +11,19 @@ pub struct NarayanasCows<T> {
     c: T,
 }
 
-impl<T: One> NarayanasCows<T> {
+impl NarayanasCows<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::one(),
-            b: T::one(),
-            c: T::one(),
-        }
+        Self { a: 1, b: 1, c: 1 }
     }
 }
 
 impl NarayanasCows<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::one(),
+            b: BigInt::one(),
+            c: BigInt::one(),
+        }
     }
 }
 
@@ -42,5 +43,5 @@ impl<T: Clone + CheckedAdd> Iterator for NarayanasCows<T> {
 }
 
 crate::check_sequences!(
-    NarayanasCows::<u16>::new(), [1, 1, 1, 2, 3, 4, 6, 9, 13, 19, 28, 41, 60, 88];
+    NarayanasCows::new(), [1, 1, 1, 2, 3, 4, 6, 9, 13, 19, 28, 41, 60, 88];
 );
