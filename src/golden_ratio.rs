@@ -1,5 +1,5 @@
-use crate::fibonacci::Fibonacci;
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, rational::Ratio};
+use crate::{Number, fibonacci::Fibonacci};
+use num::{BigInt, rational::Ratio};
 
 /// Convergents of the golden ratio as calculated from the Fibonacci sequence.
 ///
@@ -9,7 +9,7 @@ pub struct GoldenRatio<T> {
     a: T,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Integer> GoldenRatio<T> {
+impl GoldenRatio<Number> {
     pub fn new() -> Self {
         let mut fib = Fibonacci::new();
         fib.next().unwrap();
@@ -20,12 +20,26 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> GoldenRatio<T> {
 
 impl GoldenRatio<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut fib = Fibonacci::new_big();
+        fib.next().unwrap();
+        let a = fib.next().unwrap();
+        Self { fib, a }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for GoldenRatio<T> {
-    type Item = Ratio<T>;
+impl Iterator for GoldenRatio<Number> {
+    type Item = Ratio<Number>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let b = self.fib.next()?;
+        let out = Ratio::new(b, self.a);
+        self.a = b;
+        Some(out)
+    }
+}
+
+impl Iterator for GoldenRatio<BigInt> {
+    type Item = Ratio<BigInt>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let b = self.fib.next()?;

@@ -1,6 +1,7 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer};
+use crate::Number;
+use num::BigInt;
 
-/// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly, u64 can only produce 6 terms and u128 can only produce 7.
+/// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly.
 ///
 /// ```text
 /// 3, 5, 17, 257, 65537, 4294967297...
@@ -10,10 +11,10 @@ pub struct Fermat<T> {
     overflowed: bool,
 }
 
-impl<T: Integer + Clone> Fermat<T> {
+impl Fermat<Number> {
     pub fn new() -> Self {
         Self {
-            prev: T::one() + T::one() + T::one(),
+            prev: 3,
             overflowed: false,
         }
     }
@@ -21,12 +22,15 @@ impl<T: Integer + Clone> Fermat<T> {
 
 impl Fermat<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            prev: BigInt::from(3),
+            overflowed: false,
+        }
     }
 }
 
-impl<T: Integer + Clone + CheckedMul + CheckedAdd> Iterator for Fermat<T> {
-    type Item = T;
+impl Iterator for Fermat<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
@@ -34,9 +38,9 @@ impl<T: Integer + Clone + CheckedMul + CheckedAdd> Iterator for Fermat<T> {
         }
         let out = self.prev.clone();
 
-        let t = self.prev.clone() - T::one();
-        match (t).checked_mul(&t) {
-            Some(x) => match x.checked_add(&T::one()) {
+        let t = self.prev.clone() - 1;
+        match t.checked_mul(t) {
+            Some(x) => match x.checked_add(1) {
                 Some(n) => self.prev = n,
                 None => return Some(out),
             },
@@ -47,6 +51,20 @@ impl<T: Integer + Clone + CheckedMul + CheckedAdd> Iterator for Fermat<T> {
     }
 }
 
+impl Iterator for Fermat<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.prev.clone();
+
+        let t = self.prev.clone() - 1;
+        self.prev = (&t * &t) + 1;
+
+        Some(out)
+    }
+}
+
 crate::check_sequences!(
-    Fermat::<u64>::new(), [3_u64, 5, 17, 257, 65537, 4294967297];
+    Fermat::new(), [3_u64, 5, 17, 257, 65537, 4294967297];
+    Fermat::new_big(), [3_u64, 5, 17, 257, 65537, 4294967297];
 );

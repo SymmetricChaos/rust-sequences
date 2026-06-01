@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, One, Zero};
+use crate::Number;
+use num::{BigInt, One, Zero};
 use std::collections::VecDeque;
 
 /// The Fibonacci numbers. Starting with 0 and 1 every term is the sum of the two previous.
@@ -11,27 +12,39 @@ pub struct Fibonacci<T> {
     b: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Fibonacci<T> {
+impl Fibonacci<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::zero(),
-            b: T::one(),
-        }
+        Self { a: 0, b: 1 }
     }
 }
 
 impl Fibonacci<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::zero(),
+            b: BigInt::one(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone> Iterator for Fibonacci<T> {
-    type Item = T;
+impl Iterator for Fibonacci<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a;
+        let t = self.a.checked_add(self.b)?;
+        self.a = self.b;
+        self.b = t;
+        Some(out)
+    }
+}
+
+impl Iterator for Fibonacci<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = self.a.checked_add(&self.b)?;
+        let t = &self.a + &self.b;
         self.a = self.b.clone();
         self.b = t;
         Some(out)

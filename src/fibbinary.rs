@@ -1,4 +1,4 @@
-use crate::core::traits::Increment;
+use crate::{Number, core::traits::Increment};
 
 /// The Fibbinary numbers, the natural numbers, starting at zero, which contain no consecutive 1s in their binary expansion.
 ///
@@ -6,7 +6,7 @@ use crate::core::traits::Increment;
 /// 0, 1, 2, 4, 5, 8, 9, 10, 16, 17, 18...
 /// ```
 pub struct Fibbinary {
-    ctr: u64,
+    ctr: Number,
 }
 
 impl Fibbinary {
@@ -14,7 +14,7 @@ impl Fibbinary {
         Self { ctr: 0 }
     }
 
-    pub fn is_fibbinary(mut n: u64) -> bool {
+    pub fn is_fibbinary(mut n: Number) -> bool {
         let mut prev = n & 1;
         for _ in 0..64 {
             n >>= 1;
@@ -30,7 +30,7 @@ impl Fibbinary {
 }
 
 impl Iterator for Fibbinary {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

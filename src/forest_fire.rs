@@ -1,17 +1,18 @@
 use std::collections::HashSet;
 
+use crate::Number;
+
 /// The forest fire sequence. Each term is the smallest value such that not three terms form an arithmetic sequences. The graph resembles wind blown spoke.
 ///
 /// ```text
 /// 1, 1, 2, 1, 1, 2, 2, 4, 4, 1, 1, 2, 1, 1, 2, 2...
 /// ```
 pub struct ForestFire {
-    terms: Vec<u64>,
+    terms: Vec<Number>,
     n: usize,
 }
 
 impl ForestFire {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         Self {
             terms: vec![],
@@ -21,7 +22,7 @@ impl ForestFire {
 }
 
 impl Iterator for ForestFire {
-    type Item = u64;
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let n = self.n;

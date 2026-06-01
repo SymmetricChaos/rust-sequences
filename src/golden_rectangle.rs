@@ -1,5 +1,5 @@
-use crate::fibonacci::Fibonacci;
-use num::{BigInt, CheckedAdd, CheckedMul, One, Zero};
+use crate::{Number, fibonacci::Fibonacci};
+use num::BigInt;
 
 /// The golden rectangle numbers. The area of triangles that converge on having sides with lengths that are the golden ration.
 ///
@@ -11,7 +11,7 @@ pub struct GoldenRectangle<T> {
     a: T,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> GoldenRectangle<T> {
+impl GoldenRectangle<Number> {
     pub fn new() -> Self {
         let mut fib = Fibonacci::new();
         let a = fib.next().unwrap();
@@ -21,16 +21,29 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> GoldenRectangle<T> {
 
 impl GoldenRectangle<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut fib = Fibonacci::new_big();
+        let a = fib.next().unwrap();
+        Self { fib, a }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> Iterator for GoldenRectangle<T> {
-    type Item = T;
+impl Iterator for GoldenRectangle<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let b = self.fib.next()?;
-        let out = self.a.checked_mul(&b)?;
+        let out = self.a.checked_mul(b)?;
+        self.a = b.clone();
+        Some(out)
+    }
+}
+
+impl Iterator for GoldenRectangle<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let b = self.fib.next()?;
+        let out = &self.a * &b;
         self.a = b.clone();
         Some(out)
     }
@@ -44,7 +57,7 @@ pub struct GoldenRectangleSides<T> {
     a: T,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> GoldenRectangleSides<T> {
+impl GoldenRectangleSides<Number> {
     pub fn new() -> Self {
         let mut fib = Fibonacci::new();
         let a = fib.next().unwrap();
@@ -54,17 +67,30 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> GoldenRectangleSides<T> {
 
 impl GoldenRectangleSides<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut fib = Fibonacci::new_big();
+        let a = fib.next().unwrap();
+        Self { fib, a }
     }
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> Iterator for GoldenRectangleSides<T> {
-    type Item = (T, T);
+impl Iterator for GoldenRectangleSides<Number> {
+    type Item = (Number, Number);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let b = self.fib.next()?;
+        let out = (self.a, b);
+        self.a = b;
+        Some(out)
+    }
+}
+
+impl Iterator for GoldenRectangleSides<BigInt> {
+    type Item = (BigInt, BigInt);
 
     fn next(&mut self) -> Option<Self::Item> {
         let b = self.fib.next()?;
         let out = (self.a.clone(), b.clone());
-        self.a = b.clone();
+        self.a = b;
         Some(out)
     }
 }
