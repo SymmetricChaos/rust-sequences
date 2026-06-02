@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, One};
 
+use crate::Number;
+
 /// The rows of Pascal's triangle, aka the binomial coefficients.
 ///
 /// ```text
@@ -9,11 +11,9 @@ pub struct PascalsTriangle<T> {
     row: Vec<T>,
 }
 
-impl<T: CheckedAdd + Clone + One> PascalsTriangle<T> {
+impl PascalsTriangle<Number> {
     pub fn new() -> Self {
-        Self {
-            row: vec![T::one()],
-        }
+        Self { row: vec![1] }
     }
 }
 
@@ -48,11 +48,9 @@ pub struct BernoullisTriangle<T> {
     row: Vec<T>,
 }
 
-impl<T: CheckedAdd + Clone + One> BernoullisTriangle<T> {
+impl BernoullisTriangle<Number> {
     pub fn new() -> Self {
-        Self {
-            row: vec![T::one()],
-        }
+        Self { row: vec![1] }
     }
 }
 
@@ -86,6 +84,6 @@ crate::print_sequences!(
 );
 
 crate::check_sequences!(
-    PascalsTriangle::<i32>::new().flatten(), [1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1, 1, 5, 10, 10, 5];
-    BernoullisTriangle::<i32>::new().flatten(), [1, 1, 2, 1, 3, 4, 1, 4, 7, 8, 1, 5, 11, 15, 16, 1, 6, 16, 26, 31];
+    PascalsTriangle::new().flatten(), [1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1, 1, 5, 10, 10, 5];
+    BernoullisTriangle::new().flatten(), [1, 1, 2, 1, 3, 4, 1, 4, 7, 8, 1, 5, 11, 15, 16, 1, 6, 16, 26, 31];
 );

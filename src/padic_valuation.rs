@@ -1,8 +1,9 @@
 use crate::{
-    core::rationals::Rationals,
+    Number,
+    core::{rationals::Rationals, traits::Increment},
     utils::padic::{padic_abs, padic_valuation},
 };
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Signed, rational::Ratio};
+use num::{BigInt, CheckedMul, One, rational::Ratio};
 
 /// The k-adic valuation of each positive integer. When k is prime it is a p-adic valuation.
 ///
@@ -15,9 +16,9 @@ pub struct PadicValuation<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer + One> PadicValuation<T> {
-    pub fn new(p: T) -> Self {
-        Self { p, ctr: T::one() }
+impl PadicValuation<Number> {
+    pub fn new(p: Number) -> Self {
+        Self { p, ctr: 1 }
     }
 }
 
@@ -33,17 +34,28 @@ impl PadicValuation<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for PadicValuation<T> {
-    type Item = T;
+impl Iterator for PadicValuation<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let val = padic_valuation(&self.ctr, &self.p);
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.incr()?;
+        Some(val)
+    }
+}
+
+impl Iterator for PadicValuation<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let val = padic_valuation(&self.ctr, &self.p);
+        self.ctr.incr()?;
         Some(val)
     }
 }
 
 /// The k-adic absolute value of each positive integer. When k is prime it is a p-adic absolute value.
+///
 /// ```text
 /// For k = 2
 /// 1, 1/2, 1, 1/4, 1, 1/2, 1, 1/8...
@@ -53,9 +65,9 @@ pub struct PadicAbs<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer + One> PadicAbs<T> {
-    pub fn new(p: T) -> Self {
-        Self { p, ctr: T::one() }
+impl PadicAbs<Number> {
+    pub fn new(p: Number) -> Self {
+        Self { p, ctr: 1 }
     }
 }
 
@@ -71,12 +83,22 @@ impl PadicAbs<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer> Iterator for PadicAbs<T> {
-    type Item = Ratio<T>;
+impl Iterator for PadicAbs<Number> {
+    type Item = Ratio<Number>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let val = padic_abs(&self.ctr, &self.p);
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.incr()?;
+        Some(val)
+    }
+}
+
+impl Iterator for PadicAbs<BigInt> {
+    type Item = Ratio<BigInt>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let val = padic_abs(&self.ctr, &self.p);
+        self.ctr.incr()?;
         Some(val)
     }
 }
@@ -87,8 +109,8 @@ pub struct PadicValuationRational<T> {
     rationals: Rationals<T>,
 }
 
-impl<T: CheckedAdd + Clone + Integer + One + Signed + CheckedSub> PadicValuationRational<T> {
-    pub fn new(p: T) -> Self {
+impl PadicValuationRational<Number> {
+    pub fn new(p: Number) -> Self {
         Self {
             p,
             rationals: Rationals::new_pos(),
@@ -108,8 +130,21 @@ impl PadicValuationRational<BigInt> {
     }
 }
 
-impl<T: CheckedAdd + Clone + Integer + CheckedSub + Signed> Iterator for PadicValuationRational<T> {
-    type Item = T;
+impl Iterator for PadicValuationRational<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let q = self.rationals.next()?;
+
+        let val_numer = padic_valuation(q.numer(), &self.p);
+        let val_denom = padic_valuation(q.denom(), &self.p);
+
+        Some(val_numer - val_denom)
+    }
+}
+
+impl Iterator for PadicValuationRational<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let q = self.rationals.next()?;
@@ -127,11 +162,11 @@ pub struct PadicAbsRational<T> {
     rationals: Rationals<T>,
 }
 
-impl<T: CheckedAdd + Clone + Integer + One + Signed + CheckedSub> PadicAbsRational<T> {
-    pub fn new(p: T) -> Self {
+impl PadicAbsRational<Number> {
+    pub fn new(p: Number) -> Self {
         Self {
             p,
-            rationals: Rationals::<T>::new_pos(),
+            rationals: Rationals::new_pos(),
         }
     }
 }
@@ -148,10 +183,21 @@ impl PadicAbsRational<BigInt> {
     }
 }
 
-impl<T: CheckedMul + CheckedAdd + Clone + Integer + CheckedSub + Signed> Iterator
-    for PadicAbsRational<T>
-{
-    type Item = Ratio<T>;
+impl Iterator for PadicAbsRational<Number> {
+    type Item = Ratio<Number>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let q = self.rationals.next()?;
+
+        let val_numer = padic_abs(q.numer(), &self.p);
+        let val_denom = padic_abs(q.denom(), &self.p).recip();
+
+        val_numer.checked_mul(&val_denom)
+    }
+}
+
+impl Iterator for PadicAbsRational<BigInt> {
+    type Item = Ratio<BigInt>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let q = self.rationals.next()?;

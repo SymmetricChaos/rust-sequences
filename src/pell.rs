@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, One, Zero};
+use crate::Number;
+use num::{BigInt, One, Zero};
 
 /// The Pell numbers.
 ///
@@ -10,27 +11,39 @@ pub struct Pell<T> {
     b: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Pell<T> {
+impl Pell<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::zero(),
-            b: T::one(),
-        }
+        Self { a: 0, b: 1 }
     }
 }
 
 impl Pell<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            a: BigInt::zero(),
+            b: BigInt::one(),
+        }
     }
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Iterator for Pell<T> {
-    type Item = T;
+impl Iterator for Pell<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a;
+        let t = self.a.checked_add(self.b.checked_add(self.b)?)?;
+        self.a = self.b;
+        self.b = t;
+        Some(out)
+    }
+}
+
+impl Iterator for Pell<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = self.a.checked_add(&(self.b.checked_add(&self.b)?))?;
+        let t = self.a.checked_add(&self.b.checked_add(&self.b)?)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -47,30 +60,39 @@ pub struct CompanionPell<T> {
     b: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> CompanionPell<T> {
+impl CompanionPell<Number> {
     pub fn new() -> Self {
-        Self {
-            a: T::one() + T::one(),
-            b: T::one() + T::one(),
-        }
+        Self { a: 2, b: 2 }
     }
 }
 
 impl CompanionPell<BigInt> {
     pub fn new_big() -> Self {
         Self {
-            a: BigInt::one() + BigInt::one(),
-            b: BigInt::one() + BigInt::one(),
+            a: BigInt::from(2),
+            b: BigInt::from(2),
         }
     }
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Iterator for CompanionPell<T> {
-    type Item = T;
+impl Iterator for CompanionPell<Number> {
+    type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = self.a.checked_add(&(self.b.checked_add(&self.b)?))?;
+        let t = self.a.checked_add(self.b.checked_add(self.b)?)?;
+        self.a = self.b.clone();
+        self.b = t;
+        Some(out)
+    }
+}
+
+impl Iterator for CompanionPell<BigInt> {
+    type Item = BigInt;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.a.clone();
+        let t = self.a.checked_add(&self.b.checked_add(&self.b)?)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)

@@ -7,7 +7,7 @@ use num::BigInt;
 /// 3, 7, 31, 127, 2047, 8191, 131071...
 /// ```
 pub struct Mersenne<T> {
-    gaps: PrimeGaps<usize>,
+    gaps: PrimeGaps<Number>,
     ctr: T,
     overflowed: bool,
 }

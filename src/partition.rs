@@ -1,7 +1,10 @@
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One};
 
+use crate::Number;
+
 /// The number of partitons for each non-negative integer.
+///
 /// ```text
 /// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30...
 /// ```
@@ -10,10 +13,10 @@ pub struct Partition<T> {
     ctr: usize,
 }
 
-impl<T: One> Partition<T> {
+impl Partition<Number> {
     pub fn new() -> Self {
         Self {
-            values: vec![T::one()],
+            values: vec![1],
             ctr: 0,
         }
     }
@@ -21,7 +24,10 @@ impl<T: One> Partition<T> {
 
 impl Partition<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            values: vec![BigInt::one()],
+            ctr: 0,
+        }
     }
 }
 
@@ -171,12 +177,12 @@ impl Iterator for Partitions {
 
 crate::check_iteration_times!(
     Partition::new_big(), 405;
-    Partition::<u64>::new(), 405;
+    Partition::new(), 405;
 );
 
 crate::check_sequences!(
     Partition::new_big(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
-    Partition::<u64>::new(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+    Partition::new(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );
 
 crate::print_sequences!(

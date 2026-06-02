@@ -1,8 +1,8 @@
-use crate::ruler::Ruler;
-use num::{BigInt, CheckedAdd, Integer};
-use std::ops::Rem;
+use crate::{Number, ruler::Ruler};
+use num::BigInt;
 
 /// The period doubling sequence. Fixed point for the string rewrite rule 0 -> 01 and 1 -> 00. Equivalent to the parity of the 2-adic valuation of each non-negative integer.
+///
 /// ```text
 /// 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0...
 /// ```
@@ -11,23 +11,35 @@ pub struct PeriodDoubling<T> {
     two: T,
 }
 
-impl<T: Clone + CheckedAdd + Integer> PeriodDoubling<T> {
+impl PeriodDoubling<Number> {
     pub fn new() -> Self {
         Self {
             two_adic_val: Ruler::new(),
-            two: T::one() + T::one(),
+            two: 2,
         }
     }
 }
 
 impl PeriodDoubling<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            two_adic_val: Ruler::new_big(),
+            two: BigInt::from(2),
+        }
     }
 }
 
-impl<T: Clone + CheckedAdd + Integer + Rem> Iterator for PeriodDoubling<T> {
-    type Item = T;
+impl Iterator for PeriodDoubling<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let n = self.two_adic_val.next()?;
+        Some(n % self.two.clone())
+    }
+}
+
+impl Iterator for PeriodDoubling<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let n = self.two_adic_val.next()?;
@@ -36,7 +48,7 @@ impl<T: Clone + CheckedAdd + Integer + Rem> Iterator for PeriodDoubling<T> {
 }
 
 crate::check_iteration_times!(
-    PeriodDoubling::<u32>::new(), 1_000_000;
+    PeriodDoubling::new(), 1_000_000;
     PeriodDoubling::new_big(), 1_000_000;
 );
 

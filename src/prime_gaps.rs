@@ -1,4 +1,4 @@
-use crate::core::primes::Primes;
+use crate::{Number, core::primes::Primes};
 use num::{BigInt, CheckedAdd, Integer};
 use std::hash::Hash;
 
@@ -12,20 +12,22 @@ pub struct PrimeGaps<T> {
     prev: T,
 }
 
-impl<T: CheckedAdd + Eq + Hash + Integer + Clone> PrimeGaps<T> {
+impl PrimeGaps<Number> {
     pub fn new() -> Self {
         let mut primes = Primes::new();
         primes.next();
-        Self {
-            primes,
-            prev: T::one() + T::one(),
-        }
+        Self { primes, prev: 2 }
     }
 }
 
 impl PrimeGaps<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut primes = Primes::new_big();
+        primes.next();
+        Self {
+            primes,
+            prev: BigInt::from(2),
+        }
     }
 }
 
@@ -41,5 +43,5 @@ impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for PrimeGaps<T> {
 }
 
 crate::check_sequences!(
-    PrimeGaps::<i32>::new(), [1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4, 2, 4, 6, 6, 2, 6, 4, 2, 6, 4, 6, 8, 4, 2, 4, 2, 4, 14, 4, 6, 2, 10, 2, 6, 6, 4, 6, 6, 2, 10, 2, 4, 2, 12, 12, 4, 2, 4, 6, 2, 10, 6, 6, 6, 2, 6, 4, 2, 10, 14, 4, 2, 4, 14, 6, 10, 2, 4, 6, 8, 6, 6, 4, 6, 8, 4, 8, 10, 2, 10, 2, 6, 4, 6, 8, 4, 2, 4, 12, 8, 4, 8, 4, 6, 12];
+    PrimeGaps::new(), [1, 2, 2, 4, 2, 4, 2, 4, 6, 2, 6, 4, 2, 4, 6, 6, 2, 6, 4, 2, 6, 4, 6, 8, 4, 2, 4, 2, 4, 14, 4, 6, 2, 10, 2, 6, 6, 4, 6, 6, 2, 10, 2, 4, 2, 12, 12, 4, 2, 4, 6, 2, 10, 6, 6, 6, 2, 6, 4, 2, 10, 14, 4, 2, 4, 14, 6, 10, 2, 4, 6, 8, 6, 6, 4, 6, 8, 4, 8, 10, 2, 10, 2, 6, 4, 6, 8, 4, 2, 4, 12, 8, 4, 8, 4, 6, 12];
 );

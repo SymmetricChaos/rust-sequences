@@ -1,4 +1,6 @@
-use num::{BigInt, CheckedAdd, Integer, Signed};
+use num::{BigInt, CheckedAdd, Integer, One, Signed};
+
+use crate::Number;
 
 /// Starting with 1 the sequence is extended by repeatedly taking the terms generated so far and appending them in reverse order, each incremented by one.
 ///
@@ -10,10 +12,10 @@ pub struct ReverseAndIncrement<T> {
     idx: usize,
 }
 
-impl<T: CheckedAdd + Clone + Integer> ReverseAndIncrement<T> {
+impl ReverseAndIncrement<Number> {
     pub fn new() -> Self {
         Self {
-            terms: vec![T::one()],
+            terms: vec![1],
             idx: 0,
         }
     }
@@ -21,7 +23,10 @@ impl<T: CheckedAdd + Clone + Integer> ReverseAndIncrement<T> {
 
 impl ReverseAndIncrement<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            terms: vec![BigInt::one()],
+            idx: 0,
+        }
     }
 }
 
@@ -52,7 +57,7 @@ pub struct PiMu<T> {
     s: ReverseAndIncrement<T>,
 }
 
-impl<T: CheckedAdd + Clone + Integer + Signed> PiMu<T> {
+impl PiMu<Number> {
     pub fn new() -> Self {
         let mut s = ReverseAndIncrement::new();
         let prev = s.next().unwrap();
@@ -62,7 +67,9 @@ impl<T: CheckedAdd + Clone + Integer + Signed> PiMu<T> {
 
 impl PiMu<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut s = ReverseAndIncrement::new_big();
+        let prev = s.next().unwrap();
+        Self { prev, s }
     }
 }
 
@@ -78,6 +85,6 @@ impl<T: CheckedAdd + Clone + Integer + Signed> Iterator for PiMu<T> {
 }
 
 crate::check_sequences!(
-    ReverseAndIncrement::<i32>::new(), [1, 2, 3, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 5, 6, 7, 6, 5, 6, 5, 4, 3, 4, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 5, 6, 7, 6, 5, 6, 5, 4, 5, 6, 7, 6, 7, 8, 7, 6, 5, 6, 7, 6, 5, 6, 5, 4, 3, 4, 5, 4, 5, 6];
-    PiMu::<i32>::new(), [1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, -1, -1];
+    ReverseAndIncrement::new(), [1, 2, 3, 2, 3, 4, 3, 2, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 5, 6, 7, 6, 5, 6, 5, 4, 3, 4, 5, 4, 5, 6, 5, 4, 3, 4, 5, 4, 3, 4, 3, 2, 3, 4, 5, 4, 5, 6, 5, 4, 5, 6, 7, 6, 5, 6, 5, 4, 5, 6, 7, 6, 7, 8, 7, 6, 5, 6, 7, 6, 5, 6, 5, 4, 3, 4, 5, 4, 5, 6];
+    PiMu::new(), [1, 1, -1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, 1, -1, -1];
 );

@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{
     BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Zero, bigint::Sign, rational::Ratio,
 };
@@ -8,18 +9,21 @@ pub struct WallisProduct<T> {
     product: Ratio<T>,
 }
 
-impl<T: Clone + Integer + One> WallisProduct<T> {
+impl WallisProduct<Number> {
     pub fn new() -> Self {
         Self {
-            ctr: T::one(),
-            product: Ratio::<T>::one(),
+            ctr: 1,
+            product: Ratio::one(),
         }
     }
 }
 
 impl WallisProduct<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::one(),
+            product: Ratio::one(),
+        }
     }
 }
 
@@ -44,12 +48,12 @@ pub struct Leibniz<T> {
     sum: Ratio<T>,
 }
 
-impl<T: Clone + CheckedAdd + Integer + CheckedMul + CheckedSub> Leibniz<T> {
+impl Leibniz<Number> {
     pub fn new() -> Self {
         Self {
-            k: T::one(),
+            k: 1,
             sign: Sign::Plus,
-            sum: Ratio::new(T::zero(), T::one()),
+            sum: Ratio::new(0, 1),
         }
     }
 }
