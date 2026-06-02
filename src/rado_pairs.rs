@@ -1,5 +1,5 @@
-use crate::{sorted_pairs::SortedPairsStrict, utils::bit_predicate::bit_predicate};
-use num::{BigInt, CheckedAdd, One, Zero};
+use crate::{Number, sorted_pairs::SortedPairsStrict, utils::bit_predicate::bit_predicate};
+use num::{BigInt, One};
 
 /// The ordered pairs of numbers connected by an edge in the infinite Rado graph. Alternatively every pair of numbers (a,b) such that the ath digit of b is 1.
 ///
@@ -10,7 +10,7 @@ pub struct RadoPairs<T> {
     pairs: SortedPairsStrict<T>,
 }
 
-impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> RadoPairs<T> {
+impl RadoPairs<Number> {
     pub fn new() -> Self {
         Self {
             pairs: SortedPairsStrict::new(),
@@ -18,26 +18,25 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> RadoPairs<T> {
     }
 }
 
-macro_rules! impl_rado_pairs {
-    ($t: ty) => {
-        impl Iterator for RadoPairs<$t> {
-            type Item = ($t, $t);
-
-            fn next(&mut self) -> Option<Self::Item> {
-                loop {
-                    let (a, b) = self.pairs.next()?;
-                    if bit_predicate(a, b) || bit_predicate(b, a) {
-                        return Some((a, b));
-                    }
-                }
-            }
+impl RadoPairs<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            pairs: SortedPairsStrict::new_big(),
         }
-    };
+    }
 }
 
-impl_rado_pairs!(u8);
-impl_rado_pairs!(u16);
-impl_rado_pairs!(u32);
+impl Iterator for RadoPairs<Number> {
+    type Item = (Number, Number);
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let (a, b) = self.pairs.next()?;
+            if bit_predicate(a as u32, b as u32) || bit_predicate(b as u32, a as u32) {
+                return Some((a, b));
+            }
+        }
+    }
+}
 
 impl Iterator for RadoPairs<BigInt> {
     type Item = (BigInt, BigInt);
@@ -57,5 +56,5 @@ impl Iterator for RadoPairs<BigInt> {
 }
 
 crate::print_sequences!(
-    RadoPairs::<u8>::new(), 20, "{:?}", ", ";
+    RadoPairs::new(), 20, "{:?}", ", ";
 );

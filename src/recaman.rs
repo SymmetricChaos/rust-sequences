@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedSub, Integer};
+use crate::{Number, core::traits::Increment};
+use num::{BigInt, One, Zero};
 
 /// Recamán's sequence. Decreases by n unless that number has already appeared or would be negative in which case it increases by n.
 ///
@@ -11,11 +12,11 @@ pub struct Recaman<T> {
     prev: Vec<T>,
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + Integer> Recaman<T> {
+impl Recaman<Number> {
     pub fn new() -> Self {
         Self {
-            n: T::zero(),
-            ctr: T::one(),
+            n: 0,
+            ctr: 1,
             prev: Vec::new(),
         }
     }
@@ -23,12 +24,41 @@ impl<T: Clone + CheckedAdd + CheckedSub + Integer> Recaman<T> {
 
 impl Recaman<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            n: BigInt::zero(),
+            ctr: BigInt::one(),
+            prev: Vec::new(),
+        }
     }
 }
 
-impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for Recaman<T> {
-    type Item = T;
+impl Iterator for Recaman<Number> {
+    type Item = Number;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = self.n;
+
+        if self.ctr >= self.n {
+            self.n = self.n.checked_add(self.ctr)?
+        } else {
+            let down = self.n.checked_sub(self.ctr)?;
+            if self.prev.contains(&down) {
+                self.n = self.n.checked_add(self.ctr)?;
+            } else {
+                self.n = down;
+            }
+        }
+
+        self.ctr.incr()?;
+
+        self.prev.push(self.n);
+
+        Some(out)
+    }
+}
+
+impl Iterator for Recaman<BigInt> {
+    type Item = BigInt;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.n.clone();
@@ -44,7 +74,7 @@ impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for Recaman<T> {
             }
         }
 
-        self.ctr = self.ctr.checked_add(&T::one())?;
+        self.ctr.incr()?;
 
         self.prev.push(self.n.clone());
 
