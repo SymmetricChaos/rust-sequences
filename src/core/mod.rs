@@ -24,6 +24,7 @@ pub mod alternating;
 pub mod combinations;
 pub mod continued_fraction;
 pub mod traits;
+pub mod unit;
 
 pub use alternating::*;
 pub use arithmetic::*;

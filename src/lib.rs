@@ -116,7 +116,6 @@ pub mod taxicab;
 pub mod thue_morse;
 pub mod trig;
 pub mod twin_primes;
-pub mod unit;
 pub mod weyl;
 pub mod zeta;
 
