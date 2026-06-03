@@ -36,8 +36,8 @@ crate::print_sequences!(
     DirichletConvolution::new_big(one,one), 10; // identical to number of divisors function, below
     NumberOfDivisors::new(), 10;
     BoustrophedonTriangle::new(Primes::new_big()), 5, "{:?}", "\n";
-    Ruler::<u32>::new(), 20;
-    OrdinalTransform::new(Ruler::<u32>::new()), 20;
+    Ruler::new(), 20;
+    OrdinalTransform::new(Ruler::new()), 20;
     Lodumo::new(Fibonacci::new(),5), 20; // A160081
     Complement::new(Deficient::new(), 1), 20; // The non-deficient numbers (abundant and perfect numbers)
 );

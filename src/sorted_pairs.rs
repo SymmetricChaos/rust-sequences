@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, CheckedAdd, One, Zero};
 
 /// All pairs of non-negative integers where the first is not more than the second.
@@ -6,18 +7,18 @@ pub struct SortedPairs<T> {
     col: T,
 }
 
-impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> SortedPairs<T> {
+impl SortedPairs<Number> {
     pub fn new() -> Self {
-        Self {
-            row: T::zero(),
-            col: T::zero(),
-        }
+        Self { row: 0, col: 0 }
     }
 }
 
 impl SortedPairs<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            row: BigInt::zero(),
+            col: BigInt::zero(),
+        }
     }
 }
 
@@ -43,12 +44,9 @@ pub struct SortedPairsStrict<T> {
     col: T,
 }
 
-impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> SortedPairsStrict<T> {
+impl SortedPairsStrict<Number> {
     pub fn new() -> Self {
-        Self {
-            row: T::one(),
-            col: T::zero(),
-        }
+        Self { row: 1, col: 0 }
     }
 }
 
@@ -78,6 +76,6 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Iterator for SortedPairsSt
 }
 
 crate::print_sequences!(
-    SortedPairsStrict::<i32>::new(), 10, "{:?}", ", ";
-    SortedPairs::<i32>::new(), 10, "{:?}", ", ";
+    SortedPairsStrict::new(), 10, "{:?}", ", ";
+    SortedPairs::new(), 10, "{:?}", ", ";
 );

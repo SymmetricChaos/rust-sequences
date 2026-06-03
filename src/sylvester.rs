@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, One};
 
 /// Sylvester's sequence. Starting at 2 each term is the product of all previous terms plus one. Overflow occurs quickly for fixed width integer types but the largest representable value will be returned.
@@ -10,10 +11,10 @@ pub struct Sylvester<T> {
     overflowed: bool,
 }
 
-impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Sylvester<T> {
+impl Sylvester<Number> {
     pub fn new() -> Self {
         Self {
-            current: T::one() + T::one(),
+            current: 2,
             overflowed: false,
         }
     }
@@ -21,7 +22,10 @@ impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Sylvester<T> {
 
 impl Sylvester<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            current: BigInt::from(2),
+            overflowed: false,
+        }
     }
 }
 
@@ -53,6 +57,6 @@ impl<T: Clone + One + CheckedMul + CheckedAdd + CheckedSub> Iterator for Sylvest
 }
 
 crate::check_sequences!(
-    Sylvester::<u64>::new(), [2_u64, 3, 7, 43, 1807, 3263443, 10650056950807]; // check that maximum value gets returned
+    Sylvester::new(), [2_i64, 3, 7, 43, 1807, 3263443, 10650056950807]; // check that maximum value gets returned
     Sylvester::new_big(), ["2", "3", "7", "43", "1807", "3263443", "10650056950807", "113423713055421844361000443", "12864938683278671740537145998360961546653259485195807", "165506647324519964198468195444439180017513152706377497841851388766535868639572406808911988131737645185443"];
 );

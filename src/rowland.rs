@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, FromPrimitive, Integer};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, FromPrimitive, Integer};
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1)) for some positive integer n.
 ///

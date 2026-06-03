@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, Integer, One, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
 
 /// The ruler function. Equivalent to the 2-adic valuation, the exponent of the greatest power of two that divides each positive integer.
 ///

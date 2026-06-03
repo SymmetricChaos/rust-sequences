@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
 
 pub fn unsigned_stirling_first(n: &BigInt, k: &BigInt) -> BigInt {
@@ -17,18 +18,18 @@ pub struct StirlingFirst<T> {
     row: Vec<T>,
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone> StirlingFirst<T> {
+impl StirlingFirst<Number> {
     pub fn new() -> Self {
-        Self {
-            n: T::zero(),
-            row: vec![T::one()],
-        }
+        Self { n: 0, row: vec![1] }
     }
 }
 
 impl StirlingFirst<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            n: BigInt::zero(),
+            row: vec![BigInt::one()],
+        }
     }
 }
 
@@ -63,11 +64,11 @@ pub struct StirlingFirstSigned<T> {
     pos: bool,
 }
 
-impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> StirlingFirstSigned<T> {
+impl StirlingFirstSigned<Number> {
     pub fn new() -> Self {
         Self {
-            n: T::zero(),
-            row: vec![T::one()],
+            n: 0,
+            row: vec![1],
             pos: true,
         }
     }
@@ -75,7 +76,11 @@ impl<T: One + Zero + CheckedAdd + CheckedMul + Clone + Signed> StirlingFirstSign
 
 impl StirlingFirstSigned<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            n: BigInt::zero(),
+            row: vec![BigInt::one()],
+            pos: true,
+        }
     }
 }
 

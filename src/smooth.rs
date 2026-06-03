@@ -1,3 +1,4 @@
+use crate::Number;
 use crate::core::primes::Primes;
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedDiv, Integer, One};
@@ -13,13 +14,13 @@ pub struct Smooth<T> {
     primes: Vec<T>,
 }
 
-impl<T: CheckedAdd + CheckedDiv + Clone + Hash + Integer> Smooth<T> {
+impl Smooth<Number> {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
-    pub fn new(n: T) -> Self {
-        assert!(n > T::one());
+    pub fn new(n: Number) -> Self {
+        assert!(n > 1);
         Self {
-            ctr: T::zero(),
+            ctr: 1,
             primes: Primes::new().take_while(|x| *x <= n).collect_vec(),
         }
     }
@@ -32,7 +33,12 @@ impl Smooth<BigInt> {
     where
         BigInt: From<N>,
     {
-        Self::new(BigInt::from(n))
+        let n = BigInt::from(n);
+        assert!(n > BigInt::one());
+        Self {
+            ctr: BigInt::one(),
+            primes: Primes::new().take_while(|x| *x <= n).collect_vec(),
+        }
     }
 }
 
@@ -65,10 +71,10 @@ pub struct Regular<T> {
     set: HashSet<T>,
 }
 
-impl<T: CheckedAdd + One + Ord> Regular<T> {
+impl Regular<Number> {
     pub fn new() -> Self {
         let mut heap = BinaryHeap::new();
-        heap.push(Reverse(T::one()));
+        heap.push(Reverse(1));
         Self {
             heap,
             set: HashSet::new(),
@@ -78,7 +84,12 @@ impl<T: CheckedAdd + One + Ord> Regular<T> {
 
 impl Regular<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        let mut heap = BinaryHeap::new();
+        heap.push(Reverse(BigInt::one()));
+        Self {
+            heap,
+            set: HashSet::new(),
+        }
     }
 }
 
@@ -134,12 +145,12 @@ impl<T: CheckedAdd + Clone + Ord + Hash> Iterator for Regular<T> {
 }
 
 crate::check_iteration_times!(
-    Smooth::<i32>::new(5), 1690;
-    Regular::<i32>::new(), 1690; // Only 1690 values are possible for i32
-    Regular::<u32>::new(), 1690; // this takes longer because it has more space and doesn't short circuit yet
+    Smooth::new(5), 1690;
+    Regular::new(), 1690; // Only 1690 values are possible for i32
+    Regular::new(), 1690; // this takes longer because it has more space and doesn't short circuit yet
 );
 
 crate::check_sequences!(
-    Smooth::new_big(5),    [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
-    Regular::<i32>::new(), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
+    Smooth::new_big(5), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
+    Regular::new(),     [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
 );

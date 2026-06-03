@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Signed, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Signed, Zero};
 
 /// The integers created by repeating the digits of a positive integer.
 pub struct Repint<T> {

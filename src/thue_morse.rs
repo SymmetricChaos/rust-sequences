@@ -1,5 +1,7 @@
 use num::{BigInt, One, Zero};
 
+use crate::Number;
+
 /// The Thue-Morse sequence, the unique fixed point of the mapping 0 -> 01 and 1 -> 10.
 ///
 /// ```text
@@ -12,20 +14,25 @@ pub struct ThueMorse<T> {
     one: T,
 }
 
-impl<T: Clone + One + Zero> ThueMorse<T> {
+impl ThueMorse<Number> {
     pub fn new() -> Self {
         Self {
-            value: BigInt::one() + BigInt::one(),
+            value: BigInt::from(2),
             ctr: 0,
-            zero: T::zero(),
-            one: T::one(),
+            zero: 0,
+            one: 1,
         }
     }
 }
 
 impl ThueMorse<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            value: BigInt::from(2),
+            ctr: 0,
+            zero: BigInt::zero(),
+            one: BigInt::one(),
+        }
     }
 }
 
@@ -49,13 +56,12 @@ impl<T: Clone> Iterator for ThueMorse<T> {
 }
 
 crate::check_iteration_times!(
-    ThueMorse::<BigInt>::new(), 20_000_000;
-    ThueMorse::<u32>::new(), 20_000_000;
-    ThueMorse::<i32>::new(), 20_000_000;
+    ThueMorse::new_big(), 20_000_000;
+    ThueMorse::new(), 20_000_000;
 );
 
 crate::check_sequences!(
-    ThueMorse::<BigInt>::new(), [
+    ThueMorse::new(), [
         0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0,
         1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1,
         1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1,
