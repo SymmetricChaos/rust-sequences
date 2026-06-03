@@ -1,4 +1,4 @@
-use crate::core::primes::Primes;
+use crate::{Number, core::primes::Primes};
 use num::{BigInt, CheckedAdd, Integer};
 use std::hash::Hash;
 
@@ -12,17 +12,19 @@ pub struct SafePrimes<T> {
     list: Vec<T>,
 }
 
-impl<T: CheckedAdd + Clone + Hash + Integer> SafePrimes<T> {
+impl SafePrimes<Number> {
     pub fn new() -> Self {
         let mut primes = Primes::new();
         let list = vec![primes.next().unwrap()];
-        SafePrimes { primes, list }
+        Self { primes, list }
     }
 }
 
 impl SafePrimes<BigInt> {
     pub fn new_big() -> Self {
-        SafePrimes::new()
+        let mut primes = Primes::new_big();
+        let list = vec![primes.next().unwrap()];
+        Self { primes, list }
     }
 }
 
@@ -51,17 +53,19 @@ pub struct SophieGermainPrimes<T> {
     list: Vec<T>,
 }
 
-impl<T: CheckedAdd + Clone + Hash + Integer> SophieGermainPrimes<T> {
+impl SophieGermainPrimes<Number> {
     pub fn new() -> Self {
         let mut primes = Primes::new();
         let list = vec![primes.next().unwrap()];
-        SophieGermainPrimes { primes, list }
+        Self { primes, list }
     }
 }
 
 impl SophieGermainPrimes<BigInt> {
     pub fn new_big() -> Self {
-        SophieGermainPrimes::new()
+        let mut primes = Primes::new_big();
+        let list = vec![primes.next().unwrap()];
+        Self { primes, list }
     }
 }
 
@@ -81,6 +85,6 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for SophieGermainPrimes<T>
 }
 
 crate::check_sequences!(
-    SafePrimes::<i32>::new(), [5, 7, 11, 23, 47, 59, 83, 107, 167, 179, 227, 263, 347, 359, 383, 467, 479, 503, 563, 587, 719, 839, 863, 887, 983, 1019, 1187, 1283, 1307, 1319, 1367, 1439, 1487, 1523, 1619, 1823, 1907];
-    SophieGermainPrimes::<i32>::new(), [2, 3, 5, 11, 23, 29, 41, 53, 83, 89, 113, 131, 173, 179, 191, 233, 239, 251, 281, 293, 359, 419, 431, 443, 491, 509, 593, 641, 653, 659, 683, 719, 743, 761, 809, 911, 953, 1013, 1019, 1031, 1049, 1103, 1223, 1229, 1289, 1409, 1439, 1451, 1481, 1499, 1511, 1559];
+    SafePrimes::new(), [5, 7, 11, 23, 47, 59, 83, 107, 167, 179, 227, 263, 347, 359, 383, 467, 479, 503, 563, 587, 719, 839, 863, 887, 983, 1019, 1187, 1283, 1307, 1319, 1367, 1439, 1487, 1523, 1619, 1823, 1907];
+    SophieGermainPrimes::new(), [2, 3, 5, 11, 23, 29, 41, 53, 83, 89, 113, 131, 173, 179, 191, 233, 239, 251, 281, 293, 359, 419, 431, 443, 491, 509, 593, 641, 653, 659, 683, 719, 743, 761, 809, 911, 953, 1013, 1019, 1031, 1049, 1103, 1223, 1229, 1289, 1409, 1439, 1451, 1481, 1499, 1511, 1559];
 );

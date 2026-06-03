@@ -1,4 +1,6 @@
-use num::{BigInt, CheckedAdd, Integer};
+use num::{BigInt, CheckedAdd, FromPrimitive, Integer};
+
+use crate::Number;
 
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1)) for some positive integer n.
 ///
@@ -11,11 +13,11 @@ pub struct Rowland<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> Rowland<T> {
-    pub fn new(initial: T) -> Self {
+impl Rowland<Number> {
+    pub fn new(initial: Number) -> Self {
         Self {
             value: initial,
-            ctr: T::one() + T::one(),
+            ctr: 2,
         }
     }
 }
@@ -25,7 +27,10 @@ impl Rowland<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(initial))
+        Self {
+            value: BigInt::from(initial),
+            ctr: BigInt::from_i32(2).unwrap(),
+        }
     }
 }
 
@@ -49,11 +54,11 @@ pub struct RowlandPrime<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> RowlandPrime<T> {
-    pub fn new(initial: T) -> Self {
+impl RowlandPrime<Number> {
+    pub fn new(initial: Number) -> Self {
         Self {
             value: initial,
-            ctr: T::one() + T::one(),
+            ctr: 2,
         }
     }
 }
@@ -63,7 +68,10 @@ impl RowlandPrime<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(initial))
+        Self {
+            value: BigInt::from(initial),
+            ctr: BigInt::from_i32(2).unwrap(),
+        }
     }
 }
 

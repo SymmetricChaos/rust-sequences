@@ -1,4 +1,6 @@
-use num::{BigInt, CheckedAdd, Integer};
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
+
+use crate::Number;
 
 /// The ruler function. Equivalent to the 2-adic valuation, the exponent of the greatest power of two that divides each positive integer.
 ///
@@ -11,12 +13,12 @@ pub struct Ruler<T> {
     offset: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> Ruler<T> {
+impl Ruler<Number> {
     pub fn new() -> Self {
         Self {
-            p: T::one() + T::one(),
-            ctr: T::one(),
-            offset: T::zero(),
+            p: 2,
+            ctr: 1,
+            offset: 0,
         }
     }
 
@@ -27,16 +29,20 @@ impl<T: CheckedAdd + Clone + Integer> Ruler<T> {
     /// ```
     pub fn new_plus() -> Self {
         Self {
-            p: T::one() + T::one(),
-            ctr: T::one(),
-            offset: T::one(),
+            p: 2,
+            ctr: 1,
+            offset: 1,
         }
     }
 }
 
 impl Ruler<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            p: BigInt::from(2),
+            ctr: BigInt::one(),
+            offset: BigInt::zero(),
+        }
     }
 
     /// The alternative ruler sequence which removes the zeroes.
@@ -45,7 +51,11 @@ impl Ruler<BigInt> {
     /// 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5...
     /// ```
     pub fn new_big_plus() -> Self {
-        Self::new_plus()
+        Self {
+            p: BigInt::from(2),
+            ctr: BigInt::one(),
+            offset: BigInt::one(),
+        }
     }
 }
 
@@ -71,6 +81,6 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for Ruler<T> {
 }
 
 crate::check_sequences!(
-    Ruler::<i32>::new(),      [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0];
-    Ruler::<i32>::new_plus(), [1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 7, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1];
+    Ruler::new(),      [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0];
+    Ruler::new_plus(), [1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 7, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1, 6, 1, 2, 1, 3, 1, 2, 1, 4, 1];
 );
