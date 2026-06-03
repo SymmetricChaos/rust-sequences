@@ -1,4 +1,4 @@
-use crate::core::nth_powers::NthPowers;
+use crate::{Number, core::nth_powers::NthPowers};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, Zero, rational::Ratio};
 use std::iter::Skip;
 
@@ -8,7 +8,7 @@ pub struct Zeta<T> {
     powers: Skip<NthPowers<T>>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + One + Integer> Zeta<T> {
+impl Zeta<Number> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new(p: u32) -> Self {
         Self {
@@ -21,7 +21,10 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Integer> Zeta<T> {
 impl Zeta<BigInt> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new_big(p: u32) -> Self {
-        Self::new(p)
+        Self {
+            sum: Ratio::zero(),
+            powers: NthPowers::new_big(p).skip(1),
+        }
     }
 }
 
