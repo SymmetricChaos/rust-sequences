@@ -1,4 +1,5 @@
-use num::{BigInt, CheckedAdd, Integer};
+use crate::Number;
+use num::{BigInt, CheckedAdd, Integer, One, Signed};
 
 /// A Weyl-Marsaglia sequence starting at zero. A permutation of all integers 0..n that repeats every n values.
 ///
@@ -12,17 +13,14 @@ pub struct WeylMarsaglia<T> {
     modulus: T,
 }
 
-impl<T: CheckedAdd + Clone + Integer> WeylMarsaglia<T> {
+impl WeylMarsaglia<Number> {
     /// Create a new sequence with the given step and modulus.
     /// Panics if step is not coprime to modulus.
-    pub fn new(step: T, modulus: T) -> Self {
-        assert!(modulus != T::zero(), "modulus cannot be zero");
-        assert!(
-            step.gcd(&modulus) == T::one(),
-            "step must be copriem to modulus"
-        );
+    pub fn new(step: Number, modulus: Number) -> Self {
+        assert!(modulus.is_positive(), "modulus must be positive");
+        assert!(step.gcd(&modulus) == 1, "step must be copriem to modulus");
         Self {
-            n: T::zero(),
+            n: 1,
             step,
             modulus,
         }
@@ -36,7 +34,18 @@ impl WeylMarsaglia<BigInt> {
     where
         BigInt: From<N>,
     {
-        Self::new(BigInt::from(step), BigInt::from(modulus))
+        let step = BigInt::from(step);
+        let modulus = BigInt::from(modulus);
+        assert!(modulus.is_positive(), "modulus must be positive");
+        assert!(
+            step.gcd(&modulus).is_one(),
+            "step must be copriem to modulus"
+        );
+        Self {
+            n: BigInt::one(),
+            step,
+            modulus,
+        }
     }
 }
 
