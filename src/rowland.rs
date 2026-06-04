@@ -4,7 +4,7 @@ use num::{BigInt, CheckedAdd, FromPrimitive, Integer};
 /// Rowland's sequence R(n) = R(n-1) + gcd(n, R(n-1)) for some positive integer n.
 ///
 /// ```text
-/// For n = 7
+/// n = 7
 /// 7, 8, 9, 10, 15, 18, 19, 20, 21, 22...
 /// ```
 pub struct Rowland<T> {

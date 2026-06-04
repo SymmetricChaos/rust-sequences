@@ -22,7 +22,7 @@ impl Iterator for Semiprime {
         loop {
             self.ctr += 1;
             let s: Number = prime_factorization(self.ctr).into_iter().map(|x| x.1).sum();
-            if s == 2_i64 {
+            if s == 2 {
                 return Some(self.ctr);
             }
         }
@@ -30,6 +30,14 @@ impl Iterator for Semiprime {
 }
 
 /// The positive integers which are the product of exactly k prime numbers (potentially with repetition).
+///
+/// ```text
+/// k = 2 (semiprimes)
+/// 4, 6, 9, 10, 14, 15, 21, 22, 25...
+///
+/// k = 3
+/// 8, 12, 18, 20, 27, 28, 30, 42, 44...
+/// ```
 pub struct AlmostPrime {
     ctr: Number,
     k: Number,

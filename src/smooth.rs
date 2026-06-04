@@ -145,9 +145,8 @@ impl<T: CheckedAdd + Clone + Ord + Hash> Iterator for Regular<T> {
 }
 
 crate::check_iteration_times!(
-    Smooth::new(5), 1690;
-    Regular::new(), 1690; // Only 1690 values are possible for i32
-    Regular::new(), 1690; // this takes longer because it has more space and doesn't short circuit yet
+    Smooth::new(5), 1000;
+    Regular::new(), 1000; // Regular is much faster than Smooth(5)
 );
 
 crate::check_sequences!(

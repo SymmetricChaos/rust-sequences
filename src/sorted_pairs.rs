@@ -1,4 +1,4 @@
-use crate::Number;
+use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, One, Zero};
 
 /// All pairs of non-negative integers where the first is not more than the second.
@@ -28,10 +28,10 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Iterator for SortedPairs<T
     fn next(&mut self) -> Option<Self::Item> {
         let out = Some((self.col.clone(), self.row.clone()));
 
-        self.col = self.col.checked_add(&T::one())?;
+        self.col.incr()?;
         if self.col > self.row {
             self.col = T::zero();
-            self.row = self.row.checked_add(&T::one())?;
+            self.row.incr()?;
         }
 
         out
@@ -65,10 +65,10 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Iterator for SortedPairsSt
     fn next(&mut self) -> Option<Self::Item> {
         let out = Some((self.col.clone(), self.row.clone()));
 
-        self.col = self.col.checked_add(&T::one())?;
+        self.col.incr()?;
         if self.col >= self.row {
             self.col = T::zero();
-            self.row = self.row.checked_add(&T::one())?;
+            self.row.incr()?;
         }
 
         out

@@ -1,5 +1,5 @@
 use crate::{Number, sorted_pairs::SortedPairsStrict, utils::bit_predicate::bit_predicate};
-use num::{BigInt, One};
+use num::{BigInt, Integer, Zero};
 
 /// The ordered pairs of numbers connected by an edge in the infinite Rado graph. Alternatively every pair of numbers (a,b) such that the ath digit of b is 1.
 ///
@@ -45,10 +45,10 @@ impl Iterator for RadoPairs<BigInt> {
         loop {
             let (a, b) = self.pairs.next()?;
             let mut t = b.clone();
-            for _ in num::iter::range(BigInt::one(), a.clone()) {
+            for _ in num::iter::range(BigInt::zero(), a.clone()) {
                 t = t / 2;
             }
-            if (t % BigInt::from(2)).is_one() {
+            if t.is_odd() {
                 return Some((a, b));
             }
         }
@@ -57,4 +57,5 @@ impl Iterator for RadoPairs<BigInt> {
 
 crate::print_sequences!(
     RadoPairs::new(), 20, "{:?}", ", ";
+    RadoPairs::new_big(), 20, "{:?}", ", ";
 );
