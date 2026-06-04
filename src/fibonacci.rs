@@ -1,11 +1,11 @@
 use crate::Number;
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
 use std::collections::VecDeque;
 
 /// The Fibonacci numbers. Starting with 0 and 1 every term is the sum of the two previous.
 ///
 /// ```text
-/// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34...
+/// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987...
 /// ```
 pub struct Fibonacci<T> {
     a: T,
@@ -27,24 +27,12 @@ impl Fibonacci<BigInt> {
     }
 }
 
-impl Iterator for Fibonacci<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a;
-        let t = self.a.checked_add(self.b)?;
-        self.a = self.b;
-        self.b = t;
-        Some(out)
-    }
-}
-
-impl Iterator for Fibonacci<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + Integer + CheckedAdd> Iterator for Fibonacci<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = &self.a + &self.b;
+        let t = self.a.checked_add(&self.b)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -52,37 +40,37 @@ impl Iterator for Fibonacci<BigInt> {
 }
 
 /// The bits of the infinite Fibonacci word.
-/// 0, 1, 0, 0, 1, 0, 1, 0, 0, 1...
+/// 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1...
 pub struct FibonacciWord<T> {
     word: VecDeque<bool>,
     zero: T,
     one: T,
 }
 
-impl<T: One + PartialEq + Zero> FibonacciWord<T> {
+impl FibonacciWord<Number> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.
     pub fn new() -> Self {
         Self {
             word: VecDeque::from(vec![false]),
-            zero: T::zero(),
-            one: T::one(),
+            zero: 0,
+            one: 1,
         }
     }
 
     /// First n bits of the infinite Fibonacci word.
     /// Panics if n is less than one.
-    pub fn first_n(n: i64) -> Vec<T> {
+    pub fn first_n(n: i64) -> Vec<Number> {
         assert!(n > 0);
         let mut word = Vec::with_capacity(n as usize + 1);
-        word.push(T::zero());
+        word.push(0);
         let mut idx = 0;
         while word.len() < n as usize {
             if word[idx].is_one() {
-                word.push(T::zero());
+                word.push(0);
             } else {
-                word.push(T::one());
-                word.push(T::zero());
+                word.push(1);
+                word.push(0);
             }
             idx += 1;
         }
@@ -95,14 +83,17 @@ impl FibonacciWord<BigInt> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            word: VecDeque::from(vec![false]),
+            zero: BigInt::zero(),
+            one: BigInt::one(),
+        }
     }
 
     /// First n bits of the infinite Fibonacci word.
     /// Panics if n is less than one.
-    pub fn first_n_big(n: i64) -> Vec<BigInt> {
-        assert!(n > 0);
-        let mut word = Vec::with_capacity(n as usize + 1);
+    pub fn first_n_big(n: usize) -> Vec<BigInt> {
+        let mut word = Vec::with_capacity(n + 1);
         word.push(BigInt::zero());
         let mut idx = 0;
         while word.len() < n as usize {
@@ -114,7 +105,7 @@ impl FibonacciWord<BigInt> {
             }
             idx += 1;
         }
-        word.truncate(n as usize);
+        word.truncate(n);
         word
     }
 }
@@ -136,7 +127,7 @@ impl<T: Clone> Iterator for FibonacciWord<T> {
 }
 
 /// The sucessive Fibonacci words as strings.
-/// 0, 01, 010, 01001, 01001010, 0100101001001...
+/// 0, 01, 010, 01001, 01001010, 0100101001001, 010010100100101001010...
 pub struct FibonacciStrings {
     a: String,
     b: String,

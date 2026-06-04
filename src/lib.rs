@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 pub mod automata;
 pub mod collatz;
 pub mod core;
@@ -119,10 +121,44 @@ pub mod twin_primes;
 pub mod weyl;
 pub mod zeta;
 
+#[cfg(target_pointer_width = "16")]
+type Number = i16;
 #[cfg(target_pointer_width = "32")]
 type Number = i32;
 #[cfg(target_pointer_width = "64")]
 type Number = i64;
+
+#[macro_export]
+macro_rules! sample_sequences {
+    ($($seq:expr);+ $(;)?) => {
+        #[cfg(test)]
+        #[test]
+        #[ignore="visualization"]
+        fn sample_sequences() {
+        $(
+            let mut sq = $seq;
+            let mut terms = Vec::new();
+            let mut tot_len = 3;
+            let s = loop {
+                match sq.next() {
+                    Some(n) => {
+                        let st = n.to_string();
+                        let st_len = st.len() + 2;
+                        if st_len + tot_len > 72 {
+                            break terms.join(", ");
+                        } else {
+                            terms.push(st);
+                            tot_len += st_len;
+                        }
+                    }
+                    None => break terms.join(", "),
+                };
+            };
+            println!("{}\n{}...\n", stringify!($seq), s);
+        )+
+        }
+    };
+}
 
 #[macro_export]
 macro_rules! print_rows {
