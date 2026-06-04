@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, Integer, Zero};
+use num::{BigInt, CheckedAdd, Integer, Zero};
 
 /// The odd part of each positive integer. The value after dividing by the largest power of two that is a divisor.
 ///
@@ -24,8 +24,8 @@ impl OddPart<BigInt> {
     }
 }
 
-impl Iterator for OddPart<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + Integer + std::ops::Shr<i32, Output = T>> Iterator for OddPart<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
@@ -33,23 +33,7 @@ impl Iterator for OddPart<Number> {
         let mut n = self.ctr.clone();
 
         while n.is_even() {
-            n /= 2;
-        }
-
-        Some(n)
-    }
-}
-
-impl Iterator for OddPart<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr.incr()?;
-
-        let mut n = self.ctr.clone();
-
-        while n.is_even() {
-            n /= 2;
+            n = n >> 1;
         }
 
         Some(n)

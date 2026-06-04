@@ -45,8 +45,8 @@ impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> Iterator for Pyt
         // Find the next pair
         // Requirements:
         // m > n > 0
-        // gcd(m,n) = 0
-        // one of m,n even
+        // gcd(m,n) = 1
+        // at least one of m,n even
         loop {
             if self.m > self.n {
                 self.n = self.n.checked_add(&T::one())?;

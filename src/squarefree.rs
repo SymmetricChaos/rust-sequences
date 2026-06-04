@@ -1,9 +1,11 @@
+use std::hash::Hash;
+
 use crate::{
     Number,
     core::{primes::Primes, traits::Increment},
     utils::divisibility::radical,
 };
-use num::{BigInt, Integer, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 
 /// Squarefree numbers. Natural numbers that are not divisible twice by any natural number except one.
 ///
@@ -40,36 +42,15 @@ impl Squarefree<BigInt> {
     }
 }
 
-impl Iterator for Squarefree<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer + Hash> Iterator for Squarefree<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
             self.ctr.incr()?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(n.checked_mul(n)?);
-            }
-            for square in self.squares.iter() {
-                if self.ctr.is_multiple_of(square) {
-                    continue 'outer;
-                }
-            }
-            break;
-        }
-        Some(self.ctr.clone())
-    }
-}
-
-impl Iterator for Squarefree<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        'outer: loop {
-            self.ctr.incr()?;
-            if &self.ctr >= self.squares.last().unwrap() {
-                let n = self.primes.next().unwrap();
-                self.squares.push(&n * &n);
+                self.squares.push(n.checked_mul(&n)?);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {
@@ -117,35 +98,15 @@ impl Squareful<BigInt> {
     }
 }
 
-impl Iterator for Squareful<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer + Hash> Iterator for Squareful<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
             self.ctr.incr()?;
             if &self.ctr >= self.squares.last().unwrap() {
                 let n = self.primes.next().unwrap();
-                self.squares.push(n.checked_mul(n)?);
-            }
-            for square in self.squares.iter() {
-                if self.ctr.is_multiple_of(square) {
-                    break 'outer;
-                }
-            }
-        }
-        Some(self.ctr.clone())
-    }
-}
-
-impl Iterator for Squareful<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        'outer: loop {
-            self.ctr.incr()?;
-            if &self.ctr >= self.squares.last().unwrap() {
-                let n = self.primes.next().unwrap();
-                self.squares.push(&n * &n);
+                self.squares.push(n.checked_mul(&n)?);
             }
             for square in self.squares.iter() {
                 if self.ctr.is_multiple_of(square) {

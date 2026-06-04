@@ -32,7 +32,15 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + CheckedDiv + Integer> Ite
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.catalan.next().map(|n| n % (T::one() + T::one()))
+        if let Some(n) = self.catalan.next() {
+            if n.is_odd() {
+                Some(T::one())
+            } else {
+                Some(T::zero())
+            }
+        } else {
+            None
+        }
     }
 }
 

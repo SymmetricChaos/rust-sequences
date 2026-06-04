@@ -1,5 +1,5 @@
 use crate::{Number, ruler::Ruler};
-use num::BigInt;
+use num::{BigInt, CheckedAdd, Integer};
 
 /// The period doubling sequence. Fixed point for the string rewrite rule 0 -> 01 and 1 -> 00. Equivalent to the parity of the 2-adic valuation of each non-negative integer.
 ///
@@ -29,17 +29,8 @@ impl PeriodDoubling<BigInt> {
     }
 }
 
-impl Iterator for PeriodDoubling<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let n = self.two_adic_val.next()?;
-        Some(n % self.two.clone())
-    }
-}
-
-impl Iterator for PeriodDoubling<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for PeriodDoubling<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let n = self.two_adic_val.next()?;

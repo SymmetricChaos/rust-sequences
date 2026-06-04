@@ -81,6 +81,7 @@ enum State {
 }
 
 impl PartitionsN {
+    /// Only usize output is available.
     pub fn new(n: usize) -> Self {
         Self {
             parts: vec![0; n + 1],
@@ -160,6 +161,7 @@ pub struct Partitions {
 }
 
 impl Partitions {
+    /// Only usize output is available.
     pub fn new() -> Self {
         Self { ctr: 0 }
     }

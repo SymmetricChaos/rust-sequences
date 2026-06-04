@@ -3,7 +3,7 @@ use crate::{
     core::{rationals::Rationals, traits::Increment},
     utils::padic::{padic_abs, padic_valuation},
 };
-use num::{BigInt, CheckedMul, One, rational::Ratio};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, rational::Ratio};
 
 /// The k-adic valuation of each positive integer. When k is prime it is a p-adic valuation.
 ///
@@ -34,18 +34,8 @@ impl PadicValuation<BigInt> {
     }
 }
 
-impl Iterator for PadicValuation<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let val = padic_valuation(&self.ctr, &self.p);
-        self.ctr.incr()?;
-        Some(val)
-    }
-}
-
-impl Iterator for PadicValuation<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for PadicValuation<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let val = padic_valuation(&self.ctr, &self.p);
@@ -83,18 +73,8 @@ impl PadicAbs<BigInt> {
     }
 }
 
-impl Iterator for PadicAbs<Number> {
-    type Item = Ratio<Number>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let val = padic_abs(&self.ctr, &self.p);
-        self.ctr.incr()?;
-        Some(val)
-    }
-}
-
-impl Iterator for PadicAbs<BigInt> {
-    type Item = Ratio<BigInt>;
+impl<T: Clone + CheckedAdd + Integer> Iterator for PadicAbs<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let val = padic_abs(&self.ctr, &self.p);
@@ -130,21 +110,8 @@ impl PadicValuationRational<BigInt> {
     }
 }
 
-impl Iterator for PadicValuationRational<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let q = self.rationals.next()?;
-
-        let val_numer = padic_valuation(q.numer(), &self.p);
-        let val_denom = padic_valuation(q.denom(), &self.p);
-
-        Some(val_numer - val_denom)
-    }
-}
-
-impl Iterator for PadicValuationRational<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for PadicValuationRational<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let q = self.rationals.next()?;
@@ -183,21 +150,8 @@ impl PadicAbsRational<BigInt> {
     }
 }
 
-impl Iterator for PadicAbsRational<Number> {
-    type Item = Ratio<Number>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let q = self.rationals.next()?;
-
-        let val_numer = padic_abs(q.numer(), &self.p);
-        let val_denom = padic_abs(q.denom(), &self.p).recip();
-
-        val_numer.checked_mul(&val_denom)
-    }
-}
-
-impl Iterator for PadicAbsRational<BigInt> {
-    type Item = Ratio<BigInt>;
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + Integer> Iterator for PadicAbsRational<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let q = self.rationals.next()?;

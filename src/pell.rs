@@ -1,5 +1,5 @@
 use crate::Number;
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
 
 /// The Pell numbers.
 ///
@@ -26,20 +26,8 @@ impl Pell<BigInt> {
     }
 }
 
-impl Iterator for Pell<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a;
-        let t = self.a.checked_add(self.b.checked_add(self.b)?)?;
-        self.a = self.b;
-        self.b = t;
-        Some(out)
-    }
-}
-
-impl Iterator for Pell<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for Pell<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
@@ -75,20 +63,8 @@ impl CompanionPell<BigInt> {
     }
 }
 
-impl Iterator for CompanionPell<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a.clone();
-        let t = self.a.checked_add(self.b.checked_add(self.b)?)?;
-        self.a = self.b.clone();
-        self.b = t;
-        Some(out)
-    }
-}
-
-impl Iterator for CompanionPell<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for CompanionPell<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();

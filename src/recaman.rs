@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Zero};
 
 /// Recamán's sequence. Decreases by n unless that number has already appeared or would be negative in which case it increases by n.
 ///
@@ -32,33 +32,8 @@ impl Recaman<BigInt> {
     }
 }
 
-impl Iterator for Recaman<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.n;
-
-        if self.ctr >= self.n {
-            self.n = self.n.checked_add(self.ctr)?
-        } else {
-            let down = self.n.checked_sub(self.ctr)?;
-            if self.prev.contains(&down) {
-                self.n = self.n.checked_add(self.ctr)?;
-            } else {
-                self.n = down;
-            }
-        }
-
-        self.ctr.incr()?;
-
-        self.prev.push(self.n);
-
-        Some(out)
-    }
-}
-
-impl Iterator for Recaman<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for Recaman<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.n.clone();
@@ -66,7 +41,7 @@ impl Iterator for Recaman<BigInt> {
         if self.ctr >= self.n {
             self.n = self.n.checked_add(&self.ctr)?
         } else {
-            let down = self.n.checked_sub(&self.ctr)?;
+            let down = self.n.checked_sub(&self.ctr)?; // no overflow possible but allows subtracting via a reference
             if self.prev.contains(&down) {
                 self.n = self.n.checked_add(&self.ctr)?;
             } else {

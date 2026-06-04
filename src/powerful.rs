@@ -1,7 +1,7 @@
 use crate::{Number, utils::divisibility::prime_factorization};
 use num::integer::gcd;
 
-/// Positive natural numbers that are divisible by the squares of all their prime divisors.
+/// The powerful number, positive natural numbers that are divisible by the squares of all their prime divisors.
 ///
 /// ```text
 /// 1, 4, 8, 9, 16, 25, 27, 32, 36, 49...

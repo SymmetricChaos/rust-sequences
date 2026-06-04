@@ -1,4 +1,4 @@
-use num::{BigInt, Integer, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 
 use crate::{Number, core::traits::Increment};
 
@@ -34,22 +34,12 @@ impl Cube<BigInt> {
     }
 }
 
-impl Iterator for Cube<Number> {
-    type Item = Number;
+impl<T: CheckedMul + CheckedAdd + Integer> Iterator for Cube<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let out = self.ctr.checked_mul(self.ctr)?.checked_mul(self.ctr)?;
+        let out = self.ctr.checked_mul(&self.ctr)?.checked_mul(&self.ctr)?;
         self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for Cube<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = &self.ctr * &self.ctr * &self.ctr;
-        self.ctr.inc();
         Some(out)
     }
 }

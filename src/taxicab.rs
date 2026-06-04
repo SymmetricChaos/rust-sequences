@@ -1,6 +1,6 @@
 use crate::figurate::Cube;
 use crate::{Number, core::traits::Increment};
-use num::BigInt;
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer};
 
 /// The taxicab numbers. The natural numbers that are the sum of two positive cubes in more than one way. Named for an ancedote by G. H. Hardy about Srinivasa Ramanujan.
 ///
@@ -9,89 +9,57 @@ use num::BigInt;
 /// ```
 pub struct Taxicab<T> {
     ctr: T,
-    cubes: Vec<T>,
-    cube: Cube<T>,
+    cube_list: Vec<T>,
+    cubes: Cube<T>,
 }
 
 impl Taxicab<Number> {
     pub fn new() -> Self {
-        let mut cube = Cube::new();
-        cube.next();
-        let mut cubes = Vec::new();
+        let mut cubes = Cube::new();
+        cubes.next();
+        let mut cube_list = Vec::new();
+        // Preload the list of cubes because we known the first taxicab number is 1729.
         for _ in 0..12 {
-            cubes.push(cube.next().unwrap());
+            cube_list.push(cubes.next().unwrap());
         }
         Self {
             ctr: 1728,
+            cube_list,
             cubes,
-            cube,
         }
     }
 }
 
 impl Taxicab<BigInt> {
     pub fn new_big() -> Self {
-        let mut cube = Cube::new_big();
-        cube.next();
-        let mut cubes = Vec::new();
+        let mut cubes = Cube::new_big();
+        cubes.next();
+        let mut cube_list = Vec::new();
         for _ in 0..12 {
-            cubes.push(cube.next().unwrap());
+            cube_list.push(cubes.next().unwrap());
         }
         Self {
             ctr: BigInt::from(1728),
+            cube_list,
             cubes,
-            cube,
         }
     }
 }
 
-impl Iterator for Taxicab<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedMul + CheckedSub + CheckedAdd + Integer> Iterator for Taxicab<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             self.ctr.incr()?;
-            if &self.ctr >= self.cubes.last().unwrap() {
-                self.cubes.push(self.cube.next()?);
+            if &self.ctr >= self.cube_list.last().unwrap() {
+                self.cube_list.push(self.cubes.next()?);
             }
             let mut found_sum = false;
-            for c in self.cubes.iter() {
-                match self.ctr.checked_sub(*c) {
-                    Some(diff) => {
-                        if self.cubes.contains(&diff) {
-                            // check if we've found a sum of cubes before
-                            if found_sum {
-                                // if we have found a sum before, check its not the same sum in reverse order by making sure c is the smaller of the two terms
-                                if &diff > c {
-                                    return Some(self.ctr);
-                                }
-                            } else {
-                                // otherwise note that we've found a sum
-                                found_sum = true;
-                            }
-                        }
-                    }
-                    None => continue,
-                }
-            }
-        }
-    }
-}
-
-impl Iterator for Taxicab<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            self.ctr.incr()?;
-            if &self.ctr >= self.cubes.last().unwrap() {
-                self.cubes.push(self.cube.next()?);
-            }
-            let mut found_sum = false;
-            for c in self.cubes.iter() {
+            for c in self.cube_list.iter() {
                 match self.ctr.checked_sub(c) {
                     Some(diff) => {
-                        if self.cubes.contains(&diff) {
+                        if self.cube_list.contains(&diff) {
                             // check if we've found a sum of cubes before
                             if found_sum {
                                 // if we have found a sum before, check its not the same sum in reverse order by making sure c is the smaller of the two terms
@@ -104,7 +72,7 @@ impl Iterator for Taxicab<BigInt> {
                             }
                         }
                     }
-                    None => continue,
+                    None => continue, // this only happens for unsigned types, signed types will produce at most one negative difference so there's no reason to optimize it away
                 }
             }
         }

@@ -4,10 +4,19 @@ use std::collections::VecDeque;
 use crate::Number;
 
 /// A generalization of the Fibonacci and Narayana sequences. For a non-negative constant, k, the sequence begins with the number 1 repeated k+1) times. Further terms are equal to f(n) = f(n-1) + f(n-k). Any of these sequences may be prefixed by a single zero.
+///
 /// ```text
-/// k = 0 gives the powers of two
-/// k = 1 gives the Fibonacci sequence
-/// k = 2 gives the Narayana cow sequence
+/// k = 0 (powers of two)
+/// 1, 2, 4, 8, 16, 32, 64, 128...
+///
+/// k = 1 (Fibonacci sequence)
+/// 1, 1, 2, 3, 5, 8, 13, 21, 34...
+///
+/// k = 2 (Narayana cow sequence)
+/// 1, 1, 1, 2, 3, 4, 6, 9, 13, 19...
+///
+/// k = 3 (A003269)
+/// 1, 1, 1, 1, 2, 3, 4, 5, 7, 10...
 /// ```
 pub struct NarayanaGeneral<T> {
     window: VecDeque<T>,
