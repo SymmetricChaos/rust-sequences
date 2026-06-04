@@ -18,7 +18,7 @@ impl WeylMarsaglia<Number> {
     /// Panics if step is not coprime to modulus.
     pub fn new(step: Number, modulus: Number) -> Self {
         assert!(modulus.is_positive(), "modulus must be positive");
-        assert!(step.gcd(&modulus) == 1, "step must be copriem to modulus");
+        assert!(step.gcd(&modulus) == 1, "step must be coprime to modulus");
         Self {
             n: 1,
             step,
@@ -39,7 +39,7 @@ impl WeylMarsaglia<BigInt> {
         assert!(modulus.is_positive(), "modulus must be positive");
         assert!(
             step.gcd(&modulus).is_one(),
-            "step must be copriem to modulus"
+            "step must be coprime to modulus"
         );
         Self {
             n: BigInt::one(),
