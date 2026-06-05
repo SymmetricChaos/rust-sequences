@@ -1,4 +1,4 @@
-use crate::{Number, factorial::Factorials};
+use crate::{Number, factorial::Factorial};
 use num::{BigInt, CheckedAdd, CheckedMul, One, Zero, rational::Ratio};
 
 /// The partial sums of the Taylor series form of the exponential function evaluated at numer/denom.
@@ -6,7 +6,7 @@ pub struct Exponential<T> {
     sum: Ratio<T>,
     val: Ratio<T>,
     x: Ratio<T>,
-    factorials: Factorials<T>,
+    factorials: Factorial<T>,
 }
 
 impl Exponential<Number> {
@@ -15,7 +15,7 @@ impl Exponential<Number> {
             sum: Ratio::zero(),
             val: Ratio::one(),
             x: Ratio::new(numer, denom),
-            factorials: Factorials::new(),
+            factorials: Factorial::new(),
         }
     }
 
@@ -24,7 +24,7 @@ impl Exponential<Number> {
             sum: Ratio::one(),
             val: Ratio::one(),
             x,
-            factorials: Factorials::new(),
+            factorials: Factorial::new(),
         }
     }
 }
@@ -38,7 +38,7 @@ impl Exponential<BigInt> {
             sum: Ratio::zero(),
             val: Ratio::one(),
             x: Ratio::new(BigInt::from(numer), BigInt::from(denom)),
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
         }
     }
 
@@ -54,7 +54,7 @@ impl Exponential<BigInt> {
             sum: Ratio::zero(),
             val: Ratio::one(),
             x,
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
         }
     }
 }

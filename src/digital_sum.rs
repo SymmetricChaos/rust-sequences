@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, FromPrimitive, Integer, Zero};
+use num::{BigInt, CheckedAdd, FromPrimitive, Integer, Zero};
 
 // Doesn't check for sign so only use internally
 fn digital_sum<N: Integer>(mut n: N, base: &N) -> N {
@@ -33,6 +33,11 @@ fn additive_persistence<N: Integer>(mut n: N, base: &N) -> N {
 }
 
 /// The sums of the digits of each natural number in a given base.
+///
+/// ```text
+/// base = 10
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3...
+/// ```
 pub struct DigitalSums<T> {
     ctr: T,
     base: T,
@@ -61,18 +66,8 @@ impl DigitalSums<BigInt> {
     }
 }
 
-impl Iterator for DigitalSums<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = digital_sum(self.ctr, &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for DigitalSums<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for DigitalSums<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_sum(self.ctr.clone(), &self.base);
@@ -82,6 +77,11 @@ impl Iterator for DigitalSums<BigInt> {
 }
 
 /// The digital root of each natural number in a given base. The fixed point when repeatedly applying the digital sum.
+///
+/// ```text
+/// base = 10
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4...
+/// ```
 pub struct DigitalRoots<N> {
     ctr: N,
     base: N,
@@ -110,18 +110,8 @@ impl DigitalRoots<BigInt> {
     }
 }
 
-impl Iterator for DigitalRoots<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = digital_root(self.ctr, &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for DigitalRoots<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for DigitalRoots<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_root(self.ctr.clone(), &self.base);
@@ -131,6 +121,11 @@ impl Iterator for DigitalRoots<BigInt> {
 }
 
 /// The additive persistence of each natural number in a given base. The number of times the digital sum function must be applied before it reaches a fixed point.
+///
+/// ```text
+/// base = 10
+/// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1...
+/// ```
 pub struct AdditivePersistence<N> {
     ctr: N,
     base: N,
@@ -159,18 +154,8 @@ impl AdditivePersistence<BigInt> {
     }
 }
 
-impl Iterator for AdditivePersistence<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = additive_persistence(self.ctr, &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for AdditivePersistence<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for AdditivePersistence<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = additive_persistence(self.ctr.clone(), &self.base);
@@ -183,4 +168,10 @@ crate::check_sequences!(
     DigitalSums::new(10), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 8, 9, 10, 11, 12, 13, 14, 15];
     DigitalRoots::new(10), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8];
     AdditivePersistence::new(10), skip 1234, [2,  2,  2,  2,   2,  2, 1, 1, 1,  2,  2,  2,  2,  2,  2,  2, 1, 1,  2,  2];
+);
+
+crate::sample_sequences!(
+    DigitalSums::new(10);
+    DigitalRoots::new(10);
+    AdditivePersistence::new(10);
 );

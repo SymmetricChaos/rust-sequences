@@ -2,6 +2,11 @@ use crate::{Number, utils::factorial::factorial};
 use num::{BigInt, One, Signed, Zero};
 
 /// The number of de Bruijn sequences for an alphabet with k symbols for each substring length n, starting at zero.
+///
+/// ```text
+/// k = 2
+/// 1, 1, 2, 16, 2048, 67108864...
+/// ```
 pub struct DeBruijn<T> {
     k: T,
     f: T,
@@ -113,6 +118,11 @@ fn debruijn(t: usize, p: usize, n: usize, k: usize, a: &mut Vec<usize>, s: &mut 
 }
 
 /// The lexicographically first de Brujin word for a given alphabet and substring length.
+///
+/// ```text
+/// alphabet = "abcd", substring_length = 2
+/// a, a, b, a, c, a, d, b, b, c, b, d, c, c, d, d...
+/// ```
 pub struct DeBruijnWord {
     s: Vec<char>,
     idx: usize,
@@ -150,4 +160,9 @@ crate::check_sequences!(
     DeBruijn::new_big(2), ["1", "1", "2", "16", "2048", "67108864", "144115188075855872", "1329227995784915872903807060280344576"];
     DeBruijn::new(2), [1_i64, 1, 2, 16, 2048, 67108864, 144115188075855872]; // check that we return the largest term we can
     DeBruijnWord::new("abcd", 2), ["a", "a", "b", "a", "c", "a", "d", "b", "b", "c", "b", "d", "c", "c", "d", "d"];
+);
+
+crate::sample_sequences!(
+    DeBruijn::new_big(2);
+    DeBruijnWord::new("abcd", 2);
 );

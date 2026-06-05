@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, FromPrimitive, Integer, Zero};
+use num::{BigInt, CheckedAdd, FromPrimitive, Integer, Zero};
 
 // Doesn't check for sign so only use internally
 fn digital_prod<N: Integer>(mut n: N, base: &N) -> N {
@@ -42,7 +42,7 @@ fn multiplicative_persistence<N: Integer>(mut n: N, base: &N) -> N {
 /// The product of the digits of each natural number to a given base.
 ///
 /// ```text
-/// For base = 10
+/// base = 10
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4...
 /// ```
 pub struct DigitalProds<T> {
@@ -73,18 +73,8 @@ impl DigitalProds<BigInt> {
     }
 }
 
-impl Iterator for DigitalProds<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = digital_prod(self.ctr.clone(), &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for DigitalProds<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for DigitalProds<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = digital_prod(self.ctr.clone(), &self.base);
@@ -94,6 +84,11 @@ impl Iterator for DigitalProds<BigInt> {
 }
 
 /// The multiplicative digital root of each natural number to a given base. The fixed point when repeatedly applying the digital product.
+///
+/// ```text
+/// base = 10
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4...
+/// ```
 pub struct MultiplicativeDigitalRoots<T> {
     ctr: T,
     base: T,
@@ -122,18 +117,8 @@ impl MultiplicativeDigitalRoots<BigInt> {
     }
 }
 
-impl Iterator for MultiplicativeDigitalRoots<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = multiplicative_digital_root(self.ctr, &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for MultiplicativeDigitalRoots<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for MultiplicativeDigitalRoots<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_digital_root(self.ctr.clone(), &self.base);
@@ -143,6 +128,11 @@ impl Iterator for MultiplicativeDigitalRoots<BigInt> {
 }
 
 /// The multiplicative persistence of each natural number to a given base. The number of times the digital product function must be applied before it reaches a fixed point.
+///
+/// ```text
+/// base = 10
+/// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+/// ```
 pub struct MultiplicativePersistence<T> {
     ctr: T,
     base: T,
@@ -171,18 +161,8 @@ impl MultiplicativePersistence<BigInt> {
     }
 }
 
-impl Iterator for MultiplicativePersistence<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = multiplicative_persistence(self.ctr, &self.base);
-        self.ctr.incr()?;
-        Some(out)
-    }
-}
-
-impl Iterator for MultiplicativePersistence<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for MultiplicativePersistence<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = multiplicative_persistence(self.ctr.clone(), &self.base);
@@ -195,4 +175,10 @@ crate::check_sequences!(
     DigitalProds::new(10), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 0, 6, 12, 18, 24, 30, 36, 42];
     MultiplicativeDigitalRoots::new(10), skip 25, [0,   2,  4,  6,  8, 0, 3, 6, 9,  2];
     MultiplicativePersistence::new(10), skip 25,  [2,   2,  2,  2,  2, 1, 1, 1, 1,  2];
+);
+
+crate::sample_sequences!(
+    DigitalProds::new(10);
+    MultiplicativeDigitalRoots::new(10);
+    MultiplicativePersistence::new(10);
 );

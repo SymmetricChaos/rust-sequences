@@ -1,10 +1,10 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, One, Zero};
 
 /// The number of derangements for a set of n elements (starting from 0).
 ///
 /// ```text
-/// 1, 0, 1, 2, 9, 44, 265, 1854...
+/// 1, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570...
 /// ```
 pub struct Derangements<T> {
     a: T,
@@ -35,38 +35,23 @@ impl Derangements<BigInt> {
     }
 }
 
-impl Iterator for Derangements<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Derangements<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
             return None;
         }
 
-        let out = self.a;
+        let out = self.a.clone();
 
-        let next = match self.ctr.checked_mul(self.a.checked_add(self.b)?) {
+        let next = match self.ctr.checked_mul(&self.a.checked_add(&self.b)?) {
             Some(n) => n,
             None => {
                 self.overflowed = true;
                 return Some(out);
             }
         };
-        self.a = self.b;
-        self.b = next;
-        self.ctr.incr()?;
-
-        Some(out)
-    }
-}
-
-impl Iterator for Derangements<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a.clone();
-
-        let next = &self.ctr * (&self.a + &self.b);
         self.a = self.b.clone();
         self.b = next;
         self.ctr.incr()?;
@@ -77,4 +62,8 @@ impl Iterator for Derangements<BigInt> {
 
 crate::check_sequences!(
     Derangements::new(), [1_i64, 0, 1, 2, 9, 44, 265, 1854, 14833, 133496, 1334961, 14684570, 176214841, 2290792932, 32071101049, 481066515734, 7697064251745, 130850092279664, 2355301661033953, 44750731559645106];
+);
+
+crate::sample_sequences!(
+    Derangements::new();
 );

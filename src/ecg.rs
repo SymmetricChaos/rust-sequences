@@ -5,7 +5,7 @@ use std::collections::BTreeSet;
 /// The ECG sequence. Starting with 1 and 2 each term is the smallest positive integer not yet used which shares a divisor with the previous term.
 ///
 /// ```text
-/// 1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24...
+/// 1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24, 16, 20, 22...
 /// ```
 pub struct Ecg {
     used: BTreeSet<Number>, // Checking this becomes much faster than checking a Vec after a few hundred terms
@@ -70,4 +70,8 @@ crate::check_iteration_times!(
 
 crate::check_sequences!(
     Ecg::new(), [1, 2, 4, 6, 3, 9, 12, 8, 10, 5, 15, 18, 14, 7, 21, 24, 16, 20, 22, 11, 33, 27, 30, 25, 35, 28, 26, 13, 39, 36, 32, 34, 17, 51, 42, 38, 19, 57, 45, 40, 44, 46, 23, 69, 48, 50, 52, 54, 56, 49, 63, 60, 55, 65, 70, 58, 29, 87, 66, 62, 31, 93, 72, 64, 68, 74, 37, 111, 75, 78, 76, 80, 82];
+);
+
+crate::sample_sequences!(
+    Ecg::new();
 );

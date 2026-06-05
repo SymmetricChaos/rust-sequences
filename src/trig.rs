@@ -1,4 +1,4 @@
-use crate::factorial::Factorials;
+use crate::factorial::Factorial;
 use num::{BigInt, One, Zero, rational::Ratio};
 
 /// Partial sums of the Taylor series expansion of the sine function evaluated at n/d.
@@ -6,7 +6,7 @@ pub struct Sine {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorials<BigInt>,
+    factorials: Factorial<BigInt>,
     neg: bool,
 }
 
@@ -20,7 +20,7 @@ impl Sine {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
             neg: true,
         }
     }
@@ -50,7 +50,7 @@ pub struct Cosine {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorials<BigInt>,
+    factorials: Factorial<BigInt>,
     neg: bool,
 }
 
@@ -64,7 +64,7 @@ impl Cosine {
             sum: Ratio::zero(),
             val: Ratio::one(),
             x,
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
             neg: true,
         }
     }
@@ -94,7 +94,7 @@ pub struct Cosecant {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorials<BigInt>,
+    factorials: Factorial<BigInt>,
     neg: bool,
 }
 
@@ -108,7 +108,7 @@ impl Cosecant {
             sum: Ratio::zero(),
             val: x.clone(),
             x,
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
             neg: true,
         }
     }
@@ -142,7 +142,7 @@ pub struct Secant {
     sum: Ratio<BigInt>,
     val: Ratio<BigInt>,
     x: Ratio<BigInt>,
-    factorials: Factorials<BigInt>,
+    factorials: Factorial<BigInt>,
     neg: bool,
 }
 
@@ -156,7 +156,7 @@ impl Secant {
             sum: Ratio::zero(),
             val: Ratio::one(),
             x,
-            factorials: Factorials::new_big(),
+            factorials: Factorial::new_big(),
             neg: true,
         }
     }

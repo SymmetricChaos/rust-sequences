@@ -1,5 +1,5 @@
 use crate::{
-    Number, core::traits::Increment, factorial::Factorials, utils::recursive_factoring::factorable,
+    Number, core::traits::Increment, factorial::Factorial, utils::recursive_factoring::factorable,
 };
 
 /// The Jordan–Pólya numbers, those that can be completely factored into factorial numbers.
@@ -10,13 +10,13 @@ use crate::{
 pub struct JordanPolya {
     ctr: Number,
     factorials_vec: Vec<Number>,
-    factorials: Factorials<Number>,
+    factorials: Factorial<Number>,
 }
 
 impl JordanPolya {
     /// Only u64 output is supported.
     pub fn new() -> Self {
-        let mut factorials = Factorials::new();
+        let mut factorials = Factorial::new();
         factorials.next();
         factorials.next();
         Self {

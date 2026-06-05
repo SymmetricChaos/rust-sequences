@@ -1,4 +1,4 @@
-use crate::factorial::Factorials;
+use crate::factorial::Factorial;
 use num::{BigInt, One, Zero};
 
 /// Liouville's constant, decimal expansion of the first number proven to be transcendental. Also the characteristic function of the factorials.
@@ -7,14 +7,14 @@ use num::{BigInt, One, Zero};
 /// 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0...
 /// ```
 pub struct Liouville {
-    factorial: Factorials<BigInt>,
+    factorial: Factorial<BigInt>,
     next_factorial: BigInt,
     ctr: BigInt,
 }
 
 impl Liouville {
     pub fn new() -> Self {
-        let mut factorial = Factorials::new_big();
+        let mut factorial = Factorial::new_big();
         factorial.next();
         let next_factorial = factorial.next().unwrap();
         Self {

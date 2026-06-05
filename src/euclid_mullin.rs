@@ -5,7 +5,7 @@ use crate::{Number, utils::divisibility::prime_factorization};
 /// The Euclid-Mullin sequence defined using the smallest prime factors of the products.
 ///
 /// ```text
-/// 2, 3, 7, 43, 13, 53, 5, 6221671...
+/// 2, 3, 7, 43, 13, 53, 5, 6221671, 38709183810571...
 /// ```
 pub struct EuclidMullinSmallest {
     terms: Vec<Number>,
@@ -49,7 +49,7 @@ impl Iterator for EuclidMullinSmallest {
 
 /// The Euclid-Mullin sequence defined using the largest prime factors of the products.
 ///
-/// 2, 3, 7, 43, 13, 53, 5, 6221671...
+/// 2, 3, 7, 43, 139, 50207, 340999, 2365347734339...
 pub struct EuclidMullinLargest {
     terms: Vec<Number>,
     overflowed: bool,
@@ -93,4 +93,9 @@ impl Iterator for EuclidMullinLargest {
 crate::check_sequences!(
     EuclidMullinSmallest::new(), [2_u64, 3, 7, 43, 13, 53, 5, 6221671, 38709183810571]; // limited by overflow
     EuclidMullinLargest::new(), [2_u64, 3, 7, 43, 139, 50207, 340999, 2365347734339]; // limited by overflow
+);
+
+crate::sample_sequences!(
+    EuclidMullinSmallest::new();
+    EuclidMullinLargest::new();
 );

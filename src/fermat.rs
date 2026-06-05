@@ -4,7 +4,7 @@ use num::BigInt;
 /// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly.
 ///
 /// ```text
-/// 3, 5, 17, 257, 65537, 4294967297...
+/// 3, 5, 17, 257, 65537, 4294967297, 18446744073709551617...
 /// ```
 pub struct Fermat<T> {
     prev: T,
@@ -68,3 +68,5 @@ crate::check_sequences!(
     Fermat::new(), [3_u64, 5, 17, 257, 65537, 4294967297];
     Fermat::new_big(), [3_u64, 5, 17, 257, 65537, 4294967297];
 );
+
+crate::sample_sequences!(Fermat::new_big());
