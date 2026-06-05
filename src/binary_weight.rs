@@ -6,7 +6,7 @@ use crate::{
 /// The binary weight of each natural number, starting from zero.
 ///
 /// ```text
-/// 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2...
+/// 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3...
 /// ```
 pub struct BinaryWeight<T> {
     ctr: T,
@@ -30,4 +30,8 @@ impl Iterator for BinaryWeight<Number> {
 
 crate::check_sequences!(
     BinaryWeight::new(), [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3];
+);
+
+crate::sample_sequences!(
+    BinaryWeight::new();
 );

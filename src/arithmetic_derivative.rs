@@ -23,7 +23,7 @@ fn arith_deriv(n: Number) -> Number {
 /// d(p) = 1 (for all primes p)
 /// d(mn) = d(m)n + d(n)m (for all naturals m, n)
 ///
-/// 0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9...
+/// 0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9, 8, 32, 1, 21, 1, 24...
 /// ```
 pub struct ArithmeticDerivative {
     ctr: Number,
@@ -96,4 +96,8 @@ impl Iterator for ArithmeticDerivativeRational {
 
 crate::check_sequences!(
     ArithmeticDerivative::new(), [0, 0, 1, 1, 4, 1, 5, 1, 12, 6, 7, 1, 16, 1, 9, 8, 32, 1, 21, 1, 24, 10, 13, 1, 44, 10, 15, 27, 32, 1, 31, 1, 80, 14, 19, 12, 60, 1, 21, 16, 68, 1, 41, 1, 48, 39, 25, 1, 112, 14, 45, 20, 56, 1, 81, 16, 92, 22, 31, 1, 92, 1, 33, 51, 192, 18, 61, 1, 72, 26, 59, 1, 156, 1, 39, 55, 80, 18, 71];
+);
+
+crate::sample_sequences!(
+    ArithmeticDerivative::new();
 );

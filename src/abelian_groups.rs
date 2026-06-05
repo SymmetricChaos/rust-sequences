@@ -5,15 +5,15 @@ use num::CheckedMul;
 /// The number of abelian groups of order n for each positive integer n.
 ///
 /// ```text
-/// 1, 1, 1, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1...
+/// 1, 1, 1, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1, 1, 1, 5, 1, 2, 1, 2, 1, 1, 1...
 /// ```
-pub struct AbelianGroups {
-    ctr: Number,
-    partition_number: Vec<Number>,
-    partition_number_generator: Partition<Number>,
+pub struct AbelianGroups<T> {
+    ctr: T,
+    partition_number: Vec<T>,
+    partition_number_generator: Partition<T>,
 }
 
-impl AbelianGroups {
+impl AbelianGroups<Number> {
     pub fn new() -> Self {
         Self {
             ctr: 0,
@@ -23,7 +23,7 @@ impl AbelianGroups {
     }
 }
 
-impl Iterator for AbelianGroups {
+impl Iterator for AbelianGroups<Number> {
     type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -53,4 +53,8 @@ impl Iterator for AbelianGroups {
 
 crate::check_sequences!(
     AbelianGroups::new(), [1, 1, 1, 2, 1, 1, 1, 3, 2, 1, 1, 2, 1, 1, 1, 5, 1, 2, 1, 2, 1, 1, 1, 3, 2, 1, 3, 2, 1, 1, 1, 7, 1, 1, 1, 4, 1, 1, 1, 3, 1, 1, 1, 2, 2, 1, 1, 5, 2, 2, 1, 2, 1, 3];
+);
+
+crate::sample_sequences!(
+    AbelianGroups::new();
 );
