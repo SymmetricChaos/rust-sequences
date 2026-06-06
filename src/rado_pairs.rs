@@ -4,7 +4,7 @@ use num::{BigInt, Integer, Zero};
 /// The ordered pairs of numbers connected by an edge in the infinite Rado graph. Alternatively every pair of numbers (a,b) such that the ath digit of b is 1.
 ///
 /// ```text
-/// (0,1), (1,2), (0,3), (1,3), (2,4), (0,5), (2,5)
+/// (0, 1), (1, 2), (0, 3), (1, 3), (2, 4), (0, 5), (2, 5), (1, 6)...
 /// ```
 pub struct RadoPairs<T> {
     pairs: SortedPairsStrict<T>,
@@ -58,4 +58,8 @@ impl Iterator for RadoPairs<BigInt> {
 crate::print_sequences!(
     RadoPairs::new(), 20, "{:?}", ", ";
     RadoPairs::new_big(), 20, "{:?}", ", ";
+);
+
+crate::sample_sequences!(
+    RadoPairs::new().map(|x| format!("{:?}",x));
 );

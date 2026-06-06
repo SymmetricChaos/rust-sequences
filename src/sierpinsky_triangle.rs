@@ -3,7 +3,10 @@ use crate::core::traits::Increment;
 /// Sierpiński's triangle.
 ///
 /// ```text
-/// [1], [1,1], [1,0,1], [1,1,1,1], [1,0,0,0,1]...
+/// [1], [1, 1], [1, 0, 1], [1, 1, 1, 1], [1, 0, 0, 0, 1]...
+///
+/// flattened
+/// 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0...
 /// ```
 pub struct SierpinskyTriangle {
     ctr: usize,
@@ -12,6 +15,10 @@ pub struct SierpinskyTriangle {
 impl SierpinskyTriangle {
     pub fn new() -> Self {
         Self { ctr: 0 }
+    }
+
+    pub fn flattened() -> impl Iterator<Item = usize> {
+        Self::new().flatten()
     }
 }
 
@@ -39,4 +46,9 @@ crate::print_sequences!(
 
 crate::check_sequences!(
     SierpinskyTriangle::new().flatten(), [1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1];
+);
+
+crate::sample_sequences!(
+    SierpinskyTriangle::new().map(|x| format!("{:?}", x));
+    SierpinskyTriangle::new().flatten();
 );

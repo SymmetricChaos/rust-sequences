@@ -4,7 +4,7 @@ use num::{BigInt, CheckedAdd, Integer, One, Zero};
 /// The Perrin sequence. Defined by the recurrence P(n) = P(n-2) + P(n-3) with starting terms 3, 0, 2. Same recurrence as the Padovan sequence.
 ///
 /// ```text
-/// 3, 0, 2, 3, 2, 5, 5, 7, 10, 12, 17, 22...
+/// 3, 0, 2, 3, 2, 5, 5, 7, 10, 12, 17, 22, 29, 39, 51, 68, 90, 119...
 /// ```
 pub struct Perrin<T> {
     n0: T,
@@ -50,7 +50,7 @@ impl<T: Integer + Clone + CheckedAdd> Iterator for Perrin<T> {
 /// The Padovan sequence. Defined by the recurrence P(n) = P(n-2) + P(n-3) with starting terms 1, 1, 1. Same recurrence as the Perrin sequence.
 ///
 /// ```text
-/// 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16...
+/// 1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28, 37, 49, 65, 86, 114...
 /// ```
 pub struct Padovan<T> {
     n0: T,
@@ -96,4 +96,9 @@ impl<T: Integer + Clone + CheckedAdd> Iterator for Padovan<T> {
 crate::check_sequences!(
     Perrin::new(), [3, 0, 2, 3, 2, 5, 5, 7, 10, 12, 17, 22, 29, 39, 51, 68, 90, 119, 158, 209, 277, 367, 486, 644, 853, 1130, 1497, 1983, 2627, 3480, 4610, 6107, 8090, 10717, 14197, 18807, 24914, 33004, 43721, 57918, 76725, 101639, 134643, 178364, 236282, 313007, 414646, 549289];
     Padovan::new(), [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12, 16, 21, 28, 37, 49, 65, 86, 114, 151, 200, 265, 351, 465, 616, 816, 1081, 1432, 1897, 2513, 3329, 4410, 5842, 7739, 10252, 13581, 17991, 23833, 31572, 41824, 55405, 73396, 97229, 128801, 170625, 226030, 299426];
+);
+
+crate::sample_sequences!(
+    Perrin::new();
+    Padovan::new();
 );

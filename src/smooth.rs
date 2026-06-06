@@ -64,7 +64,7 @@ impl<T: CheckedAdd + CheckedDiv + Clone + Integer> Iterator for Smooth<T> {
 /// The regular numbers, those which have only the prime divisors 2, 3, and 5. Thousands of times faster than Smooth::new(5) but uses increasingly more memory as it generates terms.
 ///
 /// ```text
-/// 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16...
+/// 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32...
 /// ```
 pub struct Regular<T> {
     heap: BinaryHeap<Reverse<T>>,
@@ -152,4 +152,8 @@ crate::check_iteration_times!(
 crate::check_sequences!(
     Smooth::new_big(5), [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
     Regular::new(),     [1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32, 36, 40, 45, 48, 50, 54, 60, 64, 72, 75, 80, 81, 90, 96, 100, 108, 120, 125, 128, 135, 144, 150, 160, 162, 180, 192, 200, 216, 225, 240, 243, 250, 256, 270, 288, 300, 320, 324, 360, 375, 384, 400, 405];
+);
+
+crate::sample_sequences!(
+    Regular::new();
 );
