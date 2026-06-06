@@ -15,6 +15,10 @@ impl PythagoreanTriples<Number> {
     pub fn new() -> Self {
         Self { m: 2, n: 1 }
     }
+
+    pub fn flattened() -> impl Iterator<Item = Number> {
+        Self::new().flat_map(|x| [x.0, x.1, x.2])
+    }
 }
 
 impl PythagoreanTriples<BigInt> {
@@ -23,6 +27,10 @@ impl PythagoreanTriples<BigInt> {
             m: BigInt::from(2),
             n: BigInt::one(),
         }
+    }
+
+    pub fn flattened_big() -> impl Iterator<Item = BigInt> {
+        Self::new_big().flat_map(|x| [x.0, x.1, x.2])
     }
 }
 
@@ -68,6 +76,11 @@ impl<T: CheckedAdd + CheckedMul + CheckedSub + Clone + Integer> Iterator for Pyt
 
 crate::print_sequences!(
     PythagoreanTriples::new(), 100, "{:?}", "\n";
+    PythagoreanTriples::flattened(), 20;
+);
+
+crate::check_sequences!(
+    PythagoreanTriples::flattened(), [3, 4, 5, 5, 12, 13, 8, 15, 17, 7, 24, 25, 20, 21, 29, 12, 35, 37, 9, 40, 41, 28, 45, 53, 11, 60, 61, 16, 63, 65, 33, 56, 65, 48, 55, 73, 13, 84, 85, 36, 77, 85, 39, 80, 89, 20, 99, 101, 65, 72, 97, 15, 112, 113, 60, 91, 109, 44, 117, 125, 17, 144, 145, 24, 143, 145];
 );
 
 crate::sample_sequences!(
