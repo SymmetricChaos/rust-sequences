@@ -5,7 +5,7 @@ use crate::Number;
 /// The Thue-Morse sequence, the unique fixed point of the mapping 0 -> 01 and 1 -> 10.
 ///
 /// ```text
-/// 0, 1, 1, 0, 1, 0, 0, 1, 1, 0...
+/// 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1...
 /// ```
 pub struct ThueMorse<T> {
     value: BigInt,
@@ -66,4 +66,8 @@ crate::check_sequences!(
         1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1,
         1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1,
         0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0];
+);
+
+crate::sample_sequences!(
+    ThueMorse::new();
 );

@@ -1,6 +1,6 @@
 use crate::{Number, core::traits::Increment, utils::divisibility::prime_factorization};
 
-/// Sum the prime factorization of each natural number, starting at 1.
+/// Sum of the prime factorization of each natural number, starting at 1.
 ///
 /// ```text
 /// 0, 2, 3, 4, 5, 5, 7, 6, 6, 7, 11, 7, 13...

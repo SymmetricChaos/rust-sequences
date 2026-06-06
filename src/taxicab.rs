@@ -5,7 +5,7 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer};
 /// The taxicab numbers. The natural numbers that are the sum of two positive cubes in more than one way. Named for an ancedote by G. H. Hardy about Srinivasa Ramanujan.
 ///
 /// ```text
-/// 1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683...
+/// 1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683, 64232, 65728...
 /// ```
 pub struct Taxicab<T> {
     ctr: T,
@@ -87,4 +87,8 @@ crate::check_iteration_times!(
 crate::check_sequences!(
     Taxicab::new(), [1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683, 64232, 65728, 110656, 110808, 134379, 149389, 165464, 171288, 195841, 216027, 216125, 262656, 314496, 320264, 327763, 373464, 402597, 439101, 443889, 513000, 513856, 515375, 525824, 558441, 593047, 684019, 704977];
     Taxicab::new_big(), [1729, 4104, 13832, 20683, 32832, 39312, 40033, 46683, 64232, 65728, 110656, 110808, 134379, 149389, 165464, 171288, 195841, 216027, 216125, 262656, 314496, 320264, 327763, 373464, 402597, 439101, 443889, 513000, 513856, 515375, 525824, 558441, 593047, 684019, 704977];
+);
+
+crate::sample_sequences!(
+    Taxicab::new();
 );
