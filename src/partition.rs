@@ -6,7 +6,7 @@ use crate::Number;
 /// The number of partitons for each non-negative integer.
 ///
 /// ```text
-/// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30...
+/// 1, 1, 2, 3, 5, 7, 11, 15, 22, 30, 42, 56, 77, 101, 135, 176, 231...
 /// ```
 pub struct Partition<T> {
     values: Vec<T>,
@@ -190,4 +190,8 @@ crate::check_sequences!(
 crate::print_sequences!(
     PartitionsN::new(4), 10, "{:?}", "\n";
     Partitions::new(), 5, "{:?}", "\n";
+);
+
+crate::sample_sequences!(
+    Partition::new();
 );

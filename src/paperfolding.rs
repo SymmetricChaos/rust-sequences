@@ -4,7 +4,7 @@ use num::{BigInt, Integer, One, Zero};
 /// The regular paperfolding sequence, derived from the direction of folds that ooccur when a sheet of paper is folded in half in the same direction repeatedly. Each term is 1 if the odd part of n is equal to 1 modulo 4 and otherwise is 0.
 ///
 /// ```text
-/// 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0...
+/// 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0...
 /// ```
 pub struct RegularPaperfolding<T> {
     odd_part: OddPart<T>,
@@ -108,10 +108,7 @@ impl Iterator for Paperfolding<BigInt> {
         if (n.mod_floor(&BigInt::from(4))).is_one() {
             self.iter.next()
         } else {
-            match self.iter.next() {
-                Some(b) => Some(1 - b),
-                None => None,
-            }
+            Some(1 - self.iter.next()?)
         }
     }
 }
@@ -121,4 +118,8 @@ crate::check_sequences!(
     Paperfolding::new([1, 1, 1, 1, 1, 1, 1].into_iter()), [1, 1, 0, 1, 1, 0, 0];
     Paperfolding::new([0, 0, 0, 0, 0, 0, 0].into_iter()), [0, 0, 1, 0, 0, 1, 1];
     Paperfolding::new([0, 1, 0, 1, 0, 1, 0].into_iter()), [0, 1, 1, 1, 0, 0, 1];
+);
+
+crate::sample_sequences!(
+    RegularPaperfolding::new();
 );

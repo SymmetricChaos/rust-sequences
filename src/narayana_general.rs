@@ -7,16 +7,16 @@ use crate::Number;
 ///
 /// ```text
 /// k = 0 (powers of two)
-/// 1, 2, 4, 8, 16, 32, 64, 128...
+/// 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192...
 ///
 /// k = 1 (Fibonacci sequence)
-/// 1, 1, 2, 3, 5, 8, 13, 21, 34...
+/// 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597...
 ///
 /// k = 2 (Narayana cow sequence)
-/// 1, 1, 1, 2, 3, 4, 6, 9, 13, 19...
+/// 1, 1, 1, 2, 3, 4, 6, 9, 13, 19, 28, 41, 60, 88, 129, 189, 277, 406...
 ///
 /// k = 3 (A003269)
-/// 1, 1, 1, 1, 2, 3, 4, 5, 7, 10...
+/// 1, 1, 1, 1, 2, 3, 4, 5, 7, 10, 14, 19, 26, 36, 50, 69, 95, 131, 181...
 /// ```
 pub struct NarayanaGeneral<T> {
     window: VecDeque<T>,
@@ -55,4 +55,11 @@ crate::check_sequences!(
     NarayanaGeneral::new(1), [1, 1, 2, 3, 5, 8, 13, 21, 34]; // A000045
     NarayanaGeneral::new(2), [1, 1, 1, 2, 3, 4, 6, 9, 13, 19]; // A000930
     NarayanaGeneral::new(3), [1, 1, 1, 1, 2, 3, 4, 5, 7, 10]; // A003269
+);
+
+crate::sample_sequences!(
+    NarayanaGeneral::new(0);
+    NarayanaGeneral::new(1);
+    NarayanaGeneral::new(2);
+    NarayanaGeneral::new(3);
 );

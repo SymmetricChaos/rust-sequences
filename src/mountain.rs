@@ -43,9 +43,10 @@ impl<T: Clone + Integer> Iterator for SingleMountain<T> {
     }
 }
 
-/// The mountain sequence. Consists of non-overlapping "mountains" that start at n, increase to 2n, then decrease back to n. The height of each moutnain is determined by the corresponding term of the sequence.
+/// The mountain sequence. Consists of non-overlapping "mountains" that start at n, increase by one until reaching 2n, then decrease by one until reaching n. The height of each moutnain is determined by the corresponding term of the sequence.
+///
 /// ```text
-/// 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2...
+/// 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3...
 /// ```
 pub struct Mountain<T> {
     current_mountian: SingleMountain<T>,
@@ -93,4 +94,8 @@ impl<T: Clone + Integer> Iterator for Mountain<T> {
 
 crate::check_sequences!(
     Mountain::new(), [1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5, 4, 3, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 1, 2, 1, 2, 3, 4, 3, 2, 3, 4, 5, 6, 5, 4, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 4, 5, 6, 5];
+);
+
+crate::sample_sequences!(
+    Mountain::new();
 );

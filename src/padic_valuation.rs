@@ -8,8 +8,11 @@ use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, rational::Ra
 /// The k-adic valuation of each positive integer. When k is prime it is a p-adic valuation.
 ///
 /// ```text
-/// For k = 2
-/// 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0...
+/// k = 2
+/// 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0...
+///
+/// k = 3
+/// 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 1, 0, 0...
 /// ```
 pub struct PadicValuation<T> {
     p: T,
@@ -47,8 +50,11 @@ impl<T: Clone + CheckedAdd + Integer> Iterator for PadicValuation<T> {
 /// The k-adic absolute value of each positive integer. When k is prime it is a p-adic absolute value.
 ///
 /// ```text
-/// For k = 2
-/// 1, 1/2, 1, 1/4, 1, 1/2, 1, 1/8...
+/// k = 2
+/// 1, 1/2, 1, 1/4, 1, 1/2, 1, 1/8, 1, 1/2, 1, 1/4, 1, 1/2, 1, 1/16, 1...
+///
+/// k = 3
+/// 1, 1, 1/3, 1, 1, 1/3, 1, 1, 1/9, 1, 1, 1/3, 1, 1, 1/3, 1, 1, 1/9, 1...
 /// ```
 pub struct PadicAbs<T> {
     p: T,
@@ -58,6 +64,14 @@ pub struct PadicAbs<T> {
 impl PadicAbs<Number> {
     pub fn new(p: Number) -> Self {
         Self { p, ctr: 1 }
+    }
+
+    pub fn numers(p: Number) -> impl Iterator<Item = Number> {
+        Self::new(p).map(|q| *q.numer())
+    }
+
+    pub fn denoms(p: Number) -> impl Iterator<Item = Number> {
+        Self::new(p).map(|q| *q.denom())
     }
 }
 
@@ -70,6 +84,20 @@ impl PadicAbs<BigInt> {
             p: BigInt::from(p),
             ctr: BigInt::one(),
         }
+    }
+
+    pub fn numers<T>(p: T) -> impl Iterator<Item = BigInt>
+    where
+        BigInt: From<T>,
+    {
+        Self::new_big(p).map(|q| q.numer().clone())
+    }
+
+    pub fn denoms<T>(p: T) -> impl Iterator<Item = BigInt>
+    where
+        BigInt: From<T>,
+    {
+        Self::new_big(p).map(|q| q.denom().clone())
     }
 }
 
@@ -136,6 +164,14 @@ impl PadicAbsRational<Number> {
             rationals: Rationals::new_pos(),
         }
     }
+
+    pub fn numers(p: Number) -> impl Iterator<Item = Number> {
+        Self::new(p).map(|q| *q.numer())
+    }
+
+    pub fn denoms(p: Number) -> impl Iterator<Item = Number> {
+        Self::new(p).map(|q| *q.denom())
+    }
 }
 
 impl PadicAbsRational<BigInt> {
@@ -147,6 +183,20 @@ impl PadicAbsRational<BigInt> {
             p: BigInt::from(p),
             rationals: Rationals::new_big_pos(),
         }
+    }
+
+    pub fn numers<T>(p: T) -> impl Iterator<Item = BigInt>
+    where
+        BigInt: From<T>,
+    {
+        Self::new_big(p).map(|q| q.numer().clone())
+    }
+
+    pub fn denoms<T>(p: T) -> impl Iterator<Item = BigInt>
+    where
+        BigInt: From<T>,
+    {
+        Self::new_big(p).map(|q| q.denom().clone())
     }
 }
 
@@ -170,4 +220,11 @@ crate::print_sequences!(
 crate::check_sequences!(
     PadicValuation::new(2), [0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2];
     PadicAbs::new(2), ["1", "1/2", "1", "1/4", "1", "1/2", "1", "1/8"];
+);
+
+crate::sample_sequences!(
+    PadicValuation::new(2);
+    PadicValuation::new(3);
+    PadicAbs::new(2);
+    PadicAbs::new(3);
 );

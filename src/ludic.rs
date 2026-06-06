@@ -3,7 +3,7 @@ use crate::{
     core::{parity::Odds, traits::Increment},
     transforms::complement::Complement,
 };
-use num::{BigInt, One, Zero};
+use num::{BigInt, CheckedAdd, Integer, One};
 
 /// Ludic numbers. Similar to the lucky numbers but terms are counted relative to the position of the number that eliminates them.
 ///
@@ -36,8 +36,8 @@ impl Ludic<BigInt> {
     }
 }
 
-impl Iterator for Ludic<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + Integer> Iterator for Ludic<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         // First term
@@ -49,8 +49,8 @@ impl Iterator for Ludic<Number> {
         // Second term
         if self.ctr == 1 {
             self.ctr += 1;
-            self.terms.push([self.odds.next()?, 0]);
-            return Some(2);
+            self.terms.push([self.odds.next()?, T::zero()]);
+            return Some(T::one() + T::one());
         }
 
         // Most recently added number will be output
@@ -71,49 +71,7 @@ impl Iterator for Ludic<Number> {
             }
 
             // Now that a new term has been determined it starts it own independent counter
-            self.terms.push([n, 0]);
-
-            return Some(out);
-        }
-    }
-}
-
-impl Iterator for Ludic<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        // First term
-        if self.ctr == 0 {
-            self.ctr += 1;
-            return self.odds.next();
-        }
-
-        // Second term
-        if self.ctr == 1 {
-            self.ctr += 1;
-            self.terms.push([self.odds.next()?, BigInt::zero()]);
-            return Some(BigInt::from(2));
-        }
-
-        // Most recently added number will be output
-        let out = self.terms.last()?[0].clone();
-
-        'outer: loop {
-            // Look at the next odd number.
-            let n = self.odds.next()?;
-
-            // In order (important!) step the counters for the known terms and stop if any of the counters reach a multiple of the term
-            // Doing it this way ensures we do not double count anything and that we eliminate terms with the lower sequences first
-            for [term, count] in self.terms.iter_mut() {
-                count.incr()?;
-                *count = count.clone() % term.clone();
-                if count.is_zero() {
-                    continue 'outer;
-                }
-            }
-
-            // Now that a new term has been determined it starts it own independent counter
-            self.terms.push([n, BigInt::zero()]);
+            self.terms.push([n, T::zero()]);
 
             return Some(out);
         }
@@ -122,7 +80,9 @@ impl Iterator for Ludic<BigInt> {
 
 /// The non-Ludic numbers.
 ///
-/// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21...
+/// ```text
+/// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21, 22, 24, 26, 27, 28...
+/// ```
 pub struct NonLudic<T>(Complement<T>);
 
 impl NonLudic<Number> {
@@ -137,16 +97,8 @@ impl NonLudic<BigInt> {
     }
 }
 
-impl Iterator for NonLudic<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.next()
-    }
-}
-
-impl Iterator for NonLudic<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for NonLudic<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.0.next()
@@ -156,4 +108,9 @@ impl Iterator for NonLudic<BigInt> {
 crate::check_sequences!(
     Ludic::new_big(), [1, 2, 3, 5, 7, 11, 13, 17, 23, 25, 29, 37, 41, 43, 47, 53, 61, 67, 71, 77, 83, 89, 91, 97, 107, 115, 119, 121, 127, 131, 143, 149, 157, 161, 173, 175, 179, 181, 193, 209, 211, 221, 223, 227, 233, 235, 239, 247, 257, 265, 277, 283, 287, 301, 307, 313];
     NonLudic::new_big(), [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 19, 20, 21, 22, 24, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58, 59, 60, 62, 63, 64, 65, 66, 68, 69, 70, 72, 73, 74, 75, 76, 78, 79, 80, 81, 82, 84, 85, 86, 87];
+);
+
+crate::sample_sequences!(
+    Ludic::new();
+    NonLudic::new();
 );

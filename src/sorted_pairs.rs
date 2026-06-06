@@ -1,7 +1,7 @@
 use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, One, Zero};
 
-/// All pairs of non-negative integers where the first is not more than the second.
+/// All pairs of non-negative integers where the first is less than or equal to the second.
 pub struct SortedPairs<T> {
     row: T,
     col: T,

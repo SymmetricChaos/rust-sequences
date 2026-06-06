@@ -5,7 +5,7 @@ use num::{BigInt, Integer, Zero};
 /// The Möbius function over the positive integers.
 ///
 /// ```text
-/// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0...
+/// 1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0, -1, 1, 1, 0, -1, 0, -1, 0...
 /// ```
 pub struct Mobius<T> {
     n: T,
@@ -42,7 +42,7 @@ impl Iterator for Mobius<Number> {
 
 /// The values of the Merterns function over the positive integers. Partial sums of the Mobius function, without the leading zero.
 ///
-/// 1, 0, -1, -1, -2, -1, -2, -2, -2, -1
+/// 1, 0, -1, -1, -2, -1, -2, -2, -2, -1, -2, -2, -3, -2, -1, -1, -2...
 pub struct Mertens<T> {
     n: Number,
     sum: T,
@@ -91,4 +91,9 @@ impl Iterator for Mertens<Number> {
 crate::check_sequences!(
     Mobius::new(), [1, -1, -1, 0, -1, 1, -1, 0, 0, 1, -1, 0, -1, 1, 1, 0, -1, 0, -1, 0];
     Mertens::new(), [1, 0, -1, -1, -2, -1, -2, -2, -2, -1, -2, -2, -3, -2, -1, -1, -2, -2, -3, -3];
+);
+
+crate::sample_sequences!(
+    Mobius::new();
+    Mertens::new();
 );

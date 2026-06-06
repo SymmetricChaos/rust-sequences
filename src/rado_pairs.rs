@@ -1,5 +1,5 @@
 use crate::{Number, sorted_pairs::SortedPairsStrict};
-use num::{BigInt, FromPrimitive, Integer, Zero, pow::Pow};
+use num::{BigInt, Integer, pow::Pow};
 
 /// The pairs of numbers connected by an edge in the infinite Rado graph, with the lower term first. Alternatively every pair of numbers (a,b) such that the ath bit of b is 1.
 ///
@@ -39,6 +39,9 @@ impl Iterator for RadoPairs<Number> {
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             let (a, b) = self.pairs.next()?;
+            if a > 63 {
+                continue;
+            }
             if (b >> a).is_odd() {
                 return Some((a, b));
             }
@@ -61,8 +64,8 @@ impl Iterator for RadoPairs<BigInt> {
 }
 
 crate::print_sequences!(
-    RadoPairs::new(), 20, "{:?}", ", ";
-    RadoPairs::new_big(), 20, "{:?}", ", ";
+    RadoPairs::new(), skip 1500, 20, "{:?}", ", ";
+    RadoPairs::new_big(), skip 1500, 20, "{:?}", ", ";
     RadoPairs::flattened(), 20;
 );
 
