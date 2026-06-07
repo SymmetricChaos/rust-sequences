@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 pub mod automata;
 pub mod collatz;
 pub mod core;

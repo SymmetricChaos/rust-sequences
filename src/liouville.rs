@@ -4,7 +4,7 @@ use num::{BigInt, One, Zero};
 /// Liouville's constant, decimal expansion of the first number proven to be transcendental. Also the characteristic function of the factorials.
 ///
 /// ```text
-/// 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0...
+/// 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
 /// ```
 pub struct Liouville {
     factorial: Factorial<BigInt>,
@@ -40,4 +40,8 @@ impl Iterator for Liouville {
 
 crate::check_sequences!(
     Liouville::new(), [1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+);
+
+crate::sample_sequences!(
+    Liouville::new();
 );

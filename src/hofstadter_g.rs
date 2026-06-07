@@ -4,6 +4,7 @@ use crate::core::traits::Increment;
 ///
 /// ```text
 /// a(n) = n - a(a(n-1))
+///
 /// 0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9...
 /// ```
 pub struct HofstadterG {

@@ -6,11 +6,7 @@ use crate::Number;
 /// The sequence of look-and-say strings. Each is determiend by how the runs of numbers in the previous string might be said aloud.
 ///
 /// ```text
-/// 1 (one one)
-/// 11 (two one)
-/// 21 (one two, one one)
-/// 1211 (one one, one two, two one)
-/// 111221 (three one, two two, one one)
+/// 1, 11, 21, 1211, 111221, 312211, 13112221, 1113213211...
 /// ```
 pub struct LookAndSayString {
     string: String,
@@ -58,7 +54,7 @@ impl Iterator for LookAndSayString {
 /// The look-and-say sequence interpreted as numbers.
 ///
 /// ```text
-/// 1, 11, 21, 1211, 111221...
+/// 1, 11, 21, 1211, 111221, 312211, 13112221, 1113213211...
 /// ```
 pub struct LookAndSay<T> {
     string: LookAndSayString,
@@ -94,4 +90,9 @@ impl<T: Num> Iterator for LookAndSay<T> {
 crate::check_sequences!(
     LookAndSayString::new(), ["1", "11", "21", "1211", "111221", "312211", "13112221", "1113213211", "31131211131221", "13211311123113112211", "11131221133112132113212221", "3113112221232112111312211312113211"];
     LookAndSay::new_big(), [1_i64, 11, 21, 1211, 111221, 312211, 13112221, 1113213211, 31131211131221];
+);
+
+crate::sample_sequences!(
+    LookAndSayString::new();
+    LookAndSay::new_big();
 );

@@ -4,7 +4,7 @@ use num::{BigInt, One, Zero};
 /// The hyperprimorial numbers. Partial products of each prime to the power of itself.
 ///
 /// ```text
-/// 4, 108, 337500, 277945762500...
+/// 1, 4, 108, 337500, 277945762500, 79301169838123235887500...
 /// ```
 pub struct HyperPrimorial<T> {
     prod: T,
@@ -69,4 +69,8 @@ impl Iterator for HyperPrimorial<BigInt> {
 
 crate::check_sequences!(
     HyperPrimorial::new_big(), [1_u128, 4, 108, 337500, 277945762500, 79301169838123235887500];
+);
+
+crate::sample_sequences!(
+    HyperPrimorial::new_big();
 );

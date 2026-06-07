@@ -4,7 +4,7 @@ use num::{BigInt, One, Zero};
 /// The hyperfactorials numbers. Partial products of each positive natural number to the power of itself.
 ///
 /// ```text
-/// 1, 1, 4, 108, 27648, 86400000...
+/// 1, 1, 4, 108, 27648, 86400000, 4031078400000, 3319766398771200000...
 /// ```
 pub struct HyperFactorial<T> {
     prod: T,
@@ -67,4 +67,8 @@ impl Iterator for HyperFactorial<BigInt> {
 
 crate::check_sequences!(
     HyperFactorial::new_big(), [1_u128, 1, 4, 108, 27648, 86400000, 4031078400000];
+);
+
+crate::sample_sequences!(
+    HyperFactorial::new_big();
 );
