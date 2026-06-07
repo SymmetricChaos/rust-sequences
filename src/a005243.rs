@@ -54,9 +54,11 @@ impl<T: Clone + CheckedAdd + Integer> Iterator for A005243<T> {
     }
 }
 
-/// Complement of A005243, starting from 1.
+/// Complement of A005243.
 ///
+/// ```text
 /// 4, 7, 9, 12, 13, 15, 20, 23, 26, 27, 28, 31, 36, 38, 39, 42, 44, 48...
+/// ```
 pub struct A048973<T>(Complement<T>);
 
 impl A048973<Number> {

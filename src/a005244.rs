@@ -2,7 +2,7 @@ use crate::{Number, transforms::complement::Complement};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer, One};
 use std::collections::BTreeSet;
 
-/// Starting with 2 and 3 every number that can be written as (a*b)-1,  for a and b in the sequence, appears in increasing order.
+/// Starting with 2 and 3 every number that can be written as (a*b)-1, for a and b in the sequence, appears in increasing order.
 ///
 /// ```text
 /// 2, 3, 5, 9, 14, 17, 26, 27, 33, 41, 44, 50, 51, 53, 65, 69, 77, 80...
@@ -44,9 +44,11 @@ impl<T: Clone + CheckedMul + Integer> Iterator for A005244<T> {
     }
 }
 
-/// Complement of A005244, starting from 1.
+/// Complement of A005244.
 ///
+/// ```text
 /// 1, 4, 6, 7, 8, 10, 11, 12, 13, 15, 16, 18, 19, 20, 21, 22, 23, 24...
+/// ```
 pub struct A171413<T>(Complement<T>);
 
 impl A171413<Number> {

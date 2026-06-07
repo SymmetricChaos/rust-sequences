@@ -68,23 +68,25 @@ pub const BASE_SETS: [&str; 64] = [
     "{{}{{}}{{{}}}{{}{{}}}{{{{}}}}{{}{{{}}}}}",
 ];
 
-/// The Ackerman sets, a bijection between the naturals and the pure sets.
+/// The Ackerman sets, a bijection between the naturals and the pure sets (aka hereditary finite sets).
+///
 /// ```text
 /// f({}) = 0
 /// f(A) = sum 2^f(a_i) for all a_i in A
+///
+/// {}, {{}}, {{{}}}, {{}{{}}}, {{{{}}}}, {{}{{{}}}}, {{{}}{{{}}}}...
 /// ```
-pub struct AckermannSet {
+pub struct AckermannSets {
     ctr: BigInt,
 }
 
-impl AckermannSet {
-    pub fn new_big() -> Self {
+impl AckermannSets {
+    pub fn new() -> Self {
         Self { ctr: BigInt::ZERO }
     }
 
     // This remiains fast up to thousands of bits!
-    /// The nth Ackerman set.
-    /// Panics if n is negative.
+    /// The nth Ackerman set. n must be positive.
     pub fn nth<T>(n: T) -> String
     where
         BigInt: From<T>,
@@ -95,7 +97,7 @@ impl AckermannSet {
     }
 }
 
-impl Iterator for AckermannSet {
+impl Iterator for AckermannSets {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -117,7 +119,6 @@ pub fn number_to_set_64(mut n: u64) -> String {
     let mut out = String::from("{");
     for i in 0..=64 {
         if n & 1 == 1 {
-            // out.push_str(&number_to_set_64(i));
             out.push_str(BASE_SETS[i]); // much faster than recursion
         }
         n >>= 1;
@@ -144,18 +145,22 @@ pub fn number_to_set_big(n: &BigInt) -> String {
     out
 }
 
-#[cfg(test)]
-mod tests {
+// #[cfg(test)]
+// mod tests {
 
-    use super::*;
+//     use super::*;
 
-    #[ignore = "constant generation"]
-    #[test]
-    fn generate_base_sets() {
-        println!("pub const BASE_SETS: [&str; 64] = [");
-        for i in 0..64 {
-            println!("    \"{}\",", number_to_set_64(i))
-        }
-        println!("];");
-    }
-}
+//     #[ignore = "constant generation"]
+//     #[test]
+//     fn generate_base_sets() {
+//         println!("pub const BASE_SETS: [&str; 64] = [");
+//         for i in 0..64 {
+//             println!("    \"{}\",", number_to_set_64(i))
+//         }
+//         println!("];");
+//     }
+// }
+
+crate::sample_sequences!(
+    AckermannSets::new();
+);
