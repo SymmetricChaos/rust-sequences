@@ -22,6 +22,7 @@ impl Partition<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Partition<BigInt> {
     pub fn new_big() -> Self {
         Self {

@@ -13,6 +13,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Naturals<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Naturals<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

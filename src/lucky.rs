@@ -26,6 +26,7 @@ impl Lucky<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Lucky<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -87,6 +88,7 @@ impl Unlucky<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Unlucky<BigInt> {
     pub fn new_big() -> Self {
         Self(Complement::new(Lucky::new_big(), BigInt::one()))

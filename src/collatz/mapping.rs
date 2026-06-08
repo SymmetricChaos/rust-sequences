@@ -23,6 +23,7 @@ impl CollatzMap<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CollatzMap<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -41,6 +42,7 @@ impl Iterator for CollatzMap<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CollatzMap<BigInt> {
     type Item = BigInt;
 
@@ -72,6 +74,7 @@ impl ReducedCollatzMap<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl ReducedCollatzMap<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -94,6 +97,7 @@ impl Iterator for ReducedCollatzMap<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for ReducedCollatzMap<BigInt> {
     type Item = BigInt;
 

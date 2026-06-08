@@ -19,6 +19,7 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Composites<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Composites<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

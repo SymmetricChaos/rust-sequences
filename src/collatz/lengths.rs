@@ -20,6 +20,7 @@ impl CollatzLength<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CollatzLength<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -45,6 +46,7 @@ impl Iterator for CollatzLength<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CollatzLength<BigInt> {
     type Item = u64;
 
@@ -81,6 +83,7 @@ impl ReducedCollatzLength<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl ReducedCollatzLength<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -106,6 +109,7 @@ impl Iterator for ReducedCollatzLength<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for ReducedCollatzLength<BigInt> {
     type Item = u64;
 

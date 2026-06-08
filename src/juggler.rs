@@ -20,6 +20,7 @@ impl Juggler<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Juggler<BigInt> {
     pub fn new_big<G>(n: G) -> Self
     where
@@ -47,6 +48,7 @@ impl Iterator for Juggler<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Juggler<BigInt> {
     type Item = BigInt;
 

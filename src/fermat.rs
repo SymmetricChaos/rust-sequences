@@ -20,6 +20,7 @@ impl Fermat<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Fermat<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -51,6 +52,7 @@ impl Iterator for Fermat<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Fermat<BigInt> {
     type Item = BigInt;
 

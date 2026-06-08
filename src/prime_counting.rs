@@ -27,6 +27,7 @@ impl PrimeCounting<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PrimeCounting<BigInt> {
     pub fn new_big() -> Self {
         let mut prime = Primes::new();

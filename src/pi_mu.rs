@@ -21,6 +21,7 @@ impl ReverseAndIncrement<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl ReverseAndIncrement<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -67,6 +68,7 @@ impl PiMu<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PiMu<BigInt> {
     pub fn new_big() -> Self {
         let mut s = ReverseAndIncrement::new_big();

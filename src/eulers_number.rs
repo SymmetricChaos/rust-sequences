@@ -32,6 +32,7 @@ impl Euler<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Euler<BigInt> {
     pub fn new_big() -> Self {
         Self {

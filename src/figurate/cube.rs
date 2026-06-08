@@ -18,6 +18,7 @@ impl Cube<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Cube<BigInt> {
     pub fn new_big() -> Self {
         Self {

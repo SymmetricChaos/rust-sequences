@@ -16,6 +16,7 @@ impl CollatzHeights<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CollatzHeights<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -45,6 +46,7 @@ impl Iterator for CollatzHeights<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CollatzHeights<BigInt> {
     type Item = BigInt;
 

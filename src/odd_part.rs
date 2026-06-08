@@ -16,6 +16,7 @@ impl OddPart<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl OddPart<BigInt> {
     pub fn new_big() -> Self {
         Self {

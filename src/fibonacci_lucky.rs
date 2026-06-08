@@ -17,6 +17,7 @@ impl<T: CheckedAdd + Clone + Integer> FibonacciLucky<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl FibonacciLucky<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

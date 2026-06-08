@@ -28,6 +28,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Rationals<N> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Rationals<BigInt> {
     /// The non-negative rationals
     pub fn new_big() -> Self {
@@ -96,6 +97,7 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> SignedRational
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SignedRationals<BigInt> {
     pub fn new_big() -> Self {
         Self {

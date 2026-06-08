@@ -26,6 +26,7 @@ impl Ludic<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Ludic<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -91,6 +92,7 @@ impl NonLudic<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NonLudic<BigInt> {
     pub fn new_big() -> Self {
         Self(Complement::new(Ludic::new_big(), BigInt::one()))

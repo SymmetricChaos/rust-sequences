@@ -18,6 +18,7 @@ impl Zeta<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Zeta<BigInt> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
     pub fn new_big(p: u32) -> Self {

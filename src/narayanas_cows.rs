@@ -18,6 +18,7 @@ impl NarayanasCows<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NarayanasCows<BigInt> {
     pub fn new_big() -> Self {
         Self {

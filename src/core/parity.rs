@@ -19,6 +19,7 @@ impl<T: One + Zero> Parity<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Parity<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -51,6 +52,7 @@ impl<T: CheckedAdd + Clone + One + Zero> Evens<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Evens<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -80,6 +82,7 @@ impl<T: CheckedAdd + Clone + One> Odds<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Odds<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -109,6 +112,7 @@ impl<T: CheckedAdd + Clone + One + Signed + Zero> EvenIntegers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl EvenIntegers<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -144,6 +148,7 @@ impl<T: CheckedAdd + Clone + Signed + One> OddIntegers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl OddIntegers<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

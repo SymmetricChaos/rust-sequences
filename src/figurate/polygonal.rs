@@ -32,6 +32,7 @@ impl Polygonal<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Polygonal<BigInt> {
     pub fn new_big<T>(k: T) -> Self
     where
@@ -67,6 +68,7 @@ impl Iterator for Polygonal<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Polygonal<BigInt> {
     type Item = BigInt;
 

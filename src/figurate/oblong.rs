@@ -18,6 +18,7 @@ impl Oblong<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Oblong<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -46,6 +47,7 @@ impl Iterator for Oblong<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Oblong<BigInt> {
     type Item = BigInt;
 

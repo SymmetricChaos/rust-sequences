@@ -28,6 +28,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Zero> AdditiveLinearRecurrence<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl AdditiveLinearRecurrence<BigInt> {
     /// The simplest linear recurrence with two terms and two coefficients.
     pub fn new_big<T>(a: T, b: T, p: T, q: T) -> Self

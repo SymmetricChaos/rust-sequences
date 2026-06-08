@@ -25,6 +25,7 @@ impl PadicValuation<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PadicValuation<BigInt> {
     pub fn new_big<T>(p: T) -> Self
     where
@@ -75,6 +76,7 @@ impl PadicAbs<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PadicAbs<BigInt> {
     pub fn new_big<T>(p: T) -> Self
     where
@@ -126,6 +128,7 @@ impl PadicValuationRational<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PadicValuationRational<BigInt> {
     pub fn new_big<T>(p: T) -> Self
     where
@@ -174,6 +177,7 @@ impl PadicAbsRational<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PadicAbsRational<BigInt> {
     pub fn new_big<T>(p: T) -> Self
     where

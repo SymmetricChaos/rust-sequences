@@ -17,6 +17,7 @@ impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + CheckedDiv + One> Catalan
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Catalan<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

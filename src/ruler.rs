@@ -35,6 +35,7 @@ impl Ruler<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Ruler<BigInt> {
     pub fn new_big() -> Self {
         Self {

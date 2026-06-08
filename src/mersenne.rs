@@ -22,6 +22,7 @@ impl Mersenne<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Mersenne<BigInt> {
     pub fn new_big() -> Self {
         Self {

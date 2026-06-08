@@ -54,6 +54,7 @@ impl Mertens<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Mertens<BigInt> {
     pub fn new_big() -> Self {
         Self {

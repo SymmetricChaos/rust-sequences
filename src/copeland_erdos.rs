@@ -29,6 +29,7 @@ impl CopelandErdos<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CopelandErdos<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self

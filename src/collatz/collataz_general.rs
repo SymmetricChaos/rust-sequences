@@ -19,6 +19,7 @@ impl CollatzGeneral<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CollatzGeneral<BigInt> {
     pub fn new_big<T>(n: T, a: T, b: T) -> Self
     where
@@ -47,6 +48,7 @@ impl Iterator for CollatzGeneral<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CollatzGeneral<BigInt> {
     type Item = BigInt;
 

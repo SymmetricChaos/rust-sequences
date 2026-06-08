@@ -22,6 +22,7 @@ impl Recaman<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Recaman<BigInt> {
     pub fn new_big() -> Self {
         Self {

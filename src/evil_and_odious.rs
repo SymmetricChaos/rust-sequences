@@ -16,6 +16,7 @@ impl Evil<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Evil<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -39,6 +40,7 @@ impl Iterator for Evil<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Evil<BigInt> {
     type Item = BigInt;
 
@@ -69,6 +71,7 @@ impl Odious<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Odious<BigInt> {
     pub fn new_big() -> Self {
         Self { ctr: BigInt::one() }
@@ -90,6 +93,7 @@ impl Iterator for Odious<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Odious<BigInt> {
     type Item = BigInt;
 

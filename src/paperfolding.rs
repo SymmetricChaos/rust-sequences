@@ -18,6 +18,7 @@ impl RegularPaperfolding<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl RegularPaperfolding<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -36,6 +37,7 @@ impl Iterator for RegularPaperfolding<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for RegularPaperfolding<BigInt> {
     type Item = BigInt;
 
@@ -69,6 +71,7 @@ impl Paperfolding<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Paperfolding<BigInt> {
     /// The iterator should output only 0s and 1s, representing the directions of the folding. A iterator that gives all 1s produces the regular paperfolding sequence.
     pub fn new_big<I>(iter: I) -> Self
@@ -99,6 +102,7 @@ impl Iterator for Paperfolding<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Paperfolding<BigInt> {
     type Item = BigInt;
 

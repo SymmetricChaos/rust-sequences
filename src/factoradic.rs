@@ -39,6 +39,7 @@ impl<T: CheckedAdd + Clone + Integer + Zero> Factoradic<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Factoradic<BigInt> {
     pub fn new_big(size: usize) -> Self {
         Self::new(size)

@@ -18,6 +18,7 @@ impl Rueppel<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Rueppel<BigInt> {
     pub fn new_big() -> Self {
         Self {

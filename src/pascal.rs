@@ -17,6 +17,7 @@ impl PascalsTriangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PascalsTriangle<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -54,6 +55,7 @@ impl BernoullisTriangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl BernoullisTriangle<BigInt> {
     pub fn new_big() -> Self {
         Self {

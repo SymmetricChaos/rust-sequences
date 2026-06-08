@@ -21,6 +21,7 @@ impl PythagoreanTriples<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PythagoreanTriples<BigInt> {
     pub fn new_big() -> Self {
         Self {

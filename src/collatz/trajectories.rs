@@ -23,6 +23,7 @@ impl CollatzTrajectories<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CollatzTrajectories<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -50,6 +51,7 @@ impl Iterator for CollatzTrajectories<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CollatzTrajectories<BigInt> {
     type Item = Vec<BigInt>;
 

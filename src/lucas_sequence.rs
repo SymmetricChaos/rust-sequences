@@ -20,6 +20,7 @@ impl LucasU<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl LucasU<BigInt> {
     pub fn new_big<G>(p: G, q: G) -> Self
     where
@@ -48,6 +49,7 @@ impl Iterator for LucasU<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for LucasU<BigInt> {
     type Item = BigInt;
 
@@ -80,6 +82,7 @@ impl LucasV<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl LucasV<BigInt> {
     pub fn new_big<G: Clone>(p: G, q: G) -> Self
     where
@@ -108,6 +111,7 @@ impl Iterator for LucasV<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for LucasV<BigInt> {
     type Item = BigInt;
 

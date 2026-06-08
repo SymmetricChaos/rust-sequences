@@ -64,6 +64,7 @@ impl Mountain<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Mountain<BigInt> {
     pub fn new_big() -> Self {
         Self {

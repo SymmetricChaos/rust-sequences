@@ -26,6 +26,7 @@ impl Kempner<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Kempner<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -71,6 +72,7 @@ impl Iterator for Kempner<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Kempner<BigInt> {
     type Item = Ratio<BigInt>;
 

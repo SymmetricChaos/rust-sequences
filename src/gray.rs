@@ -16,6 +16,7 @@ impl Gray<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Gray<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -34,6 +35,7 @@ impl Iterator for Gray<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Gray<BigInt> {
     type Item = BigInt;
 

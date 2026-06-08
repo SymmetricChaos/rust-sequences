@@ -22,6 +22,7 @@ impl<T: CheckedAdd + Integer + Hash + Clone> Primes<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Primes<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -110,6 +111,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PrimePowers<BigInt> {
     pub fn new_big() -> Self {
         Self::new()
@@ -154,6 +156,7 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Primorial<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Primorial<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

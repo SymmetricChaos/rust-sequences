@@ -18,6 +18,7 @@ impl Factorial<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Factorial<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -57,6 +58,7 @@ impl AlternatingFactorial<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl AlternatingFactorial<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -92,6 +94,7 @@ impl DoubleFactorial<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl DoubleFactorial<BigInt> {
     pub fn new_big() -> Self {
         Self {

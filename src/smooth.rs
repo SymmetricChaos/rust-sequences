@@ -26,6 +26,7 @@ impl Smooth<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Smooth<BigInt> {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
@@ -82,6 +83,7 @@ impl Regular<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Regular<BigInt> {
     pub fn new_big() -> Self {
         let mut heap = BinaryHeap::new();

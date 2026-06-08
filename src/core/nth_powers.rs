@@ -16,6 +16,7 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Zero> NthPowers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NthPowers<BigInt> {
     pub fn new_big(p: u32) -> Self {
         Self::new(p)

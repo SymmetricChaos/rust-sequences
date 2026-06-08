@@ -18,6 +18,7 @@ impl NarayanaTriangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NarayanaTriangle<BigInt> {
     pub fn new_big() -> Self {
         Self {

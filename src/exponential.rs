@@ -29,6 +29,7 @@ impl Exponential<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Exponential<BigInt> {
     pub fn new_big<G>(numer: G, denom: G) -> Self
     where
@@ -71,6 +72,7 @@ impl Iterator for Exponential<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Exponential<BigInt> {
     type Item = Ratio<BigInt>;
 
@@ -120,6 +122,7 @@ impl NaturalLog<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NaturalLog<BigInt> {
     /// Panics if numer/denom <= 0.
     pub fn new_big<G>(numer: G, denom: G) -> Self
@@ -176,6 +179,7 @@ impl Iterator for NaturalLog<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for NaturalLog<BigInt> {
     type Item = Ratio<BigInt>;
 

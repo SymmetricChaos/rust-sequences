@@ -30,6 +30,7 @@ impl Squarefree<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Squarefree<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();
@@ -86,6 +87,7 @@ impl Squareful<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Squareful<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();

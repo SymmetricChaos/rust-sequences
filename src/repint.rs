@@ -36,6 +36,7 @@ impl Repint<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Repint<BigInt> {
     pub fn new_big<N>(number: N, base: N) -> Self
     where

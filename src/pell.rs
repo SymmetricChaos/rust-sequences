@@ -17,6 +17,7 @@ impl Pell<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Pell<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -54,6 +55,7 @@ impl CompanionPell<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CompanionPell<BigInt> {
     pub fn new_big() -> Self {
         Self {

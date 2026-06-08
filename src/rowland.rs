@@ -21,6 +21,7 @@ impl Rowland<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Rowland<BigInt> {
     pub fn new_big<G>(initial: G) -> Self
     where
@@ -64,6 +65,7 @@ impl RowlandPrimeGenerating<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl RowlandPrimeGenerating<BigInt> {
     pub fn new_big<G>(initial: G) -> Self
     where
@@ -107,6 +109,7 @@ impl RowlandPrime<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl RowlandPrime<BigInt> {
     pub fn new_big<G>(initial: G) -> Self
     where

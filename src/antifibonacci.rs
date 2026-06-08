@@ -23,6 +23,7 @@ impl AntiFibonacci<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl AntiFibonacci<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -79,6 +80,7 @@ impl NonAntiFibonacci<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NonAntiFibonacci<BigInt> {
     pub fn new_big() -> Self {
         let mut antifib = AntiFibonacci::new_big();

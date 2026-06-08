@@ -23,6 +23,7 @@ impl<T: Signed + CheckedAdd + Clone + CheckedMul + CheckedSub + std::ops::Shr<i3
     }
 }
 
+#[cfg(feature = "big_int")]
 impl GeneralizedPentagonal<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

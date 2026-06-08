@@ -44,6 +44,7 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl RationalDigits<BigInt> {
     pub fn new_big<F: Integer + Clone, G>(numer: F, denom: F, base: G) -> Self
     where

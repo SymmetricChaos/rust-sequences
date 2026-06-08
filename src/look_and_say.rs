@@ -70,6 +70,7 @@ impl LookAndSay<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl LookAndSay<BigInt> {
     pub fn new_big() -> Self {
         Self {

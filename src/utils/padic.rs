@@ -42,6 +42,7 @@ impl Padic for BigInt {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Padic for Ratio<BigInt> {
     fn padic_abs(&self, p: u32) -> Ratio<BigInt> {
         self.numer().padic_abs(p) * self.denom().padic_abs(p).recip()

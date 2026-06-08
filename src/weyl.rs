@@ -27,6 +27,7 @@ impl WeylMarsaglia<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl WeylMarsaglia<BigInt> {
     /// Create a new sequence with the given step and modulus.
     /// Panics if step is not coprime to modulus.

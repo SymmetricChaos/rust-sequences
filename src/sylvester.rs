@@ -20,6 +20,7 @@ impl Sylvester<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Sylvester<BigInt> {
     pub fn new_big() -> Self {
         Self {

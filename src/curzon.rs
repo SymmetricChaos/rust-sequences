@@ -20,6 +20,7 @@ impl Curzon<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Curzon<BigInt> {
     pub fn new_big<G>(base: G) -> Self
     where

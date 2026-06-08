@@ -20,6 +20,7 @@ impl PeriodDoubling<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PeriodDoubling<BigInt> {
     pub fn new_big() -> Self {
         Self {

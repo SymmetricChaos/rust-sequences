@@ -19,6 +19,7 @@ impl FlyStraight<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl FlyStraight<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -68,6 +69,7 @@ impl A255140<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl A255140<BigInt> {
     pub fn new_big() -> Self {
         Self {

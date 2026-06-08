@@ -17,6 +17,7 @@ impl HyperFactorial<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl HyperFactorial<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -46,6 +47,7 @@ impl Iterator for HyperFactorial<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for HyperFactorial<BigInt> {
     type Item = BigInt;
 

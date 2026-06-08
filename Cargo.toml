@@ -3,8 +3,9 @@ name = "rust_sequences"
 version = "0.1.0"
 edition = "2024"
 
-[profile.dev]
-opt-level = 1
+[features]
+big_int = []
+default = ["big_int"]
 
 [dependencies]
 num = "0.4.3"

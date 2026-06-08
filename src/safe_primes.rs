@@ -20,6 +20,7 @@ impl SafePrimes<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SafePrimes<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();
@@ -61,6 +62,7 @@ impl SophieGermainPrimes<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SophieGermainPrimes<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();

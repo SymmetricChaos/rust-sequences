@@ -34,6 +34,7 @@ impl CenteredPolygonal<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CenteredPolygonal<BigInt> {
     pub fn new_big<T: One>(k: T) -> Self
     where
@@ -66,6 +67,7 @@ impl Iterator for CenteredPolygonal<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for CenteredPolygonal<BigInt> {
     type Item = BigInt;
 

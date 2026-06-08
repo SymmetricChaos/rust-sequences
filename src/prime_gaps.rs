@@ -20,6 +20,7 @@ impl PrimeGaps<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PrimeGaps<BigInt> {
     pub fn new_big() -> Self {
         let mut primes = Primes::new_big();

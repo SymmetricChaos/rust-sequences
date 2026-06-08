@@ -18,6 +18,7 @@ impl Cahen<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Cahen<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -54,6 +55,7 @@ impl Iterator for Cahen<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Cahen<BigInt> {
     type Item = Ratio<BigInt>;
 

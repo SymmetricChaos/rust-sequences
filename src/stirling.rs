@@ -24,6 +24,7 @@ impl StirlingFirst<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl StirlingFirst<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -74,6 +75,7 @@ impl StirlingFirstSigned<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl StirlingFirstSigned<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -135,6 +137,7 @@ pub struct StirlingSecond<T> {
 //     }
 // }
 
+#[cfg(feature = "big_int")]
 impl StirlingSecond<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -144,6 +147,7 @@ impl StirlingSecond<BigInt> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for StirlingSecond<BigInt> {
     type Item = Vec<BigInt>;
 

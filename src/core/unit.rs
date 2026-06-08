@@ -20,6 +20,7 @@ impl<T: One + Zero> UnitSequence<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl UnitSequence<BigInt> {
     pub fn new_big() -> Self {
         Self::new()

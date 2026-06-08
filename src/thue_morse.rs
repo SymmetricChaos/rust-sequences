@@ -25,6 +25,7 @@ impl ThueMorse<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl ThueMorse<BigInt> {
     pub fn new_big() -> Self {
         Self {

@@ -15,6 +15,7 @@ impl<T: CheckedMul + Clone> Geometric<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Geometric<BigInt> {
     pub fn new_big<T>(initial: T, multiplier: T) -> Self
     where

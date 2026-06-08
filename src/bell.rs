@@ -16,6 +16,7 @@ impl BellTriangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl BellTriangle<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -39,6 +40,7 @@ impl Iterator for BellTriangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for BellTriangle<BigInt> {
     type Item = Vec<BigInt>;
 
@@ -71,6 +73,7 @@ impl Bell<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Bell<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -87,6 +90,7 @@ impl Iterator for Bell<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Bell<BigInt> {
     type Item = BigInt;
 

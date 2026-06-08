@@ -21,6 +21,7 @@ impl BaumSweet<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl BaumSweet<BigInt> {
     pub fn new_big() -> Self {
         Self {

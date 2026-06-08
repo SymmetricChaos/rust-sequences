@@ -17,6 +17,7 @@ impl SquareTriangular<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SquareTriangular<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -38,6 +39,7 @@ impl Iterator for SquareTriangular<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for SquareTriangular<BigInt> {
     type Item = BigInt;
 

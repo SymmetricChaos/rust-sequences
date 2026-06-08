@@ -26,6 +26,7 @@ impl Champernowne<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Champernowne<BigInt> {
     pub fn new_big<G>(base: G) -> Self
     where
@@ -60,6 +61,7 @@ impl Iterator for Champernowne<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Champernowne<BigInt> {
     type Item = BigInt;
 

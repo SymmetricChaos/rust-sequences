@@ -17,6 +17,7 @@ impl Lucas<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Lucas<BigInt> {
     pub fn new_big() -> Self {
         Self {

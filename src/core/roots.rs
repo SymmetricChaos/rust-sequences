@@ -17,6 +17,7 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> SquareRoot
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SquareRoot<BigInt> {
     pub fn new_big<N>(numer: N, denom: N) -> Self
     where
@@ -63,6 +64,7 @@ impl<T: CheckedAdd + CheckedDiv + CheckedMul + Clone + Integer + One> CubeRoot<T
     }
 }
 
+#[cfg(feature = "big_int")]
 impl CubeRoot<BigInt> {
     pub fn new_big<N>(num: N, den: N) -> Self
     where

@@ -30,6 +30,7 @@ impl Harmonic<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Harmonic<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -88,6 +89,7 @@ impl AlternatingHarmonic<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl AlternatingHarmonic<BigInt> {
     pub fn new_big() -> Self {
         Self {

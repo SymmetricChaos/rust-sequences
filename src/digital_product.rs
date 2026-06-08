@@ -58,6 +58,7 @@ impl DigitalProds<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl DigitalProds<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
@@ -102,6 +103,7 @@ impl MultiplicativeDigitalRoots<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl MultiplicativeDigitalRoots<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
@@ -146,6 +148,7 @@ impl MultiplicativePersistence<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl MultiplicativePersistence<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self

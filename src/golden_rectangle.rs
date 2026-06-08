@@ -19,6 +19,7 @@ impl GoldenRectangle<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl GoldenRectangle<BigInt> {
     pub fn new_big() -> Self {
         let mut fib = Fibonacci::new_big();
@@ -56,6 +57,7 @@ impl GoldenRectangleSides<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl GoldenRectangleSides<BigInt> {
     pub fn new_big() -> Self {
         let mut fib = Fibonacci::new_big();

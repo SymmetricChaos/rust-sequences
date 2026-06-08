@@ -35,6 +35,7 @@ where
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Bernoulli<BigInt> {
     pub fn new_plus_big() -> Self {
         Self::new_plus()

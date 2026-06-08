@@ -24,6 +24,7 @@ impl FigureFigure<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl FigureFigure<BigInt> {
     pub fn new_big() -> Self {
         Self {

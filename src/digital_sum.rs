@@ -51,6 +51,7 @@ impl DigitalSums<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl DigitalSums<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
@@ -95,6 +96,7 @@ impl DigitalRoots<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl DigitalRoots<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self
@@ -139,6 +141,7 @@ impl AdditivePersistence<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl AdditivePersistence<BigInt> {
     /// Base must be greater than or equal to 2.
     pub fn new_big<G>(base: G) -> Self

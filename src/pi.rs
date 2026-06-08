@@ -18,6 +18,7 @@ impl WallisProduct<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl WallisProduct<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -58,6 +59,7 @@ impl Leibniz<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Leibniz<BigInt> {
     pub fn new_big() -> Self {
         Self {

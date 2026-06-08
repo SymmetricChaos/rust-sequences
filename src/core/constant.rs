@@ -11,6 +11,7 @@ impl<T> Constant<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Constant<BigInt> {
     pub fn new_big<G>(val: G) -> Self
     where

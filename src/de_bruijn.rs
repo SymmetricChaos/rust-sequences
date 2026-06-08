@@ -30,6 +30,7 @@ impl DeBruijn<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl DeBruijn<BigInt> {
     pub fn new_big<G>(k: G) -> Self
     where
@@ -82,6 +83,7 @@ impl Iterator for DeBruijn<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for DeBruijn<BigInt> {
     type Item = BigInt;
 

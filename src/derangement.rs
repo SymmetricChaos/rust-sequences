@@ -24,6 +24,7 @@ impl Derangements<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Derangements<BigInt> {
     pub fn new_big() -> Self {
         Self {

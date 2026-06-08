@@ -18,6 +18,7 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Clone> PolynomialNaturals<N> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl PolynomialNaturals<BigInt> {
     pub fn new_big<T>(coef: Vec<T>) -> Self
     where

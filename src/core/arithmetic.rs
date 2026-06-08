@@ -12,6 +12,7 @@ impl<T: CheckedAdd + Clone> Arithmetic<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Arithmetic<BigInt> {
     pub fn new_big<G>(init: G, inc: G) -> Self
     where
@@ -49,6 +50,7 @@ impl<T: CheckedAdd + Clone + Zero> Multiples<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Multiples<BigInt> {
     pub fn new_big<G>(init: G) -> Self
     where

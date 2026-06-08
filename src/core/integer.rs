@@ -13,6 +13,7 @@ impl<T: CheckedAdd + Clone + Signed> Integers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Integers<BigInt> {
     pub fn new_big() -> Self {
         Self {

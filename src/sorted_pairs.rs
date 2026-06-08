@@ -13,6 +13,7 @@ impl SortedPairs<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SortedPairs<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -50,6 +51,7 @@ impl SortedPairsStrict<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl SortedPairsStrict<BigInt> {
     pub fn new_big() -> Self {
         Self {

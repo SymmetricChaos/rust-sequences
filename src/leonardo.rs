@@ -18,6 +18,7 @@ impl Leonardo<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Leonardo<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -39,6 +40,7 @@ impl Iterator for Leonardo<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Leonardo<BigInt> {
     type Item = BigInt;
 

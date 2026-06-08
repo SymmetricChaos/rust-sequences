@@ -18,6 +18,7 @@ impl Fibonacci<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Fibonacci<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -79,6 +80,7 @@ impl FibonacciWord<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl FibonacciWord<BigInt> {
     /// Note that an internal VecDeque grows at a linear rate as the iterator runs.
     /// If a known number of bits are needed first_n is much more memory efficient.

@@ -18,6 +18,7 @@ impl GoldenRatio<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl GoldenRatio<BigInt> {
     pub fn new_big() -> Self {
         let mut fib = Fibonacci::new_big();

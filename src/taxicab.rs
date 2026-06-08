@@ -30,6 +30,7 @@ impl Taxicab<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Taxicab<BigInt> {
     pub fn new_big() -> Self {
         let mut cubes = Cube::new_big();

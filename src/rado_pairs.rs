@@ -22,6 +22,7 @@ impl RadoPairs<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl RadoPairs<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -49,6 +50,7 @@ impl Iterator for RadoPairs<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for RadoPairs<BigInt> {
     type Item = (BigInt, BigInt);
 

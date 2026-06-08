@@ -15,6 +15,7 @@ impl Ducci<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Ducci<BigInt> {
     pub fn new_big<G>(tup: Vec<G>) -> Self
     where
@@ -43,6 +44,7 @@ impl Iterator for Ducci<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Ducci<BigInt> {
     type Item = Vec<BigInt>;
 

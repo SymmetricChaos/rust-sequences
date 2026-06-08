@@ -12,6 +12,7 @@ impl<T: CheckedMul + Clone + One> Powers<T> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Powers<BigInt> {
     pub fn new_big<T: Clone>(n: T) -> Self
     where

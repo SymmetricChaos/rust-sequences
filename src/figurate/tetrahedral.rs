@@ -18,6 +18,7 @@ impl Tetrahedral<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Tetrahedral<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -53,6 +54,7 @@ impl Iterator for Tetrahedral<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for Tetrahedral<BigInt> {
     type Item = BigInt;
 

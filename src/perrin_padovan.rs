@@ -22,6 +22,7 @@ impl Perrin<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Perrin<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -68,6 +69,7 @@ impl Padovan<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Padovan<BigInt> {
     pub fn new_big() -> Self {
         Self {

@@ -21,6 +21,7 @@ impl A005244<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl A005244<BigInt> {
     pub fn new_big() -> Self {
         Self {
@@ -57,6 +58,7 @@ impl A171413<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl A171413<BigInt> {
     pub fn new_big() -> Self {
         A171413(Complement::new(A005244::new_big(), BigInt::one()))

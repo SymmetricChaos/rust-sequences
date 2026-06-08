@@ -30,6 +30,7 @@ impl NarayanaGeneral<Number> {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl NarayanaGeneral<BigInt> {
     pub fn new_big(k: usize) -> Self {
         Self {
