@@ -1,7 +1,7 @@
 use crate::Number;
 use num::{BigInt, Integer};
 
-/// The values of a generalized Collatz sequence.
+/// The values of a generalized Collatz sequence with with constants a and b.
 ///
 /// ```text
 /// f(n) = an+b for odd n
