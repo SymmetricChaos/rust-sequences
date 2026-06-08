@@ -167,3 +167,9 @@ crate::check_sequences!(
 crate::print_sequences!(
     FibonacciStrings::new(), 7;
 );
+
+crate::sample_sequences!(
+    Fibonacci::new();
+    FibonacciWord::new();
+    FibonacciStrings::new();
+);

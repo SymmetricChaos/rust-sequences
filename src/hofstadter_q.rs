@@ -1,7 +1,7 @@
 /// Hofstadter's Q-sequence. A doubly recursive sequence in which the two previous terms determine the terms added together to determine the next.
 ///
 /// ```text
-/// 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10, 11, 11...
+/// 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10, 11, 11, 12, 12...
 /// ```
 pub struct HofstadterQ {
     terms: Vec<usize>,
@@ -37,4 +37,8 @@ impl Iterator for HofstadterQ {
 
 crate::check_sequences!(
     HofstadterQ::new(), [1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10, 11, 11, 12, 12, 12, 12, 16];
+);
+
+crate::sample_sequences!(
+    HofstadterQ::new();
 );

@@ -1,10 +1,12 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, CheckedAdd, CheckedSub, One, Zero, bigint::Sign, rational::Ratio};
+use num::{
+    BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Zero, bigint::Sign, rational::Ratio,
+};
 
 /// The harmonic numbers, partial sums of the harmonic series. This sequence diverges.
 ///
 /// ```text
-/// 0, 1, 3/2, 11/6, 25/12, 137/60, 49/20, 363/140...
+/// 1, 3/2, 11/6, 25/12, 137/60, 49/20, 363/140, 761/280, 7129/2520...
 /// ```
 pub struct Harmonic<T> {
     ctr: T,
@@ -22,6 +24,7 @@ impl Harmonic<Number> {
     pub fn numers() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.numer().clone())
     }
+
     pub fn denoms() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.denom().clone())
     }
@@ -38,29 +41,20 @@ impl Harmonic<BigInt> {
     pub fn numers_big() -> impl Iterator<Item = BigInt> {
         Self::new_big().map(|q| q.numer().clone())
     }
+
     pub fn denoms_big() -> impl Iterator<Item = BigInt> {
         Self::new_big().map(|q| q.denom().clone())
     }
 }
 
-impl Iterator for Harmonic<Number> {
-    type Item = Ratio<Number>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr.incr()?;
-        self.sum = self.sum.checked_add(&Ratio::new(1, self.ctr))?;
-        Some(self.sum)
-    }
-}
-
-impl Iterator for Harmonic<BigInt> {
-    type Item = Ratio<BigInt>;
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + Integer> Iterator for Harmonic<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
         self.sum = self
             .sum
-            .checked_add(&Ratio::new(BigInt::one(), self.ctr.clone()))?;
+            .checked_add(&Ratio::new(T::one(), self.ctr.clone()))?;
         Some(self.sum.clone())
     }
 }
@@ -68,7 +62,7 @@ impl Iterator for Harmonic<BigInt> {
 /// The partial sums of the alternating harmonic series. They converge on the natural logarithm of 2.
 ///
 /// ```text
-/// 0, 1, 1/2, 5/6, 7/12, 47/60, 37/60...
+/// 1/2, 1/6, 5/12, 13/60, 23/60, 101/420, 307/840, 641/2520, 893/2520...
 /// ```
 pub struct AlternatingHarmonic<T> {
     ctr: T,
@@ -88,6 +82,7 @@ impl AlternatingHarmonic<Number> {
     pub fn numers() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.numer().clone())
     }
+
     pub fn denoms() -> impl Iterator<Item = Number> {
         Self::new().map(|q| q.denom().clone())
     }
@@ -105,41 +100,24 @@ impl AlternatingHarmonic<BigInt> {
     pub fn numers_big() -> impl Iterator<Item = BigInt> {
         Self::new_big().map(|q| q.numer().clone())
     }
+
     pub fn denoms_big() -> impl Iterator<Item = BigInt> {
         Self::new_big().map(|q| q.denom().clone())
     }
 }
 
-impl Iterator for AlternatingHarmonic<Number> {
-    type Item = Ratio<Number>;
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + Integer> Iterator
+    for AlternatingHarmonic<T>
+{
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ctr.incr()?;
-        let q = Ratio::new(1, self.ctr);
+        let q = Ratio::new(T::one(), self.ctr.clone());
         match self.sign {
             Sign::Minus => self.sum = self.sum.checked_sub(&q)?,
             Sign::NoSign => unreachable!("NoSign is never used"),
             Sign::Plus => self.sum = self.sum.checked_add(&q)?,
-        }
-        self.sign = -self.sign;
-        Some(self.sum)
-    }
-}
-
-impl Iterator for AlternatingHarmonic<BigInt> {
-    type Item = Ratio<BigInt>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.ctr.incr()?;
-        let q = Ratio::new(BigInt::one(), self.ctr.clone());
-        match self.sign {
-            Sign::Minus => {
-                self.sum -= q;
-            }
-            Sign::NoSign => unreachable!("NoSign is never used"),
-            Sign::Plus => {
-                self.sum += q;
-            }
         }
         self.sign = -self.sign;
         Some(self.sum.clone())
@@ -157,4 +135,9 @@ crate::check_sequences!(
     Harmonic::denoms(), [1_i64, 2, 6, 12, 60, 20, 140, 280, 2520, 2520, 27720, 27720, 360360, 360360, 360360, 720720, 12252240, 4084080, 77597520, 15519504, 5173168, 5173168, 118982864, 356948592, 8923714800, 8923714800, 80313433200, 80313433200, 2329089562800, 2329089562800, 72201776446800];
     AlternatingHarmonic::numers(), [1_i64, 1, 5, 7, 47, 37, 319, 533, 1879, 1627, 20417, 18107, 263111, 237371, 52279, 95549, 1768477, 1632341, 33464927, 155685007, 166770367, 156188887, 3825136961, 3602044091, 19081066231, 18051406831, 57128792093, 7751493599, 236266661971];
     AlternatingHarmonic::denoms(), [1_i64, 2, 6, 12, 60, 60, 420, 840, 2520, 2520, 27720, 27720, 360360, 360360, 72072, 144144, 2450448, 2450448, 46558512, 232792560, 232792560, 232792560, 5354228880, 5354228880, 26771144400, 26771144400, 80313433200, 11473347600];
+);
+
+crate::sample_sequences!(
+    Harmonic::new();
+    AlternatingHarmonic::new();
 );

@@ -69,4 +69,6 @@ crate::check_sequences!(
     Fermat::new_big(), [3_u64, 5, 17, 257, 65537, 4294967297];
 );
 
-crate::sample_sequences!(Fermat::new_big());
+crate::sample_sequences!(
+    Fermat::new_big();
+);

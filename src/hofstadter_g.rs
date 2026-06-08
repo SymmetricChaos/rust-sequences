@@ -5,7 +5,7 @@ use crate::core::traits::Increment;
 /// ```text
 /// a(n) = n - a(a(n-1))
 ///
-/// 0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9...
+/// 0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9, 9, 10, 11, 11, 12, 12...
 /// ```
 pub struct HofstadterG {
     terms: Vec<usize>,
@@ -36,4 +36,8 @@ impl Iterator for HofstadterG {
 
 crate::check_sequences!(
     HofstadterG::new(), [0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6, 7, 8, 8, 9, 9, 10, 11, 11, 12, 12, 13, 14, 14, 15, 16, 16, 17, 17, 18, 19, 19, 20, 21, 21, 22, 22, 23, 24, 24, 25, 25, 26, 27];
+);
+
+crate::sample_sequences!(
+    HofstadterG::new();
 );
