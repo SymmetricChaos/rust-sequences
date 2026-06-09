@@ -3,12 +3,12 @@ use crate::{
     core::traits::Increment,
     utils::{divisibility::divisors, miller_rabin::is_prime, totient::totient},
 };
-use num::{Integer, rational::Ratio};
+use num::{CheckedMul, Integer, rational::Ratio};
 
 /// The range of Euler's totient function in increasing order.
 ///
 /// ```text
-/// 1, 2, 4, 6, 8, 10, 12, 16, 18...
+/// 1, 2, 4, 6, 8, 10, 12, 16, 18, 20, 22, 24, 28, 30, 32, 36, 40, 42...
 /// ```
 pub struct TotientRange {
     ctr: Number,
@@ -33,13 +33,18 @@ impl Iterator for TotientRange {
                 // skip it
             } else {
                 let m = self.ctr;
-                let nmax: Ratio<Number> = divisors(m)
-                    .iter()
-                    .map(|n| *n + 1)
-                    .filter(|n| is_prime(*n))
-                    .map(|n| Ratio::new(n, n - 1))
-                    .product::<Ratio<Number>>()
-                    * m;
+                let nmax = {
+                    let mut nmax = Ratio::new(m, 1);
+                    for d in divisors(m)
+                        .iter()
+                        .map(|n| *n + 1)
+                        .filter(|n| is_prime(*n))
+                        .map(|n| Ratio::new(n, n - 1))
+                    {
+                        nmax = nmax.checked_mul(&d)?;
+                    }
+                    nmax
+                };
                 let mut n = m;
                 let mut k = 0;
                 while Ratio::new(n, 1) <= nmax {
@@ -57,5 +62,9 @@ impl Iterator for TotientRange {
 }
 
 crate::check_sequences!(
-    TotientRange::new(),   [1, 2, 4, 6, 8, 10, 12, 16, 18, 20, 22, 24, 28, 30, 32, 36, 40, 42, 44, 46, 48, 52, 54, 56, 58, 60, 64, 66, 70, 72, 78, 80, 82, 84, 88, 92, 96, 100, 102, 104, 106, 108, 110, 112, 116, 120, 126, 128, 130, 132, 136, 138, 140, 144, 148, 150, 156, 160, 162, 164, 166, 168, 172, 176];
+    TotientRange::new(), [1, 2, 4, 6, 8, 10, 12, 16, 18, 20, 22, 24, 28, 30, 32, 36, 40, 42, 44, 46, 48, 52, 54, 56, 58, 60, 64, 66, 70, 72, 78, 80, 82, 84, 88, 92, 96, 100, 102, 104, 106, 108, 110, 112, 116, 120, 126, 128, 130, 132, 136, 138, 140, 144, 148, 150, 156, 160, 162, 164, 166, 168, 172, 176];
+);
+
+crate::sample_sequences!(
+    TotientRange::new();
 );
