@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, Signed};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, Signed};
 
 /// The integers in the canonical ordering.
 ///

@@ -83,9 +83,9 @@ impl<T: Clone + CheckedAdd + Integer> Iterator for DigitalSums<T> {
 /// base = 10
 /// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4...
 /// ```
-pub struct DigitalRoots<N> {
-    ctr: N,
-    base: N,
+pub struct DigitalRoots<T> {
+    ctr: T,
+    base: T,
 }
 
 impl DigitalRoots<Number> {
@@ -128,9 +128,9 @@ impl<T: Clone + CheckedAdd + Integer> Iterator for DigitalRoots<T> {
 /// base = 10
 /// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1...
 /// ```
-pub struct AdditivePersistence<N> {
-    ctr: N,
-    base: N,
+pub struct AdditivePersistence<T> {
+    ctr: T,
+    base: T,
 }
 
 impl AdditivePersistence<Number> {

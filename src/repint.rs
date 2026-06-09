@@ -38,9 +38,9 @@ impl Repint<Number> {
 
 #[cfg(feature = "big_int")]
 impl Repint<BigInt> {
-    pub fn new_big<N>(number: N, base: N) -> Self
+    pub fn new_big<G>(number: G, base: G) -> Self
     where
-        BigInt: From<N>,
+        BigInt: From<G>,
     {
         let number = BigInt::from(number);
         let base = BigInt::from(base);

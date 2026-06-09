@@ -7,7 +7,7 @@ use rayon::iter::{IntoParallelIterator, ParallelIterator};
 /// Uses parallelized 64-bit arithmetic up to 2^32 and parallelized 128-bit arithmetic for larger numbers.
 /// Running time for parallelized code is not deterministic.
 pub fn pollards_rho(n: Number) -> Option<Number> {
-    if n > 0x3FFFFFF {
+    if n > 0x03FFFFFF {
         return _pollards_rho_par(n);
     }
 

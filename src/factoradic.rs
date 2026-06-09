@@ -3,21 +3,21 @@ use num::{BigInt, CheckedAdd, Integer, Zero};
 /// The factoradic representation of each non-negative integer. Panics if n is less than zero.
 /// When size is 0 the minimal length vector is returned.
 /// For any other value of size the output is padded to the left with zeroes to equal the size and returns None of the output is greater than the factorial of size.
-pub fn factoradic<N: Integer>(mut n: N, size: usize) -> Option<Vec<N>> {
-    assert!(n >= N::zero());
-    let mut out = vec![N::zero()];
-    let mut divisor = N::one() + N::one();
+pub fn factoradic<T: Integer>(mut n: T, size: usize) -> Option<Vec<T>> {
+    assert!(n >= T::zero());
+    let mut out = vec![T::zero()];
+    let mut divisor = T::one() + T::one();
     while !n.is_zero() {
         let (q, r) = n.div_rem(&divisor);
         out.push(r);
         n = q;
-        divisor = divisor + N::one();
+        divisor = divisor + T::one();
     }
     if out.len() > size && size != 0 {
         return None;
     }
     while out.len() < size {
-        out.push(N::zero());
+        out.push(T::zero());
     }
     Some(out.into_iter().rev().collect())
 }

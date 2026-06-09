@@ -3,71 +3,75 @@ use crate::{
     core::{integer::Integers, natural::Naturals},
 };
 use itertools::Itertools;
-use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
+use num::{BigInt, CheckedAdd, CheckedMul, Zero};
 
-/// A polynomial evaluated at each natural number.
-pub struct PolynomialNaturals<N> {
-    coef: Vec<N>,
-    ctr: Naturals<N>,
+/// A polynomial with integer coefficients evaluated at each value of a given seqeunce.
+pub struct Polynomial<T> {
+    coefs: Vec<T>,
+    points: Box<dyn Iterator<Item = T>>,
 }
 
-impl PolynomialNaturals<Number> {
-    pub fn new(coef: Vec<Number>) -> Self {
-        Self {
-            coef,
-            ctr: Naturals::new(),
-        }
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl PolynomialNaturals<BigInt> {
-    pub fn new_big<T>(coef: Vec<T>) -> Self
+impl<T> Polynomial<T> {
+    pub fn new<I>(coefs: Vec<T>, points: I) -> Self
     where
-        BigInt: From<T>,
+        I: Iterator<Item = T> + 'static,
     {
         Self {
-            coef: coef.into_iter().map(|x| BigInt::from(x)).collect_vec(),
-            ctr: Naturals::new_big(),
+            coefs,
+            points: Box::new(points),
         }
     }
 }
 
-impl<N: One + Zero + CheckedAdd + CheckedMul + Clone> Iterator for PolynomialNaturals<N> {
-    type Item = N;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let mut total = N::zero();
-        let x = self.ctr.next()?;
-        for c in self.coef.iter().rev() {
-            total = total.checked_mul(&x)?.checked_add(c)?;
-        }
-        Some(total)
-    }
-}
-
-/// A polynomial evaluated at each integer.
-pub struct PolynomialIntegers<N> {
-    coef: Vec<N>,
-    ctr: Integers<N>,
-}
-
-impl PolynomialIntegers<Number> {
-    pub fn new(coef: Vec<Number>) -> Self {
+impl Polynomial<Number> {
+    /// Evaluted at each natural number.
+    pub fn at_naturals(coefs: Vec<Number>) -> Self {
         Self {
-            coef,
-            ctr: Integers::new(),
+            coefs,
+            points: Box::new(Naturals::new()),
+        }
+    }
+
+    /// Evaluted at each integer.
+    pub fn at_integers(coefs: Vec<Number>) -> Self {
+        Self {
+            coefs,
+            points: Box::new(Integers::new()),
         }
     }
 }
 
-impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> Iterator for PolynomialIntegers<N> {
-    type Item = N;
+impl Polynomial<BigInt> {
+    /// Evaluted at each natural number.
+    pub fn at_naturals_big<G>(coefs: Vec<G>) -> Self
+    where
+        BigInt: From<G>,
+    {
+        Self {
+            coefs: coefs.into_iter().map(|c| BigInt::from(c)).collect_vec(),
+            points: Box::new(Naturals::new_big()),
+        }
+    }
+
+    /// Evaluted at each integer.
+    pub fn at_integers_big<G>(coefs: Vec<G>) -> Self
+    where
+        BigInt: From<G>,
+    {
+        Self {
+            coefs: coefs.into_iter().map(|c| BigInt::from(c)).collect_vec(),
+            points: Box::new(Integers::new_big()),
+        }
+    }
+}
+
+impl<T: Zero + CheckedAdd + CheckedMul + Clone> Iterator for Polynomial<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut total = N::zero();
-        let x = self.ctr.next()?;
-        for c in self.coef.iter().rev() {
+        let mut total = T::zero();
+        let x = self.points.next()?;
+        for c in self.coefs.iter().rev() {
             total = total.checked_mul(&x)?.checked_add(c)?;
         }
 
@@ -76,6 +80,6 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> Iterator for Poly
 }
 
 crate::check_sequences!(
-    PolynomialNaturals::new(vec![-6,1,2]), [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
-    PolynomialIntegers::new(vec![1,-4,3]), [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
+    Polynomial::at_naturals(vec![-6,1,2]), [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
+    Polynomial::at_integers(vec![1,-4,3]), [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
 );

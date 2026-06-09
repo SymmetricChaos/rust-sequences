@@ -53,7 +53,7 @@ pub(super) fn miller_rabin(n: Number) -> MRTest {
     MRTest::Prime
 }
 
-/// 64-bit primality test. First checks small prime factors then switches to deterministic Miller-Rabin.
+/// Deterministic 64-bit primality test. First checks small prime factors then switches to Miller-Rabin.
 pub fn is_prime(n: Number) -> bool {
     if n <= 1 {
         return false;

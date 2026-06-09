@@ -54,7 +54,7 @@ impl<T: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.row.is_zero() {
-            self.row = self.row.checked_add(&T::one())?;
+            self.row.incr()?;
             return Some(Ratio::zero());
         }
 

@@ -30,9 +30,9 @@ impl Smooth<Number> {
 impl Smooth<BigInt> {
     /// Panics if n is less than two.
     /// If n is very large initializing the set of primes may impose an extreme time and memory burden. There are more than two hundred million primes less than u32::MAX.
-    pub fn new_big<N>(n: N) -> Self
+    pub fn new_big<G>(n: G) -> Self
     where
-        BigInt: From<N>,
+        BigInt: From<G>,
     {
         let n = BigInt::from(n);
         assert!(n > BigInt::one());

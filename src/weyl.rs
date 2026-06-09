@@ -31,9 +31,9 @@ impl WeylMarsaglia<Number> {
 impl WeylMarsaglia<BigInt> {
     /// Create a new sequence with the given step and modulus.
     /// Panics if step is not coprime to modulus.
-    pub fn new_big<N>(step: N, modulus: N) -> Self
+    pub fn new_big<G>(step: G, modulus: G) -> Self
     where
-        BigInt: From<N>,
+        BigInt: From<G>,
     {
         let step = BigInt::from(step);
         let modulus = BigInt::from(modulus);

@@ -1,3 +1,4 @@
+use crate::Number;
 #[cfg(feature = "big_int")]
 use num::{BigInt, One, Zero};
 use num::{CheckedAdd, CheckedMul, Integer, rational::Ratio};
@@ -14,16 +15,16 @@ pub struct SimpleContinuedFraction<T> {
 
 impl SimpleContinuedFraction<Number> {
     /// A simple continued fraction with denominators taken from an iterator.
-    pub fn new<I>(mut d: I) -> Self
+    pub fn new<I>(mut denoms: I) -> Self
     where
         I: Iterator<Item = Number> + 'static,
     {
         Self {
             a0: 1,
             b0: 0,
-            a1: d.next().unwrap(),
+            a1: denoms.next().unwrap(),
             b1: 1,
-            dens: Box::new(d),
+            dens: Box::new(denoms),
             ended: false,
         }
     }
@@ -49,16 +50,16 @@ impl SimpleContinuedFraction<Number> {
 #[cfg(feature = "big_int")]
 impl SimpleContinuedFraction<BigInt> {
     /// A simple continued fraction with denominators taken from an iterator.
-    pub fn new_big<I>(mut d: I) -> Self
+    pub fn new_big<I>(mut denoms: I) -> Self
     where
         I: Iterator<Item = BigInt> + 'static,
     {
         Self {
             a0: BigInt::one(),
             b0: BigInt::zero(),
-            a1: d.next().unwrap(),
+            a1: denoms.next().unwrap(),
             b1: BigInt::one(),
-            dens: Box::new(d),
+            dens: Box::new(denoms),
             ended: false,
         }
     }
@@ -111,12 +112,14 @@ impl<T: CheckedAdd + CheckedMul + Clone + Integer> Iterator for SimpleContinuedF
     }
 }
 
-use crate::Number;
 #[cfg(test)]
-use crate::core::{Naturals, traits::DigitSequence};
-crate::print_sequences!(
-    SimpleContinuedFraction::new_periodic(&[], &[1]).map(|q| q.digits(5).unwrap()), 10; // Converges on phi
-    SimpleContinuedFraction::new_periodic(&[1], &[2]).map(|q| q.digits(5).unwrap()), 10; // Cnverges on sqrt(2)
-    SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]).map(|q| q.digits(10).unwrap()), 10; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
-    SimpleContinuedFraction::new(Naturals::new()).map(|q| q.digits(10).unwrap()), 12; // converges on 0.697774657964007982
-);
+mod test {
+    use super::*;
+    use crate::core::{Naturals, traits::DigitSequence};
+    crate::print_sequences!(
+        SimpleContinuedFraction::new_periodic(&[], &[1]).map(|q| q.digits(5).unwrap()), 10; // Converges on phi
+        SimpleContinuedFraction::new_periodic(&[1], &[2]).map(|q| q.digits(5).unwrap()), 10; // Cnverges on sqrt(2)
+        SimpleContinuedFraction::new_finite(&[3, 7, 15, 1, 292, 1]).map(|q| q.digits(10).unwrap()), 10; // Cnverges on pi, notice the jump in accuracy when the 292 term is reached
+        SimpleContinuedFraction::new(Naturals::new()).map(|q| q.digits(10).unwrap()), 12; // converges on 0.697774657964007982
+    );
+}

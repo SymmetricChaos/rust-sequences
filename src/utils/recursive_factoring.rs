@@ -11,7 +11,7 @@ pub fn factorable(n: Number, factors: &[Number]) -> bool {
     factorable_inner(n, factors, 0)
 }
 
-/// Can n be factored using the number numbers in factors?
+/// Can n be factored using only the numbers in factors?
 pub fn factorable_inner(n: Number, factors: &[Number], level: usize) -> bool {
     if n == 1 {
         return true;

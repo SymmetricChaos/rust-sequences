@@ -2,6 +2,14 @@ use crate::Number;
 use num::{BigInt, CheckedMul};
 
 /// Geometric sequence with chosen initial value and multiplier
+///
+/// ```text
+/// initial = 3, multiplier = 2
+/// 3, 6, 12, 24, 48, 96, 192, 384, 768, 1536, 3072, 6144, 12288, 24576...
+///
+/// initial = 8, multiplier = -5
+/// 8, -40, 200, -1000, 5000, -25000, 125000, -625000, 3125000...
+/// ```
 pub struct Geometric<T> {
     value: T,
     multiplier: T,
@@ -39,11 +47,12 @@ impl<T: CheckedMul + Clone> Iterator for Geometric<T> {
     }
 }
 
-crate::print_sequences!(
-    Geometric::new(3, -4), 10;
-);
-
 crate::check_sequences!(
     Geometric::new(3, 2), [3, 6, 12, 24, 48, 96, 192, 384, 768, 1536];
     Geometric::new(4, 3), [4, 12, 36, 108, 324, 972, 2916, 8748, 26244, 78732];
+);
+
+crate::sample_sequences!(
+   Geometric::new(3, 2);
+   Geometric::new(8, -5);
 );
