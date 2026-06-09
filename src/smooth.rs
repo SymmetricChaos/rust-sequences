@@ -38,7 +38,7 @@ impl Smooth<BigInt> {
         assert!(n > BigInt::one());
         Self {
             ctr: BigInt::one(),
-            primes: Primes::new().take_while(|x| *x <= n).collect_vec(),
+            primes: Primes::new_big().take_while(|x| *x <= n).collect_vec(),
         }
     }
 }

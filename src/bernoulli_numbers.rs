@@ -3,9 +3,10 @@ use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Signed, Zero, rati
 use std::marker::PhantomData;
 
 /// The Bernoulli numbers.
-/// Either the plus or minus version of the sequence may be chosen.
 ///
+/// ```text
 /// 1, ±1/2, 1/6, 0, -1/30, 0, 1/42, 0, -1/30, 0, 5/66...
+/// ```
 pub struct Bernoulli<T> {
     m: usize,
     phantom: PhantomData<T>,

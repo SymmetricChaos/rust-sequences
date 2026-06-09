@@ -59,6 +59,6 @@ impl<T: Clone> Iterator for HighWaterMark<T> {
 }
 
 crate::check_sequences!(
-    HighWaterMark::<i32>::new(crate::core::EvenIntegers::new()), [0, 2, 4, 6, 8];
-    HighWaterMark::<i32>::new_by(crate::core::EvenIntegers::new(), |a,b| b.cmp(a)), [0, -2, -4, -6];
+    HighWaterMark::new(crate::core::EvenIntegers::new()), [0, 2, 4, 6, 8];
+    HighWaterMark::new_by(crate::core::EvenIntegers::new(), |a,b| b.cmp(a)), [0, -2, -4, -6];
 );

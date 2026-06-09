@@ -1,4 +1,4 @@
-use crate::core::traits::Increment;
+use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 use std::{
     collections::{BinaryHeap, HashMap},
@@ -13,11 +13,11 @@ pub struct Primes<T> {
     n: T,
 }
 
-impl<T: CheckedAdd + Integer + Hash + Clone> Primes<T> {
+impl Primes<Number> {
     pub fn new() -> Self {
         Self {
-            sieve: HashMap::<T, Vec<T>>::new(),
-            n: T::one(),
+            sieve: HashMap::<Number, Vec<Number>>::new(),
+            n: 1,
         }
     }
 }
@@ -25,7 +25,12 @@ impl<T: CheckedAdd + Integer + Hash + Clone> Primes<T> {
 #[cfg(feature = "big_int")]
 impl Primes<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        use num::One;
+
+        Self {
+            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
+            n: BigInt::one(),
+        }
     }
 }
 
@@ -57,7 +62,7 @@ impl<T: CheckedAdd + Hash + Integer + Clone> Iterator for Primes<T> {
 
 // Representation of a prime power for use in the generator
 #[derive(Eq, PartialEq)]
-struct PrimePower<T: Eq + PartialEq> {
+struct PrimePower<T> {
     value: T,
     prime: T,
 }
@@ -97,12 +102,12 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
 /// The perfect powers of primes.
 ///
 /// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
-pub struct PrimePowers<T: Eq> {
+pub struct PrimePowers<T> {
     priority_queue: BinaryHeap<PrimePower<T>>,
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
+impl PrimePowers<Number> {
     pub fn new() -> Self {
         Self {
             priority_queue: BinaryHeap::new(),
@@ -114,7 +119,10 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Ord + Integer> PrimePowers<T> {
 #[cfg(feature = "big_int")]
 impl PrimePowers<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            priority_queue: BinaryHeap::new(),
+            primes: Primes::new_big(),
+        }
     }
 }
 
@@ -147,10 +155,10 @@ pub struct Primorial<T> {
     primes: Primes<T>,
 }
 
-impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Primorial<T> {
+impl Primorial<Number> {
     pub fn new() -> Self {
         Self {
-            prod: T::one(),
+            prod: 1,
             primes: Primes::new(),
         }
     }
@@ -159,7 +167,12 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Primorial<T> {
 #[cfg(feature = "big_int")]
 impl Primorial<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        use num::One;
+
+        Self {
+            prod: BigInt::one(),
+            primes: Primes::new_big(),
+        }
     }
 }
 
@@ -178,11 +191,11 @@ impl<T: CheckedAdd + CheckedMul + Hash + Integer + Clone> Iterator for Primorial
 
 crate::check_iteration_times!(
     Primes::new_big(), 75_000;
-    Primes::<u32>::new(), 75_000;
+    Primes::new(), 75_000;
 );
 
 crate::check_sequences!(
-    Primes::new_big(),         [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
-    PrimePowers::<u32>::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37, 41, 43, 47, 49, 53, 59, 61, 64, 67, 71, 73, 79, 81, 83, 89, 97, 101, 103, 107, 109, 113, 121, 125, 127, 128, 131, 137, 139, 149, 151, 157, 163, 167, 169, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227];
-    Primorial::<u64>::new(),   [1_u64, 2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870, 6469693230, 200560490130, 7420738134810, 304250263527210, 13082761331670030, 614889782588491410];
+    Primes::new_big(),  [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
+    PrimePowers::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37, 41, 43, 47, 49, 53, 59, 61, 64, 67, 71, 73, 79, 81, 83, 89, 97, 101, 103, 107, 109, 113, 121, 125, 127, 128, 131, 137, 139, 149, 151, 157, 163, 167, 169, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227];
+    Primorial::new(),   [1_u64, 2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870, 6469693230, 200560490130, 7420738134810, 304250263527210, 13082761331670030, 614889782588491410];
 );

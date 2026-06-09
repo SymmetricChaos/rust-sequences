@@ -1,20 +1,23 @@
-use crate::core::traits::Increment;
+use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, Integer};
 use std::{collections::HashMap, hash::Hash};
 
-/// The composite numbers. A002808
+/// The composite numbers.
 ///
-/// 4, 6, 8, 9, 10, 12, 14, 15, 16...
+/// ```text
+/// 4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28...
+/// ```
+
 pub struct Composites<T> {
     sieve: HashMap<T, Vec<T>>,
     n: T,
 }
 
-impl<T: CheckedAdd + Clone + Hash + Integer> Composites<T> {
+impl Composites<Number> {
     pub fn new() -> Self {
         Self {
-            sieve: HashMap::<T, Vec<T>>::new(),
-            n: T::one(),
+            sieve: HashMap::<Number, Vec<Number>>::new(),
+            n: 1,
         }
     }
 }
@@ -22,7 +25,12 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Composites<T> {
 #[cfg(feature = "big_int")]
 impl Composites<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        use num::One;
+
+        Self {
+            sieve: HashMap::<BigInt, Vec<BigInt>>::new(),
+            n: BigInt::one(),
+        }
     }
 }
 
@@ -54,4 +62,8 @@ impl<T: CheckedAdd + Clone + Hash + Integer> Iterator for Composites<T> {
 
 crate::check_sequences!(
     Composites::new_big(), [4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58, 60, 62, 63, 64, 65, 66, 68, 69, 70, 72, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88];
+);
+
+crate::sample_sequences!(
+    Composites::new();
 );

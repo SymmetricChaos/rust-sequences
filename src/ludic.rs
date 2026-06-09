@@ -31,7 +31,7 @@ impl Ludic<BigInt> {
     pub fn new_big() -> Self {
         Self {
             ctr: 0,
-            odds: Odds::new(),
+            odds: Odds::new_big(),
             terms: Vec::new(),
         }
     }

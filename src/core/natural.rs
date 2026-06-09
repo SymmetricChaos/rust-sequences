@@ -1,22 +1,28 @@
 use num::{BigInt, CheckedAdd, One, Zero};
 
+use crate::Number;
+
 /// The natural numbers. The non-negative integers.
 ///
-/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9...
+/// ```text
+/// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18...
+/// ```
 pub struct Naturals<T> {
     ctr: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Naturals<T> {
+impl Naturals<Number> {
     pub fn new() -> Self {
-        Self { ctr: T::zero() }
+        Self { ctr: 0 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl Naturals<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            ctr: BigInt::zero(),
+        }
     }
 }
 
@@ -32,5 +38,9 @@ impl<T: CheckedAdd + Clone + One> Iterator for Naturals<T> {
 
 crate::check_sequences!(
     Naturals::new_big(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    Naturals::<u8>::new(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    Naturals::new(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+);
+
+crate::sample_sequences!(
+    Naturals::new();
 );

@@ -1,7 +1,9 @@
+use crate::{
+    Number,
+    core::{integer::Integers, natural::Naturals},
+};
 use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedMul, One, Signed, Zero};
-
-use crate::core::{integer::Integers, natural::Naturals};
 
 /// A polynomial evaluated at each natural number.
 pub struct PolynomialNaturals<N> {
@@ -9,8 +11,8 @@ pub struct PolynomialNaturals<N> {
     ctr: Naturals<N>,
 }
 
-impl<N: One + Zero + CheckedAdd + CheckedMul + Clone> PolynomialNaturals<N> {
-    pub fn new(coef: Vec<N>) -> Self {
+impl PolynomialNaturals<Number> {
+    pub fn new(coef: Vec<Number>) -> Self {
         Self {
             coef,
             ctr: Naturals::new(),
@@ -50,8 +52,8 @@ pub struct PolynomialIntegers<N> {
     ctr: Integers<N>,
 }
 
-impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> PolynomialIntegers<N> {
-    pub fn new(coef: Vec<N>) -> Self {
+impl PolynomialIntegers<Number> {
+    pub fn new(coef: Vec<Number>) -> Self {
         Self {
             coef,
             ctr: Integers::new(),
@@ -74,6 +76,6 @@ impl<N: One + Zero + CheckedAdd + CheckedMul + Signed + Clone> Iterator for Poly
 }
 
 crate::check_sequences!(
-    PolynomialNaturals::<i32>::new(vec![-6,1,2]), [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
-    PolynomialIntegers::<i32>::new(vec![1,-4,3]), [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
+    PolynomialNaturals::new(vec![-6,1,2]), [-6, -3, 4, 15, 30, 49, 72, 99, 130, 165];
+    PolynomialIntegers::new(vec![1,-4,3]), [1, 0, 8, 5, 21, 16, 40, 33, 65, 56];
 );

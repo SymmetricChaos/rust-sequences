@@ -1,6 +1,8 @@
 use num::{BigInt, One, Zero};
 use std::marker::PhantomData;
 
+use crate::Number;
+
 /// The unit function in number theory. A single 1 followed by infinite 0s. It is the identity for the Dirichlet convolution.
 ///
 /// ```text
@@ -11,7 +13,7 @@ pub struct UnitSequence<T> {
     _phantom: PhantomData<T>,
 }
 
-impl<T: One + Zero> UnitSequence<T> {
+impl UnitSequence<Number> {
     pub fn new() -> Self {
         Self {
             n: true,
@@ -23,7 +25,10 @@ impl<T: One + Zero> UnitSequence<T> {
 #[cfg(feature = "big_int")]
 impl UnitSequence<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            n: true,
+            _phantom: PhantomData,
+        }
     }
 }
 
@@ -41,6 +46,6 @@ impl<T: One + Zero> Iterator for UnitSequence<T> {
 }
 
 crate::check_sequences!(
-    UnitSequence::<i32>::new(), [1, 0, 0, 0, 0];
+    UnitSequence::new(), [1, 0, 0, 0, 0];
     UnitSequence::new_big(), [1, 0, 0, 0, 0];
 );

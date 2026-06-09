@@ -2,15 +2,19 @@ use std::marker::PhantomData;
 
 use num::{BigInt, CheckedAdd, One, Signed, Zero};
 
+use crate::Number;
+
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 ///
-/// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1...
+/// ```text
+/// 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0...
+/// ```
 pub struct Parity<T> {
     value: bool,
     _phantom: PhantomData<T>,
 }
 
-impl<T: One + Zero> Parity<T> {
+impl Parity<Number> {
     pub fn new() -> Self {
         Self {
             value: false,
@@ -22,7 +26,10 @@ impl<T: One + Zero> Parity<T> {
 #[cfg(feature = "big_int")]
 impl Parity<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            value: false,
+            _phantom: PhantomData,
+        }
     }
 }
 
@@ -41,21 +48,25 @@ impl<T: One + Zero> Iterator for Parity<T> {
 
 /// The even natural numbers.
 ///
-/// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18...
+/// ```text
+/// 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34...
+/// ```
 pub struct Evens<T> {
     val: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Zero> Evens<T> {
+impl Evens<Number> {
     pub fn new() -> Self {
-        Self { val: T::zero() }
+        Self { val: 0 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl Evens<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            val: BigInt::zero(),
+        }
     }
 }
 
@@ -71,21 +82,23 @@ impl<T: CheckedAdd + Clone + One> Iterator for Evens<T> {
 
 /// The odd natural numbers.
 ///
-/// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19...
+/// ```text
+/// 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35...
+/// ```
 pub struct Odds<T> {
     val: T,
 }
 
-impl<T: CheckedAdd + Clone + One> Odds<T> {
+impl Odds<Number> {
     pub fn new() -> Self {
-        Self { val: T::one() }
+        Self { val: 1 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl Odds<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self { val: BigInt::one() }
     }
 }
 
@@ -101,21 +114,25 @@ impl<T: CheckedAdd + Clone + One> Iterator for Odds<T> {
 
 /// The even integers.
 ///
-/// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10...
+/// ```text
+/// 0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10, 12, -12, 14, -14, 16, -16...
+/// ```
 pub struct EvenIntegers<T> {
     val: T,
 }
 
-impl<T: CheckedAdd + Clone + One + Signed + Zero> EvenIntegers<T> {
+impl EvenIntegers<Number> {
     pub fn new() -> Self {
-        Self { val: T::zero() }
+        Self { val: 0 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl EvenIntegers<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            val: BigInt::zero(),
+        }
     }
 }
 
@@ -137,21 +154,23 @@ impl<T: CheckedAdd + Clone + Signed + One> Iterator for EvenIntegers<T> {
 
 /// The odd integers.
 ///
-/// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9...
+/// ```text
+/// 1, -1, 3, -3, 5, -5, 7, -7, 9, -9, 11, -11, 13, -13, 15, -15, 17...
+/// ```
 pub struct OddIntegers<T> {
     val: T,
 }
 
-impl<T: CheckedAdd + Clone + Signed + One> OddIntegers<T> {
+impl OddIntegers<Number> {
     pub fn new() -> Self {
-        Self { val: T::one() }
+        Self { val: 1 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl OddIntegers<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self { val: BigInt::one() }
     }
 }
 
@@ -173,15 +192,23 @@ impl<T: CheckedAdd + Clone + Signed + One> Iterator for OddIntegers<T> {
 }
 
 crate::check_iteration_times!(
-    Evens::new_big(), 5_000_000;
-    Evens::<i32>::new(), 5_000_000;
-    EvenIntegers::new_big(), 5_000_000;
-    EvenIntegers::<i32>::new(), 5_000_000;
+    Evens::new(), 5_000_000;
+    Evens::new(), 5_000_000;
+    EvenIntegers::new(), 5_000_000;
+    EvenIntegers::new(), 5_000_000;
 );
 
 crate::check_sequences!(
-    Evens::<i32>::new(), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
-    EvenIntegers::new_big(), [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
-    Odds::new_big(), [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
-    OddIntegers::new_big(), [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
+    Evens::new(), [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
+    EvenIntegers::new(), [0, 2, -2, 4, -4, 6, -6, 8, -8, 10];
+    Odds::new(), [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    OddIntegers::new(), [1, -1, 3, -3, 5, -5, 7, -7, 9, -9];
+);
+
+crate::sample_sequences!(
+    Parity::new();
+    Evens::new();
+    EvenIntegers::new();
+    Odds::new();
+    OddIntegers::new();
 );

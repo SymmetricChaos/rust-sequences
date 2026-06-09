@@ -1,26 +1,31 @@
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, One};
 
+use crate::Number;
+
 /// The Catalan numbers.
 ///
-/// 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862...
+/// ```text
+/// 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012...
+/// ```
+
 pub struct Catalan<T> {
     val: T,
     ctr: T,
 }
 
-impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + CheckedDiv + One> Catalan<T> {
+impl Catalan<Number> {
     pub fn new() -> Self {
-        Self {
-            val: T::one(),
-            ctr: T::one(),
-        }
+        Self { val: 1, ctr: 1 }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl Catalan<BigInt> {
     pub fn new_big() -> Self {
-        Self::new()
+        Self {
+            val: BigInt::one(),
+            ctr: BigInt::one(),
+        }
     }
 }
 
@@ -47,5 +52,9 @@ crate::check_iteration_times!(
 );
 
 crate::check_sequences!(
-    Catalan::new_big(), [1_u64, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, 6564120420, 24466267020, 91482563640, 343059613650, 1289904147324, 4861946401452, 18367353072152, 69533550916004, 263747951750360, 1002242216651368, 3814986502092304];
+    Catalan::new_big(), [1_i64, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190, 6564120420, 24466267020, 91482563640, 343059613650, 1289904147324, 4861946401452, 18367353072152, 69533550916004, 263747951750360, 1002242216651368, 3814986502092304];
+);
+
+crate::sample_sequences!(
+    Catalan::new();
 );

@@ -10,7 +10,7 @@ pub struct Zeta<T> {
 
 impl Zeta<Number> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
-    pub fn new(p: u32) -> Self {
+    pub fn new(p: usize) -> Self {
         Self {
             sum: Ratio::zero(),
             powers: NthPowers::new(p).skip(1),
@@ -21,7 +21,7 @@ impl Zeta<Number> {
 #[cfg(feature = "big_int")]
 impl Zeta<BigInt> {
     /// Power p is specified as a u32 due to the interface of the .pow() function.
-    pub fn new_big(p: u32) -> Self {
+    pub fn new_big(p: usize) -> Self {
         Self {
             sum: Ratio::zero(),
             powers: NthPowers::new_big(p).skip(1),
@@ -44,5 +44,5 @@ impl<T: CheckedAdd + CheckedMul + Clone + One + Integer> Iterator for Zeta<T> {
 
 // very slow to converge
 crate::check_sequences!(
-    crate::core::rational_digits::RationalDigits::from_ratio_big(Zeta::new_big(2).skip(1500).next().unwrap(), 10), [1, 6, 4, 4]; // pi squared over 6 (1.644...)
+    crate::core::rational_digits::RationalDigits::from_ratio_big(Zeta::new_big(2).skip(1500).next().unwrap(), 10.into()), [1, 6, 4, 4]; // pi squared over 6 (1.644...)
 );

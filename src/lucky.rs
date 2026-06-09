@@ -31,7 +31,7 @@ impl Lucky<BigInt> {
     pub fn new_big() -> Self {
         Self {
             ctr: BigInt::one(),
-            odds: Odds::new(),
+            odds: Odds::new_big(),
             terms: Vec::new(),
         }
     }

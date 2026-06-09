@@ -1,29 +1,29 @@
-use crate::core::traits::Increment;
+use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
 
 /// The non-negative rational numbers in anti-diagonal order
-pub struct Rationals<N> {
-    numer: N,
-    denom: N,
-    row: N,
+pub struct Rationals<T> {
+    numer: T,
+    denom: T,
+    row: T,
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Rationals<N> {
+impl Rationals<Number> {
     /// The non-negative rationals
     pub fn new() -> Self {
         Self {
-            numer: N::one(),
-            denom: N::one(),
-            row: N::zero(),
+            numer: 1,
+            denom: 1,
+            row: 0,
         }
     }
 
     /// The positive rationals
     pub fn new_pos() -> Self {
         Self {
-            numer: N::one(),
-            denom: N::one(),
-            row: N::one(),
+            numer: 1,
+            denom: 1,
+            row: 1,
         }
     }
 }
@@ -49,12 +49,12 @@ impl Rationals<BigInt> {
     }
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<N> {
-    type Item = Ratio<N>;
+impl<T: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.row.is_zero() {
-            self.row = self.row.checked_add(&N::one())?;
+            self.row = self.row.checked_add(&T::one())?;
             return Some(Ratio::zero());
         }
 
@@ -62,14 +62,14 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
         let out = Ratio::new_raw(self.numer.clone(), self.denom.clone());
 
         loop {
-            self.numer = self.numer.checked_sub(&N::one())?;
-            self.denom = self.denom.checked_add(&N::one())?;
+            self.numer = self.numer.checked_sub(&T::one())?;
+            self.denom = self.denom.checked_add(&T::one())?;
             if self.numer.is_zero() {
                 self.row.incr()?;
                 self.numer = self.row.clone();
-                self.denom = N::one();
+                self.denom = T::one();
             }
-            if self.numer.gcd(&self.denom) == N::one() {
+            if self.numer.gcd(&self.denom) == T::one() {
                 break;
             }
         }
@@ -79,19 +79,19 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
 }
 
 /// All rational numbers, starting from zero, with the positive rationals in anti-diagonal order each followed by its negative.
-pub struct SignedRationals<N> {
-    numer: N,
-    denom: N,
-    row: N,
+pub struct SignedRationals<T> {
+    numer: T,
+    denom: T,
+    row: T,
     positive: bool,
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> SignedRationals<N> {
+impl SignedRationals<Number> {
     pub fn new() -> Self {
         Self {
-            numer: N::one(),
-            denom: N::one(),
-            row: N::zero(),
+            numer: 1,
+            denom: 1,
+            row: 0,
             positive: true,
         }
     }
@@ -109,8 +109,8 @@ impl SignedRationals<BigInt> {
     }
 }
 
-impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for SignedRationals<N> {
-    type Item = Ratio<N>;
+impl<T: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for SignedRationals<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.row.is_zero() {
@@ -123,14 +123,14 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
             // new_raw() justified because gcd is always checked before we get here
             let out = Some(Ratio::new_raw(-self.numer.clone(), self.denom.clone()));
             loop {
-                self.numer = self.numer.checked_sub(&N::one())?;
-                self.denom = self.denom.checked_add(&N::one())?;
+                self.numer = self.numer.checked_sub(&T::one())?;
+                self.denom = self.denom.checked_add(&T::one())?;
                 if self.numer.is_zero() {
                     self.row.incr()?;
                     self.numer = self.row.clone();
-                    self.denom = N::one();
+                    self.denom = T::one();
                 }
-                if self.numer.gcd(&self.denom) == N::one() {
+                if self.numer.gcd(&self.denom) == T::one() {
                     return out;
                 }
             }
@@ -142,6 +142,6 @@ impl<N: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
 }
 
 crate::check_sequences!(
-    Rationals::<u32>::new(), ["0", "1", "2", "1/2", "3", "1/3", "4", "3/2", "2/3", "1/4", "5", "1/5", "6", "5/2", "4/3", "3/4", "2/5", "1/6", "7", "5/3"];
-    SignedRationals::<i32>::new(), ["0", "1", "-1", "2", "-2", "1/2", "-1/2", "3", "-3", "1/3", "-1/3", "4", "-4", "3/2", "-3/2", "2/3", "-2/3", "1/4", "-1/4", "5"];
+    Rationals::new(), ["0", "1", "2", "1/2", "3", "1/3", "4", "3/2", "2/3", "1/4", "5", "1/5", "6", "5/2", "4/3", "3/4", "2/5", "1/6", "7", "5/3"];
+    SignedRationals::new(), ["0", "1", "-1", "2", "-2", "1/2", "-1/2", "3", "-3", "1/3", "-1/3", "4", "-4", "3/2", "-3/2", "2/3", "-2/3", "1/4", "-1/4", "5"];
 );

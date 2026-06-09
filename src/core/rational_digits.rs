@@ -1,7 +1,7 @@
-use num::{
-    BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, PrimInt, Zero, rational::Ratio,
-};
+use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
 use std::fmt::Display;
+
+use crate::Number;
 
 /// Digits of an integer in reverse order.
 fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {
@@ -24,16 +24,16 @@ pub struct RationalDigits<T> {
     leading_zero: bool,
 }
 
-impl<T: PrimInt + Integer + Display> RationalDigits<T> {
-    pub fn new(numer: T, denom: T, base: T) -> Self {
+impl RationalDigits<Number> {
+    pub fn new(numer: Number, denom: Number, base: Number) -> Self {
         Self::from_ratio(Ratio::new(numer, denom), base)
     }
 
-    pub fn from_ratio(q: Ratio<T>, base: T) -> Self {
-        assert!(q >= Ratio::<T>::zero());
+    pub fn from_ratio(q: Ratio<Number>, base: Number) -> Self {
+        assert!(q >= Ratio::zero());
         let (i_part, f_part) = q.into_raw();
         let numer = integer_digits(i_part, base);
-        let remdr = T::zero();
+        let remdr = 0;
         Self {
             remdr,
             denom: f_part,
@@ -46,20 +46,17 @@ impl<T: PrimInt + Integer + Display> RationalDigits<T> {
 
 #[cfg(feature = "big_int")]
 impl RationalDigits<BigInt> {
-    pub fn new_big<F: Integer + Clone, G>(numer: F, denom: F, base: G) -> Self
+    pub fn new_big<G: Clone + Integer>(numer: G, denom: G, base: G) -> Self
     where
-        Ratio<BigInt>: From<Ratio<F>>,
-        BigInt: From<F>,
         Ratio<BigInt>: From<Ratio<G>>,
         BigInt: From<G>,
     {
         Self::from_ratio_big(Ratio::new(numer, denom), base)
     }
 
-    pub fn from_ratio_big<F: Clone + Integer, G>(q: Ratio<F>, base: G) -> Self
+    pub fn from_ratio_big<G: Clone + Integer>(q: Ratio<G>, base: G) -> Self
     where
-        Ratio<BigInt>: From<Ratio<F>>,
-        BigInt: From<F>,
+        Ratio<BigInt>: From<Ratio<G>>,
         BigInt: From<G>,
     {
         let q: Ratio<BigInt> = q.into();

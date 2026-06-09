@@ -30,7 +30,7 @@ impl PrimeCounting<Number> {
 #[cfg(feature = "big_int")]
 impl PrimeCounting<BigInt> {
     pub fn new_big() -> Self {
-        let mut prime = Primes::new();
+        let mut prime = Primes::new_big();
         let next_prime = prime.next().unwrap();
         Self {
             prime,
