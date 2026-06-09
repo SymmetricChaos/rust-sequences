@@ -1,7 +1,6 @@
 //! These sequences are core in the sense that any other sequence may depend on them but none of them can depend on any others.
 //! They should be as generic as possible and avoid using supertraits like Integer or Num that have many subtraits.
 pub mod arithmetic;
-pub mod catalan;
 pub mod composite;
 pub mod constant;
 pub mod geometric;
@@ -27,7 +26,6 @@ pub mod unit;
 
 pub use alternating::*;
 pub use arithmetic::*;
-pub use catalan::*;
 pub use combinations::*;
 pub use composite::*;
 pub use constant::*;

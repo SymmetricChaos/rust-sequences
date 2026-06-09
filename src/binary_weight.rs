@@ -1,7 +1,4 @@
-use crate::{
-    Number,
-    core::traits::{CountBits, Increment},
-};
+use crate::{Number, core::traits::Increment};
 
 /// The binary weight of each natural number, starting from zero.
 ///
@@ -22,7 +19,7 @@ impl Iterator for BinaryWeight<Number> {
     type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let n = Some(self.ctr.count_ones_64() as Number);
+        let n = Some(self.ctr.count_ones() as Number);
         self.ctr.incr()?;
         n
     }

@@ -1,3 +1,4 @@
+use crate::Number;
 use num::BigInt;
 
 /// A constant sequence that always returns the same value.
@@ -5,8 +6,8 @@ pub struct Constant<T> {
     val: T,
 }
 
-impl<T> Constant<T> {
-    pub fn new(val: T) -> Self {
+impl Constant<Number> {
+    pub fn new(val: Number) -> Self {
         Self { val }
     }
 }
@@ -17,7 +18,9 @@ impl Constant<BigInt> {
     where
         BigInt: From<G>,
     {
-        Self::new(BigInt::from(val))
+        Self {
+            val: BigInt::from(val),
+        }
     }
 }
 

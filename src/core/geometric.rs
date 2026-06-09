@@ -1,3 +1,4 @@
+use crate::Number;
 use num::{BigInt, CheckedMul};
 
 /// Geometric sequence with chosen initial value and multiplier
@@ -6,8 +7,8 @@ pub struct Geometric<T> {
     multiplier: T,
 }
 
-impl<T: CheckedMul + Clone> Geometric<T> {
-    pub fn new(initial: T, multiplier: T) -> Self {
+impl Geometric<Number> {
+    pub fn new(initial: Number, multiplier: Number) -> Self {
         Self {
             value: initial,
             multiplier,
@@ -17,9 +18,9 @@ impl<T: CheckedMul + Clone> Geometric<T> {
 
 #[cfg(feature = "big_int")]
 impl Geometric<BigInt> {
-    pub fn new_big<T>(initial: T, multiplier: T) -> Self
+    pub fn new_big<G>(initial: G, multiplier: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         Self {
             value: BigInt::from(initial),
@@ -39,7 +40,7 @@ impl<T: CheckedMul + Clone> Iterator for Geometric<T> {
 }
 
 crate::print_sequences!(
-    Geometric::<i32>::new(3, -4), 10;
+    Geometric::new(3, -4), 10;
 );
 
 crate::check_sequences!(

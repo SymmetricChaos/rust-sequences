@@ -25,6 +25,7 @@ pub mod binomial_distribution;
 
 pub mod bernoulli_numbers;
 pub mod cahen;
+pub mod catalan;
 pub mod champernowne;
 pub mod compositions;
 pub mod compositions_weak;
