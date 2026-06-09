@@ -1,4 +1,4 @@
-use num::Integer;
+use num::{Integer, Zero};
 
 use crate::Number;
 
@@ -12,8 +12,10 @@ pub fn collatz(n: Number) -> Option<Number> {
 }
 
 /// Apply the reduced Collatz function. n/2^k if n is even and (3n+1)/2^k if n is odd, for the largest value of k that gives an integer. Always produces an odd number.
-pub fn reduced_collatz(n: Number) -> Option<Number> {
-    let mut n = n;
+pub fn reduced_collatz(mut n: Number) -> Option<Number> {
+    if n.is_zero() {
+        return Some(0);
+    }
     if n.is_odd() {
         n = n.checked_mul(3)?.checked_add(1)?;
     };

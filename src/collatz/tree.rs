@@ -1,14 +1,10 @@
-use num::{BigInt, One};
-
 use crate::Number;
+use num::{BigInt, One};
 
 /// The Collatz tree. Each layer contains the numbers that have a trajectory one step longer than the pevious layer. When flattened a permutation of the positive integers.
 ///
 /// ```text
 /// [1], [2], [4], [8], [16], [5, 32], [10, 64], [3, 20, 21, 128]...
-///
-/// flattened
-/// 1, 2, 4, 8, 16, 5, 32, 10, 64, 3, 20, 21, 128, 6, 40, 42, 256, 12...
 /// ```
 pub struct CollatzTree<T> {
     layer: Vec<T>,
@@ -18,10 +14,6 @@ impl CollatzTree<Number> {
     pub fn new() -> Self {
         Self { layer: vec![1] }
     }
-
-    pub fn flattened() -> impl Iterator<Item = Number> {
-        Self::new().flatten()
-    }
 }
 
 #[cfg(feature = "big_int")]
@@ -30,10 +22,6 @@ impl CollatzTree<BigInt> {
         Self {
             layer: vec![BigInt::one()],
         }
-    }
-
-    pub fn flattened_big() -> impl Iterator<Item = BigInt> {
-        Self::new_big().flatten()
     }
 }
 
@@ -73,10 +61,9 @@ impl Iterator for CollatzTree<BigInt> {
 }
 
 crate::check_sequences!(
-    CollatzTree::flattened(), [1, 2, 4, 8, 16, 5, 32, 10, 64, 3, 20, 21, 128, 6, 40, 42, 256, 12, 13, 80, 84, 85, 512, 24, 26, 160, 168, 170, 1024, 48, 52, 53, 320, 336, 340, 341, 2048, 17, 96, 104, 106, 113, 640, 672, 680, 682, 4096, 34, 35, 192, 208, 212, 213, 226, 227, 1280, 1344, 1360, 1364];
+    CollatzTree::new().flatten(), [1, 2, 4, 8, 16, 5, 32, 10, 64, 3, 20, 21, 128, 6, 40, 42, 256, 12, 13, 80, 84, 85, 512, 24, 26, 160, 168, 170, 1024, 48, 52, 53, 320, 336, 340, 341, 2048, 17, 96, 104, 106, 113, 640, 672, 680, 682, 4096, 34, 35, 192, 208, 212, 213, 226, 227, 1280, 1344, 1360, 1364];
 );
 
 crate::sample_sequences!(
     CollatzTree::new().map(|x| format!("{:?}",x));
-    CollatzTree::flattened();
 );
