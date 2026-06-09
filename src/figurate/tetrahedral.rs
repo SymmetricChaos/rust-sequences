@@ -28,13 +28,13 @@ impl Tetrahedral<BigInt> {
         }
     }
 
-    pub fn nth<T>(n: T) -> BigInt
-    where
-        BigInt: From<T>,
-    {
-        let n = &BigInt::from(n);
-        ((n + 1) * (n + 2) * (n + 3)) / 6
-    }
+    // pub fn nth<T>(n: T) -> BigInt
+    // where
+    //     BigInt: From<T>,
+    // {
+    //     let n = &BigInt::from(n);
+    //     ((n + 1) * (n + 2) * (n + 3)) / 6
+    // }
 }
 
 impl<T: Clone + CheckedAdd + CheckedSub + Integer> Iterator for Tetrahedral<T> {

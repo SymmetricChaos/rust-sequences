@@ -1,8 +1,6 @@
-use num::BigInt;
-
-#[cfg(feature = "big_int")]
 use crate::Number;
 use crate::core::integer::Integers;
+use num::BigInt;
 
 /// The generalized polygonal numbers with selectable order. Extends the domain of the polygonal numbers to all integers.
 ///

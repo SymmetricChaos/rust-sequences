@@ -4,7 +4,7 @@ use num::integer::gcd;
 /// Duffian numbers. Composite numbers that are coprime to the sum of their divisors.
 ///
 /// ```text
-/// 4, 8, 9, 16, 21, 25, 27, 32, 35, 36...
+/// 4, 8, 9, 16, 21, 25, 27, 32, 35, 36, 39, 49, 50, 55, 57, 63, 64, 65...
 /// ```
 pub struct Duffian {
     c: Composites<Number>,
@@ -35,7 +35,7 @@ impl Iterator for Duffian {
 /// Duffian twins. Duffian numbers that differ by one.
 ///
 /// ```text
-/// (8, 9), (35, 36), (49, 50), (63, 64), (64, 65)...
+/// (8, 9), (35, 36), (49, 50), (63, 64), (64, 65), (128, 129)...
 /// ```
 pub struct DuffianTwins {
     duff: Duffian,
@@ -67,10 +67,11 @@ impl Iterator for DuffianTwins {
     }
 }
 
-crate::print_sequences!(
-    DuffianTwins::new(), 10, "{:?}", ", ";
-);
-
 crate::check_sequences!(
     Duffian::new(), [4, 8, 9, 16, 21, 25, 27, 32, 35, 36, 39, 49, 50, 55, 57, 63, 64, 65, 75, 77, 81, 85, 93, 98, 100, 111, 115, 119, 121, 125, 128, 129, 133, 143, 144, 155, 161, 169, 171, 175, 183, 185, 187, 189, 201, 203, 205, 209, 215, 217, 219, 221, 225, 235, 237, 242, 243, 245, 247];
+);
+
+crate::sample_sequences!(
+    Duffian::new();
+    DuffianTwins::new().map(|x| format!("{:?}",x));
 );

@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Signed};
-
 use crate::{Number, core::integer::Integers};
+use num::{BigInt, CheckedAdd, CheckedMul, CheckedSub, Signed};
 
 /// The generalized pentagonal numbers. Extends the domain of the pentagonal numbers to all integers.
 ///

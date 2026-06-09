@@ -10,14 +10,13 @@ use num::rational::Ratio;
 /// The abundant numbers. Positive integers which have an aliquot sum greater than themselves.
 ///
 /// ```text
-/// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54...
+/// 12, 18, 20, 24, 30, 36, 40, 42, 48, 54, 56, 60, 66, 70, 72, 78, 80...
 /// ```
 pub struct Abundant {
     n: Number,
 }
 
 impl Abundant {
-    /// Only u64 output supported.
     pub fn new() -> Self {
         Self { n: 11 }
     }
@@ -39,7 +38,7 @@ impl Iterator for Abundant {
 /// The primitive abundant numbers. Abundant numbers that have no abundant divisors.
 ///
 /// ```text
-/// 12, 18, 20, 30, 42, 56, 66, 70, 78, 88...
+/// 12, 18, 20, 30, 42, 56, 66, 70, 78, 88, 102, 104, 114, 138, 174...
 /// ```
 pub struct PrimitiveAbundant {
     n: Number,
@@ -78,7 +77,7 @@ impl Iterator for PrimitiveAbundant {
 /// Highly abundant numbers. Positive integers for which the sum of divisors is greater than for any smaller positive integer.
 ///
 /// ```text
-/// 1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24...
+/// 1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24, 30, 36, 42, 48, 60, 72...
 /// ```
 pub struct HighlyAbundant {
     record: Number,
@@ -109,7 +108,7 @@ impl Iterator for HighlyAbundant {
 /// Superabundant numbers. Positive integers for which the ratio between the sum of divisors and itself is greater than for any smaller positive integer.
 ///
 /// ```text
-/// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120...
+/// 1, 2, 4, 6, 12, 24, 36, 48, 60, 120, 180, 240, 360, 720, 840, 1260...
 /// ```
 pub struct Superabundant {
     record: Ratio<Number>,
@@ -148,4 +147,11 @@ crate::check_sequences!(
     PrimitiveAbundant::new(), [12, 18, 20, 30, 42, 56, 66, 70, 78, 88, 102, 104, 114, 138, 174, 186, 196, 222, 246, 258, 272, 282, 304, 308, 318, 354, 364, 366, 368, 402, 426, 438, 464, 474, 476, 498, 532, 534, 550, 572, 582, 606, 618, 642, 644, 650, 654, 678, 748, 762, 786, 812, 822];
     Superabundant::new(),     [1, 2, 4, 6, 12, 24, 36, 48, 60, 120, 180, 240, 360, 720, 840, 1260, 1680, 2520, 5040, 10080, 15120, 25200, 27720, 55440, 110880, 166320, 277200, 332640, 554400, 665280, 720720, 1441440, 2162160, 3603600, 4324320, 7207200, 8648640, 10810800, 21621600, 36756720, 61261200, 73513440, 122522400];
     HighlyAbundant::new(),    [1, 2, 3, 4, 6, 8, 10, 12, 16, 18, 20, 24, 30, 36, 42, 48, 60, 72, 84, 90, 96, 108, 120, 144, 168, 180, 210, 216, 240, 288, 300, 336, 360, 420, 480, 504, 540, 600, 630, 660, 720, 840, 960, 1008, 1080, 1200, 1260, 1440, 1560, 1620, 1680, 1800, 1920, 1980, 2100];
+);
+
+crate::sample_sequences!(
+    Abundant::new();
+    PrimitiveAbundant::new();
+    Superabundant::new();
+    HighlyAbundant::new();
 );

@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, CheckedAdd, FromPrimitive, Integer, One, Signed, Zero};
+use num::{BigInt, CheckedAdd, Integer, One, Zero};
 
 /// The triangular numbers. The partial sums of the natural numbers.
 ///
@@ -26,14 +26,14 @@ impl Triangular<BigInt> {
         }
     }
 
-    pub fn nth<T>(n: T) -> BigInt
-    where
-        BigInt: From<T>,
-    {
-        let n = BigInt::from(n);
-        assert!(!n.is_negative());
-        (n.clone() * (n + 1)) / BigInt::from_i32(2).unwrap()
-    }
+    // pub fn nth<T>(n: T) -> BigInt
+    // where
+    //     BigInt: From<T>,
+    // {
+    //     let n = BigInt::from(n);
+    //     assert!(!n.is_negative());
+    //     (n.clone() * (n + 1)) / BigInt::from_i32(2).unwrap()
+    // }
 }
 
 impl<T: Clone + CheckedAdd + Integer> Iterator for Triangular<T> {

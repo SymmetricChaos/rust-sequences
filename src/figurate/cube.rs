@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
-
 use crate::{Number, core::traits::Increment};
+use num::{BigInt, CheckedAdd, CheckedMul, Integer, Zero};
 
 /// The cube numbers.
 ///
