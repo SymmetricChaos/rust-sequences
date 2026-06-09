@@ -7,7 +7,9 @@ use std::{
 
 /// The prime natural numbers, those having exactly two distinct divisors.
 ///
-/// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...
+/// ```text
+/// 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61...
+/// ```
 pub struct Primes<T> {
     sieve: HashMap<T, Vec<T>>,
     n: T,
@@ -101,7 +103,9 @@ impl<T: Eq + PartialEq + PartialOrd + Ord> PartialOrd for PrimePower<T> {
 
 /// The perfect powers of primes.
 ///
-/// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37...
+/// ```text
+/// 1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32...
+/// ```
 pub struct PrimePowers<T> {
     priority_queue: BinaryHeap<PrimePower<T>>,
     primes: Primes<T>,
@@ -149,7 +153,9 @@ impl<T: CheckedAdd + CheckedMul + Clone + Hash + Integer> Iterator for PrimePowe
 
 /// The primorials, the partial products of the primes.
 ///
-/// 1, 2, 6, 30, 210, 2310, 30030, 510510, 9699690...
+/// ```text
+/// 1, 2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870...
+/// ```
 pub struct Primorial<T> {
     prod: T,
     primes: Primes<T>,
@@ -198,4 +204,10 @@ crate::check_sequences!(
     Primes::new_big(),  [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271];
     PrimePowers::new(), [1, 2, 3, 4, 5, 7, 8, 9, 11, 13, 16, 17, 19, 23, 25, 27, 29, 31, 32, 37, 41, 43, 47, 49, 53, 59, 61, 64, 67, 71, 73, 79, 81, 83, 89, 97, 101, 103, 107, 109, 113, 121, 125, 127, 128, 131, 137, 139, 149, 151, 157, 163, 167, 169, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227];
     Primorial::new(),   [1_u64, 2, 6, 30, 210, 2310, 30030, 510510, 9699690, 223092870, 6469693230, 200560490130, 7420738134810, 304250263527210, 13082761331670030, 614889782588491410];
+);
+
+crate::sample_sequences!(
+    Primes::new();
+    PrimePowers::new();
+    Primorial::new();
 );

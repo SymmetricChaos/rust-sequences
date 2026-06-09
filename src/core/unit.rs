@@ -6,7 +6,7 @@ use crate::Number;
 /// The unit function in number theory. A single 1 followed by infinite 0s. It is the identity for the Dirichlet convolution.
 ///
 /// ```text
-/// 1, 0, 0, 0, 0, 0, 0, 0, 0...
+/// 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
 /// ```
 pub struct UnitSequence<T> {
     n: bool,
@@ -48,4 +48,8 @@ impl<T: One + Zero> Iterator for UnitSequence<T> {
 crate::check_sequences!(
     UnitSequence::new(), [1, 0, 0, 0, 0];
     UnitSequence::new_big(), [1, 0, 0, 0, 0];
+);
+
+crate::sample_sequences!(
+    UnitSequence::new();
 );

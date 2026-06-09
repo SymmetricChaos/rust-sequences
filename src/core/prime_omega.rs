@@ -2,7 +2,9 @@ use crate::{Number, core::traits::Increment, utils::divisibility::prime_factoriz
 
 /// The number of prime factors of each positive integer, counted with multiplicity. The prime Ω (big omega) function.
 ///
-/// 0, 1, 1, 2, 1, 2, 1, 3, 2, 2, 1, 3, 1, 2, 2...
+/// ```text
+/// 0, 1, 1, 2, 1, 2, 1, 3, 2, 2, 1, 3, 1, 2, 2, 4, 1, 3, 1, 3, 2, 2, 1...
+/// ```
 pub struct NumberOfPrimeFactors {
     ctr: Number,
 }
@@ -24,7 +26,9 @@ impl Iterator for NumberOfPrimeFactors {
 
 /// The number of distinct prime factors of each positive integer. The prime ω (small omega) function.
 ///
-/// 0, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2...
+/// ```text
+/// 0, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1...
+/// ```
 pub struct NumberOfDistinctPrimeFactors {
     ctr: Number,
 }
@@ -47,4 +51,9 @@ impl Iterator for NumberOfDistinctPrimeFactors {
 crate::check_sequences!(
     NumberOfPrimeFactors::new(), [0, 1, 1, 2, 1, 2, 1, 3, 2, 2, 1, 3, 1, 2, 2, 4, 1, 3, 1, 3, 2, 2, 1, 4, 2, 2, 3, 3, 1, 3, 1, 5, 2, 2, 2, 4, 1, 2, 2, 4, 1, 3, 1, 3, 3, 2, 1, 5, 2, 3, 2, 3, 1, 4, 2, 4, 2, 2, 1, 4, 1, 2, 3, 6, 2, 3, 1, 3, 2, 3, 1, 5, 1, 2, 3, 3, 2, 3, 1, 5, 4, 2, 1, 4, 2, 2, 2, 4, 1, 4, 2, 3, 2, 2, 2, 6, 1, 3, 3, 4, 1, 3, 1, 4, 3, 2, 1, 5, 1, 3, 2];
     NumberOfDistinctPrimeFactors::new(), [0, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 3, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 3, 1, 2, 2, 1, 2, 3, 1, 2, 2, 3, 1, 2, 1, 2, 2, 2, 2, 3, 1, 2, 1, 2, 1, 3, 2, 2, 2, 2, 1, 3, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 3, 1, 2, 3, 2, 1, 2, 1, 3, 2];
+);
+
+crate::sample_sequences!(
+    NumberOfPrimeFactors::new();
+    NumberOfDistinctPrimeFactors::new();
 );
