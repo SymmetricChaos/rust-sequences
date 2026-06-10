@@ -1,7 +1,7 @@
-use crate::core::alternating::Alternating;
-use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Signed, Zero, rational::Ratio};
-use std::marker::PhantomData;
+use crate::core::{alternating::Alternating, traits::Increment};
+use num::{BigInt, CheckedAdd, CheckedMul, FromPrimitive, One, Zero, rational::Ratio};
 
+#[cfg(feature = "big_int")]
 /// The Bernoulli numbers.
 ///
 /// ```text
@@ -9,52 +9,33 @@ use std::marker::PhantomData;
 /// ```
 pub struct Bernoulli<T> {
     m: usize,
-    phantom: PhantomData<T>,
-    n: BigInt,
+    n: T,
 }
 
-impl<T: Signed> Bernoulli<T>
-where
-    T: TryFrom<BigInt>,
-{
-    /// Internal calculations are done using BigInt and converted for output so there is no gain in speed or memory usage over ::new_big().
-    pub fn new_plus() -> Self {
+#[cfg(feature = "big_int")]
+impl Bernoulli<BigInt> {
+    pub fn new_plus_big() -> Self {
         Self {
             m: 0,
-            phantom: PhantomData,
             n: BigInt::one(),
         }
     }
 
-    /// Internal calculations are done using BigInt and converted for output so there is no gain in speed or memory usage over ::new_big().
-    pub fn new_minus() -> Self {
+    pub fn new_minus_big() -> Self {
         Self {
             m: 0,
-            phantom: PhantomData,
             n: BigInt::zero(),
         }
     }
 }
 
 #[cfg(feature = "big_int")]
-impl Bernoulli<BigInt> {
-    pub fn new_plus_big() -> Self {
-        Self::new_plus()
-    }
-
-    pub fn new_minus_big() -> Self {
-        Self::new_minus()
-    }
-}
-
-impl<T> Iterator for Bernoulli<T>
-where
-    T: TryFrom<BigInt>,
-{
-    type Item = Ratio<T>;
+impl Iterator for Bernoulli<BigInt> {
+    type Item = Ratio<BigInt>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut sum = Ratio::zero();
+
         for k in 0..=self.m {
             let kb = BigInt::from_usize(k)?;
             let frac = Ratio::new(BigInt::one(), kb.clone() + BigInt::one());
@@ -68,8 +49,10 @@ where
             }
             sum = sum.checked_add(&(frac.checked_mul(&j_sum)?))?;
         }
-        self.m = self.m.checked_add(1)?;
-        Some(Ratio::new_raw(
+
+        self.m.incr()?;
+
+        Some(Ratio::new(
             sum.numer().clone().try_into().ok()?,
             sum.denom().clone().try_into().ok()?,
         ))
