@@ -1,5 +1,5 @@
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, Integer, Signed, Zero};
+use num::{BigInt, CheckedAdd, Integer, Zero};
 
 /// The Champernowne constants. Infinite words formed by listing the digits of the natural numbers in a given base.
 ///
@@ -40,39 +40,17 @@ impl Champernowne<BigInt> {
     }
 }
 
-impl Iterator for Champernowne<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + Integer> Iterator for Champernowne<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.ctr.is_zero() {
             self.ctr.incr()?;
-            self.digits.push(0);
+            self.digits.push(T::zero());
         }
         if self.digits.is_empty() {
             let mut n = self.ctr.clone();
-            while n.is_positive() {
-                let (div, rem) = n.div_rem(&self.base);
-                self.digits.push(rem);
-                n = div;
-            }
-            self.ctr.incr()?;
-        }
-        self.digits.pop()
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Iterator for Champernowne<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.ctr.is_zero() {
-            self.ctr.incr()?;
-            self.digits.push(BigInt::zero());
-        }
-        if self.digits.is_empty() {
-            let mut n = self.ctr.clone();
-            while n.is_positive() {
+            while n > T::zero() {
                 let (div, rem) = n.div_rem(&self.base);
                 self.digits.push(rem);
                 n = div;

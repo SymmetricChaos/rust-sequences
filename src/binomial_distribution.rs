@@ -1,5 +1,6 @@
 use num::{BigInt, One, Signed, integer::binomial, rational::Ratio};
 
+#[cfg(feature = "big_int")]
 /// The probability mass function for the binomial distribution given a positive integer number of trials and a positive rational probability of success.
 pub struct BinomialDistribution {
     p: Ratio<BigInt>,
@@ -8,6 +9,7 @@ pub struct BinomialDistribution {
     k: i32,
 }
 
+#[cfg(feature = "big_int")]
 impl BinomialDistribution {
     /// Panics if n or probability is not positive.
     pub fn new_big<T: Clone>(n: i32, probability: Ratio<T>) -> Self
@@ -30,6 +32,7 @@ impl BinomialDistribution {
     }
 }
 
+#[cfg(feature = "big_int")]
 impl Iterator for BinomialDistribution {
     type Item = Ratio<BigInt>;
 

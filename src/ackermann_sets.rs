@@ -1,4 +1,6 @@
-use num::{BigInt, Signed};
+use num::{BigInt, Signed, Zero};
+
+use crate::Number;
 
 // For 64-bit numbers only these 64 sets are used, each effectively represents a particular bit
 pub const BASE_SETS: [&str; 64] = [
@@ -72,32 +74,31 @@ pub const BASE_SETS: [&str; 64] = [
 ///
 /// ```text
 /// f({}) = 0
-/// f(A) = sum 2^f(a_i) for all a_i in A
+/// f(A)  = sum 2^f(a_i) for all a_i in A
 ///
 /// {}, {{}}, {{{}}}, {{}{{}}}, {{{{}}}}, {{}{{{}}}}, {{{}}{{{}}}}...
 /// ```
-pub struct AckermannSets {
-    ctr: BigInt,
+pub struct AckermannSets<T> {
+    ctr: T,
 }
 
-impl AckermannSets {
+impl AckermannSets<Number> {
     pub fn new() -> Self {
-        Self { ctr: BigInt::ZERO }
-    }
-
-    // This remiains fast up to thousands of bits!
-    /// The nth Ackerman set. n must be positive.
-    pub fn nth<T>(n: T) -> String
-    where
-        BigInt: From<T>,
-    {
-        let b = BigInt::from(n);
-        assert!(!b.is_negative());
-        number_to_set_big(&b)
+        Self { ctr: 0 }
     }
 }
 
-impl Iterator for AckermannSets {
+#[cfg(feature = "big_int")]
+impl AckermannSets<BigInt> {
+    pub fn new_big() -> Self {
+        Self {
+            ctr: BigInt::zero(),
+        }
+    }
+}
+
+#[cfg(feature = "big_int")]
+impl Iterator for AckermannSets<BigInt> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -115,6 +116,24 @@ impl Iterator for AckermannSets {
     }
 }
 
+impl Iterator for AckermannSets<Number> {
+    type Item = String;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let out = number_to_set_64(self.ctr as u64);
+        self.ctr += 1;
+        Some(out)
+    }
+
+    // Optimize by skipping set generation.
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.ctr += n as Number;
+        let out = number_to_set_64(self.ctr as u64);
+        self.ctr += 1;
+        Some(out)
+    }
+}
+
 pub fn number_to_set_64(mut n: u64) -> String {
     let mut out = String::from("{");
     for i in 0..=64 {
@@ -127,11 +146,12 @@ pub fn number_to_set_64(mut n: u64) -> String {
     out
 }
 
+#[cfg(feature = "big_int")]
 pub fn number_to_set_big(n: &BigInt) -> String {
     assert!(!n.is_negative());
     let mut out = String::from("{");
     for i in 0..=n.bits() {
-        if i < 64 {
+        if i < 63 {
             if n.bit(i) {
                 out.push_str(BASE_SETS[i as usize]); // much faster than recursion
             }
@@ -162,5 +182,5 @@ pub fn number_to_set_big(n: &BigInt) -> String {
 // }
 
 crate::sample_sequences!(
-    AckermannSets::new();
+    AckermannSets::new_big();
 );
