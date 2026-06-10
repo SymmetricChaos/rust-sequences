@@ -13,7 +13,6 @@ use crate::{
     transforms::{
         AbsDiffs, AlternatingPartialSums, Boustrophedon, BoustrophedonTriangle, CesaroPartialSums,
         Complement, DirichletConvolution, Lodumo, OrdinalTransform, Ratios,
-        dirichlet_convolution::one,
     },
     zeta::Zeta,
 };
@@ -33,7 +32,7 @@ crate::print_sequences!(
     SquareRoot::new_big(1,2).map(|q| to_dec(q, 5).unwrap()), 6; // converges on sqrt(1/2) 0.70710678118...
     CubeRoot::new_big(2,1).map(|q| to_dec(q, 5).unwrap()), 6; // converges on cbrt(2) 1.25992104989...
     CesaroPartialSums::new([1,0].into_iter().cycle()), 10;
-    DirichletConvolution::new_big(one,one), 10; // identical to number of divisors function, below
+    DirichletConvolution::new(Constant::new(1), Constant::new(1)), 10; // identical to number of divisors function, below
     NumberOfDivisors::new(), 10;
     BoustrophedonTriangle::new(Primes::new_big()), 5, "{:?}", "\n";
     Ruler::new(), 20;

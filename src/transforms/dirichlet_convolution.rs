@@ -1,49 +1,49 @@
-use num::{BigInt, One, Zero};
-
-pub fn unit(n: BigInt) -> BigInt {
-    if n.is_one() {
-        BigInt::one()
-    } else {
-        BigInt::zero()
-    }
-}
-
-pub fn one(_: BigInt) -> BigInt {
-    BigInt::one()
-}
+use crate::core::traits::Increment;
+use num::{CheckedAdd, CheckedMul, Zero};
 
 /// The Dirichlet convolution.
-pub struct DirichletConvolution {
+pub struct DirichletConvolution<T> {
     ctr: usize,
-    f: Box<dyn Fn(BigInt) -> BigInt>,
-    g: Box<dyn Fn(BigInt) -> BigInt>,
+    f_terms: Vec<T>,
+    g_terms: Vec<T>,
+    f: Box<dyn Iterator<Item = T>>,
+    g: Box<dyn Iterator<Item = T>>,
 }
 
-impl DirichletConvolution {
-    pub fn new_big<F, G>(f: F, g: G) -> Self
+impl<T> DirichletConvolution<T> {
+    pub fn new<F, G>(f: F, g: G) -> Self
     where
-        F: Fn(BigInt) -> BigInt + 'static,
-        G: Fn(BigInt) -> BigInt + 'static,
+        F: Iterator<Item = T> + 'static,
+        G: Iterator<Item = T> + 'static,
     {
         Self {
-            ctr: usize::one(),
+            ctr: 1,
+            f_terms: Vec::new(),
+            g_terms: Vec::new(),
             f: Box::new(f),
             g: Box::new(g),
         }
     }
 }
 
-impl Iterator for DirichletConvolution {
-    type Item = BigInt;
+impl<T: Clone + Zero + CheckedAdd + CheckedMul> Iterator for DirichletConvolution<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut out = BigInt::zero();
-        for i in 1..=self.ctr {
-            if (self.ctr % i).is_zero() {
-                out += (self.f)(BigInt::from(i)) * (self.g)(BigInt::from(self.ctr / i))
+        let mut out = T::zero();
+
+        self.f_terms.push(self.f.next()?);
+        self.g_terms.push(self.g.next()?);
+
+        let n = self.ctr;
+
+        for d in 1..=n {
+            if n.is_multiple_of(d) {
+                out =
+                    out.checked_add(&self.f_terms[d - 1].checked_mul(&self.g_terms[(n / d) - 1])?)?;
             }
         }
-        self.ctr = self.ctr.checked_add(1)?;
+        self.ctr.incr()?;
 
         Some(out)
     }

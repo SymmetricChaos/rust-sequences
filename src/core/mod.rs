@@ -44,3 +44,4 @@ pub use rational_digits::*;
 pub use rationals::*;
 pub use recurrence::*;
 pub use roots::*;
+pub use unit::*;
