@@ -1,11 +1,11 @@
 use num::{Integer, rational::Ratio};
 
 /// Sequence of reciprocals of a sequence of integers. Returns None if the integer is zero.
-pub struct IntegerReciprocals<T> {
+pub struct Reciprocals<T> {
     iter: Box<dyn Iterator<Item = T>>,
 }
 
-impl<T: Clone + Integer> IntegerReciprocals<T> {
+impl<T: Clone + Integer> Reciprocals<T> {
     pub fn new<I>(iter: I) -> Self
     where
         I: Iterator<Item = T> + 'static,
@@ -16,7 +16,7 @@ impl<T: Clone + Integer> IntegerReciprocals<T> {
     }
 }
 
-impl<T: Clone + Integer> Iterator for IntegerReciprocals<T> {
+impl<T: Clone + Integer> Iterator for Reciprocals<T> {
     type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

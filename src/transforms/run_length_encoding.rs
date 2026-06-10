@@ -19,18 +19,10 @@ impl<T: CheckedAdd + Clone + Integer> RunLengthEncoding<T> {
             iter: Box::new(iter),
         }
     }
-
-    /// A flattened version of the run length encoding.
-    pub fn new_flat<I>(iter: I) -> impl Iterator<Item = T>
-    where
-        I: Iterator<Item = T> + 'static,
-    {
-        Self::new(iter).map(|(a, b)| [a, b]).flatten()
-    }
 }
 
 impl<T: CheckedAdd + Clone + Integer> Iterator for RunLengthEncoding<T> {
-    type Item = (T, T);
+    type Item = [T; 2];
 
     fn next(&mut self) -> Option<Self::Item> {
         let val = self.val.clone();
@@ -45,11 +37,11 @@ impl<T: CheckedAdd + Clone + Integer> Iterator for RunLengthEncoding<T> {
             }
         }
 
-        Some((val.unwrap(), ctr))
+        Some([val.unwrap(), ctr])
     }
 }
 
 crate::print_sequences!(
-    RunLengthEncoding::new([1, 1, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7, 7, 7, 7].into_iter()), 4, "{:?}", ", ";
-    RunLengthEncoding::new_flat([1, 1, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 7, 7, 7, 7, 7, 7, 7, 7].into_iter()), 8;
+    RunLengthEncoding::new([81, 81, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 3, 3, 3].into_iter()), 4, "{:?}", ", ";
+    RunLengthEncoding::new([81, 81, 3, 3, 3, 3, 5, 5, 5, 5, 5, 5, 3, 3, 3].into_iter()).flatten(), 8;
 );

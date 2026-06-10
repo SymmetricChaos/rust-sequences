@@ -23,14 +23,14 @@ impl<T: CheckedAdd + Clone + Integer> ShadowTransform<T> {
 }
 
 impl<T: CheckedAdd + Clone + Integer + Rem<Output = T>> Iterator for ShadowTransform<T> {
-    type Item = usize;
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut total = 0;
+        let mut total = T::zero();
 
         for i in self.terms.iter() {
             if (i.clone() % self.ctr.clone()).is_zero() {
-                total += 1;
+                total.incr()?;
             }
         }
 

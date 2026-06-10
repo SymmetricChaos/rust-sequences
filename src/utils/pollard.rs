@@ -2,10 +2,7 @@ use crate::Number;
 use num::Integer;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
-/// Find a factor using Pollard's Rho.
-/// Uses 64-bit arithmetic on a single thread for small numbers.
-/// Uses parallelized 64-bit arithmetic up to 2^32 and parallelized 128-bit arithmetic for larger numbers.
-/// Running time for parallelized code is not deterministic.
+/// Find a factor using Pollard's Rho. For inputs above above 67108863 parallelization is used.
 pub fn pollards_rho(n: Number) -> Option<Number> {
     if n > 0x03FFFFFF {
         return _pollards_rho_par(n);

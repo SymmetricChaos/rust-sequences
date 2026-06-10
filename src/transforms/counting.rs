@@ -25,7 +25,7 @@ impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Counting<T> {
     }
 }
 
-impl<T: CheckedAdd + Clone + One + PartialOrd + Zero> Iterator for Counting<T> {
+impl<T: CheckedAdd + Clone + One + PartialOrd> Iterator for Counting<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {

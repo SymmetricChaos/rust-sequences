@@ -1,7 +1,7 @@
 use crate::core::traits::Increment;
 use num::{CheckedAdd, CheckedSub, Integer, Signed, Zero, rational::Ratio};
 
-/// Sequence of partial sums if an iterator. Returns None if overflow occurs during addition or if the sequence ends.
+/// Sequence of partial sums of an iterator.
 pub struct PartialSums<T> {
     sum: T,
     iter: Box<dyn Iterator<Item = T>>,
@@ -29,7 +29,7 @@ impl<T: CheckedAdd + Clone> Iterator for PartialSums<T> {
     }
 }
 
-/// Sequence of alternating partial sums of an iterator. Returns None if overflow occurs during addition or subtraction or if the sequence ends.
+/// Sequence of alternating partial sums of an iterator.
 pub struct AlternatingPartialSums<T> {
     sum: T,
     iter: Box<dyn Iterator<Item = T>>,
@@ -64,7 +64,7 @@ impl<T: CheckedAdd + CheckedSub + Clone> Iterator for AlternatingPartialSums<T> 
     }
 }
 
-/// Sequence of partial sums of the absolute values of an iterator. Returns None if overflow occurs during addition or if the sequence ends.
+/// Sequence of partial sums of the absolute values of an iterator.
 pub struct AbsolutePartialSums<T> {
     sum: T,
     iter: Box<dyn Iterator<Item = T>>,
