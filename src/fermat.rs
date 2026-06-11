@@ -1,5 +1,5 @@
 use crate::Number;
-use num::BigInt;
+use num::{BigInt, CheckedAdd, CheckedMul, Integer};
 
 /// The Fermat numbers. (2^(2^n))+1 for positive integers n. Terms grow extremely quickly.
 ///
@@ -30,8 +30,8 @@ impl Fermat<BigInt> {
     }
 }
 
-impl Iterator for Fermat<Number> {
-    type Item = Number;
+impl<T: Clone + CheckedAdd + CheckedMul + Integer> Iterator for Fermat<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.overflowed {
@@ -39,28 +39,14 @@ impl Iterator for Fermat<Number> {
         }
         let out = self.prev.clone();
 
-        let t = self.prev.clone() - 1;
-        match t.checked_mul(t) {
-            Some(x) => match x.checked_add(1) {
+        let t = self.prev.clone() - T::one();
+        match t.checked_mul(&t) {
+            Some(x) => match x.checked_add(&T::one()) {
                 Some(n) => self.prev = n,
                 None => return Some(out),
             },
             None => return Some(out),
         }
-
-        Some(out)
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Iterator for Fermat<BigInt> {
-    type Item = BigInt;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.prev.clone();
-
-        let t = self.prev.clone() - 1;
-        self.prev = (&t * &t) + 1;
 
         Some(out)
     }
