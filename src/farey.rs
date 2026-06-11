@@ -1,24 +1,69 @@
-use num::{BigInt, BigRational, One, Signed, Zero, rational::Ratio};
+use num::{
+    BigInt, CheckedAdd, CheckedMul, CheckedSub, Integer, One, Signed, Zero, rational::Ratio,
+};
 
-/// The Farey sequence of a given order.
+use crate::Number;
+
+/// The Farey sequence of a given order, k.
 ///
 /// ```text
-/// For order 4
+/// k = 4
 /// 0, 1/4, 1/3, 1/2, 2/3, 3/4, 1
+///
+/// k = 7
+/// 1, 6/7, 5/6, 4/5, 3/4, 5/7, 2/3, 3/5, 4/7, 1/2, 3/7, 2/5, 1/3, 2/7...
 /// ```
-pub struct Farey {
-    n0: BigInt,
-    d0: BigInt,
-    n1: BigInt,
-    d1: BigInt,
-    k: BigInt,
+pub struct Farey<T> {
+    n0: T,
+    d0: T,
+    n1: T,
+    d1: T,
+    k: T,
 }
 
-impl Farey {
+impl Farey<Number> {
     /// The ascending Farey sequence of order k. Panics if k is not positive.
-    pub fn new_big<T>(k: T) -> Self
+    pub fn new(k: Number) -> Self {
+        assert!(k.is_positive());
+        Self {
+            n0: 0,
+            d0: 1,
+            n1: 1,
+            d1: k,
+            k,
+        }
+    }
+
+    /// The ascending Farey sequence of order k. Panics if k is not positive.
+    pub fn new_ascending(k: Number) -> Self {
+        assert!(k.is_positive());
+        Self {
+            n0: 0,
+            d0: 1,
+            n1: 1,
+            d1: k,
+            k,
+        }
+    }
+
+    /// The descending Farey sequence of order k. Panics if k is not positive.
+    pub fn new_descending(k: Number) -> Self {
+        assert!(k.is_positive());
+        Self {
+            n0: 1,
+            d0: 1,
+            n1: k - 1,
+            d1: k,
+            k,
+        }
+    }
+}
+
+impl Farey<BigInt> {
+    /// The ascending Farey sequence of order k. Panics if k is not positive.
+    pub fn new_big<G>(k: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         let k = BigInt::from(k);
         assert!(k.is_positive());
@@ -32,9 +77,9 @@ impl Farey {
     }
 
     /// The ascending Farey sequence of order k. Panics if k is not positive.
-    pub fn new_big_ascending<T>(k: T) -> Self
+    pub fn new_big_ascending<G>(k: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         let k = BigInt::from(k);
         assert!(k.is_positive());
@@ -48,9 +93,9 @@ impl Farey {
     }
 
     /// The descending Farey sequence of order k. Panics if k is not positive.
-    pub fn new_big_descending<T>(k: T) -> Self
+    pub fn new_big_descending<G>(k: G) -> Self
     where
-        BigInt: From<T>,
+        BigInt: From<G>,
     {
         let k = BigInt::from(k);
         assert!(k.is_positive());
@@ -64,18 +109,18 @@ impl Farey {
     }
 }
 
-impl Iterator for Farey {
-    type Item = BigRational;
+impl<T: Clone + CheckedAdd + CheckedMul + CheckedSub + Integer> Iterator for Farey<T> {
+    type Item = Ratio<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.n0 > self.d0 || self.n0.is_negative() {
+        if self.n0 > self.d0 || self.n0 < T::zero() {
             return None;
         }
 
         let out = Ratio::new(self.n0.clone(), self.d0.clone());
-        let t = (&self.k + &self.d0) / &self.d1;
-        let n2 = &t * &self.n1 - &self.n0;
-        let d2 = &t * &self.d1 - &self.d0;
+        let t = self.k.checked_add(&self.d0)? / self.d1.clone();
+        let n2 = t.checked_mul(&self.n1)?.checked_sub(&self.n0)?;
+        let d2 = t.checked_mul(&self.d1)?.checked_sub(&self.d0)?;
         self.n0 = self.n1.clone();
         self.d0 = self.d1.clone();
         self.n1 = n2;
@@ -85,9 +130,11 @@ impl Iterator for Farey {
     }
 }
 
-crate::print_sequences!(
-    Farey::new_big(3), 10;
-    Farey::new_big(4), 19;
-    Farey::new_big_descending(3), 10;
-    Farey::new_big_descending(7), 19;
+crate::sample_sequences!(
+    Farey::new_big(3);
+    Farey::new_big(4);
+    Farey::new_big_descending(3);
+    Farey::new_big_descending(7);
+    Farey::new_descending(7);
+    Farey::new(4);
 );

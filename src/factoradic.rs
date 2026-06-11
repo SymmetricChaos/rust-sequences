@@ -1,5 +1,7 @@
 use num::{BigInt, CheckedAdd, Integer, Zero};
 
+use crate::Number;
+
 /// The factoradic representation of each non-negative integer. Panics if n is less than zero.
 /// When size is 0 the minimal length vector is returned.
 /// For any other value of size the output is padded to the left with zeroes to equal the size and returns None of the output is greater than the factorial of size.
@@ -30,19 +32,19 @@ pub struct Factoradic<T> {
     size: usize,
 }
 
-impl<T: CheckedAdd + Clone + Integer + Zero> Factoradic<T> {
+impl Factoradic<Number> {
     pub fn new(size: usize) -> Self {
-        Self {
-            ctr: T::zero(),
-            size,
-        }
+        Self { ctr: 0, size }
     }
 }
 
 #[cfg(feature = "big_int")]
 impl Factoradic<BigInt> {
     pub fn new_big(size: usize) -> Self {
-        Self::new(size)
+        Self {
+            ctr: BigInt::zero(),
+            size,
+        }
     }
 }
 

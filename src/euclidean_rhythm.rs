@@ -1,14 +1,13 @@
+use crate::Number;
 use itertools::Itertools;
 
-use crate::Number;
-
 /// The bits of a Euclidean Rhythm. These are defined only using the original iterative procedure without the alternate stopping rule. The two definitions always differ only by a cyclic shift.
-pub struct EuclideanRhythm {
-    s: Vec<Number>,
+pub struct EuclideanRhythm<T> {
+    s: Vec<T>,
     idx: usize,
 }
 
-impl EuclideanRhythm {
+impl EuclideanRhythm<Number> {
     /// a and b must both be positive.
     pub fn new(a: Number, b: Number) -> Self {
         assert!(a.is_positive());
@@ -54,7 +53,7 @@ impl EuclideanRhythm {
     }
 }
 
-impl Iterator for EuclideanRhythm {
+impl Iterator for EuclideanRhythm<Number> {
     type Item = Number;
 
     fn next(&mut self) -> Option<Self::Item> {
