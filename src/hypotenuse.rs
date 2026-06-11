@@ -1,4 +1,4 @@
-use crate::{Number, utils::divisibility::prime_factorization};
+use crate::{Number, core::traits::Increment, utils::divisibility::prime_factorization};
 
 /// Hypotenuse Numbers. Integers that can be the length of the hypotenuse of a primitive right triangle with integer sides.
 ///
@@ -11,7 +11,7 @@ pub struct Hypotenuse {
 
 impl Hypotenuse {
     pub fn new() -> Self {
-        Self { ctr: 1 }
+        Self { ctr: 4 }
     }
 }
 
@@ -20,7 +20,7 @@ impl Iterator for Hypotenuse {
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
-            self.ctr = self.ctr.checked_add(1)?;
+            self.ctr.incr()?;
 
             for factor in prime_factorization(self.ctr).iter().map(|x| x.0) {
                 if (factor - 1) % 4 != 0 {
@@ -54,7 +54,7 @@ impl Iterator for Nonhypotenuse {
 
     fn next(&mut self) -> Option<Self::Item> {
         'outer: loop {
-            self.ctr = self.ctr.checked_add(1)?;
+            self.ctr.incr()?;
 
             for factor in prime_factorization(self.ctr).iter().map(|x| x.0) {
                 if (factor - 1) % 4 == 0 {

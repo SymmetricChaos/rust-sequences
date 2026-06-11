@@ -14,7 +14,6 @@ pub struct JordanPolya {
 }
 
 impl JordanPolya {
-    /// Only u64 output is supported.
     pub fn new() -> Self {
         let mut factorials = Factorial::new();
         factorials.next();
