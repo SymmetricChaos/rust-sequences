@@ -1,6 +1,5 @@
-use num::{BigInt, FromPrimitive, One, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedMul, CheckedSub, FromPrimitive, Integer, One, Zero};
 
 /// Any recurrence of the form
 /// ```text
@@ -35,29 +34,14 @@ impl LucasU<BigInt> {
     }
 }
 
-impl Iterator for LucasU<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a;
-        let x = self.p.checked_mul(self.a)?;
-        let y = self.q.checked_mul(self.b)?;
-        let t = x.checked_sub(y)?;
-        self.a = self.b;
-        self.b = t;
-        Some(out)
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Iterator for LucasU<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedSub + CheckedMul + Integer> Iterator for LucasU<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let x = &self.p * &self.a;
-        let y = &self.q * &self.b;
-        let t = &x - &y;
+        let x = self.p.checked_mul(&self.a)?;
+        let y = self.q.checked_mul(&self.b)?;
+        let t = x.checked_sub(&y)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)
@@ -97,29 +81,14 @@ impl LucasV<BigInt> {
     }
 }
 
-impl Iterator for LucasV<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a;
-        let x = self.p.checked_mul(self.a)?;
-        let y = self.q.checked_mul(self.b)?;
-        let t = x.checked_sub(y)?;
-        self.a = self.b;
-        self.b = t;
-        Some(out)
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Iterator for LucasV<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedSub + CheckedMul + Integer> Iterator for LucasV<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let x = &self.p * &self.a;
-        let y = &self.q * &self.b;
-        let t = &x - &y;
+        let x = self.p.checked_mul(&self.a)?;
+        let y = self.q.checked_mul(&self.b)?;
+        let t = x.checked_sub(&y)?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)

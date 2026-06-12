@@ -1,6 +1,5 @@
-use num::{BigInt, One};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, Integer, One};
 
 /// The Leonardo numbers. Defined by a linear recurrence similar to the Fibonnaci numbers.
 ///
@@ -28,25 +27,12 @@ impl Leonardo<BigInt> {
     }
 }
 
-impl Iterator for Leonardo<Number> {
-    type Item = Number;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let out = self.a;
-        let t = self.a.checked_add(self.b)?.checked_add(1)?;
-        self.a = self.b;
-        self.b = t;
-        Some(out)
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Iterator for Leonardo<BigInt> {
-    type Item = BigInt;
+impl<T: Clone + CheckedAdd + Integer> Iterator for Leonardo<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.a.clone();
-        let t = &self.a + &self.b + 1;
+        let t = self.a.checked_add(&self.b)?.checked_add(&T::one())?;
         self.a = self.b.clone();
         self.b = t;
         Some(out)

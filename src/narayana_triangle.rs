@@ -5,7 +5,7 @@ use crate::Number;
 /// The Narayana triangle.
 ///
 /// ```text
-/// [1], [1,1], [1,3,1], [1,6,6,1]...
+/// [1], [1, 1], [1, 3, 1], [1, 6, 6, 1], [1, 10, 20, 10, 1]...
 /// ```
 pub struct NarayanaTriangle<T> {
     row: T,
@@ -48,6 +48,6 @@ impl<T: Integer + Clone> Iterator for NarayanaTriangle<T> {
     }
 }
 
-crate::print_sequences!(
-    NarayanaTriangle::new_big(), 5, "{:?}", "\n";
+crate::sample_sequences!(
+    NarayanaTriangle::new().map(|x| format!("{x:?}"));
 );

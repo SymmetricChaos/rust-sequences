@@ -1,6 +1,6 @@
 use crate::utils::divisibility::prime_factorization;
 use crate::{Number, core::traits::Increment};
-use num::{BigInt, Integer, Zero};
+use num::Integer;
 
 /// The Möbius function over the positive integers.
 ///
@@ -51,16 +51,6 @@ pub struct Mertens<T> {
 impl Mertens<Number> {
     pub fn new() -> Self {
         Self { n: 0, sum: 0 }
-    }
-}
-
-#[cfg(feature = "big_int")]
-impl Mertens<BigInt> {
-    pub fn new_big() -> Self {
-        Self {
-            n: 0,
-            sum: BigInt::zero(),
-        }
     }
 }
 
