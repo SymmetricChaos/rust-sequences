@@ -1,11 +1,10 @@
-use num::{BigInt, CheckedAdd, One};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, One};
 
 /// The rows of Pascal's triangle, aka the binomial coefficients.
 ///
 /// ```text
-/// [1], [1,1], [1,2,1], [1,3,3,1], [1,4,6,4,1]...
+/// [1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]...
 /// ```
 pub struct PascalsTriangle<T> {
     row: Vec<T>,
@@ -44,7 +43,9 @@ impl<T: CheckedAdd + Clone + One> Iterator for PascalsTriangle<T> {
 
 /// Bernoulli's triangle. The partial sums of the rows of Pascal's triangle.
 ///
-/// [1], [1,2], [1,3,4], [1,4,7,8], [1,5,11,15,16]...
+/// ```text
+/// [1], [1, 2], [1, 3, 4], [1, 4, 7, 8], [1, 5, 11, 15, 16]...
+/// ```
 pub struct BernoullisTriangle<T> {
     row: Vec<T>,
 }
@@ -80,12 +81,12 @@ impl<T: CheckedAdd + Clone + One> Iterator for BernoullisTriangle<T> {
     }
 }
 
-crate::print_sequences!(
-    PascalsTriangle::new_big(), 5, "{:?}", "\n";
-    BernoullisTriangle::new_big(), 5, "{:?}", "\n";
-);
-
 crate::check_sequences!(
     PascalsTriangle::new().flatten(), [1, 1, 1, 1, 2, 1, 1, 3, 3, 1, 1, 4, 6, 4, 1, 1, 5, 10, 10, 5];
     BernoullisTriangle::new().flatten(), [1, 1, 2, 1, 3, 4, 1, 4, 7, 8, 1, 5, 11, 15, 16, 1, 6, 16, 26, 31];
+);
+
+crate::sample_sequences!(
+    PascalsTriangle::new().map(|x| format!("{x:?}"));
+    BernoullisTriangle::new().map(|x| format!("{x:?}"));
 );

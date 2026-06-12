@@ -88,14 +88,14 @@ impl PadicAbs<BigInt> {
         }
     }
 
-    pub fn numers<T>(p: T) -> impl Iterator<Item = BigInt>
+    pub fn numers_big<T>(p: T) -> impl Iterator<Item = BigInt>
     where
         BigInt: From<T>,
     {
         Self::new_big(p).map(|q| q.numer().clone())
     }
 
-    pub fn denoms<T>(p: T) -> impl Iterator<Item = BigInt>
+    pub fn denoms_big<T>(p: T) -> impl Iterator<Item = BigInt>
     where
         BigInt: From<T>,
     {
@@ -189,14 +189,14 @@ impl PadicAbsRational<BigInt> {
         }
     }
 
-    pub fn numers<T>(p: T) -> impl Iterator<Item = BigInt>
+    pub fn numers_big<T>(p: T) -> impl Iterator<Item = BigInt>
     where
         BigInt: From<T>,
     {
         Self::new_big(p).map(|q| q.numer().clone())
     }
 
-    pub fn denoms<T>(p: T) -> impl Iterator<Item = BigInt>
+    pub fn denoms_big<T>(p: T) -> impl Iterator<Item = BigInt>
     where
         BigInt: From<T>,
     {
@@ -227,4 +227,5 @@ crate::sample_sequences!(
     PadicValuation::new(3);
     PadicAbs::new(2);
     PadicAbs::new(3);
+    PadicAbs::denoms(3);
 );

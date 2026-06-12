@@ -188,11 +188,7 @@ crate::check_sequences!(
     Partition::new(), [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
 );
 
-crate::print_sequences!(
-    PartitionsN::new(4), 10, "{:?}", "\n";
-    Partitions::new(), 5, "{:?}", "\n";
-);
-
 crate::sample_sequences!(
+    PartitionsN::new(4).map(|x| format!("{x:?}"));
     Partition::new();
 );

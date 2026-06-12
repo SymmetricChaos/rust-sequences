@@ -4,6 +4,10 @@ use num::{
 };
 
 /// The partial sums of the Wallis product, converging on pi.
+///
+/// ```text
+/// 2, 8/3, 128/45, 512/175, 32768/11025, 131072/43659, 2097152/693693...
+/// ```
 pub struct WallisProduct<T> {
     ctr: T,
     product: Ratio<T>,
@@ -43,6 +47,10 @@ impl<T: Clone + Integer + CheckedMul + CheckedAdd> Iterator for WallisProduct<T>
 }
 
 /// The partial sums of the Madhava-Leibniz formula for pi. Four times the arctangent of one.
+///
+/// ```text
+/// 0, 4, 8/3, 52/15, 304/105, 1052/315, 10312/3465, 147916/45045...
+/// ```
 pub struct Leibniz<T> {
     k: T,
     sign: Sign,
@@ -93,10 +101,7 @@ impl<T: Clone + CheckedAdd + Integer + CheckedMul + CheckedSub> Iterator for Lei
     }
 }
 
-#[cfg(test)]
-use crate::core::rational_digits::rational_decimal_string;
-
-crate::print_sequences!(
-    Leibniz::new_big().map(|x| rational_decimal_string(x,3).unwrap()), 15; // converges slowly from above and below
-    WallisProduct::new_big().map(|x| rational_decimal_string(x,3).unwrap()), 15; // converges slowly from below
+crate::sample_sequences!(
+   Leibniz::new();
+   WallisProduct::new();
 );

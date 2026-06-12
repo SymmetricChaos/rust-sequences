@@ -139,22 +139,21 @@ macro_rules! sample_sequences {
             let mut sq = $seq;
             let mut terms = Vec::new();
             let mut tot_len = 3;
-            let s = loop {
+            loop {
                 match sq.next() {
                     Some(n) => {
                         let st = n.to_string();
                         let st_len = st.len() + 2;
                         if st_len + tot_len > 72 {
-                            break terms.join(", ");
+                            break println!("{}\n{}...\n", stringify!($seq), terms.join(", ")) ;
                         } else {
                             terms.push(st);
                             tot_len += st_len;
                         }
                     }
-                    None => break terms.join(", "),
+                    None => break println!("{}\n{}\n", stringify!($seq), terms.join(", ")) ,
                 };
             };
-            println!("{}\n{}...\n", stringify!($seq), s);
         )+
         }
     };
