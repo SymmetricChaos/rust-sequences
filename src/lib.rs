@@ -121,8 +121,6 @@ pub mod twin_primes;
 pub mod weyl;
 pub mod zeta;
 
-#[cfg(target_pointer_width = "16")]
-type Number = i16;
 #[cfg(target_pointer_width = "32")]
 type Number = i32;
 #[cfg(target_pointer_width = "64")]

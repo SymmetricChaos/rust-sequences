@@ -1,36 +1,56 @@
-/// A linear congruential generator. A kind of simple PRNG.
+use num::PrimInt;
+
+use crate::rngs::{SQRTUMAX, UMAX};
+
+/// A linear congruential generator.
 ///
 /// ```text
+/// n_{x} = (n_{x-1} * a + c) % m
+///
 /// n = 47594118, a = 23, b = 0, m = 100000001 (Lehmer's LCG)
 /// 47594118, 94664704, 77288171, 77627916, 85442051, 65167154...
 ///
 /// n = 1, a = 65539, b = 0, m = 2147483648 (RANDU LCG)
 /// 1, 65539, 393225, 1769499, 7077969, 26542323, 95552217, 334432395...
 /// ```
-pub struct Lcg {
-    n: u64,
-    a: u64,
-    c: u64,
-    m: u64,
+pub struct Lcg<T> {
+    n: T,
+    a: T,
+    c: T,
+    m: T,
 }
 
-impl Lcg {
+#[cfg(target_pointer_width = "32")]
+impl Lcg<u32> {
+    /// To prevent overflow during multiplication n, a, and m must all be less than the square root of the maximum value of the type and x must not cause overflow when added to m.
     pub fn new(n: u32, a: u32, c: u32, m: u32) -> Self {
-        Self {
-            n: n as u64,
-            a: a as u64,
-            c: c as u64,
-            m: m as u64,
-        }
+        assert!(n < SQRTUMAX, "n must be less than {SQRTUMAX}");
+        assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
+        assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
+        assert!(c < UMAX - m, "c must be less than {}", UMAX - m);
+        Self { n, a, c, m }
     }
 }
 
-impl Iterator for Lcg {
-    type Item = u64;
+#[cfg(target_pointer_width = "64")]
+impl Lcg<u64> {
+    /// To prevent overflow during multiplication n, a, and m must all be less than the square root of the maximum value of the type and x must not cause overflow when added to m.
+    pub fn new(n: u64, a: u64, c: u64, m: u64) -> Self {
+        assert!(n < SQRTUMAX, "n must be less than {SQRTUMAX}");
+        assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
+        assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
+        assert!(c < UMAX - m, "c must be less than {}", UMAX - m);
+        Self { n, a, c, m }
+    }
+}
+
+impl<T: PrimInt> Iterator for Lcg<T> {
+    type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
         let out = self.n;
-        self.n = (self.n * self.a + self.c) % self.m;
+        self.n = (self.n * self.a) % self.m;
+        self.n = (self.n + self.c) % self.m;
         Some(out)
     }
 }
