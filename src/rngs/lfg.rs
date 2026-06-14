@@ -15,16 +15,16 @@ pub struct Lfg<T> {
     m: T,
 }
 
-#[cfg(target_pointer_width = "32")]
-impl Lfg<u32> {
-    /// To prevent overflow during addition a, b, and m must all be less than half the maximum value of the type.
-    pub fn new(a: u32, b: u32, m: u32) -> Self {
-        assert!(a < HALFMAX, "a must be less than {HALFMAX}");
-        assert!(b < HALFMAX, "b must be less than {HALFMAX}");
-        assert!(m < HALFMAX, "m must be less than {HALFMAX}");
-        Self { a, b, m }
-    }
-}
+// #[cfg(target_pointer_width = "32")]
+// impl Lfg<u32> {
+//     /// To prevent overflow during addition a, b, and m must all be less than half the maximum value of the type.
+//     pub fn new(a: u32, b: u32, m: u32) -> Self {
+//         assert!(a < HALFMAX, "a must be less than {HALFMAX}");
+//         assert!(b < HALFMAX, "b must be less than {HALFMAX}");
+//         assert!(m < HALFMAX, "m must be less than {HALFMAX}");
+//         Self { a, b, m }
+//     }
+// }
 
 #[cfg(target_pointer_width = "64")]
 impl Lfg<u64> {
@@ -63,16 +63,16 @@ pub struct LfgMult<T> {
     m: T,
 }
 
-#[cfg(target_pointer_width = "32")]
-impl LfgMult<u32> {
-    /// To prevent overflow during multiplication a, b, and m must all be less than the square root of the maximum value of the type.
-    pub fn new(a: u32, b: u32, m: u32) -> Self {
-        assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
-        assert!(b < SQRTUMAX, "b must be less than {SQRTUMAX}");
-        assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
-        Self { a, b, m }
-    }
-}
+// #[cfg(target_pointer_width = "32")]
+// impl LfgMult<u32> {
+//     /// To prevent overflow during multiplication a, b, and m must all be less than the square root of the maximum value of the type.
+//     pub fn new(a: u32, b: u32, m: u32) -> Self {
+//         assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
+//         assert!(b < SQRTUMAX, "b must be less than {SQRTUMAX}");
+//         assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
+//         Self { a, b, m }
+//     }
+// }
 
 #[cfg(target_pointer_width = "64")]
 impl LfgMult<u64> {
