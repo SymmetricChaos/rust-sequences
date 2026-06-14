@@ -1,6 +1,12 @@
 pub mod blum_blum_shub;
 pub mod lcg;
 pub mod lfg;
+pub mod lfsr;
+
+pub use blum_blum_shub::*;
+pub use lcg::*;
+pub use lfg::*;
+pub use lfsr::*;
 
 #[cfg(target_pointer_width = "32")]
 pub const UMAX: u32 = u32::MAX;

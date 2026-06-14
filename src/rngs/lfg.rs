@@ -1,7 +1,7 @@
 use crate::rngs::{HALFUMAX, SQRTUMAX};
 use num::PrimInt;
 
-/// Lagged Fibonacci Generator.
+/// Lagged Fibonacci Generator using addition.
 ///
 /// ```text
 /// n_{x} = (n_{x-1} + n_{x-2}) % m
@@ -49,10 +49,14 @@ impl<T: PrimInt> Iterator for Lfg<T> {
     }
 }
 
-crate::sample_sequences!(
-    Lfg::new(123, 456, 789);
-);
-
+/// Lagged Fibonacci Generator using multiplication.
+///
+/// ```text
+/// n_{x} = (n_{x-1} * n_{x-2}) % m
+///
+/// a = 123, b = 456, m = 789
+/// 123, 456, 69, 693, 477, 759, 681, 84, 396, 126, 189, 144, 390, 141...
+/// ```
 pub struct LfgMult<T> {
     a: T,
     b: T,
@@ -92,3 +96,8 @@ impl<T: PrimInt> Iterator for LfgMult<T> {
         Some(out)
     }
 }
+
+crate::sample_sequences!(
+    Lfg::new(123, 456, 789);
+    LfgMult::new(123, 456, 789);
+);
