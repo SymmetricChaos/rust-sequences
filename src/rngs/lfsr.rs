@@ -1,4 +1,4 @@
-use crate::rngs::UBITS;
+use crate::rngs::{UBITS, UMAX};
 
 /// A Fibonacci type linear feedback shift register that shifts bits to the right (toward the least significant bit). This iterator returns the sequence of states.
 ///
@@ -26,11 +26,17 @@ impl Iterator for FibonacciLfsr<u64> {
         let out = self.state;
         let new_bit = ((self.state & self.taps).count_ones() as u64 ^ self.state) & 1;
         self.state =
-            ((self.state >> 1) | (new_bit << (self.bits - 1))) & (!0 >> (UBITS - self.bits));
+            ((self.state >> 1) | (new_bit << (self.bits - 1))) & (UMAX >> (UBITS - self.bits));
         Some(out)
     }
 }
 
+/// A Galois type linear feedback shift register that shifts bits to the right (toward the least significant bit). This iterator returns the sequence of states.
+///
+/// ```test
+/// state = 0b0000000001, taps = 0b0100001000, bits = 10
+/// 1, 644, 322, 161, 724, 362, 181, 734, 367, 563, 925, 842, 421, 598...
+/// ```
 pub struct GaloisLfsr<T> {
     state: T,
     taps: T,
@@ -53,7 +59,7 @@ impl Iterator for GaloisLfsr<u64> {
         if lsb == 1 {
             self.state ^= self.taps;
         }
-        self.state = ((self.state >> 1) | (lsb << (self.bits - 1))) & (!0 >> (UBITS - self.bits));
+        self.state = ((self.state >> 1) | (lsb << (self.bits - 1))) & (UMAX >> (UBITS - self.bits));
 
         Some(out)
     }

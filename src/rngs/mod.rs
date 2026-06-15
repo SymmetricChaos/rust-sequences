@@ -18,6 +18,7 @@ pub use lfsr::*;
 // #[cfg(target_pointer_width = "64")]
 // pub const UMAX: u64 = u64::MAX;
 // #[cfg(target_pointer_width = "64")]
+
 // pub const HALFUMAX: u64 = UMAX / 2;
 // #[cfg(target_pointer_width = "64")]
 // pub const SQRTUMAX: u64 = UMAX.isqrt();
