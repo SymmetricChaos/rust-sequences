@@ -1,4 +1,4 @@
-use crate::rngs::{HALFUMAX, SQRTUMAX};
+use crate::rngs::{HALFUMAX, SQRTUMAX, UNumber};
 use num::PrimInt;
 
 /// Lagged Fibonacci Generator using addition.
@@ -63,21 +63,9 @@ pub struct LfgMult<T> {
     m: T,
 }
 
-// #[cfg(target_pointer_width = "32")]
-// impl LfgMult<u32> {
-//     /// To prevent overflow during multiplication a, b, and m must all be less than the square root of the maximum value of the type.
-//     pub fn new(a: u32, b: u32, m: u32) -> Self {
-//         assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
-//         assert!(b < SQRTUMAX, "b must be less than {SQRTUMAX}");
-//         assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
-//         Self { a, b, m }
-//     }
-// }
-
-#[cfg(target_pointer_width = "64")]
-impl LfgMult<u64> {
+impl LfgMult<UNumber> {
     /// To prevent overflow during multiplication a, b, and m must all be less than the square root of the maximum value of the type.
-    pub fn new(a: u64, b: u64, m: u64) -> Self {
+    pub fn new(a: UNumber, b: UNumber, m: UNumber) -> Self {
         assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
         assert!(b < SQRTUMAX, "b must be less than {SQRTUMAX}");
         assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");

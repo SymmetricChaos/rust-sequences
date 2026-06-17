@@ -1,4 +1,4 @@
-use crate::rngs::{SQRTUMAX, UMAX};
+use crate::rngs::{SQRTUMAX, UMAX, UNumber};
 use num::PrimInt;
 
 /// A linear congruential generator.
@@ -19,22 +19,9 @@ pub struct Lcg<T> {
     m: T,
 }
 
-// #[cfg(target_pointer_width = "32")]
-// impl Lcg<u32> {
-//     /// To prevent overflow during multiplication n, a, and m must all be less than the square root of the maximum value of the type and x must not cause overflow when added to m.
-//     pub fn new(n: u32, a: u32, c: u32, m: u32) -> Self {
-//         assert!(n < SQRTUMAX, "n must be less than {SQRTUMAX}");
-//         assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
-//         assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
-//         assert!(c < UMAX - m, "c must be less than {}", UMAX - m);
-//         Self { n, a, c, m }
-//     }
-// }
-
-#[cfg(target_pointer_width = "64")]
-impl Lcg<u64> {
+impl Lcg<UNumber> {
     /// To prevent overflow during multiplication n, a, and m must all be less than the square root of the maximum value of the type and x must not cause overflow when added to m.
-    pub fn new(n: u64, a: u64, c: u64, m: u64) -> Self {
+    pub fn new(n: UNumber, a: UNumber, c: UNumber, m: UNumber) -> Self {
         assert!(n < SQRTUMAX, "n must be less than {SQRTUMAX}");
         assert!(a < SQRTUMAX, "a must be less than {SQRTUMAX}");
         assert!(m < SQRTUMAX, "m must be less than {SQRTUMAX}");
