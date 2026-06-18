@@ -63,3 +63,8 @@ impl Iterator for Pcg64_32 {
         Some(self.transform.apply(x) as u32)
     }
 }
+
+crate::sample_sequences!(
+    Pcg64_32::new_xsh_rr(0, 6364136223846793005, 1442695040888963407);
+    Pcg64_32::new_xsh_rs(0, 6364136223846793005, 1442695040888963407);
+);
