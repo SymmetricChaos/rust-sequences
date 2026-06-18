@@ -1,9 +1,5 @@
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum PcgTransform {
-    /// Random Shift
-    Rs,
-    /// Random Rotation
-    Rr,
     // Xorshift with Random Rotation
     XshRr,
     // Xorshift with Random Shift
@@ -13,8 +9,6 @@ pub enum PcgTransform {
 impl PcgTransform {
     pub fn apply(&self, n: u64) -> u64 {
         match self {
-            Self::Rs => n >> (29 - (n >> 61)),
-            Self::Rr => u64::rotate_right(n, 29 - (n >> 61) as u32),
             Self::XshRr => u64::rotate_right((n ^ (n >> 18)) >> 27, (n >> 59) as u32),
             Self::XshRs => (n ^ (n >> 22)) >> (22 + (n >> 61)),
         }
@@ -22,6 +16,16 @@ impl PcgTransform {
 }
 
 /// A Permuted Congruential Generator with a 64-bit state and a 32-bit output.
+///
+/// ```text
+/// Xorshift with Random Rotation (recommended settings)
+/// seed = 0, multiplier = 6364136223846793005, increment = 1442695040888963407
+/// 0, 2687235069, 1747165774, 158681, 13462534, 12872360, 588101...
+///
+/// Xorshift with Random Shift (recommended settings)
+/// seed = 0, multiplier = 6364136223846793005, increment = 1442695040888963407
+/// 0, 367836042, 599385756, 3181286013, 1527626195, 447129947...
+/// ```
 pub struct Pcg64_32 {
     state: u64,
     multiplier: u64,
@@ -30,7 +34,7 @@ pub struct Pcg64_32 {
 }
 
 impl Pcg64_32 {
-    /// Output permutation is xorshift wiyj random rotation.
+    /// Output permutation is xorshift with random rotation.
     pub fn new_xsh_rr(seed: u64, multiplier: u64, increment: u64) -> Self {
         Self {
             state: seed,
