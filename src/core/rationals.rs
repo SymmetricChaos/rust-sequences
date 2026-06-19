@@ -1,7 +1,11 @@
 use crate::{Number, core::traits::Increment};
 use num::{BigInt, CheckedAdd, CheckedSub, Integer, One, Signed, Zero, rational::Ratio};
 
-/// The non-negative rational numbers in anti-diagonal order
+/// The non-negative rational numbers in anti-diagonal order.
+///
+/// ```text
+/// 0, 1, 2, 1/2, 3, 1/3, 4, 3/2, 2/3, 1/4, 5, 1/5, 6, 5/2, 4/3, 3/4...
+/// ```
 pub struct Rationals<T> {
     numer: T,
     denom: T,
@@ -79,6 +83,10 @@ impl<T: CheckedAdd + CheckedSub + Clone + Ord + Integer> Iterator for Rationals<
 }
 
 /// All rational numbers, starting from zero, with the positive rationals in anti-diagonal order each followed by its negative.
+///
+/// ```text
+/// 0, 1, -1, 2, -2, 1/2, -1/2, 3, -3, 1/3, -1/3, 4, -4, 3/2, -3/2, 2/3...
+/// ```
 pub struct SignedRationals<T> {
     numer: T,
     denom: T,
@@ -144,4 +152,9 @@ impl<T: CheckedAdd + CheckedSub + Clone + Ord + Integer + Signed> Iterator for S
 crate::check_sequences!(
     Rationals::new(), ["0", "1", "2", "1/2", "3", "1/3", "4", "3/2", "2/3", "1/4", "5", "1/5", "6", "5/2", "4/3", "3/4", "2/5", "1/6", "7", "5/3"];
     SignedRationals::new(), ["0", "1", "-1", "2", "-2", "1/2", "-1/2", "3", "-3", "1/3", "-1/3", "4", "-4", "3/2", "-3/2", "2/3", "-2/3", "1/4", "-1/4", "5"];
+);
+
+crate::sample_sequences!(
+    Rationals::new();
+    SignedRationals::new();
 );
