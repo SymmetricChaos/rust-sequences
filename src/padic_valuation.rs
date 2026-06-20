@@ -121,10 +121,9 @@ pub struct PadicValuationRational<T> {
 
 impl PadicValuationRational<Number> {
     pub fn new(p: Number) -> Self {
-        Self {
-            p,
-            rationals: Rationals::new_pos(),
-        }
+        let mut rationals = Rationals::new();
+        rationals.next();
+        Self { p, rationals }
     }
 }
 
@@ -134,9 +133,11 @@ impl PadicValuationRational<BigInt> {
     where
         BigInt: From<T>,
     {
+        let mut rationals = Rationals::new_big();
+        rationals.next();
         Self {
             p: BigInt::from(p),
-            rationals: Rationals::new_big_pos(),
+            rationals,
         }
     }
 }
@@ -162,10 +163,9 @@ pub struct PadicAbsRational<T> {
 
 impl PadicAbsRational<Number> {
     pub fn new(p: Number) -> Self {
-        Self {
-            p,
-            rationals: Rationals::new_pos(),
-        }
+        let mut rationals = Rationals::new();
+        rationals.next();
+        Self { p, rationals }
     }
 
     pub fn numers(p: Number) -> impl Iterator<Item = Number> {
@@ -183,9 +183,11 @@ impl PadicAbsRational<BigInt> {
     where
         BigInt: From<T>,
     {
+        let mut rationals = Rationals::new_big();
+        rationals.next();
         Self {
             p: BigInt::from(p),
-            rationals: Rationals::new_big_pos(),
+            rationals,
         }
     }
 

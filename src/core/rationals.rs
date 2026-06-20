@@ -13,7 +13,6 @@ pub struct Rationals<T> {
 }
 
 impl Rationals<Number> {
-    /// The non-negative rationals
     pub fn new() -> Self {
         Self {
             numer: 1,
@@ -21,34 +20,15 @@ impl Rationals<Number> {
             row: 0,
         }
     }
-
-    /// The positive rationals
-    pub fn new_pos() -> Self {
-        Self {
-            numer: 1,
-            denom: 1,
-            row: 1,
-        }
-    }
 }
 
 #[cfg(feature = "big_int")]
 impl Rationals<BigInt> {
-    /// The non-negative rationals
     pub fn new_big() -> Self {
         Self {
             numer: BigInt::one(),
             denom: BigInt::one(),
             row: BigInt::zero(),
-        }
-    }
-
-    /// The positive rationals
-    pub fn new_big_pos() -> Self {
-        Self {
-            numer: BigInt::one(),
-            denom: BigInt::one(),
-            row: BigInt::one(),
         }
     }
 }
