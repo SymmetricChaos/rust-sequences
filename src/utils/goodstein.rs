@@ -60,14 +60,36 @@ pub fn hereditary_base_string(n: Number, b: Number) -> String {
     s
 }
 
+pub fn increase_herediary_base(s: String, b: Number) -> String {
+    let replacement = |caps: &Captures| -> String {
+        let k: i64 = caps[0].parse().unwrap();
+
+        if k == b {
+            format!("{}", k + 1)
+        } else {
+            format!("{k}")
+        }
+    };
+
+    if REG.find(&s).is_some() {
+        return REG.replace_all(&s, &replacement).to_string();
+    }
+
+    s
+}
+
 #[cfg(test)]
 mod base_test {
     use super::*;
 
     #[test]
     fn simple_base_test() {
-        println!("{}", base_string(1020, 2));
+        println!("{}", base_string(25, 2));
 
-        println!("{}", hereditary_base_string(1020, 2));
+        println!("{}", hereditary_base_string(25, 2));
+        println!(
+            "{}",
+            increase_herediary_base(hereditary_base_string(25, 2), 2)
+        );
     }
 }
