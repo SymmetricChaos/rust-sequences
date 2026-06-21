@@ -3,6 +3,7 @@ pub mod collatz;
 pub mod divisibility;
 pub mod exp_by_squaring;
 pub mod factorial;
+pub mod goodstein;
 pub mod miller_rabin;
 pub mod modular_int;
 pub mod padic;

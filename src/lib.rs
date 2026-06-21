@@ -56,6 +56,7 @@ pub mod fortunate;
 pub mod golden_ratio;
 pub mod golden_rectangle;
 pub mod golomb;
+pub mod goodstein;
 pub mod gray;
 pub mod harmonic;
 pub mod hofstadter_g;
