@@ -2,7 +2,10 @@ use itertools::Itertools;
 use num::{BigInt, CheckedAdd, CheckedMul, Zero};
 
 /// Any recurrence of the form
+///
+/// ```text
 /// a_x = c_0 * a_{x-n} + c_1 * a_{x-n-1} + c_2 * a{x-n-2}...
+/// ```
 pub struct AdditiveLinearRecurrence<T> {
     vals: Vec<T>,
     coefs: Vec<T>,
@@ -77,7 +80,10 @@ impl<T: CheckedAdd + CheckedMul + Clone + Zero> Iterator for AdditiveLinearRecur
 }
 
 /// Any recurrence of the form
+///
+/// ```text
 /// a_x = f_0(a_{x-1}) + f_1(a_{x-2}) + f_3(a_{x-3})...
+/// ```
 pub struct AdditiveRecurrence {
     vals: Vec<BigInt>,
     funcs: Vec<Box<dyn Fn(&BigInt) -> BigInt>>,

@@ -1,8 +1,6 @@
-use std::marker::PhantomData;
-
-use num::{BigInt, CheckedAdd, One, Signed, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, One, Signed, Zero};
+use std::marker::PhantomData;
 
 /// The sequence of parity of the natural numbers with 0 for even and 1 for odd.
 ///

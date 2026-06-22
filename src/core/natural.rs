@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, One, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, One, Zero};
 
 /// The natural numbers. The non-negative integers.
 ///

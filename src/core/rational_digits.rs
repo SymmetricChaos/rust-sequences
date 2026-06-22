@@ -1,7 +1,6 @@
+use crate::Number;
 use num::{BigInt, CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, Zero, rational::Ratio};
 use std::fmt::Display;
-
-use crate::Number;
 
 /// Digits of an integer in reverse order.
 fn integer_digits<T: Integer>(n: T, base: T) -> Vec<T> {

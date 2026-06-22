@@ -1,6 +1,5 @@
-use num::{BigInt, CheckedAdd, Zero};
-
 use crate::Number;
+use num::{BigInt, CheckedAdd, Zero};
 
 /// Arithmetic sequence with chosen initial value and increment.
 ///
