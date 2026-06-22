@@ -23,6 +23,10 @@ impl HereditaryBaseStrings {
         assert!(base >= 2);
         Self { ctr: 0, base }
     }
+
+    pub fn nth(n: Number, base: Number) -> String {
+        hereditary_base_string(n, base)
+    }
 }
 
 impl Iterator for HereditaryBaseStrings {

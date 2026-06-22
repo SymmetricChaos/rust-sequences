@@ -129,5 +129,7 @@ mod base_test {
         println!("{}", base_string(n, b, true));
         println!("{}", hereditary_base_string(n, b));
         println!("{}", goodstein_step(hereditary_base_string(n, b), b));
+
+        println!("{}", hereditary_base_string(100, 3));
     }
 }
