@@ -1,24 +1,22 @@
+use crate::Number;
 use num::integer::mod_floor;
 use num::{CheckedAdd, CheckedDiv, CheckedMul, CheckedSub, Integer, One, Zero};
 use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
-//TODO: This could be made generic over architecture pointer size
-
-/// ModInt uses an i32 internally so N should not be more than 46340 to avoid issues with multiplication.
 /// If N is not prime, division will fail for some inputs.
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct ModInt<const N: i32>(i32);
+pub struct ModInt<const N: Number>(Number);
 
-impl<const N: i32> ModInt<N> {
-    /// Create a new ModInt from an i32 and force it to a valid value
-    pub fn new(n: i32) -> Self {
+impl<const N: Number> ModInt<N> {
+    /// Create a new ModInt from an Number and force it to a valid value
+    pub fn new(n: Number) -> Self {
         Self(mod_floor(n, N))
     }
 
     /// Create a new ModInt without checking the input
-    pub fn new_raw(n: i32) -> Self {
+    pub fn new_raw(n: Number) -> Self {
         Self(n)
     }
 
@@ -33,7 +31,7 @@ impl<const N: i32> ModInt<N> {
     }
 }
 
-impl<const N: i32> Zero for ModInt<N> {
+impl<const N: Number> Zero for ModInt<N> {
     fn zero() -> Self {
         ModInt(0)
     }
@@ -43,7 +41,7 @@ impl<const N: i32> Zero for ModInt<N> {
     }
 }
 
-impl<const N: i32> One for ModInt<N> {
+impl<const N: Number> One for ModInt<N> {
     fn one() -> Self {
         ModInt(1)
     }
@@ -53,19 +51,19 @@ impl<const N: i32> One for ModInt<N> {
     }
 }
 
-impl<const N: i32> Display for ModInt<N> {
+impl<const N: Number> Display for ModInt<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
 }
 
-impl<const N: i32> Debug for ModInt<N> {
+impl<const N: Number> Debug for ModInt<N> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} (mod {})", self.0, N)
     }
 }
 
-impl<const N: i32> Add for ModInt<N> {
+impl<const N: Number> Add for ModInt<N> {
     type Output = Self;
 
     fn add(self, rhs: Self) -> Self::Output {
@@ -73,19 +71,19 @@ impl<const N: i32> Add for ModInt<N> {
     }
 }
 
-impl<const N: i32> AddAssign for ModInt<N> {
+impl<const N: Number> AddAssign for ModInt<N> {
     fn add_assign(&mut self, rhs: Self) {
         *self = Self((self.0 + rhs.0) % N)
     }
 }
 
-impl<const N: i32> CheckedAdd for ModInt<N> {
+impl<const N: Number> CheckedAdd for ModInt<N> {
     fn checked_add(&self, v: &Self) -> Option<Self> {
         Some(Self(self.0.checked_add(v.0)? % N))
     }
 }
 
-impl<const N: i32> Sub for ModInt<N> {
+impl<const N: Number> Sub for ModInt<N> {
     type Output = Self;
 
     fn sub(self, rhs: Self) -> Self::Output {
@@ -93,19 +91,19 @@ impl<const N: i32> Sub for ModInt<N> {
     }
 }
 
-impl<const N: i32> SubAssign for ModInt<N> {
+impl<const N: Number> SubAssign for ModInt<N> {
     fn sub_assign(&mut self, rhs: Self) {
         *self = *self + -rhs;
     }
 }
 
-impl<const N: i32> CheckedSub for ModInt<N> {
+impl<const N: Number> CheckedSub for ModInt<N> {
     fn checked_sub(&self, v: &Self) -> Option<Self> {
         Some(Self((self.0 + N).checked_sub(v.0)? % N))
     }
 }
 
-impl<const N: i32> Mul for ModInt<N> {
+impl<const N: Number> Mul for ModInt<N> {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self::Output {
@@ -113,19 +111,19 @@ impl<const N: i32> Mul for ModInt<N> {
     }
 }
 
-impl<const N: i32> MulAssign for ModInt<N> {
+impl<const N: Number> MulAssign for ModInt<N> {
     fn mul_assign(&mut self, rhs: Self) {
         *self = Self((self.0 * rhs.0) % N)
     }
 }
 
-impl<const N: i32> CheckedMul for ModInt<N> {
+impl<const N: Number> CheckedMul for ModInt<N> {
     fn checked_mul(&self, v: &Self) -> Option<Self> {
         Some(Self(self.0.checked_mul(v.0)? % N))
     }
 }
 
-impl<const N: i32> Div for ModInt<N> {
+impl<const N: Number> Div for ModInt<N> {
     type Output = Self;
 
     fn div(self, rhs: Self) -> Self::Output {
@@ -133,19 +131,19 @@ impl<const N: i32> Div for ModInt<N> {
     }
 }
 
-impl<const N: i32> DivAssign for ModInt<N> {
+impl<const N: Number> DivAssign for ModInt<N> {
     fn div_assign(&mut self, rhs: Self) {
         *self = *self * rhs.recip().unwrap()
     }
 }
 
-impl<const N: i32> CheckedDiv for ModInt<N> {
+impl<const N: Number> CheckedDiv for ModInt<N> {
     fn checked_div(&self, v: &Self) -> Option<Self> {
         self.checked_mul(&v.recip()?)
     }
 }
 
-impl<const N: i32> Neg for ModInt<N> {
+impl<const N: Number> Neg for ModInt<N> {
     type Output = Self;
 
     fn neg(self) -> Self::Output {

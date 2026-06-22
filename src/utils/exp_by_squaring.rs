@@ -1,26 +1,38 @@
 use crate::Number;
 use num::{CheckedMul, Integer};
 
-/// Modular exponentiation by squaring
-pub fn pow_mod(n: Number, x: Number, p: Number) -> Number {
+/// Modular exponentiation by squaring with unchecked operations.
+pub fn pow_mod(n: Number, p: Number, m: Number) -> Number {
+    #[cfg(target_pointer_width = "64")]
     let mut n = i128::from(n);
-    let mut x = i128::from(x);
-    let p = i128::from(p);
+    #[cfg(target_pointer_width = "64")]
+    let mut p = i128::from(p);
+    #[cfg(target_pointer_width = "64")]
+    let m = i128::from(m);
+
+    #[cfg(target_pointer_width = "32")]
+    let mut n = i64::from(n);
+    #[cfg(target_pointer_width = "32")]
+    let mut p = i64::from(p);
+    #[cfg(target_pointer_width = "32")]
+    let m = i64::from(m);
+
     let mut ans = 1;
-    if x <= 0 {
+
+    if p <= 0 {
         return 1;
     }
     loop {
-        if x == 1 {
-            return ((ans * n) % p) as Number;
+        if p == 1 {
+            return ((ans * n) % m) as Number;
         }
-        if x & 1 == 0 {
-            n = (n * n) % p;
-            x >>= 1;
+        if p & 1 == 0 {
+            n = (n * n) % m;
+            p >>= 1;
             continue;
         } else {
-            ans = (ans * n) % p;
-            x -= 1;
+            ans = (ans * n) % m;
+            p -= 1;
         }
     }
 }

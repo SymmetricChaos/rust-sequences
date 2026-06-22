@@ -1,8 +1,9 @@
 use crate::{Number, utils::exp_by_squaring::pow_mod};
 use num::integer::gcd;
 
-/// These primes are sufficient witnessses to do a deterministic Miller-Rabin test for all u64.
-pub(super) const MR_WITNESSES_64: [Number; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
+// #[cfg(target_pointer_width = "64")]
+/// These primes are sufficient witnessses to do a deterministic Miller-Rabin test for all i64.
+pub(super) const MR_WITNESSES: [Number; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub(super) enum MRTest {
@@ -25,10 +26,10 @@ impl std::fmt::Display for MRTest {
 /// A Miller-Rabin test that assumes the input is an odd number greater than 2. Returns either Prime or Composite. Composite may include a factor.
 pub(super) fn miller_rabin(n: Number) -> MRTest {
     let mut d = (n - 1) / 2;
-    let r = 1_i64 + d.trailing_zeros() as Number;
+    let r = 1 + d.trailing_zeros() as Number;
     d >>= d.trailing_zeros();
 
-    'outer: for w in MR_WITNESSES_64.into_iter() {
+    'outer: for w in MR_WITNESSES.into_iter() {
         let mut x = pow_mod(w, d, n);
 
         if x == 1 || x == n - 1 {
@@ -60,7 +61,7 @@ pub fn is_prime(n: Number) -> bool {
     }
 
     // Check by trial
-    for witness in MR_WITNESSES_64 {
+    for witness in MR_WITNESSES {
         if n == witness {
             return true;
         }
@@ -70,10 +71,10 @@ pub fn is_prime(n: Number) -> bool {
     }
 
     let mut d = (n - 1) / 2;
-    let r = 1_i64 + d.trailing_zeros() as Number;
+    let r = 1 + d.trailing_zeros() as Number;
     d >>= d.trailing_zeros();
 
-    'outer: for w in MR_WITNESSES_64.into_iter() {
+    'outer: for w in MR_WITNESSES.into_iter() {
         let mut x = pow_mod(w, d, n);
 
         if x == 1 || x == n - 1 {
@@ -101,10 +102,10 @@ pub fn is_prime(n: Number) -> bool {
 /// Slightly faster primality check that assumes a number is not divisible by any witness and is not 0 or 1
 pub(super) fn is_prime_partial(n: Number) -> bool {
     let mut d = (n - 1) / 2;
-    let r = 1_i64 + d.trailing_zeros() as Number;
+    let r = 1 + d.trailing_zeros() as Number;
     d >>= d.trailing_zeros();
 
-    'outer: for w in MR_WITNESSES_64.into_iter() {
+    'outer: for w in MR_WITNESSES.into_iter() {
         let mut x = pow_mod(w, d, n);
 
         if x == 1 || x == n - 1 {
