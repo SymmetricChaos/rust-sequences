@@ -1,10 +1,14 @@
 use crate::{Number, core::traits::Increment, utils::goodstein::hereditary_base_string};
 
-/// Each positive natural in ghereditary base notation.
+/// Each positive natural in hereditary base notation used to define a Goodstein sequence.
 ///
 /// ```test
+/// The outermost terms are separated by spaces for ease of parsing.
+/// n = 187, base = 3
+/// 2*3^(3+1) + 2*3^2 + 2*3 + 1
+///
 /// base = 2
-/// 1, 2, 2 + 1, 2^2, 2^2 + 1, 2^2 + 2, 2^2 + 2 + 1, 2^(2 + 1)...
+/// 1, 2, 2 + 1, 2^2, 2^2 + 1, 2^2 + 2, 2^2 + 2 + 1, 2^(2+1)...
 ///
 /// base = 3
 /// 1, 2, 3, 3 + 1, 3 + 2, 2*3, 2*3 + 1, 2*3 + 2, 3^2, 3^2 + 1, 3^2 + 2...

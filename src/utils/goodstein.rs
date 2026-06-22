@@ -5,9 +5,11 @@ use itertools::Itertools;
 use num::traits::Euclid;
 use regex::{Captures, Regex};
 
-const REG: LazyCell<Regex> = LazyCell::new(|| Regex::new(r"[0-9]+").unwrap());
+const INTEGERS: LazyCell<Regex> = LazyCell::new(|| Regex::new(r"[0-9]+").unwrap());
+const MAIN_TERMS: LazyCell<Regex> =
+    LazyCell::new(|| Regex::new(r"(?: |^)([^ ]+)(?: \+|$)").unwrap());
 
-fn base_string(n: Number, b: Number) -> String {
+fn base_string(n: Number, b: Number, sp: bool) -> String {
     let mut terms = Vec::new();
     assert!(n.is_positive());
     assert!(b.is_positive());
@@ -37,27 +39,35 @@ fn base_string(n: Number, b: Number) -> String {
         n = q;
         p += 1;
     }
-    terms.into_iter().rev().join(" + ")
+    if sp {
+        terms.into_iter().rev().join(" + ")
+    } else {
+        terms.into_iter().rev().join("+")
+    }
 }
 
-pub fn hereditary_base_string(n: Number, b: Number) -> String {
-    let s = base_string(n, b);
+fn _hereditary_base_string_inner(n: Number, b: Number, sp: bool) -> String {
+    let s = base_string(n, b, sp);
 
     let replacement = |caps: &Captures| -> String {
         let k: i64 = caps[0].parse().unwrap();
 
         if k > b {
-            format!("({})", hereditary_base_string(k, b))
+            format!("({})", _hereditary_base_string_inner(k, b, false))
         } else {
             format!("{k}")
         }
     };
 
-    if REG.find(&s).is_some() {
-        return REG.replace_all(&s, &replacement).to_string();
+    if INTEGERS.find(&s).is_some() {
+        return INTEGERS.replace_all(&s, &replacement).to_string();
     }
 
     s
+}
+
+pub fn hereditary_base_string(n: Number, b: Number) -> String {
+    _hereditary_base_string_inner(n, b, true)
 }
 
 pub fn increase_herediary_base(s: String, b: Number) -> String {
@@ -71,11 +81,39 @@ pub fn increase_herediary_base(s: String, b: Number) -> String {
         }
     };
 
-    if REG.find(&s).is_some() {
-        return REG.replace_all(&s, &replacement).to_string();
+    if INTEGERS.find(&s).is_some() {
+        return INTEGERS.replace_all(&s, &replacement).to_string();
     }
 
     s
+}
+
+pub fn goodstein_step(s: String, b: Number) -> String {
+    if &s == "0" || &s == "1" {
+        return String::from("0");
+    }
+
+    let stepped = increase_herediary_base(s, b);
+
+    let l = MAIN_TERMS.find_iter(&stepped).count();
+
+    let final_term = MAIN_TERMS
+        .captures_iter(&stepped)
+        .last()
+        .unwrap()
+        .get(1)
+        .unwrap()
+        .as_str();
+
+    if final_term == "1" {
+        return MAIN_TERMS
+            .captures_iter(&stepped)
+            .take(l - 1)
+            .map(|c| c.get(1).unwrap().as_str())
+            .join(" + ");
+    }
+
+    todo!()
 }
 
 #[cfg(test)]
@@ -83,13 +121,13 @@ mod base_test {
     use super::*;
 
     #[test]
+    #[ignore = "visual test"]
     fn simple_base_test() {
-        println!("{}", base_string(25, 2));
+        let n = 187;
+        let b = 3;
 
-        println!("{}", hereditary_base_string(25, 2));
-        println!(
-            "{}",
-            increase_herediary_base(hereditary_base_string(25, 2), 2)
-        );
+        println!("{}", base_string(n, b, true));
+        println!("{}", hereditary_base_string(n, b));
+        println!("{}", goodstein_step(hereditary_base_string(n, b), b));
     }
 }
