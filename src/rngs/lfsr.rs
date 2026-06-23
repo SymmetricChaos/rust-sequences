@@ -45,7 +45,7 @@ impl Lfsr<UNumber> {
         Self::new(state, taps, LfsrType::Fibonacci)
     }
 
-    /// Create a Fibonacci LFSR. The number of bits used is determined from the highest set bit of the taps.
+    /// Create a Galois LFSR. The number of bits used is determined from the highest set bit of the taps.
     pub fn new_galois(state: UNumber, taps: UNumber) -> Self {
         Self::new(state, taps, LfsrType::Galois)
     }

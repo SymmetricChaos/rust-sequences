@@ -15,21 +15,9 @@ pub struct Lfg<T> {
     m: T,
 }
 
-// #[cfg(target_pointer_width = "32")]
-// impl Lfg<u32> {
-//     /// To prevent overflow during addition a, b, and m must all be less than half the maximum value of the type.
-//     pub fn new(a: u32, b: u32, m: u32) -> Self {
-//         assert!(a < HALFMAX, "a must be less than {HALFMAX}");
-//         assert!(b < HALFMAX, "b must be less than {HALFMAX}");
-//         assert!(m < HALFMAX, "m must be less than {HALFMAX}");
-//         Self { a, b, m }
-//     }
-// }
-
-#[cfg(target_pointer_width = "64")]
-impl Lfg<u64> {
+impl Lfg<UNumber> {
     /// To prevent overflow during addition a, b, and m must all be less than half the maximum value of the type.
-    pub fn new(a: u64, b: u64, m: u64) -> Self {
+    pub fn new(a: UNumber, b: UNumber, m: UNumber) -> Self {
         assert!(a < HALFUMAX, "a must be less than {HALFUMAX}");
         assert!(b < HALFUMAX, "b must be less than {HALFUMAX}");
         assert!(m < HALFUMAX, "m must be less than {HALFUMAX}");
