@@ -5,7 +5,7 @@ pub mod lfsr;
 pub mod mersenne_twister;
 pub mod pcg;
 pub mod rc4;
-pub mod xorshift;
+pub mod xoroshiro;
 
 pub use blum_blum_shub::*;
 pub use lcg::*;
@@ -14,7 +14,7 @@ pub use lfsr::*;
 pub use mersenne_twister::*;
 pub use pcg::*;
 pub use rc4::*;
-pub use xorshift::*;
+pub use xoroshiro::*;
 
 pub type UNumber = u64;
 pub const UMAX: UNumber = UNumber::MAX;

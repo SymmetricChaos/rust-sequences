@@ -11,7 +11,7 @@ pub struct Rc4 {
 }
 
 impl Rc4 {
-    /// RC4 can be initalized from any sequence of up to 256 bytes.
+    /// RC4 can be initalized from any sequence of one or more byte but any after 256 will be ignored.
     pub fn new(key: &[u8]) -> Self {
         assert!(key.len() > 0);
         let mut arr = [0; 256];
